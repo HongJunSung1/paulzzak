@@ -1,7 +1,7 @@
 import React, {useState}  from 'react';
 import styles from './p-esg-common-SideBarItem.module.css';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
-import {SideBarSub} from './p-esg-common-sideBarItem.styles';
+import {SideBarSub} from './p-esg-common-sideBarItem.styles.tsx';
 
 const SideBarItem = ({ item }) => {
   // 클릭 할 때마다 화살표 위아래 모양 바꾸기
@@ -11,6 +11,7 @@ const SideBarItem = ({ item }) => {
   function toggleCollapse() {
     setCollapsed(prevValue => !prevValue);
   }
+
 
 
   if(item.childrens.length > 0){
