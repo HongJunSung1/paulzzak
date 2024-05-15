@@ -16,5 +16,28 @@ export const SbContainer = styled.div`
 // SbItem에서 하위메뉴들을 묶어줄 div
 export const SideBarSub = styled.div`
   overflow: hidden;
-  max-height: ${props => props.isOpen ? "100%" : "0"};
+  max-height:0;
+  ${props => props.isOpen  ? "animation: slide-fade-in-dropdown-animation 0.5s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.5s ease; max-height: 0;"};
+
+  @keyframes slide-fade-in-dropdown-animation {
+    0% {
+      transform: translateY(-100%);
+    }
+  
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-fade-out-dropdown-animation {
+    0% {
+      transform: translateY(0);
+    }
+  
+    100% {
+      transform: translateY(-100%);
+    }
+  }
 `
+
+

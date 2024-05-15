@@ -29,11 +29,13 @@ const SideBarItem = ({ item }) => {
                           >{item.menuName}
           <span style={{paddingTop: "2px"}}>{icon}</span>
         </div>
+        <div style={{overflow:"hidden"}}>
         <SideBarSub isOpen={collapsed}>
           {item.childrens.map((child) => (
             <SideBarItem key={child.id} item={child} />
           ))}
         </SideBarSub>
+        </div>
       </div>
     )
   } else{
