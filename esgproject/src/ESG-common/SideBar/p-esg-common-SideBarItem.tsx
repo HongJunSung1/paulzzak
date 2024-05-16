@@ -1,3 +1,4 @@
+import '../../global.d.ts';
 import React, {useState}  from 'react';
 import styles from './p-esg-common-SideBarItem.module.css';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'

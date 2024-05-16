@@ -7,7 +7,7 @@ import { Interface } from "readline";
 export const SbContainer = styled.div`
   min-width: 16rem;
   width: auto;
-  height: 100%;
+  height: calc(100% - 48px);
   min-height: 70vh;
   font-size: 14px;
   position: absolute;

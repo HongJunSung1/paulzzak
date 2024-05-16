@@ -1,0 +1,66 @@
+.NavBarContainer{
+    height: 48px;
+    background-color: brown;
+    color: white;
+    font-weight: bold;
+    padding-left: 5px;
+    font-size: 25px;
+    line-height:48px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.NavBarLeft{
+    display: flex;
+}
+
+.MainTitle{
+    height: 48px;
+    line-height: 48px;
+}
+
+.NavBarItem{
+    float: right;
+    display: flex;
+}
+
+.search{
+    height: 48px;
+    line-height: 41px;
+    padding-right: 15px;
+}
+
+input[type=text]{
+    width: 200px;
+    height: 20px;
+    vertical-align: middle;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    padding: 1px 10px 1px 10px
+}
+
+.ImageLogoWrap{
+    line-height: 50px;
+}
+
+.ImageLogo{
+    padding-right: 15px;
+    width: 30px;
+    object-fit: cover;
+}
+
+.ImageContainer{
+    height: 48px;
+    line-height: 58px;
+}
+
+
+
+.ImageComponent{
+    width: 30px;
+    object-fit: cover;
+    padding-right:15px;
+    line-height: 48px;
+    cursor:pointer;
+}

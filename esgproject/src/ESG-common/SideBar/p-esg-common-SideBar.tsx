@@ -11,6 +11,7 @@ const SideBar = ({ items }) => {
   
   return (
     <SbContainer>
+      <h2>ESG</h2>
       {tree.map((subItem, index) =>
         <SideBarItem item={subItem} key={index} />
       )}
