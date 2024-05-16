@@ -6,22 +6,21 @@ import { Interface } from "readline";
 // 사이드바 전체를 감싸는 div
 export const SbContainer = styled.div`
   min-width: 16rem;
-  width: auto;
-  height: calc(100% - 48px);
+  width: 256px;
   min-height: 70vh;
   font-size: 14px;
-  position: absolute;
   background: #f8f7f3;
 `
+
 interface IisOpen{
-  isOpen : Boolean;
+  isopen : Boolean;
 };
 
 // SbItem에서 하위메뉴들을 묶어줄 div
 export const SideBarSub = styled.div<IisOpen>`
   overflow: hidden;
   max-height:0;
-  ${props => props.isOpen  ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};
+  ${props => props.isopen  ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};
 
   @keyframes slide-fade-in-dropdown-animation {
     0% {

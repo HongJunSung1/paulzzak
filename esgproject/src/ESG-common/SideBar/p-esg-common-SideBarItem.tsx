@@ -32,7 +32,7 @@ const SideBarItem = ({ item }) => {
           <span style={{paddingTop: "2px"}}>{icon}</span>
         </div>
         <div style={{overflow:"hidden"}}>
-        <SideBarSub isOpen={collapsed}>
+        <SideBarSub isopen={collapsed}>
           {item.childrens.map((child) => (
             <SideBarItem key={child.id} item={child} />
           ))}

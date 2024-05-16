@@ -52,13 +52,14 @@ input[type=text]{
 
 .ImageContainer{
     height: 48px;
-    line-height: 58px;
+    line-height: 50px;
+    min-width:105px;
 }
 
 
 
 .ImageComponent{
-    width: 30px;
+    width: 20px;
     object-fit: cover;
     padding-right:15px;
     line-height: 48px;
