@@ -20,7 +20,7 @@ const Navbar = () => {
                 </div>
                 <div className = {styles.NavBarItem}>
                     <div className = {styles.search}>
-                        <input type="text"></input>
+                        <input type="text" className={styles.SearchInput}></input>
                     </div>
                     <div className = {styles.ImageContainer}>
                         <div className = {styles.ImageWrap}>

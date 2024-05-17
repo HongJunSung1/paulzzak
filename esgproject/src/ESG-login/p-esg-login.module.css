@@ -1,0 +1,129 @@
+.LoginContainer{
+    width: 100vw;
+    height: 100vh;
+    /* 설정 */
+    position: relative;
+    background-color: rgb(219, 219, 228);
+}
+
+ 
+.LoginWrap {
+  width: 972px;
+  height: 584px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 25px;
+  border: 2px solid white;
+  display: flex;
+  background-color: white;
+}
+
+
+.LoginLeft{
+    width: 55%;
+    background-color: rgb(24, 24, 131);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.LoginLeftTop{
+    display:flex;
+}
+
+
+/* 우리 로고 위치 */
+.OurLogo{
+    padding-left: 15px;
+    padding-top: 15px;
+    width: 15px;
+    object-fit: cover;
+}
+
+.OurName{
+    padding-left: 25px;
+    padding-top: 30px;
+    font-size: 25px;
+    font-weight:bold;
+    color: white;
+}
+
+.LoginPicture{
+    width: 100%;
+    object-fit: cover;
+    margin-top: 50px;
+}
+
+.LoginLeftBottom{
+    color: white;
+    font-size: 40px;
+    padding-left: 25px;
+    padding-top: 30px;
+    font-weight:bold;
+    
+}
+
+.LoginRight{
+    width: 45%;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.LoginRightWrap{
+    position: relative;
+    top: 18%;
+}
+
+.EYLogoWrap{
+    position: relative;
+    left: 42%;
+}
+
+.EYLogo{
+    width: 86px;
+    height: 100px;
+
+}   
+
+.LoginInputWrap{
+    position: relative;
+    left: 14%;
+    padding-top: 60px;
+}
+
+.LoginInput{
+    width: 300px;
+    height: 40px;
+    vertical-align: middle;
+    border-radius: 5px;
+    border: 1px solid #dedede;
+    
+    padding: 1px 10px;
+    margin-bottom: 10px;
+}
+
+.LoginInputWrap input:focus{
+    border-color: #8f8f8f;
+    outline: none;
+}
+
+.LoginBtn{
+    width: 322px;
+    background-color:rgb(24, 24, 131);
+    height: 60px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.copyright{
+    color: rgb(206, 206, 206);
+    font-size: 14px;
+    padding-top: 110px;
+    padding-left: 80px;
+}
