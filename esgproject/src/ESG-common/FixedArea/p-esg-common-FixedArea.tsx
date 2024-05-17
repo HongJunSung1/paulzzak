@@ -5,7 +5,7 @@ import styles from './p-esg-common-FixedArea.module.css'
 
 const FixedArea = ({name}) => {
 
-    if(name == ""){
+    if(name === ""){
         name = "";
     }
 
@@ -15,22 +15,6 @@ const FixedArea = ({name}) => {
             <div>영역 테스트1</div>
             <div>영역 테스트1</div>
             <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            
         </div>
     )
 } 
