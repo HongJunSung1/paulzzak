@@ -12,4 +12,5 @@ export const DataContainer = styled.div`
     background-color: white;
     display: flex;
     margin: 10px 10px;
+    flex-direction: column;
 `

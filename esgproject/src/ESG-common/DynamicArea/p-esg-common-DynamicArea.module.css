@@ -1,0 +1,10 @@
+.DynamicArea{
+    background-color : white;
+    height: 100%;
+    padding: 10px;
+    overflow-y: scroll;
+    flex-basis: auto;
+    border: solid 0.5px rgb(200, 200, 200);
+    margin-top: 5px;
+    border-radius: 8px;
+}

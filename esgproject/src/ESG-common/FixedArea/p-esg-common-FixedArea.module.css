@@ -1,0 +1,17 @@
+.FixedArea{
+    min-height : 150px;
+    background-color : white;
+    margin-top: 10px; /*툴바를 위해 띄워놓기*/
+    padding: 10px;
+    flex: 0 0 auto;
+    border: solid 0.5px rgb(200, 200, 200);
+    border-radius: 8px;
+}
+
+.AreaName{
+    position: relative;
+    bottom: 20px;
+    left: 10px;
+    background-color: white;
+    padding: 5px;
+}
