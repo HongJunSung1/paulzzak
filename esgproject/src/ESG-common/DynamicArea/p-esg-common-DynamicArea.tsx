@@ -11,6 +11,41 @@ const DynamicArea = () => {
             <div>스크롤 테스트1</div>
             <div>스크롤 테스트1</div>
             <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
+            <div>스크롤 테스트1</div>
             
         </div>
     )
