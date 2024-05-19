@@ -48,6 +48,7 @@
     padding-right: 15px;
     width: 30px;
     object-fit: cover;
+    box-sizing: content-box;
 }
 
 .ImageContainer{
@@ -64,4 +65,5 @@
     padding-right:15px;
     line-height: 48px;
     cursor:pointer;
+    box-sizing: content-box;
 }
