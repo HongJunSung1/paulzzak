@@ -20,7 +20,7 @@ interface IisOpen{
 export const SideBarSub = styled.div<IisOpen>`
   overflow: hidden;
   max-height:0;
-  ${props => props.isopen  ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};
+  ${props => props.isopen ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};
 
   @keyframes slide-fade-in-dropdown-animation {
     0% {
