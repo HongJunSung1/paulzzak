@@ -3,6 +3,7 @@ import React, {useState}  from 'react';
 import styles from './p-esg-common-SideBarItem.module.css';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 import {SideBarSub} from './p-esg-common-sideBarItem.styles.tsx';
+import { Link } from 'react-router-dom';
 
 const SideBarItem = ({ item }) => {
   // 클릭 할 때마다 화살표 위아래 모양 바꾸기
@@ -48,7 +49,9 @@ const SideBarItem = ({ item }) => {
                       marginTop: item.pmenuId==="ROOT"? "15px": "5px",
                       paddingLeft: "10px",
                       cursor: "pointer",
-                   }}>{item.menuName}
+                   }}>
+          <Link to = {item.url}>{item.menuName}</Link>
+                    
         </div>  
       </div>
     )

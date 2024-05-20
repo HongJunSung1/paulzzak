@@ -1,9 +1,9 @@
 import React, {useState}  from 'react';
 import styles from './p-esg-login.module.css';
 
-import OurLogo from '../assets/image/belly.png'
-import EYLogo from '../assets/image/EYLogo.svg'
-import LoginPicture from '../assets/image/LoginPicture.jpg'
+import OurLogo from '../assets/image/belly.png';
+import EYLogo from '../assets/image/EYLogo.svg';
+import LoginPicture from '../assets/image/LoginPicture.jpg';
 
 const loginPage = () => {
     return (

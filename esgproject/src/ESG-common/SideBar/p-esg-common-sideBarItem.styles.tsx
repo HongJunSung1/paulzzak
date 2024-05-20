@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
-import { Interface } from "readline";
-
 
 // 사이드바 전체를 감싸는 div
 export const SbContainer = styled.div`
@@ -20,7 +18,7 @@ interface IisOpen{
 export const SideBarSub = styled.div<IisOpen>`
   overflow: hidden;
   max-height:0;
-  ${props => props.isopen  ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};
+  ${props => props.isopen ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};
 
   @keyframes slide-fade-in-dropdown-animation {
     0% {
@@ -44,3 +42,8 @@ export const SideBarSub = styled.div<IisOpen>`
 `
 
 
+// 제일 하위메뉴에서 클릭할 Link 
+export const SideBarLink = styled(Link)`
+  color: inherit;
+  text-decoration: inherit;
+`;
