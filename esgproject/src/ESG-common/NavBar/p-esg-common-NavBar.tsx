@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './p-esg-common-NavBar.module.css'
+import '../../global.d.ts';
 
 import ImageLogo from '../../assets/image/logo.png';
 import ImageSetting from '../../assets/image/setting.png';
@@ -12,7 +13,7 @@ const Navbar = () => {
             <div className = {styles.NavBarContainer}>
                 <div className = {styles.NavBarLeft}>
                     <div className = {styles.ImageLogoWrap}>
-                        <img className = {styles.ImageLogo} src={ImageLogo}/>
+                        <img className = {styles.ImageLogo} src={ImageLogo} alt={"Logo"}/>
                     </div>
                     <div className = {styles.MainTitle}>
                         ESG Data Platform
@@ -24,9 +25,9 @@ const Navbar = () => {
                     </div>
                     <div className = {styles.ImageContainer}>
                         <div className = {styles.ImageWrap}>
-                            <img className = {styles.ImageComponent} src={ImageAlarm}/>
-                            <img className = {styles.ImageComponent} src={ImageSetting}/>
-                            <img className = {styles.ImageComponent} src={ImageUser}/>
+                            <img className = {styles.ImageComponent} src={ImageAlarm} alt={"Alarm"}/>
+                            <img className = {styles.ImageComponent} src={ImageSetting} alt={"Setting"}/>
+                            <img className = {styles.ImageComponent} src={ImageUser} alt={"User"}/>
                         </div>
                     </div>
                 </div>

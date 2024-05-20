@@ -4,63 +4,72 @@
         "menuId": "menu00001",
         "menuLevel": 1,
         "menuName":"Environmental",
-        "pmenuId":"ROOT"
+        "pmenuId":"ROOT",
+        "url":""
     },
     {
         "id": 1,
         "menuId": "menu00002",
         "menuLevel": 2,
         "menuName":"환경",
-        "pmenuId":"menu00001"
+        "pmenuId":"menu00001",
+        "url":"environmental"
     },
     {
         "id": 2,
         "menuId": "menu00003",
         "menuLevel": 2,
         "menuName":"파괴",
-        "pmenuId":"menu00001"
+        "pmenuId":"menu00001",
+        "url":""
     },
     {
         "id": 3,
         "menuId": "menu00004",
         "menuLevel": 1,
         "menuName":"Social",
-        "pmenuId":"ROOT"
+        "pmenuId":"ROOT",
+        "url":""
     },
     {
         "id": 4,
         "menuId": "menu00005",
         "menuLevel": 2,
         "menuName":"사회",
-        "pmenuId":"menu00004"
+        "pmenuId":"menu00004",
+        "url":""
     },
     {
         "id": 5,
         "menuId": "menu00006",
         "menuLevel": 2,
         "menuName":"문화",
-        "pmenuId":"menu00004"
+        "pmenuId":"menu00004",
+        "url":""
     },
     {
         "id": 6,
         "menuId": "menu00007",
         "menuLevel": 1,
         "menuName":"Governance",
-        "pmenuId":"ROOT"
+        "pmenuId":"ROOT",
+        "url":""
     },
     {
         "id": 7,
         "menuId": "menu00008",
         "menuLevel": 2,
         "menuName":"정치",
-        "pmenuId":"menu00007"
+        "pmenuId":"menu00007",
+        "url":""
     },
     {
         "id": 8,
         "menuId": "menu00009",
         "menuLevel": 2,
         "menuName":"경제",
-        "pmenuId":"menu00007"
+        "pmenuId":"menu00007",
+        "url":""
     }
     
 ]
