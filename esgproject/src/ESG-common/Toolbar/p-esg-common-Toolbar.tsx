@@ -9,13 +9,13 @@ import Cut from '../../assets/image/toolbar/cut.svg';
 const ToolbarItem = ({item}) => {
     let image = "";
 
-    if(item.image == "new"){
+    if(item.image === "new"){
         image = New;
-    } else if(item.image == "query"){
+    } else if(item.image === "query"){
         image = Query;
-    } else if(item.image == "save"){
+    } else if(item.image === "save"){
         image = Save;
-    } else if(item.image == "cut"){
+    } else if(item.image === "cut"){
         image = Cut;
     }
 

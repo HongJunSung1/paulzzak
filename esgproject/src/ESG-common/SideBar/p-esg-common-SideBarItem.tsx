@@ -44,15 +44,15 @@ const SideBarItem = ({ item }) => {
   } else{
     return (
       <div>
-        <div className = {styles.menuName}
-             style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
-                      marginTop: item.pmenuId==="ROOT"? "15px": "5px",
-                      paddingLeft: "10px",
-                      cursor: "pointer",
-                   }}>
-          <Link to = {item.url} className = {styles.linkMenu}>{item.menuName}</Link>
-                    
-        </div>  
+        <Link to = {item.url} className = {styles.linkMenu}>
+          <div className = {styles.menuName}
+              style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
+                        marginTop: item.pmenuId==="ROOT"? "15px": "5px",
+                        paddingLeft: "10px",
+                        cursor: "pointer",
+                    }}>{item.menuName}
+          </div>  
+        </Link>
       </div>
     )
   }
