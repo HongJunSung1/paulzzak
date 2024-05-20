@@ -33,7 +33,7 @@ const Environmental = () => {
                 <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
                 <div>
                     <button onClick={fetchData}>버튼 테스트</button>
-                    <div>{data && typeof data === 'object' ? data[0].errMsg : data}</div>
+                    <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div>
                 </div>
                 <div>테스트2</div>
                 </Splitter>
