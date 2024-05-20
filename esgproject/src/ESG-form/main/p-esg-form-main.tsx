@@ -7,7 +7,7 @@ import FixedArea from "../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
 const Main = () => {
     return(
         <>
-                main    
+            main    
         </>
     )
 }

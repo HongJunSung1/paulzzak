@@ -50,7 +50,7 @@ const SideBarItem = ({ item }) => {
                       paddingLeft: "10px",
                       cursor: "pointer",
                    }}>
-          <Link to = {item.url}>{item.menuName}</Link>
+          <Link to = {item.url} className = {styles.linkMenu}>{item.menuName}</Link>
                     
         </div>  
       </div>

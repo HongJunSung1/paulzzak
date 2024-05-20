@@ -1,0 +1,31 @@
+.ToolbarWrap {
+    height: 40px;
+    background-color: white;
+    display: flex;
+    border: solid 0.5px rgb(200, 200, 200);
+    border-radius: 5px;
+    overflow: hidden;
+    font-size:12px;
+    font-weight:700;
+    color: #373c46;
+    letter-spacing: -.3px;
+    cursor: pointer;
+    padding-left: 2px;
+}
+
+.ToolbarContent{
+    margin: 5px 5px;
+}
+
+.ToolbarButton{
+    display: flex;
+    padding: 1px 2px 0;
+}
+
+.ToolbarImage{
+    margin-right: 5px;
+    height: 15px;
+    object-fit: cover;
+    margin-top:1px;
+}
+

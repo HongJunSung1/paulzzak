@@ -2,3 +2,8 @@
     background-color: #e7dfdf;
     cursor: pointer;
 }
+
+.linkMenu {
+    text-decoration: none;
+    color: black;
+}
