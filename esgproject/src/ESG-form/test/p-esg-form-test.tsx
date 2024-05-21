@@ -26,7 +26,7 @@ const Environmental = () => {
 
     const fetchData = async () => {
         try {
-            const result = await SP_Request('https://example.com/api', [{ key: 'value' }]);
+            const result = await SP_Request('S_Test', [{ key: 'value' }]);
             setData(result);
         } catch (error) {
             setData(error);
