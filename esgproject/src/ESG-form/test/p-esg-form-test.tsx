@@ -40,9 +40,9 @@ const Environmental = () => {
             <Toolbar items={toolbar}/>
             <FixedArea name={"테스트 이름"}>
                 <FixedWrap>
-                    <TextBox name={"신은규"}/>   
+                    <TextBox name={"신은규"} isRequire={"true"}/>   
                     <TextBox name={"엉덩이"}/>    
-                    <TextBox name={"쥐어 뜯을 거"} width={500}/>    
+                    <TextBox name={"쥐어 뜯을 거"} width={300}/>    
                 </FixedWrap>
                 <FixedWrap>
                     <TextBox></TextBox>    
