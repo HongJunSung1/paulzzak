@@ -3,7 +3,8 @@ import '../../global.d.ts';
 import styles from './p-esg-common-FixedArea.module.css'
 
 
-const FixedArea = ({name}) => {
+
+const FixedArea= ({name, children}) => {
 
     if(name === ""){
         name = "";
@@ -11,10 +12,12 @@ const FixedArea = ({name}) => {
 
     return (
         <div className={styles.FixedArea}>
-            <span className={styles.AreaName}>{name}</span>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
-            <div>영역 테스트1</div>
+            <div className={styles.AreaName}>
+                ◎ {name}
+            </div>
+            <div>
+                {children}
+            </div>
         </div>
     )
 } 

@@ -1,0 +1,55 @@
+.TextBoxWrap{
+    margin: 3px 5px 3px 5px;
+}
+
+.TextBoxTitle{
+    font-size: 12px;
+    color: rgb(144, 144, 144);
+    text-align: left;
+    font-weight:700;
+    overflow:hidden;
+    height:20px;
+}
+
+.Input{
+    height: 25px;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 25px;
+    font-size: 12px;
+    color: rgb(96, 96, 96);
+    background-color: transparent;
+    user-select: none;
+    border: 1px solid #d2deee;
+    border-radius: 3px;
+    outline: none;
+}
+
+
+.InputWrap {
+    position: relative;
+    height: 25px;
+    display: inline-block;
+ }
+  
+.InputWrap input {
+  height: inherit;
+}
+
+
+
+.InputWrap .BtnClear {
+    display:block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    height: inherit;
+    background: url('../../assets/image/condition/xButton.png') center center no-repeat;
+    background-size: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    opacity: 0.4;
+  }

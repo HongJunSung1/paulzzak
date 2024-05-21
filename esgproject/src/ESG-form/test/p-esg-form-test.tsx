@@ -6,8 +6,10 @@ import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
 
 //공통 소스
 import FixedArea from "../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
+import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
+import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -36,18 +38,28 @@ const Environmental = () => {
     return(
         <>
             <Toolbar items={toolbar}/>
-            <FixedArea name={"테스트 이름"}></FixedArea>  
+            <FixedArea name={"테스트 이름"}>
+                <FixedWrap>
+                    <TextBox name={"신은규"}/>   
+                    <TextBox name={"엉덩이"}/>    
+                    <TextBox name={"쥐어 뜯을 거"} width={500}/>    
+                </FixedWrap>
+                <FixedWrap>
+                    <TextBox></TextBox>    
+                    <TextBox></TextBox>    
+                </FixedWrap>
+            </FixedArea>  
             <DynamicArea>
-            <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
-                <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
-                <div>
-                    <button onClick={fetchData}>버튼 테스트</button>
-                    <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div>
-                </div>
-                <div>테스트2</div>
+                <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
+                    <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
+                    <div>
+                        <button onClick={fetchData}>버튼 테스트</button>
+                        <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div>
+                    </div>
+                    <div>테스트2</div>
+                    </Splitter>
+                    <div>테스트 3</div>
                 </Splitter>
-                <div>테스트 3</div>
-            </Splitter>
             </DynamicArea>
         </>
     )
