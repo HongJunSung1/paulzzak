@@ -37,7 +37,7 @@
 .OurLogo{
     padding-left: 15px;
     padding-top: 15px;
-    width: 15px;
+    width: 27px;
     object-fit: cover;
 }
 
@@ -57,9 +57,9 @@
 
 .LoginLeftBottom{
     color: white;
-    font-size: 40px;
+    font-size: 20px;
     padding-left: 25px;
-    padding-top: 30px;
+    padding-top: 62px;
     font-weight:bold;
     
 }
@@ -93,7 +93,7 @@
 }
 
 .LoginInput{
-    width: 300px;
+    width: 322px;
     height: 40px;
     vertical-align: middle;
     border-radius: 5px;
@@ -106,6 +106,10 @@
 .LoginInputWrap input:focus{
     border-color: #8f8f8f;
     outline: none;
+}
+
+input::placeholder  {
+    opacity:0.6;
 }
 
 .LoginBtn{
