@@ -10,6 +10,7 @@ import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
+import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -25,18 +26,22 @@ const Environmental = () => {
                     ]
 
     const [data,setData] = useState(null);
+    const [loading,setLoading] = useState(false);
 
     const fetchData = async () => {
+        setLoading(true);
         try {
             const result = await SP_Request('S_Test', [{ data: '신은규' },{data : '홍준성'}]);
             setData(result);
         } catch (error) {
             setData(error);
         }
+        setTimeout(()=>{setLoading(false);},1000);
     };
 
     return(
         <>
+        <Loading loading={loading}/>
             <Toolbar items={toolbar}/>
             <FixedArea name={"테스트 이름"}>
                 <FixedWrap>
@@ -56,7 +61,7 @@ const Environmental = () => {
                         <button onClick={fetchData}>버튼 테스트</button>
                         <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div>
                     </div>
-                    <div>테스트2</div>
+                    <div>테스트 2</div>
                     </Splitter>
                     <div>테스트 3</div>
                 </Splitter>
