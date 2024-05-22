@@ -21,9 +21,11 @@ const SideBarItem = ({ item }) => {
       <div>
         <div className = {styles.menuName}
                     style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
-                              marginTop: item.pmenuId==="ROOT"? "15px": "5px",
+                              height: item.pmenuId==="ROOT"? "35px": "15px",
+                              lineHeight: item.pmenuId==="ROOT"? "35px": "15px",
                               paddingLeft: "10px",
                               paddingRight: "10px",
+                              marginBottom: "-5px",
                               cursor: "pointer",
                               display: "flex",
                               justifyContent: "space-between"
