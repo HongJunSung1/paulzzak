@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './p-esg-common-NavBar.module.css'
 import '../../global.d.ts';
+import { Link } from 'react-router-dom';
 
 import ImageLogo from '../../assets/image/logo.png';
 import ImageSetting from '../../assets/image/setting.png';
@@ -11,14 +12,16 @@ const Navbar = () => {
     return (
         <div>
             <div className = {styles.NavBarContainer}>
-                <div className = {styles.NavBarLeft}>
-                    <div className = {styles.ImageLogoWrap}>
-                        <img className = {styles.ImageLogo} src={ImageLogo} alt={"Logo"}/>
+                <Link to = "/main" className = {styles.LogoClick}>
+                    <div className = {styles.NavBarLeft}>
+                        <div className = {styles.ImageLogoWrap}>
+                            <img className = {styles.ImageLogo} src={ImageLogo} alt={"Logo"}/>
+                        </div>
+                        <div className = {styles.MainTitle}>
+                            ESG Data Platform
+                        </div>
                     </div>
-                    <div className = {styles.MainTitle}>
-                        ESG Data Platform
-                    </div>
-                </div>
+                </Link>
                 <div className = {styles.NavBarItem}>
                     <div className = {styles.search}>
                         <input type="text" className={styles.SearchInput}></input>

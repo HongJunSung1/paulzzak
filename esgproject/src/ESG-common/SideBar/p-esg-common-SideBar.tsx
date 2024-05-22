@@ -2,6 +2,7 @@ import React from 'react'
 import SideBarItem from './p-esg-common-SideBarItem.tsx';
 import menuData from './testdata.json';
 import {SbContainer} from './p-esg-common-sideBarItem.styles.tsx';
+import styles from './p-esg-common-SideBarItem.module.css';
 
 const SideBar = ({ items }) => {
   const nest = (menuData, menuId = "ROOT", link = 'pmenuId') =>
@@ -11,7 +12,7 @@ const SideBar = ({ items }) => {
   
   return (
     <SbContainer>
-      <h2>ESG</h2>
+      <div className = {styles.SideBarName}>ESG</div>
       {tree.map((subItem, index) =>
         <SideBarItem item={subItem} key={index} />
       )}

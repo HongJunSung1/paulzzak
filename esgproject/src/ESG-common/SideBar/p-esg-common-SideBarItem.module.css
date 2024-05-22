@@ -7,3 +7,13 @@
     text-decoration: none;
     color: black;
 }
+
+.SideBarName{
+    height: 45px;
+    background-color: #d34e4e;
+    line-height: 45px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 25px;
+    color: white;
+}
