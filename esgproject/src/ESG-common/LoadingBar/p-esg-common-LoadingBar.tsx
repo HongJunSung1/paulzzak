@@ -7,14 +7,12 @@ import styled from "styled-components";
         if(loading == true){
             return (
                 <SpinnerWrap>
-                    <LoaderWrap>
-                        <SyncLoader
-                            color="black"
-                            loading={loading}
-                            size={30}
-                            speedMultiplier={0.7}
-                        />
-                    </LoaderWrap>
+                    <SyncLoader
+                        color="black"
+                        loading={loading}
+                        size={30}
+                        speedMultiplier={0.7}
+                    />
                 </SpinnerWrap>
             );
         }
@@ -32,11 +30,6 @@ import styled from "styled-components";
         align-items: center;
         justify-content: center;
         opacity: 0.3;
-    `
-
-    const LoaderWrap = styled.div`
-        opacity: 1;
-        z-index:100;
     `
   
     export default Loading;
