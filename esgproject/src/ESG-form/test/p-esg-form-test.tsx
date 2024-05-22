@@ -28,7 +28,7 @@ const Environmental = () => {
 
     const fetchData = async () => {
         try {
-            const result = await SP_Request('S_Test', [{ key: 'value' }]);
+            const result = await SP_Request('S_Test', [{ data: '신은규' },{data : '홍준성'}]);
             setData(result);
         } catch (error) {
             setData(error);
