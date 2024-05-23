@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {Container, DataContainer} from "./App.styles.tsx";
 import { Routes, Route, useLocation } from 'react-router-dom'
 
@@ -10,8 +12,8 @@ import Login from './ESG-login/p-esg-login.tsx';
 import Main from './ESG-form/main/p-esg-form-main.tsx';
 import Environmental from './ESG-form/test/p-esg-form-test.tsx';
 
-function App() {
 
+function App() {
 
   const location = useLocation();
   const isLoginPage = location.pathname === '/';

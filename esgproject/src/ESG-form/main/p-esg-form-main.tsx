@@ -4,7 +4,7 @@ import '../../global.d.ts';
 const Main = () => {
     return(
         <>
-            main    
+            main
         </>
     )
 }
