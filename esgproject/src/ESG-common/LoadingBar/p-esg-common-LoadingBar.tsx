@@ -4,7 +4,7 @@ import { SyncLoader
 import styled from "styled-components";
 
     const Loading = ({ loading }) => {
-        if(loading == true){
+        if(loading === true){
             return (
                 <SpinnerWrap>
                     <SyncLoader
