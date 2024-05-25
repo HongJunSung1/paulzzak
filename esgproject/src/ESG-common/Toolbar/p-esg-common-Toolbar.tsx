@@ -6,7 +6,21 @@ import Query from '../../assets/image/toolbar/query.svg';
 import Save from '../../assets/image/toolbar/save.svg';
 import Cut from '../../assets/image/toolbar/cut.svg';
 
-const ToolbarItem = ({item}) => {
+import { SP_Request } from '../../hooks/sp-request.tsx';
+const ToolbarItem = ({item,resData,isLoading}) => {
+
+    const fetchData = async () => {
+        isLoading(true);
+        try {
+            const result = await SP_Request(item.spName, [{id : 1, name: '신은규' },{id : 2, name : '홍준성'}]);
+            resData(result);
+        } catch (error) {
+            console.log(error);
+        }
+        setTimeout(()=>{ isLoading(false);},1000);
+    };
+
+
     let image = "";
 
     if(item.image === "new"){
@@ -21,7 +35,7 @@ const ToolbarItem = ({item}) => {
 
     return(
         <div className = {styles.ToolbarContent}>
-            <div className = {styles.ToolbarButton}>
+            <div className = {styles.ToolbarButton} onClick={fetchData}>
                 <img className = {styles.ToolbarImage} src={image} alt={`${item.image}`}/>
                 <div className = {styles.ToolbarTitle}>{item.title}</div>
             </div>
@@ -29,13 +43,12 @@ const ToolbarItem = ({item}) => {
     )
 }
 
-const Toolbar = ({items}) => {
-
+const Toolbar = ({items,resData,isLoading}) => {
     return(
         <>
             <div className = {styles.ToolbarWrap}>
                 {
-                    items.map((item, id) => (<ToolbarItem item={item} key={id}/>))
+                    items.map((item, id) => (<ToolbarItem item={item} key={id} resData={resData} isLoading={isLoading}/>))
                 }
             </div>
         </>

@@ -13,42 +13,21 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 
 
-import { SP_Request } from '../../hooks/sp-request.tsx';
+// import { SP_Request } from '../../hooks/sp-request.tsx';
 
 const Environmental = () => {
 
     const toolbar = [  
-                       {id: 0, title:"신규", image:"new"  , sp:""}
-                     , {id: 1, title:"조회", image:"query", sp:""}
-                     , {id: 2, title:"저장", image:"save" , sp:""}
-                     , {id: 3, title:"삭제", image:"cut"  , sp:""}
+                       {id: 0, title:"신규", image:"new"  , spName:""}
+                     , {id: 1, title:"조회", image:"query", spName:"S_Test"}
+                     , {id: 2, title:"저장", image:"save" , spName:""}
+                     , {id: 3, title:"삭제", image:"cut"  , spName:""}
                     ]
 
-    const [data,setData] = useState(null);
     const [loading,setLoading] = useState(false);
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const result = await SP_Request('S_Test', [{ data: '신은규' },{data : '홍준성'}]);
-            setData(result);
-        } catch (error) {
-            setData(error);
-        }
-        setTimeout(()=>{setLoading(false);},1000);
-    };
-
-
-    // 시트 만들기
-    const source1 = [
-                    {id: 1, name: "신은규"},
-                    {id: 2, name: "홍준성"}
-                   ]
-
-    const source2 = [
-                    {id: 1, NickName: "썩은규"},
-                    {id: 2, NickName: "홍준성"}
-                   ]
+    const [source1,setSource1] = useState([]);
+    const [source2,setSource2] = useState([]);
     
     const columns1 = [
         {name : "id", header: "ID", width: 50},
@@ -60,10 +39,20 @@ const Environmental = () => {
         {name : "NickName", header: "NickName", width: 100, editor: 'text', align: 'center'},
     ];
 
+
+    const isLoading = (isLoad) => {
+        setLoading(isLoad);
+    }
+
+    const resData = (resData) => {
+        setSource1(resData[0]);
+        setSource2(resData[1]);
+    };
+
     return(
         <>
         <Loading loading={loading}/>
-            <Toolbar items={toolbar}/>
+            <Toolbar items={toolbar} resData={resData} isLoading={isLoading}/>
             <FixedArea name={"테스트 이름"}>
                 <FixedWrap>
                     <TextBox name={"신은규"} isRequire={"true"}/>   
@@ -79,8 +68,9 @@ const Environmental = () => {
                 <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                     <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
                         <div>
-                            <button onClick={fetchData}>버튼 테스트</button>
-                            <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div>
+                            {/* <button onClick={fetchData}>버튼 테스트</button>
+                            <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div> */}
+                            테스트 1
                         </div>
                         <Grid title = "제목" source = {source1} columns = {columns1}/>
                     </Splitter>

@@ -11,7 +11,7 @@ export const SbContainer = styled.div`
 `
 
 interface IisOpen{
-  isopen : Boolean;
+  isopen : boolean;
 };
 
 // SbItem에서 하위메뉴들을 묶어줄 div
