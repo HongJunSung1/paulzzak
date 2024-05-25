@@ -27,11 +27,19 @@ const ToastGrid = ({title, source, columns}) => {
             gridRef.current.getInstance().appendRow();
         }
     }
+
+    const dataModified = () => {
+        if(gridRef.current){
+            console.log(gridRef.current.getInstance().getModifiedRows({withRawData: true}));
+            console.log(gridRef.current.getInstance().getModifiedRows());
+        }
+    }
     
     return (
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>
                 <button onClick={handleAppendRow} className={styles.GridBtn}>행 추가</button>
+                <button onClick={dataModified} className={styles.GridBtn}>변동 확인</button>
                 <div className = {styles.GridTitle}>{title}</div>
             </div>
             <div className={styles.GridWrap}>  
