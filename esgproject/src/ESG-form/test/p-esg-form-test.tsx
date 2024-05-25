@@ -39,11 +39,12 @@ const Environmental = () => {
         {name : "NickName", header: "NickName", width: 100, editor: 'text', align: 'center'},
     ];
 
-
+    // 로딩 뷰
     const isLoading = (isLoad) => {
         setLoading(isLoad);
     }
 
+    // 소스 결과 값 전달
     const resData = (resData) => {
         setSource1(resData[0]);
         setSource2(resData[1]);
