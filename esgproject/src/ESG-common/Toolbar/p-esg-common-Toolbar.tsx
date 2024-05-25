@@ -17,7 +17,7 @@ const ToolbarItem = ({item,resData,isLoading}) => {
         } catch (error) {
             console.log(error);
         }
-        setTimeout(()=>{ isLoading(false);},1000);
+        isLoading(false);
     };
 
 
