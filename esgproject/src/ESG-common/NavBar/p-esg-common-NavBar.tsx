@@ -15,15 +15,12 @@ const Navbar = () => {
 
     const navigate = useNavigate()
 
-    let isLogin = false;
-
-    isLogin = cookie.load('userid') != undefined ? true : false;
-
     useEffect(() => {
+        const isLogin = cookie.load('userid') !== undefined;
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }
-    }, []); // 빈 배열로 컴포넌트 마운트 시에만 실행
+    }, [navigate]); // 빈 배열로 컴포넌트 마운트 시에만 실행
 
     return (
         <div>
