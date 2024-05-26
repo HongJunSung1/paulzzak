@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState, useRef}  from 'react';
 import styles from './p-esg-login.module.css';
 import { useNavigate  } from 'react-router-dom';
 
@@ -18,11 +18,16 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
+    //로딩바
     const [loading,setLoading] = useState(false);
 
     // 아이디, 비밀번호 변수 설정
     const [userID,setUserID] = useState('');
     const [userPW,setUserPW] = useState(''); 
+
+    // 아이디,비밀번호 입력창 포커스
+    const passwordInputRef = useRef<HTMLInputElement>(null);
+    const idInputRef = useRef<HTMLInputElement>(null);
 
     const inputID = event => {
         setUserID(event.target.value);
@@ -36,6 +41,11 @@ const LoginPage = () => {
     // 로그인 SP 결과
     let result : any;
 
+    const activeEnter = (e) => {
+        if(e.key === "Enter") {
+            loginCheck();
+        }
+      }
 
     //로그인 체크 및 함호화
     const loginCheck = () => {
@@ -78,8 +88,34 @@ const LoginPage = () => {
             setLoading(false);// 로딩창 종료
             navigate("/main");// 메인 화면 이동
         }else{
-            setLoading(false);// 로딩창 종료
-            window.alert(result[0][0].Message);
+            switch(result[0][0].Status){
+
+                //아이디 오류 : 900
+                case "900" :
+                    setUserID("");
+                    setUserPW("");
+                    setLoading(false);// 로딩창 종료
+                    window.alert(result[0][0].Message);
+                    if(idInputRef.current){
+                        idInputRef.current.focus();// 아이디 입력 필드에 포커스
+                    }
+                break;
+
+                //비밀번호 오류 : 901
+                case "901" : 
+                    setUserPW("");
+                    setLoading(false);// 로딩창 종료
+                    window.alert(result[0][0].Message);
+                    if (passwordInputRef.current) {
+                        passwordInputRef.current.focus(); // 비밀번호 입력 필드에 포커스
+                    }
+                break;
+
+                default:
+                    setLoading(false); // 로딩창 종료
+                    window.alert("로그인에 실패했습니다. 다시 시도해주세요.");
+                break;
+            }
         }
     }
 
@@ -107,8 +143,8 @@ const LoginPage = () => {
                                 <img className = {styles.EYLogo} src={EYLogo} alt={"EYLogo"}></img>
                             </div>
                             <div className={styles.LoginInputWrap}>
-                                <input type="text" className = {styles.LoginInput} placeholder="사용자ID" value={userID} onChange={inputID}></input>
-                                <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW}></input>
+                                <input type="text" className = {styles.LoginInput} placeholder="사용자ID" value={userID} onChange={inputID} onKeyDown={(e) => activeEnter(e)} ref={idInputRef}></input>
+                                <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW} onKeyDown={(e) => activeEnter(e)} ref={passwordInputRef}></input>
                                 <button className = {styles.LoginBtn} onClick={loginCheck}>로그인</button>
                             </div>
                             <div className={styles.copyright}>
