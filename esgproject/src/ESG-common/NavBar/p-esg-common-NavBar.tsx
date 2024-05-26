@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import styles from './p-esg-common-NavBar.module.css'
 import '../../global.d.ts';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,23 @@ import ImageSetting from '../../assets/image/setting.png';
 import ImageUser from '../../assets/image/user.png';
 import ImageAlarm from '../../assets/image/alarm.png';
 
+import { useNavigate  } from 'react-router-dom';
+import cookie from 'react-cookies';
+
 const Navbar = () => {
+
+    const navigate = useNavigate()
+
+    let isLogin = false;
+
+    isLogin = cookie.load('userid') != undefined ? true : false;
+
+    useEffect(() => {
+        if (!isLogin) {
+            navigate("/"); // 기본 주소로 리다이렉트
+        }
+    }, []); // 빈 배열로 컴포넌트 마운트 시에만 실행
+
     return (
         <div>
             <div className = {styles.NavBarContainer}>

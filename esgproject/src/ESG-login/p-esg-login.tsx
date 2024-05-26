@@ -9,8 +9,12 @@ import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 
 import { SP_Request } from '../hooks/sp-request.tsx';
 import {SHA256} from 'crypto-js';
+import cookie from 'react-cookies';
 
 const LoginPage = () => {
+
+    // 쿠키 삭제
+    cookie.remove('userid', {path : '/'},1000);
 
     const navigate = useNavigate();
 
@@ -38,9 +42,11 @@ const LoginPage = () => {
         setLoading(true);// 로딩창 시작
         if (userID === null || userID === ""){
             window.alert("아이디를 입력해주세요.");
+            setLoading(false);// 로딩창 종료
             return;
         }else if (userPW === null || userPW === ""){
             window.alert("비밀번호를 입력해주세요.");
+            setLoading(false);// 로딩창 종료
             return;
         }
 
@@ -54,16 +60,26 @@ const LoginPage = () => {
 
         try {
             result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW}]);
-            console.log(result);
         } catch (error) {
             console.log(error);
         }
         if(result !== null && result[0][0].Status === "0"){
+            // 로그인 정보 쿠키 저장
+            const expires = new Date();
+            expires.setMinutes(expires.getMinutes() + 60)
+            cookie.save('userid', result[0][0].userID, {
+                path : '/',
+                expires,
+                secure : true
+                // httpOnly : true
+            });
+            // console.log(cookie.load('userid'));
+
             setLoading(false);// 로딩창 종료
-            navigate("/main");// 화면 이동
+            navigate("/main");// 메인 화면 이동
         }else{
             setLoading(false);// 로딩창 종료
-            window.alert("로그인 실패");
+            window.alert(result[0][0].Message);
         }
     }
 
