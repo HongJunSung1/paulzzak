@@ -44,28 +44,34 @@ const ToastGrid = ({title, source, columns}) => {
         setText('0');
     }
 
-
-    // 데이터 가져오기
-    const dataModified = () => {
-        if(gridRef.current){
-            let gridAr : object[] = [];
-            let createdAr : object[] | undefined = [];
-            let updatedAr : object[] | undefined = [];
-
-            let createArCnt : number = gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!.length;
-            let updatedArCnt : number = gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!.length;
-
-            if(createArCnt > 0 ){ createdAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!); }
-            if(updatedArCnt > 0){ updatedAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!); }
-
-
-            if(createdAr.length > 0){gridAr.push(createdAr);}
-            if(updatedAr.length > 0){gridAr.push(updatedAr);}
-
-            console.log(gridAr);
+    const activeEnter = (e) => {
+        if(e.key === "Enter") {
+            handleAppendRows();
         }
     }
-    
+
+
+    // // 데이터 가져오기
+    // const dataModified = () => {
+    //     if(gridRef.current){
+    //         let gridAr : object[] = [];
+    //         let createdAr : object[] | undefined = [];
+    //         let updatedAr : object[] | undefined = [];
+
+    //         let createArCnt : number = gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!.length;
+    //         let updatedArCnt : number = gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!.length;
+
+    //         if(createArCnt > 0 ){ createdAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!); }
+    //         if(updatedArCnt > 0){ updatedAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!); }
+
+
+    //         if(createdAr.length > 0){gridAr.push(createdAr);}
+    //         if(updatedAr.length > 0){gridAr.push(updatedAr);}
+
+    //         console.log(gridAr);
+    //     }
+    // }
+ 
     return (
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>
@@ -74,13 +80,13 @@ const ToastGrid = ({title, source, columns}) => {
                     {isClickRowAppend &&   
                         <div className={styles.AppendRowWrap}>
                             <span className={styles.AppendUnit}>
-                                <input type= "number" className={styles.AppendRowInput} onChange={changeNumber} value={setNumber}></input>
+                                <input type= "number" className={styles.AppendRowInput} onChange={changeNumber} value={setNumber} onKeyDown={(e) => activeEnter(e)}></input>
                                 <button onClick={handleAppendRows} className={styles.GridBtn}>행 추가</button>
                             </span>
                         </div>
                     }
                 </div>
-                <button onClick={dataModified} className={styles.GridBtn}>변동 확인</button>
+                {/* <button onClick={dataModified} className={styles.GridBtn}>변동 확인</button> */}
                 <div className = {styles.GridTitle}>{title}</div>
             </div>
             <div className={styles.GridWrap}>  
@@ -88,6 +94,7 @@ const ToastGrid = ({title, source, columns}) => {
                 {isInitialized &&        
                 <Grid   ref = {gridRef}
                         data={source}
+                        editingEvent={'click'}
                         columns = {columns} 
                         bodyHeight={'fitToParent'}
                         rowHeight={25}

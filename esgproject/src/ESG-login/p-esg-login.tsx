@@ -66,13 +66,13 @@ const LoginPage = () => {
         if(e.key === "Enter") {
             loginCheck();
         }
-      }
+    }
 
-      const activeChangeEnter = (e) => {
-        if(e.key === "Enter") {
-            passwordChange();
-        }
-      }
+    const activeChangeEnter = (e) => {
+    if(e.key === "Enter") {
+        passwordChange();
+    }
+    }
 
     //로그인 체크 및 함호화
     const loginCheck = () => {
