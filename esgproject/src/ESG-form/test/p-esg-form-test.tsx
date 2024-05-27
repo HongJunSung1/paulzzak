@@ -53,7 +53,7 @@ const Environmental = () => {
         // for(let i = 0; i < Object.keys(resData[1]).length; i++){
         //     resData[1][i].DataSet = 'DataSet2';
         // }
-        console.log(resData);
+
         setSource1(resData[0]);
         setSource2(resData[1]);
     };

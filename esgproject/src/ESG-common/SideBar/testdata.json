@@ -70,6 +70,22 @@
         "menuName":"경제",
         "pmenuId":"menu00007",
         "url":""
+    },
+    {
+        "id": 9,
+        "menuId": "menu00010",
+        "menuLevel": 1,
+        "menuName":"관리자",
+        "pmenuId":"ROOT",
+        "url":""
+    },
+    {
+        "id": 10,
+        "menuId": "menu00011",
+        "menuLevel": 2,
+        "menuName":"계정관리",
+        "pmenuId":"menu00010",
+        "url":"admin"
     }
     
 ]
