@@ -58,6 +58,7 @@ const ToastGrid = ({title, source, columns}) => {
             if(createArCnt > 0 ){ createdAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!); }
             if(updatedArCnt > 0){ updatedAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!); }
 
+
             if(createdAr.length > 0){gridAr.push(createdAr);}
             if(updatedAr.length > 0){gridAr.push(updatedAr);}
 

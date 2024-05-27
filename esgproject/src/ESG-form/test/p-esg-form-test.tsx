@@ -20,14 +20,14 @@ const Environmental = () => {
     const toolbar = [  
                        {id: 0, title:"신규", image:"new"  , spName:""}
                      , {id: 1, title:"조회", image:"query", spName:"S_Test"}
-                     , {id: 2, title:"저장", image:"save" , spName:""}
+                     , {id: 2, title:"저장", image:"save" , spName:"S_Save_Test"}
                      , {id: 3, title:"삭제", image:"cut"  , spName:""}
                     ]
 
     const [loading,setLoading] = useState(false);
 
-    const [source1,setSource1] = useState([]);
-    const [source2,setSource2] = useState([]);
+    const [source1,setSource1] = useState<object>([]);
+    const [source2,setSource2] = useState<object>([]);
     
     const columns1 = [
         {name : "id", header: "ID", width: 50},
@@ -46,13 +46,21 @@ const Environmental = () => {
 
     // 소스 결과 값 전달
     const resData = (resData) => {
+        // for(let i = 0; i < Object.keys(resData[0]).length; i++){
+        //     resData[0][i].DataSet = 'DataSet1';
+        // }
+        
+        // for(let i = 0; i < Object.keys(resData[1]).length; i++){
+        //     resData[1][i].DataSet = 'DataSet2';
+        // }
+        console.log(resData);
         setSource1(resData[0]);
         setSource2(resData[1]);
     };
 
     return(
         <>
-        <Loading loading={loading}/>
+            <Loading loading={loading}/>
             <Toolbar items={toolbar} resData={resData} isLoading={isLoading}/>
             <FixedArea name={"테스트 이름"}>
                 <FixedWrap>

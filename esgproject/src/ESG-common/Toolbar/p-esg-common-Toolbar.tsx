@@ -12,8 +12,10 @@ const ToolbarItem = ({item,resData,isLoading}) => {
     const fetchData = async () => {
         isLoading(true);
         try {
-            const result = await SP_Request(item.spName, [{id : 1, name: '신은규' },{id : 2, name : '홍준성'}]);
-            resData(result);
+            if(item.image ==="query"){
+                const result = await SP_Request(item.spName, [{id : 1, name: '신은규' },{id : 2, name : '홍준성'}]);
+                resData(result);
+            }
         } catch (error) {
             console.log(error);
         }

@@ -92,6 +92,12 @@
     padding-top: 60px;
 }
 
+.LoginInputWrapChange{
+    position: relative;
+    left: 14%;
+    padding-top: 30px;
+}
+
 .LoginInput{
     width: 322px;
     height: 40px;
@@ -103,7 +109,7 @@
     margin-bottom: 10px;
 }
 
-.LoginInputWrap input:focus{
+.LoginInputWrap input:focus, .LoginInputWrapChange input:focus{
     border-color: #8f8f8f;
     outline: none;
 }
@@ -125,9 +131,29 @@ input::placeholder  {
     cursor: pointer;
 }
 
+.loginAlert{
+    color: red;
+    padding-left: 3px;
+    font-size:14px;
+}
+
+.initPassword{
+    padding-top: 5px;
+    padding-left: 105px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .copyright{
     color: rgb(206, 206, 206);
     font-size: 14px;
-    padding-top: 110px;
+    padding-top: 80px;
+    padding-left: 80px;
+}
+
+.copyrightSub{
+    color: rgb(206, 206, 206);
+    font-size: 14px;
+    padding-top: 20px;
     padding-left: 80px;
 }
