@@ -1,11 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState, useCallback} from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-grid.module.css';
 
 import 'tui-grid/dist/tui-grid.css';
 import Grid from '@toast-ui/react-grid';
 
-const ToastGrid = ({title, source, columns}) => {
+type CustomGridProps = {
+    title: string;
+    source: any[];
+    columns: any[];
+
+    onChange: (gridId: string, changes: ModifiedRows) => void;
+    gridId: string;
+  };
+  
+type ModifiedRows = {
+    createdRows: any[];
+    updatedRows: any[];
+    deletedRows: any[];
+};
+
+const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, gridId}) => {
 
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -71,7 +86,44 @@ const ToastGrid = ({title, source, columns}) => {
     //         console.log(gridAr);
     //     }
     // }
- 
+
+    // const handleDataChange = useCallback(() => {
+    //     const instance = gridRef.current?.getInstance();
+    //     console.log(instance);
+    //     if (instance) {
+    //       const modifiedRows = instance.getModifiedRows();
+    //       const changes: ModifiedRows = {
+    //         createdRows: modifiedRows.createdRows ?? [],
+    //         updatedRows: modifiedRows.updatedRows ?? [],
+    //         deletedRows: modifiedRows.deletedRows ?? [],
+    //       };
+    //       console.log(`Grid ${gridId} detected changes:`, changes);
+    //       onChange(gridId, changes);
+    //     }
+    //   }, [gridId, onChange]);
+    
+
+    //   useEffect(() => {
+    //     const instance = gridRef.current?.getInstance();
+    //     instance?.on('editingFinish', handleDataChange);
+    
+    //     return () => {
+    //       instance?.off('editingFinish', handleDataChange);
+    //     };
+    //   }, []);
+
+
+    gridRef.current?.getInstance().on('editingFinish', () => {
+        const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
+        const changes: ModifiedRows = {
+          createdRows: modifiedRows?.createdRows ?? [],
+          updatedRows: modifiedRows?.updatedRows ?? [],
+          deletedRows: modifiedRows?.deletedRows ?? [],
+        };
+        console.log(`Grid ${gridId} detected changes:`, changes);
+        onChange(gridId, changes);
+    })
+
     return (
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>

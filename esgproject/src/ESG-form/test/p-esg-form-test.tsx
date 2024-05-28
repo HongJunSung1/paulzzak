@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import '../../global.d.ts';
 
 
@@ -15,7 +15,41 @@ import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 
 // import { SP_Request } from '../../hooks/sp-request.tsx';
 
-const Environmental = () => {
+type ModifiedRows = {
+    createdRows: any[];
+    updatedRows: any[];
+    deletedRows: any[];
+  };
+
+  
+const Environmental: React.FC = () => {
+
+    const [grid1Data, setGrid1Data] = useState([]);
+    const [grid2Data, setGrid2Data] = useState([]);
+    const [grid1Changes, setGrid1Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: [] });
+    const [grid2Changes, setGrid2Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: [] });
+  
+
+    const handleGridChange = (gridId: string, changes: ModifiedRows) => {
+        if (gridId === 'grid1') {
+            setGrid1Changes(changes);
+        } else if (gridId === 'grid2') {
+            setGrid2Changes(changes);
+        }
+      };
+    
+    const handleSave = () => {
+        const combinedData = {
+          grid1: grid1Changes,
+          grid2: grid2Changes,
+        };
+    
+        console.log('Combined Data:', combinedData);
+    
+        // 여기서 API 호출이나 데이터 처리를 수행합니다.
+    };
+
+
 
     const toolbar = [  
                        {id: 0, title:"신규", image:"new"  , spName:""}
@@ -25,9 +59,6 @@ const Environmental = () => {
                     ]
 
     const [loading,setLoading] = useState(false);
-
-    const [source1,setSource1] = useState<object>([]);
-    const [source2,setSource2] = useState<object>([]);
     
     const columns1 = [
         {name : "id", header: "ID", width: 50},
@@ -54,8 +85,8 @@ const Environmental = () => {
         //     resData[1][i].DataSet = 'DataSet2';
         // }
 
-        setSource1(resData[0]);
-        setSource2(resData[1]);
+        setGrid1Data(grid1Data);
+        setGrid2Data(grid2Data);
     };
 
     return(
@@ -74,6 +105,7 @@ const Environmental = () => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
+            <button onClick={handleSave}>Save All Changes</button>
                 <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                     <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
                         <div>
@@ -81,9 +113,12 @@ const Environmental = () => {
                             <div>{data && typeof data === 'object' ? JSON.stringify(data) : data}</div> */}
                             테스트 1
                         </div>
-                        <Grid title = "제목" source = {source1} columns = {columns1}/>
+                        {/* <Grid  title = "제목" source = {source1} columns = {columns1} onChange={handleGridChange}/> */}
+                        <Grid gridId="grid1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange}/>
                     </Splitter>
-                    <Grid title = "제목 테스트" source = {source2} columns = {columns2}/>
+                    {/* <Grid title = "제목 테스트" source = {source2} columns = {columns2} onChange={handleGridChange}/> */}
+                    <Grid gridId="grid2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange}/>
+                    
                 </Splitter>
             </DynamicArea>
         </>

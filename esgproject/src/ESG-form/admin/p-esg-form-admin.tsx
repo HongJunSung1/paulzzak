@@ -44,7 +44,6 @@ const Admin = () => {
         setSource1(resData[0]);
     }
 
-
     return (
         <>
             <Loading loading={loading}/>
@@ -57,7 +56,8 @@ const Admin = () => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Grid title="계정 정보" source = {source1} columns={columns1}/>
+                test
+                {/* <Grid title="계정 정보" source = {source1} columns={columns1}/> */}
             </DynamicArea>
         </>
     )
