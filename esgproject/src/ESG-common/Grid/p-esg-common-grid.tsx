@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState, useCallback} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-grid.module.css';
 
@@ -12,15 +12,17 @@ type CustomGridProps = {
 
     onChange: (gridId: string, changes: ModifiedRows) => void;
     gridId: string;
+    DataSet: string;
   };
   
 type ModifiedRows = {
     createdRows: any[];
     updatedRows: any[];
     deletedRows: any[];
+    DataSet    : string;
 };
 
-const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, gridId}) => {
+const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, gridId, DataSet}) => {
 
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -113,14 +115,15 @@ const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, 
     //   }, []);
 
 
-    gridRef.current?.getInstance().on('editingFinish', () => {
+    gridRef.current?.getInstance().on('afterChange', () => {
         const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
         const changes: ModifiedRows = {
           createdRows: modifiedRows?.createdRows ?? [],
           updatedRows: modifiedRows?.updatedRows ?? [],
           deletedRows: modifiedRows?.deletedRows ?? [],
+          DataSet : DataSet
         };
-        console.log(`Grid ${gridId} detected changes:`, changes);
+        // console.log(`Grid ${gridId} detected changes:`, changes);
         onChange(gridId, changes);
     })
 
