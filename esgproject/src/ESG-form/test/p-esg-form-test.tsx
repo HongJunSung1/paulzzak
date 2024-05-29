@@ -21,15 +21,38 @@ type ModifiedRows = {
     DataSet    : string;
   };
 
-  
+type grid1Ar = {
+    DataSet    : string;
+    grid       : any[];
+  };
+
+type grid2Ar = {
+    DataSet   : string;
+    grid      : any[];
+  };
+
+type condition = {
+    condition1 : string;
+    condition2 : string;
+    condition3 : string;
+    DataSet    : string;
+}  
+
 const Environmental: React.FC = () => {
 
+    // 조회조건 값
+    const [condition1, setCondition1] = useState('')
+    const [condition2, setCondition2] = useState('')
+    const [condition3, setCondition3] = useState('')
 
+    // 그리드 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
     let [grid1Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: [] , DataSet : ""});
     let [grid2Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: [] , DataSet : ""});
   
+
+
 
     const handleGridChange = (gridId: string, changes: ModifiedRows) => {
         if (gridId === 'grid1') {
@@ -37,20 +60,8 @@ const Environmental: React.FC = () => {
         } else if (gridId === 'grid2') {
             grid2Changes = changes;
         }
-      };
-    
-    const handleSave = () => {
-        const combinedData = {
-          grid1: grid1Changes,
-          grid2: grid2Changes,
-        };
-    
-        console.log('Combined Data:', combinedData);
-    
-        // 여기서 API 호출이나 데이터 처리를 수행합니다.
     };
-
-
+    
 
     const toolbar = [  
                        {id: 0, title:"신규", image:"new"  , spName:""}
@@ -73,10 +84,6 @@ const Environmental: React.FC = () => {
 
     // 툴바 이벤트
     const toolbarEvent = async (clickID) =>{
-        const combinedData = {
-            grid1: grid1Changes,
-            grid2: grid2Changes,
-        };
 
         switch (clickID){
 
@@ -85,12 +92,23 @@ const Environmental: React.FC = () => {
                 break;
 
             case 1 : 
+                    const conditionAr : condition = ({
+                        condition1 : condition1,
+                        condition2 : condition2,
+                        condition3 : condition3,
+                        DataSet    : 'DataSet1'
+                    })
 
                     setLoading(true);
                     try {
-                        const result = await SP_Request(toolbar[clickID].spName, [{id : 1, name: '신은규' },{id : 2, name : '홍준성'}]);
-                        setGrid1Data(result[0]);
-                        setGrid2Data(result[1]);
+                        const result = await SP_Request(toolbar[clickID].spName, [conditionAr]);
+                        
+                        if(result){
+                            setGrid1Data(result[0]);
+                            setGrid2Data(result[1]);
+                        } else{
+                            window.alert("ㄴ")
+                        }
                     } catch (error) {
                         console.log(error);
                     }
@@ -100,6 +118,50 @@ const Environmental: React.FC = () => {
                 break;
 
             case 2 : 
+                let grid1Ar : any[] = [];
+                let grid2Ar : any[] = [];
+
+                grid1Ar.push(...grid1Changes.createdRows)
+                grid1Ar.push(...grid1Changes.updatedRows)
+
+                grid2Ar.push(...grid2Changes.createdRows)
+                grid2Ar.push(...grid2Changes.updatedRows)
+
+                for(let i in grid1Ar) delete grid1Ar[i]._attributes
+                for(let i in grid2Ar) delete grid2Ar[i]._attributes
+
+                
+
+                const grid1ArChange : grid1Ar = ({
+                    DataSet : 'DataSet1',
+                    grid    : grid1Ar
+                })
+
+                const grid2ArChange : grid2Ar = ({
+                    DataSet : 'DataSet2',
+                    grid    : grid2Ar
+                })
+
+
+                let combinedData : any[] = [];
+
+                combinedData.push(grid1ArChange)
+                combinedData.push(grid2ArChange)
+
+                setLoading(true);
+                try {
+                    const result = await SP_Request(toolbar[clickID].spName, combinedData);
+                    
+                    if(result){
+                        window.alert('1');
+                    } else{
+                        window.alert("ㄴ")
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+                setLoading(false);
+
 
                 break;
 
@@ -125,35 +187,26 @@ const Environmental: React.FC = () => {
     // };
 
 
-
     return(
         <>
             <Loading loading={loading}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
             <FixedArea name={"테스트 이름"}>
                 <FixedWrap>
-                    <TextBox name={"신은규"} isRequire={"true"}/>   
-                    <TextBox name={"엉덩이"}/>    
-                    <TextBox name={"쥐어 뜯을 거"} width={300}/>    
-                </FixedWrap>
-                <FixedWrap>
-                    <TextBox></TextBox>    
-                    <TextBox></TextBox>    
+                    <TextBox name={"신은규"} isRequire={"true"} value={condition1} onChange={setCondition1}/>   
+                    <TextBox name={"엉덩이"} value={condition2} onChange={setCondition2}/>    
+                    <TextBox name={"쥐어 뜯을 거"} width={300} value={condition3} onChange={setCondition3}/>    
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-            <button onClick={handleSave}>Save All Changes</button>
                 <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                     <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
                         <div>
                             테스트 1
                         </div>
-                        {/* <Grid  title = "제목" source = {source1} columns = {columns1} onChange={handleGridChange}/> */}
                         <Grid gridId="grid1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} DataSet="DataSet1"/>
                     </Splitter>
-                    {/* <Grid title = "제목 테스트" source = {source2} columns = {columns2} onChange={handleGridChange}/> */}
                     <Grid gridId="grid2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} DataSet="DataSet2"/>
-                    
                 </Splitter>
             </DynamicArea>
         </>

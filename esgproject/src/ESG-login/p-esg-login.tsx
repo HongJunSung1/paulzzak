@@ -96,7 +96,7 @@ const LoginPage = () => {
         const cryptoPW = SHA256(userPW).toString();
 
         try {
-            result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW}]);
+            result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW, DataSet: 'DataSet'}]);
         } catch (error) {
             console.log(error);
         }
@@ -153,7 +153,7 @@ const LoginPage = () => {
         // 비밀번호 변경
         const cryptoPW = SHA256('1234').toString();
         try {
-            result = await SP_Request("S_ESG_LoginPasswordInit", [{userID, cryptoPW}]);
+            result = await SP_Request("S_ESG_LoginPasswordInit", [{userID, cryptoPW, DataSet: 'DataSet'}]);
             if(result){
                 setInfo(true);
             } else{
@@ -174,7 +174,7 @@ const LoginPage = () => {
         }
 
         try {
-            result = await SP_Request("S_ESG_LoginPasswordChange", [{userID, cryptoPWOrigin, cryptoPW}])
+            result = await SP_Request("S_ESG_LoginPasswordChange", [{userID, cryptoPWOrigin, cryptoPW, DataSet: 'DataSet'}])
             if(result !== null && result[0][0].Status === "0"){
                 window.alert("비밀번호 변경 완료");
                 setInfo(false);

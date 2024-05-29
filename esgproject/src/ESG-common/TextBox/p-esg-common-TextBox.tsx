@@ -1,18 +1,29 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-TextBox.module.css';
 
 
-
 const TextBox = (settings : any) => {
-    const [text, setText] = useState('');
+    const [text, setText] = useState(settings.value || '');
+
+    useEffect(() => {
+        setText(settings.value || '');
+    }, [settings.value]);
 
     const changeText = (e) => {
         setText(e.target.value);
-    }
+        if (settings.onChange) {
+            settings.onChange(e.target.value);
+        }
+    };
+
     const RemoveText = () => {
         setText('');
-    }
+        if (settings.onChange) {
+            settings.onChange('');
+        }
+    };
+    
 
     return(
         <>

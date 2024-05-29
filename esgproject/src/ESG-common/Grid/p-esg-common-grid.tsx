@@ -152,7 +152,8 @@ const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, 
                         editingEvent={'click'}
                         columns = {columns} 
                         bodyHeight={'fitToParent'}
-                        rowHeight={25}
+                        rowHeight={30}
+                        minRowHeight={30}
                         heightResizable={false} //테이블의 사이즈를 자동으로 조절
                         rowHeaders={[{type:"rowNum", align: 'center'}, {type:'checkbox'}]}
                     />
