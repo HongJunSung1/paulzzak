@@ -46,7 +46,7 @@ const SideBarItem = ({ item }) => {
   } else{
     return (
       <div>
-        <Link to = {item.url} className = {styles.linkMenu}>
+        <Link to = {item.url !== "" ? item.url : "main"} className = {styles.linkMenu}>
           <div className = {styles.menuName}
               style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
                         marginTop: item.pmenuId==="ROOT"? "15px": "5px",

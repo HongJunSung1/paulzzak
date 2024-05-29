@@ -1,4 +1,4 @@
-import React, { useEffect, useState }  from 'react'
+import React, { useEffect, useRef, useState }  from 'react'
 import '../../global.d.ts';
 
 
@@ -18,7 +18,6 @@ type ModifiedRows = {
     createdRows: any[];
     updatedRows: any[];
     deletedRows: any[];
-    DataSet    : string;
   };
 
 type grid1Ar = {
@@ -48,9 +47,10 @@ const Environmental: React.FC = () => {
     // 그리드 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
-    let [grid1Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: [] , DataSet : ""});
-    let [grid2Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: [] , DataSet : ""});
-  
+    let [grid1Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: []});
+    let [grid2Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: []});
+    const grid1Ref : any = useRef(null);
+    const grid2Ref : any = useRef(null);
 
 
 
@@ -67,7 +67,7 @@ const Environmental: React.FC = () => {
                        {id: 0, title:"신규", image:"new"  , spName:""}
                      , {id: 1, title:"조회", image:"query", spName:"S_Test"}
                      , {id: 2, title:"저장", image:"save" , spName:"S_Save_Test"}
-                     , {id: 3, title:"삭제", image:"cut"  , spName:""}
+                     , {id: 3, title:"삭제", image:"cut"  , spName:"S_Cut_Test"}
                     ]
 
     const [loading,setLoading] = useState(false);
@@ -153,9 +153,9 @@ const Environmental: React.FC = () => {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
                     
                     if(result){
-                        window.alert('1');
+                        console.log(result);
                     } else{
-                        window.alert("ㄴ")
+                        window.alert("저장 실패")
                     }
                 } catch (error) {
                     console.log(error);
@@ -165,7 +165,66 @@ const Environmental: React.FC = () => {
 
                 break;
 
-            case 3 : 
+            case 3 :
+
+                    let gridcheck1 : any[] = [];
+                    let gridcheck2 : any[] = [];
+    
+                    gridcheck1.push(...grid1Ref.current.getCheckedRows());
+                    gridcheck2.push(...grid2Ref.current.getCheckedRows());
+    
+                    // for (let key in A) {
+                    //     if (A.hasOwnProperty(key) && !B.hasOwnProperty(key)) {
+                    //         delete A[key];
+                    //     }
+                    // }
+                    for(let i in gridcheck1){
+                        delete gridcheck1[i].rowSpanMap;
+                        delete gridcheck1[i].uniqueKey;
+                        delete gridcheck1[i].sortKey;
+                        delete gridcheck1[i]._attributes;
+                        delete gridcheck1[i]._disabledPriority;
+                        delete gridcheck1[i]._relationListItemMap;
+                    }
+
+                    for(let i in gridcheck2){
+                        delete gridcheck2[i].rowSpanMap;
+                        delete gridcheck2[i].uniqueKey;
+                        delete gridcheck2[i].sortKey;
+                        delete gridcheck2[i]._attributes;
+                        delete gridcheck2[i]._disabledPriority;
+                        delete gridcheck2[i]._relationListItemMap;
+                    }
+                    
+    
+                    const grid1ArCheck : grid1Ar = ({
+                        DataSet : 'DataSet1',
+                        grid    : gridcheck1
+                    })
+    
+                    const grid2ArCheck : grid2Ar = ({
+                        DataSet : 'DataSet2',
+                        grid    : gridcheck2
+                    })
+    
+                    let checkedData : any[] = [];
+    
+                    checkedData.push(grid1ArCheck);
+                    checkedData.push(grid2ArCheck);
+
+                    setLoading(true);
+                    try {
+                        const result = await SP_Request(toolbar[clickID].spName, checkedData);
+                        
+                        if(result){
+                            console.log(result);
+                        } else{
+                            window.alert("저장 실패")
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    setLoading(false);
 
                 break;
         }
@@ -204,9 +263,9 @@ const Environmental: React.FC = () => {
                         <div>
                             테스트 1
                         </div>
-                        <Grid gridId="grid1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} DataSet="DataSet1"/>
+                        <Grid ref={grid1Ref} gridId="grid1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange}/>
                     </Splitter>
-                    <Grid gridId="grid2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} DataSet="DataSet2"/>
+                    <Grid ref={grid2Ref}  gridId="grid2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange}/>
                 </Splitter>
             </DynamicArea>
         </>

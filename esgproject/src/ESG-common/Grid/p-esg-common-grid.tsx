@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState, forwardRef, useImperativeHandle,} from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-grid.module.css';
 
@@ -12,17 +12,15 @@ type CustomGridProps = {
 
     onChange: (gridId: string, changes: ModifiedRows) => void;
     gridId: string;
-    DataSet: string;
   };
   
 type ModifiedRows = {
     createdRows: any[];
     updatedRows: any[];
     deletedRows: any[];
-    DataSet    : string;
 };
 
-const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, gridId, DataSet}) => {
+const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: CustomGridProps, ref) => {
 
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -114,14 +112,24 @@ const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, 
     //     };
     //   }, []);
 
+    // 체크된 행 가져오기
+    useImperativeHandle(ref , () => ({
+        getCheckedRows : () => {
+            if (gridRef.current) {
+                return gridRef.current.getInstance().getCheckedRows();
+            }
+            return [];
+        },
+    }));
 
+
+    // 시트 수정 데이터 감지
     gridRef.current?.getInstance().on('afterChange', () => {
         const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
         const changes: ModifiedRows = {
           createdRows: modifiedRows?.createdRows ?? [],
           updatedRows: modifiedRows?.updatedRows ?? [],
           deletedRows: modifiedRows?.deletedRows ?? [],
-          DataSet : DataSet
         };
         // console.log(`Grid ${gridId} detected changes:`, changes);
         onChange(gridId, changes);
@@ -162,5 +170,6 @@ const ToastGrid: React.FC<CustomGridProps> =({title, source, columns, onChange, 
         </div>
     )   
 }
+)
 
 export default ToastGrid;
