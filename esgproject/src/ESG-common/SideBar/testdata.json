@@ -86,6 +86,13 @@
         "menuName":"계정관리",
         "pmenuId":"menu00010",
         "url":"userinfo"
+    },
+    {
+        "id": 11,
+        "menuId": "menu00012",
+        "menuLevel": 2,
+        "menuName":"화면등록",
+        "pmenuId":"menu00010",
+        "url":"formReg"
     }
-    
 ]

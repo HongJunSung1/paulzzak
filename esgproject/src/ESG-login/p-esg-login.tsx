@@ -14,7 +14,7 @@ import cookie from 'react-cookies';
 const LoginPage = () => {
 
     // 쿠키 삭제
-    cookie.remove('userInfo', {path : '/'},1000);
+    cookie.remove('userInfo', {path : '/'}, 1000);
 
     const navigate = useNavigate();
 
@@ -97,6 +97,7 @@ const LoginPage = () => {
 
         try {
             result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW, DataSet: 'DataSet'}]);
+            console.log(result);
         } catch (error) {
             console.log(error);
         }
