@@ -85,7 +85,7 @@
         "menuLevel": 2,
         "menuName":"계정관리",
         "pmenuId":"menu00010",
-        "url":"admin"
+        "url":"userinfo"
     }
     
 ]

@@ -9,10 +9,9 @@ type CustomGridProps = {
     title: string;
     source: any[];
     columns: any[];
-
-    // onChange: (gridId: string, changes: ModifiedRows) => void;
     onChange: (gridId: string, changes: gridAr) => void;
     gridId: string;
+    addRowBtn: boolean;
   };
   
 type ModifiedRows = {
@@ -26,7 +25,7 @@ type gridAr = {
     grid       : any[];
 };
 
-const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: CustomGridProps, ref) => {
+const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowBtn}: CustomGridProps, ref) => {
 
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -94,7 +93,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: Custom
                     DataSet : gridId,
                     grid    : gridcheck
                 })
-
                 return gridArCheck
             }
             return [];
@@ -132,7 +130,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: Custom
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>
                 <div className={styles.AppendRowContainer}>
-                    <button onClick={clickRowAppend} className={styles.GridBtn}>행 추가</button>
+                    {addRowBtn && <button onClick={clickRowAppend} className={styles.GridBtn}>행 추가</button>}
                     {isClickRowAppend &&   
                         <div className={styles.AppendRowWrap}>
                             <span className={styles.AppendUnit}>

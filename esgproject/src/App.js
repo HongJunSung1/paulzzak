@@ -11,7 +11,7 @@ import Navbar from './ESG-common/NavBar/p-esg-common-NavBar.tsx';
 import Login from './ESG-login/p-esg-login.tsx';
 import Main from './ESG-form/main/p-esg-form-main.tsx';
 import Environmental from './ESG-form/test/p-esg-form-test.tsx';
-import Admin from './ESG-form/admin/p-esg-form-admin.tsx';
+import UserInfo from './ESG-form/admin/p-esg-form-admin-userInfo.tsx';
 
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
                 {/* 실제 데이터 작성 구간 */}
                   <Route path="/main" element={<Main/>}></Route>
                   <Route path="/environmental" element={<Environmental/>}></Route>
-                  <Route path="/admin" element={<Admin/>}></Route>
+                  <Route path="/userinfo" element={<UserInfo/>}></Route>
                 {/* 실제 데이터 작성 구간 */}
               </Routes>
             </DataContainer>
