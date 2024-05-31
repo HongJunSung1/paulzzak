@@ -16,7 +16,7 @@ const Navbar = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const isLogin = cookie.load('userid') !== undefined;
+        const isLogin = cookie.load('userInfo') !== undefined;
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }

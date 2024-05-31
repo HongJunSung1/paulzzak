@@ -14,7 +14,7 @@ import cookie from 'react-cookies';
 const LoginPage = () => {
 
     // 쿠키 삭제
-    cookie.remove('userid', {path : '/'},1000);
+    cookie.remove('userInfo', {path : '/'},1000);
 
     const navigate = useNavigate();
 
@@ -104,7 +104,7 @@ const LoginPage = () => {
             // 로그인 정보 쿠키 저장
             const expires = new Date();
             expires.setMinutes(expires.getMinutes() + 60)
-            cookie.save('userid', result[0][0].userID, {
+            cookie.save('userInfo', result[0][0], {
                 path : '/',
                 expires,
                 secure : true
