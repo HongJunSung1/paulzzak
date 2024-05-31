@@ -10,7 +10,8 @@ type CustomGridProps = {
     source: any[];
     columns: any[];
 
-    onChange: (gridId: string, changes: ModifiedRows) => void;
+    // onChange: (gridId: string, changes: ModifiedRows) => void;
+    onChange: (gridId: string, changes: gridAr) => void;
     gridId: string;
   };
   
@@ -18,6 +19,11 @@ type ModifiedRows = {
     createdRows: any[];
     updatedRows: any[];
     deletedRows: any[];
+};
+
+type gridAr = {
+    DataSet    : string;
+    grid       : any[];
 };
 
 const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: CustomGridProps, ref) => {
@@ -66,57 +72,30 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: Custom
     }
 
 
-    // // 데이터 가져오기
-    // const dataModified = () => {
-    //     if(gridRef.current){
-    //         let gridAr : object[] = [];
-    //         let createdAr : object[] | undefined = [];
-    //         let updatedAr : object[] | undefined = [];
-
-    //         let createArCnt : number = gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!.length;
-    //         let updatedArCnt : number = gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!.length;
-
-    //         if(createArCnt > 0 ){ createdAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).createdRows!); }
-    //         if(updatedArCnt > 0){ updatedAr.push(gridRef.current.getInstance().getModifiedRows({withRawData: true}).updatedRows!); }
-
-
-    //         if(createdAr.length > 0){gridAr.push(createdAr);}
-    //         if(updatedAr.length > 0){gridAr.push(updatedAr);}
-
-    //         console.log(gridAr);
-    //     }
-    // }
-
-    // const handleDataChange = useCallback(() => {
-    //     const instance = gridRef.current?.getInstance();
-    //     console.log(instance);
-    //     if (instance) {
-    //       const modifiedRows = instance.getModifiedRows();
-    //       const changes: ModifiedRows = {
-    //         createdRows: modifiedRows.createdRows ?? [],
-    //         updatedRows: modifiedRows.updatedRows ?? [],
-    //         deletedRows: modifiedRows.deletedRows ?? [],
-    //       };
-    //       console.log(`Grid ${gridId} detected changes:`, changes);
-    //       onChange(gridId, changes);
-    //     }
-    //   }, [gridId, onChange]);
-    
-
-    //   useEffect(() => {
-    //     const instance = gridRef.current?.getInstance();
-    //     instance?.on('editingFinish', handleDataChange);
-    
-    //     return () => {
-    //       instance?.off('editingFinish', handleDataChange);
-    //     };
-    //   }, []);
-
     // 체크된 행 가져오기
     useImperativeHandle(ref , () => ({
         getCheckedRows : () => {
             if (gridRef.current) {
-                return gridRef.current.getInstance().getCheckedRows();
+                // 삭제 시킬 행의 정보를 가져와 필요없는 정보를 배열에서 삭제하고 필요한 정보만 DataSet 값으로 넘긴 후 전달
+                let gridcheck : any[] = [];
+
+                gridcheck.push(...gridRef.current.getInstance().getCheckedRows());
+
+                for(let i in gridcheck){
+                    delete gridcheck[i].rowSpanMap;
+                    delete gridcheck[i].uniqueKey;
+                    delete gridcheck[i].sortKey;
+                    delete gridcheck[i]._attributes;
+                    delete gridcheck[i]._disabledPriority;
+                    delete gridcheck[i]._relationListItemMap;
+                }
+
+                const gridArCheck : gridAr = ({
+                    DataSet : gridId,
+                    grid    : gridcheck
+                })
+
+                return gridArCheck
             }
             return [];
         },
@@ -131,8 +110,22 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId}: Custom
           updatedRows: modifiedRows?.updatedRows ?? [],
           deletedRows: modifiedRows?.deletedRows ?? [],
         };
-        // console.log(`Grid ${gridId} detected changes:`, changes);
-        onChange(gridId, changes);
+        
+        let gridAr : any[] = [];
+        
+        gridAr.push(...changes.createdRows);
+        gridAr.push(...changes.updatedRows);
+
+
+        for(let i in gridAr) delete gridAr[i]._attributes
+        
+
+        const gridArChange : gridAr = ({
+            DataSet : gridId,
+            grid    : gridAr
+        })
+
+        onChange(gridId, gridArChange);
     })
 
     return (

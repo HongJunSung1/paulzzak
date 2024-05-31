@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState }  from 'react'
+import React, { useRef, useState }  from 'react'
 import '../../global.d.ts';
 
 
@@ -14,21 +14,11 @@ import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
-type ModifiedRows = {
-    createdRows: any[];
-    updatedRows: any[];
-    deletedRows: any[];
-  };
 
-type grid1Ar = {
+type gridAr = {
     DataSet    : string;
     grid       : any[];
-  };
-
-type grid2Ar = {
-    DataSet   : string;
-    grid      : any[];
-  };
+};
 
 type condition = {
     condition1 : string;
@@ -39,28 +29,34 @@ type condition = {
 
 const Environmental: React.FC = () => {
 
+    // 로딩뷰
+    const [loading,setLoading] = useState(false);
+
     // 조회조건 값
     const [condition1, setCondition1] = useState('')
     const [condition2, setCondition2] = useState('')
     const [condition3, setCondition3] = useState('')
 
-    // 그리드 값
+    // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
-    let [grid1Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: []});
-    let [grid2Changes] = useState<ModifiedRows>({ createdRows: [], updatedRows: [], deletedRows: []});
-    const grid1Ref : any = useRef(null);
-    const grid2Ref : any = useRef(null);
 
+    // 저장 시 넘기는 컬럼 값
+    let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
-
-    const handleGridChange = (gridId: string, changes: ModifiedRows) => {
+    // 저장 시 시트 변화 값 감지
+    const handleGridChange = (gridId: string, changes: gridAr) => {
         if (gridId === 'grid1') {
             grid1Changes = changes;
         } else if (gridId === 'grid2') {
             grid2Changes = changes;
         }
     };
+    
+    // 삭제 시 넘기는 컬럼 값
+    const grid1Ref : any = useRef(null);
+    const grid2Ref : any = useRef(null);
     
 
     const toolbar = [  
@@ -69,8 +65,6 @@ const Environmental: React.FC = () => {
                      , {id: 2, title:"저장", image:"save" , spName:"S_Save_Test"}
                      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Cut_Test"}
                     ]
-
-    const [loading,setLoading] = useState(false);
     
     const columns1 = [
         {name : "id", header: "ID", width: 50},
@@ -87,11 +81,14 @@ const Environmental: React.FC = () => {
 
         switch (clickID){
 
+            // 신규
             case 0 :
                 console.log("시트 초기화");
                 break;
 
+            // 저장
             case 1 : 
+                    // 조회 조건 담기
                     const conditionAr : condition = ({
                         condition1 : condition1,
                         condition2 : condition2,
@@ -99,129 +96,80 @@ const Environmental: React.FC = () => {
                         DataSet    : 'DataSet1'
                     })
 
+                    // 로딩 뷰 보이기
                     setLoading(true);
                     try {
+                        // 조회 SP 호출 후 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, [conditionAr]);
                         
                         if(result){
+                            // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
                             setGrid2Data(result[1]);
                         } else{
+                            // 결과값이 없을 경우 처리 로직
                             window.alert("ㄴ")
                         }
                     } catch (error) {
+                        // SP 호출 시 에러 처리 로직
                         console.log(error);
                     }
+                    // 로딩뷰 감추기
                     setLoading(false);
 
 
                 break;
-
+            
+            // 저장
             case 2 : 
-                let grid1Ar : any[] = [];
-                let grid2Ar : any[] = [];
-
-                grid1Ar.push(...grid1Changes.createdRows)
-                grid1Ar.push(...grid1Changes.updatedRows)
-
-                grid2Ar.push(...grid2Changes.createdRows)
-                grid2Ar.push(...grid2Changes.updatedRows)
-
-                for(let i in grid1Ar) delete grid1Ar[i]._attributes
-                for(let i in grid2Ar) delete grid2Ar[i]._attributes
-
                 
-
-                const grid1ArChange : grid1Ar = ({
-                    DataSet : 'DataSet1',
-                    grid    : grid1Ar
-                })
-
-                const grid2ArChange : grid2Ar = ({
-                    DataSet : 'DataSet2',
-                    grid    : grid2Ar
-                })
-
-
+                // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
 
-                combinedData.push(grid1ArChange)
-                combinedData.push(grid2ArChange)
+                combinedData.push(grid1Changes)
+                combinedData.push(grid2Changes)
 
                 setLoading(true);
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
                     
                     if(result){
+                        // SP 호출 결과 값 처리
                         console.log(result);
                     } else{
+                        // SP 호출 결과 없을 경우 처리 로직
                         window.alert("저장 실패")
                     }
                 } catch (error) {
+                    // SP 호출 시 에러 처리
                     console.log(error);
                 }
                 setLoading(false);
 
-
                 break;
 
+            // 삭제
             case 3 :
-
-                    let gridcheck1 : any[] = [];
-                    let gridcheck2 : any[] = [];
-    
-                    gridcheck1.push(...grid1Ref.current.getCheckedRows());
-                    gridcheck2.push(...grid2Ref.current.getCheckedRows());
-    
-                    // for (let key in A) {
-                    //     if (A.hasOwnProperty(key) && !B.hasOwnProperty(key)) {
-                    //         delete A[key];
-                    //     }
-                    // }
-                    for(let i in gridcheck1){
-                        delete gridcheck1[i].rowSpanMap;
-                        delete gridcheck1[i].uniqueKey;
-                        delete gridcheck1[i].sortKey;
-                        delete gridcheck1[i]._attributes;
-                        delete gridcheck1[i]._disabledPriority;
-                        delete gridcheck1[i]._relationListItemMap;
-                    }
-
-                    for(let i in gridcheck2){
-                        delete gridcheck2[i].rowSpanMap;
-                        delete gridcheck2[i].uniqueKey;
-                        delete gridcheck2[i].sortKey;
-                        delete gridcheck2[i]._attributes;
-                        delete gridcheck2[i]._disabledPriority;
-                        delete gridcheck2[i]._relationListItemMap;
-                    }
-                    
-    
-                    const grid1ArCheck : grid1Ar = ({
-                        DataSet : 'DataSet1',
-                        grid    : gridcheck1
-                    })
-    
-                    const grid2ArCheck : grid2Ar = ({
-                        DataSet : 'DataSet2',
-                        grid    : gridcheck2
-                    })
-    
+                    // 체크한 데이터 담기 
                     let checkedData : any[] = [];
-    
-                    checkedData.push(grid1ArCheck);
-                    checkedData.push(grid2ArCheck);
+
+                    checkedData.push(grid1Ref.current.getCheckedRows());
+                    checkedData.push(grid2Ref.current.getCheckedRows());
 
                     setLoading(true);
                     try {
+                        // SP 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, checkedData);
                         
                         if(result){
+                            // SP 결과 값이 있을 때 로직
                             console.log(result);
                         } else{
+                            // SP 결과 값이 없을 때 로직
                             window.alert("저장 실패")
                         }
                     } catch (error) {
+                        // SP 호출 시 에러 처리
                         console.log(error);
                     }
                     setLoading(false);
@@ -231,21 +179,7 @@ const Environmental: React.FC = () => {
       
     }
 
-    // 소스 결과 값 전달
-    // const resData = (resData) => {
-    //     // for(let i = 0; i < Object.keys(resData[0]).length; i++){
-    //     //     resData[0][i].DataSet = 'DataSet1';
-    //     // }
-        
-    //     // for(let i = 0; i < Object.keys(resData[1]).length; i++){
-    //     //     resData[1][i].DataSet = 'DataSet2';
-    //     // }
-
-    //     setGrid1Data(grid1Data);
-    //     setGrid2Data(grid2Data);
-    // };
-
-
+    // 화면
     return(
         <>
             <Loading loading={loading}/>
