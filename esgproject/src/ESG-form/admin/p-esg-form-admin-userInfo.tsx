@@ -2,6 +2,7 @@
 
 import React, { useRef, useState }  from 'react'
 import '../../global.d.ts';
+import {SHA256} from 'crypto-js';
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -116,17 +117,24 @@ const UserInfo = () => {
                 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
-
                 combinedData.push(grid1Changes)
+                // combinedData[0].grid.push({UserPW: cryptoPW})
                 
-                
+                // 신규 등록일 경우 비밀번호 지정해서 저장
+                for(let i = 0; i< combinedData[0].grid.length; i++){
+                    if(combinedData[0].grid[i].UserCD == null){
+                        const cryptoPW = SHA256('1234').toString();
+                        combinedData[0].grid[i].UserPW = cryptoPW
+                    }
+                }
+
                 setLoading(true);
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
                     
                     if(result){
                         // SP 호출 결과 값 처리
-                        console.log(result);
+                        grid1Ref.current.setRowData(result);
                         window.alert("저장 완료되었습니다.")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
