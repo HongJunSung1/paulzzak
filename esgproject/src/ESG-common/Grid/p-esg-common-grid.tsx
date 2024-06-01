@@ -97,6 +97,12 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             }
             return [];
         },
+        setRowData : (rowData) => {
+            if(gridRef.current){
+                console.log(rowData);
+                gridRef.current.getInstance().setRows(rowData[0]);
+            } 
+        },
     }));
 
 

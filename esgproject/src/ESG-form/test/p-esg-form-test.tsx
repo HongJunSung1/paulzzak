@@ -156,6 +156,8 @@ const Environmental: React.FC = () => {
                     checkedData.push(grid1Ref.current.getCheckedRows());
                     checkedData.push(grid2Ref.current.getCheckedRows());
 
+                    console.log(checkedData);
+
                     setLoading(true);
                     try {
                         // SP 결과 값 담기

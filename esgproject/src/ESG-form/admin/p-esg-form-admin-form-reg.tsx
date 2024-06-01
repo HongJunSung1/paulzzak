@@ -54,16 +54,16 @@ const FormReg = () => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:""}
-      , {id: 2, title:"저장", image:"save" , spName:""}
-      , {id: 3, title:"삭제", image:"cut"  , spName:""}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Form_Admin_FormReg_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Form_Admin_FormReg_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Form_Admin_FormReg_Cut"}
      ]
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "FormCD"    , header: "화면코드", width:  70, hidden: true},
+        {name : "FormCD"    , header: "화면코드", width:  70},
         {name : "FormName"  , header: "화면명"  , width: 300, editor: 'text'},
-        {name : "FormUrl"   , header: "화면URL" , width: 300, editor: 'text'}
+        {name : "FormUrl"   , header: "화면URL" , width: 300, editor: 'text'},
     ];
 
     // 툴바 이벤트
@@ -121,7 +121,8 @@ const FormReg = () => {
                     
                     if(result){
                         // SP 호출 결과 값 처리
-                        console.log(result);
+                        // console.log(result);
+                        grid1Ref.current.setRowData(result);
                         window.alert("저장 완료되었습니다.")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
