@@ -117,8 +117,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 //삭제할 키 값
                 const cutData = NoDataList.map(key => key.rowKey);
 
-                console.log(cutData);
-
                 //시트 해당 행 삭제
                 gridRef.current.getInstance().removeRows(cutData);
 
@@ -148,11 +146,19 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             if(gridRef.current){
                 gridRef.current.getInstance().removeRows(cutKeyData);
             } 
-        }
+        },
+
+        //시트 초기화
+        clear : () =>{
+            if(gridRef.current){
+                gridRef.current.getInstance().clear();
+            }    
+        },
+
     }));
 
     // 주어진 키들이 모두 빈 값인지 확인하는 함수
-    function isRowEmpty(row, keys) {
+    function isRowEmpty(row : any, keys : any) {
         for (const key of keys) {
             const value = row[key];
             if (value !== null && value !== undefined && value.toString().trim() !== '') {
@@ -161,7 +167,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
         return true;
     }
-
 
     // 시트 수정 데이터 감지
     gridRef.current?.getInstance().on('afterChange', () => {

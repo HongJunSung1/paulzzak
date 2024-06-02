@@ -71,7 +71,7 @@ const FormReg = () => {
         switch (clickID){
             // 신규
             case 0 :
-                console.log("시트 초기화");
+                grid1Ref.current.clear();
                 break;
 
             // 조회
