@@ -70,7 +70,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
     }
 
-
     // 공통 함수
     useImperativeHandle(ref , () => ({
 
@@ -196,6 +195,22 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         onChange(gridId, gridArChange);
     })
 
+    // 우클릭 조회
+    gridRef.current?.getInstance().on('mousedown', ev => {
+        let rightClickValue : any = []
+        window.oncontextmenu = function(){
+            rightClickValue = gridRef.current?.getInstance().getFocusedCell();
+            // 우클릭 조회한 데이터 가져오기
+            console.log(gridRef.current?.getInstance().getFocusedCell())
+            return false; // 우클릭 시 윈도우 기본 속성 못나오게 막기 
+        }
+        if(rightClickValue.length > 0){
+            console.log(rightClickValue)
+            return rightClickValue
+        }
+    })
+
+
     return (
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>
@@ -214,6 +229,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 <div className = {styles.GridTitle}>{title}</div>
             </div>
             <div className={styles.GridWrap}>  
+            {/* <div className={styles.GridWrap} onContextMenu={(e) => {e.preventDefault(); onRightClick(e);}}>   */}
                 {!isInitialized&&<div>로딩중..</div>}
                 {isInitialized &&        
                 <Grid   ref = {gridRef}
@@ -225,7 +241,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         minRowHeight={30}
                         heightResizable={false} //테이블의 사이즈를 자동으로 조절
                         rowHeaders={[{type:"rowNum", align: 'center'}, {type:'checkbox'}]}
-                    />
+                        contextMenu={null as any} // 우클릭 조회 없애기             
+                />
                 }
             </div>
         </div>

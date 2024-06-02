@@ -185,7 +185,7 @@ const LoginPage = () => {
 
         try {
             result = await SP_Request("S_ESG_LoginPasswordChange", [{userID, cryptoPWOrigin, cryptoPW, DataSet: 'DataSet'}])
-            console.log(result)
+
             if(result !== null && result[0][0].Status === "0"){
                 window.alert("비밀번호 변경 완료");
                 setInfo(false);
@@ -219,7 +219,7 @@ const LoginPage = () => {
                             passwordChangeInputRef.current.focus(); // 비밀번호 입력 필드에 포커스
                         }
                     break;
-                    
+
                     default:
                         setLoading(false); // 로딩창 종료
                         setErrMsg("로그인에 실패했습니다. 다시 시도해주세요.");
@@ -258,7 +258,7 @@ const LoginPage = () => {
                             <div>
                                 <div className={styles.LoginInputWrap}>
                                     <input type="text" className = {styles.LoginInput} placeholder="사용자ID" value={userID} onChange={inputID} onKeyDown={(e) => activeEnter(e)} ref={idInputRef}></input>
-                                    <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW} onKeyDown={(e) => activeEnter(e)} ref={passwordInputRef}></input>
+                                    <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW} onKeyDown={(e) => activeEnter(e)} ref={passwordInputRef} autoComplete="off"></input>
                                     <div className={styles.loginAlert}>{errMsg}</div>
                                     <button className = {styles.LoginBtn} onClick={loginCheck}>로그인</button>
                                     {isPassWord && <div className = {styles.initPassword} onClick={initPassword}>비밀번호 초기화</div>}
@@ -272,9 +272,9 @@ const LoginPage = () => {
                             <div>
                                 <div className={styles.LoginInputWrapChange}>
                                     <input type="text" className = {styles.LoginInput} placeholder="사용자ID" value={userID} onChange={inputID} onKeyDown={(e) => activeChangeEnter(e)} ref={idChangeInputRef}></input>
-                                    <input type="password" className = {styles.LoginInput} placeholder="현재 비밀번호" value={userPWOrigin} onChange={inputOriginPW} onKeyDown={(e) => activeChangeEnter(e)} ref={passwordChangeInputRef}></input>
-                                    <input type="password" className = {styles.LoginInput} placeholder="새 비밀번호" value={userPW} onChange={inputPW} onKeyDown={(e) => activeChangeEnter(e)} ref={passwordChangeInputRef}></input>
-                                    <input type="password" className = {styles.LoginInput} placeholder="새 비밀번호 확인" value={userPWCheck} onChange={inputPWCheck} onKeyDown={(e) => activeChangeEnter(e)} ref={passwordChangeInputRef}></input>
+                                    <input type="password" className = {styles.LoginInput} placeholder="현재 비밀번호" value={userPWOrigin} onChange={inputOriginPW} onKeyDown={(e) => activeChangeEnter(e)} ref={passwordChangeInputRef} autoComplete="off"></input>
+                                    <input type="password" className = {styles.LoginInput} placeholder="새 비밀번호" value={userPW} onChange={inputPW} onKeyDown={(e) => activeChangeEnter(e)} ref={passwordChangeInputRef} autoComplete="off"></input>
+                                    <input type="password" className = {styles.LoginInput} placeholder="새 비밀번호 확인" value={userPWCheck} onChange={inputPWCheck} onKeyDown={(e) => activeChangeEnter(e)} ref={passwordChangeInputRef} ></input>
                                     <div className={styles.loginAlert}>{errMsg}</div>
                                     <button className = {styles.LoginBtn} onClick={passwordChange}>비밀번호 변경</button>
                                 </div>
