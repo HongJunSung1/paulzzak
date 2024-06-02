@@ -94,9 +94,10 @@ const LoginPage = () => {
     const goToMain = async () => {
 
         const cryptoPW = SHA256(userPW).toString();
+        const checkPW = SHA256('1234').toString();
 
         try {
-            result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW, DataSet: 'DataSet'}]);
+            result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW, checkPW, DataSet: 'DataSet'}]);
             console.log(result);
         } catch (error) {
             console.log(error);
@@ -117,6 +118,14 @@ const LoginPage = () => {
             navigate("/main");// 메인 화면 이동
         }else{
             switch(result[0][0].Status){
+
+                //초기화 비밀번호 노출 시 비밀번호 변경 창으로 자동 이동
+                case "1" :
+                    setUserPW("");
+                    setErrMsg(result[0][0].Message);
+                    setLoading(false)
+                    setInfo(true);
+                break;
 
                 //아이디 오류 : 900
                 case "900" :
@@ -176,6 +185,7 @@ const LoginPage = () => {
 
         try {
             result = await SP_Request("S_ESG_LoginPasswordChange", [{userID, cryptoPWOrigin, cryptoPW, DataSet: 'DataSet'}])
+            console.log(result)
             if(result !== null && result[0][0].Status === "0"){
                 window.alert("비밀번호 변경 완료");
                 setInfo(false);
@@ -201,7 +211,15 @@ const LoginPage = () => {
                             passwordChangeInputRef.current.focus(); // 비밀번호 입력 필드에 포커스
                         }
                     break;
-    
+
+                    //비밀번호 오류 : 902
+                    case "902" : 
+                        setErrMsg(result[0][0].Message);
+                        if (passwordChangeInputRef.current) {
+                            passwordChangeInputRef.current.focus(); // 비밀번호 입력 필드에 포커스
+                        }
+                    break;
+                    
                     default:
                         setLoading(false); // 로딩창 종료
                         setErrMsg("로그인에 실패했습니다. 다시 시도해주세요.");
