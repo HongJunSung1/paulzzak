@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
+import isPropValid from '@emotion/is-prop-valid';
 
 // 사이드바 전체를 감싸는 div
 export const SbContainer = styled.div`
@@ -15,7 +16,9 @@ interface IisOpen{
 };
 
 // SbItem에서 하위메뉴들을 묶어줄 div
-export const SideBarSub = styled.div<IisOpen>`
+export const SideBarSub = styled('div').withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== 'isopen'
+})<IisOpen>`
   overflow: hidden;
   max-height:0;
   ${props => props.isopen ? "animation: slide-fade-in-dropdown-animation 0.1s ease; max-height: 100%;" : "animation: slide-fade-out-dropdown-animation 0.1s ease; max-height: 0;"};

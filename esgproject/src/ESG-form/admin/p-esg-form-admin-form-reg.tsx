@@ -62,8 +62,8 @@ const FormReg = () => {
      // 시트 컬럼 값
      const columns1 = [
         {name : "FormCD"    , header: "화면코드", width:  70},
-        {name : "FormName"  , header: "화면명"  , width: 300, editor: 'text'},
-        {name : "FormUrl"   , header: "화면URL" , width: 300, editor: 'text'},
+        {name : "FormName"  , header: "화면명"  , width: 300, editor: 'text', disabled:false},
+        {name : "FormUrl"   , header: "화면URL" , width: 300, editor: 'text', disabled:false},
     ];
 
     // 툴바 이벤트
@@ -132,12 +132,11 @@ const FormReg = () => {
                     
                     if(result){
                         // SP 호출 결과 값 처리
-                        // console.log(result);
-                        grid1Ref.current.setRowData(result);
-                        window.alert("저장 완료되었습니다.")
+                        grid1Ref.current.setRowData(result[0]);
+                        window.alert("저장 완료")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 실패")
+                        window.alert("저장 에러")
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리

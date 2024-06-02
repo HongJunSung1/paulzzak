@@ -103,7 +103,10 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         // 저장 후 시트 값 뿌려주기
         setRowData : (rowData) => {
             if(gridRef.current){
-                gridRef.current.getInstance().setRows(rowData[0]);
+                // setRows는 저장 후 시트 변경이 안되어 serRow 반복으로 변경
+                for(let i in rowData){
+                    gridRef.current.getInstance().setRow(Number(rowData[i].rowKey), rowData[i]);
+                }
             } 
         },
 
