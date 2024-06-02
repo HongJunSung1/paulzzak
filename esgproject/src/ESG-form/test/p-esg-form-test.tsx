@@ -122,6 +122,9 @@ const Environmental: React.FC = () => {
             
             // 저장
             case 2 : 
+                //시트 수정 종료
+                grid1Ref.current.setEditFinish();
+                grid2Ref.current.setEditFinish();
                 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];

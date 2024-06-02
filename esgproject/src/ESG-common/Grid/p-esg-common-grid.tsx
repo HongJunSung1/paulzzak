@@ -71,8 +71,10 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     }
 
 
-    // 체크된 행 가져오기
+    // 공통 함수
     useImperativeHandle(ref , () => ({
+
+        // 체크된 행 가져오기
         getCheckedRows : () => {
             if (gridRef.current) {
                 // 삭제 시킬 행의 정보를 가져와 필요없는 정보를 배열에서 삭제하고 필요한 정보만 DataSet 값으로 넘긴 후 전달
@@ -97,13 +99,68 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             }
             return [];
         },
+
+        // 저장 후 시트 값 뿌려주기
         setRowData : (rowData) => {
             if(gridRef.current){
-                console.log(rowData);
                 gridRef.current.getInstance().setRows(rowData[0]);
             } 
         },
+
+        // 저장 전 모든 컬럼 빈값 데이터 삭제
+        setColumCheck : (gridData) =>{
+            //시트 컬럼명
+            const columnNames = columns.map(column => column.name);
+            if(gridRef.current){
+                const NoDataList = gridData.filter(row => isRowEmpty(row, columnNames));
+
+                //삭제할 키 값
+                const cutData = NoDataList.map(key => key.rowKey);
+
+                console.log(cutData);
+
+                //시트 해당 행 삭제
+                gridRef.current.getInstance().removeRows(cutData);
+
+                //반환 결과
+                const returnData = gridData.filter(aItem => !NoDataList.some(bItem => bItem.rowKey === aItem.rowKey));
+
+                return returnData;
+            } 
+            return [];
+        },
+
+        // 저장시 시트 입력 종료
+        setEditFinish : () =>{
+            if(gridRef.current){
+                gridRef.current.getInstance().finishEditing();
+            } 
+        },
+
+        //시트 데이터 삭제 후 시트 행 삭제
+        removeRows : (cutData) =>{
+            const cutKeyData : any = [];
+
+            for(let i in cutData){
+                cutKeyData.push(Number(cutData[i].rowKey));
+            }
+
+            if(gridRef.current){
+                gridRef.current.getInstance().removeRows(cutKeyData);
+            } 
+        }
     }));
+
+    // 주어진 키들이 모두 빈 값인지 확인하는 함수
+    function isRowEmpty(row, keys) {
+        for (const key of keys) {
+            const value = row[key];
+            if (value !== null && value !== undefined && value.toString().trim() !== '') {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     // 시트 수정 데이터 감지
@@ -119,7 +176,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         
         gridAr.push(...changes.createdRows);
         gridAr.push(...changes.updatedRows);
-
 
         for(let i in gridAr) delete gridAr[i]._attributes
         

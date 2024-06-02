@@ -107,15 +107,26 @@ const FormReg = () => {
                 break;
             
             // 저장
-            case 2 : 
+            case 2 :
+                setLoading(true); 
+                //시트 입력 종료
+                grid1Ref.current.setEditFinish();
                 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
 
-                combinedData.push(grid1Changes)
+                //모든 컬럼이 빈값인지 체크
+                grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
-                
-                setLoading(true);
+                combinedData.push(grid1Changes);
+
+                // 저장할 데이터 없을시 종료
+                if(combinedData[0].grid.length === 0){
+                    window.alert('저장할 데이터가 없습니다.');
+                    setLoading(false);
+                    return;
+                }
+
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
                     
@@ -138,19 +149,26 @@ const FormReg = () => {
 
             // 삭제
             case 3 :
+                    setLoading(true);
                     // 체크한 데이터 담기 
                     let checkedData : any[] = [];
 
                     checkedData.push(grid1Ref.current.getCheckedRows());
 
-                    setLoading(true);
+                    // 삭제할 데이터 없을시 종료
+                    if(checkedData[0].grid.length === 0){
+                        window.alert('삭제할 데이터가 없습니다.');
+                        setLoading(false);
+                        return;
+                    }
+
                     try {
                         // SP 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, checkedData);
                         
                         if(result){
                             // SP 결과 값이 있을 때 로직
-                            console.log(result);
+                            grid1Ref.current.removeRows(result[0]);
                             window.alert("삭제 완료")
                         } else{
                             // SP 결과 값이 없을 때 로직
