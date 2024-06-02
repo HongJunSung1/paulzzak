@@ -229,7 +229,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 <div className = {styles.GridTitle}>{title}</div>
             </div>
             <div className={styles.GridWrap}>  
-            {/* <div className={styles.GridWrap} onContextMenu={(e) => {e.preventDefault(); onRightClick(e);}}>   */}
                 {!isInitialized&&<div>로딩중..</div>}
                 {isInitialized &&        
                 <Grid   ref = {gridRef}
