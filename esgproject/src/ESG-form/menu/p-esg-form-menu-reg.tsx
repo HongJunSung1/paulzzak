@@ -25,6 +25,15 @@ const Menu: React.FC = () => {
     const [grid2Data, setGrid2Data] = useState([]);
     const [grid3Data, setGrid3Data] = useState([]);
 
+    // 우클릭 시 조회
+    const handleContextMenu = (event: React.MouseEvent) => {
+        event.preventDefault();  // 기본 우클릭 메뉴 비활성화
+        setTimeout(()=> {
+            const abc = grid1Ref.current.rightClick()
+            console.log(abc.LMenuCD)
+        }, 100)
+    };
+
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
     let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -40,6 +49,7 @@ const Menu: React.FC = () => {
             grid3Changes = changes;
         }
     };
+
 
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
@@ -70,8 +80,6 @@ const Menu: React.FC = () => {
         {name : "SMenuName", header: "소메뉴 이름", width: 250, editor: 'text'},
         {name : "SOrder"   , header: "순서"       , width: 40, editor: 'text'},
     ];
-
-
 
     // 툴바 이벤트
     const toolbarEvent = async (clickID) =>{
@@ -226,6 +234,7 @@ const Menu: React.FC = () => {
             <Loading loading={loading}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
             <DynamicArea>
+                <div onContextMenu={handleContextMenu} style={{height:"100%"}}>
                 <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
                     <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
                     <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
@@ -233,6 +242,7 @@ const Menu: React.FC = () => {
                         <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} columns = {columns3} onChange={handleGridChange} addRowBtn = {true}/>
                     </Splitter>
                 </Splitter>
+                </div>
             </DynamicArea>
         </>
     )
