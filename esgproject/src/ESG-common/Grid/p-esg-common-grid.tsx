@@ -205,8 +205,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
     // 우클릭 조회
     gridRef.current?.getInstance().on('mousedown', ev => {
-        // rightClickValue = []     
-        // rowAllValue = []; 
+        rightClickValue = []     
+        rowAllValue = []; 
         window.oncontextmenu = function(){
             rightClickValue = gridRef.current?.getInstance().getFocusedCell();
             // 우클릭 조회한 데이터 가져오기
