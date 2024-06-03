@@ -1,11 +1,12 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 
 import {Container, DataContainer} from "./App.styles.tsx";
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate  } from 'react-router-dom'
 
 // 공통 영역
 import SideBar from './ESG-common/SideBar/p-esg-common-SideBar.tsx';
 import Navbar from './ESG-common/NavBar/p-esg-common-NavBar.tsx';
+import Loading from './ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 
 // 화면 영역
 import Login from './ESG-login/p-esg-login.tsx';
@@ -21,6 +22,22 @@ function App() {
   const location = useLocation();
   const isLoginPage = location.pathname === '/';
 
+  const [isLoading,setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // 페이지 이동 전 이벤트
+    setIsLoading(true);
+
+    // 페이지 이동 후 이벤트
+    const handleComplete = () => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2100); // 원하는 로딩 시간 설정
+    };
+
+    handleComplete();
+  }, [location]);
+
   return (      
   <div className="App" style={{backgroundColor:"#faf9f8"}}>
       {isLoginPage && 
@@ -34,6 +51,7 @@ function App() {
           <Container>
             <SideBar/>  
             <DataContainer>
+            <Loading loading={isLoading}/>
               <Routes>
                 {/* 실제 데이터 작성 구간 */}
                   <Route path="/main" element={<Main/>}></Route>

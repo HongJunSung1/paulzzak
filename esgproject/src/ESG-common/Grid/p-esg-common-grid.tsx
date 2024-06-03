@@ -37,7 +37,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             if(gridRef.current){
                 gridRef.current.getInstance().refreshLayout();
             }
-        }, 100);
+        }, 2000);
 
         return () => clearTimeout(timer);
     }, []);
@@ -235,7 +235,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 <div className = {styles.GridTitle}>{title}</div>
             </div>
             <div className={styles.GridWrap}>  
-                {!isInitialized&&<div>로딩중..</div>}
+                {!isInitialized&&<div></div>}
                 {isInitialized &&        
                 <Grid   ref = {gridRef}
                         data={source}
