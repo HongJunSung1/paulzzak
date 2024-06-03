@@ -71,6 +71,8 @@ const Menu: React.FC = () => {
         {name : "SOrder"   , header: "순서"       , width: 40, editor: 'text'},
     ];
 
+
+
     // 툴바 이벤트
     const toolbarEvent = async (clickID) =>{
         switch(clickID){

@@ -30,7 +30,11 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
     const [isClickRowAppend, setCollapsed] = useState(false);
-    
+
+    // 우클릭 조회 담기 용
+    let rightClickValue : any = []     
+    let rowAllValue : any = []; 
+
     useEffect(() => {
         const timer = setTimeout(()=> {
             setIsInitialized(true);
@@ -157,6 +161,11 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             }    
         },
 
+        // 우클릭 조회 담기
+        rightClick : () => {
+            rowAllValue
+        }
+
     }));
 
     // 주어진 키들이 모두 빈 값인지 확인하는 함수
@@ -197,8 +206,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
     // 우클릭 조회
     gridRef.current?.getInstance().on('mousedown', ev => {
-        let rightClickValue : any = []     
-        let rowAllValue : any = []; 
+        rightClickValue = []     
+        rowAllValue = []; 
         window.oncontextmenu = function(){
             rightClickValue = gridRef.current?.getInstance().getFocusedCell();
             // 우클릭 조회한 데이터 가져오기
@@ -213,7 +222,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             }
             return false; // 우클릭 시 윈도우 기본 속성 못나오게 막기 
         }
-        return rowAllValue
     })
 
 
