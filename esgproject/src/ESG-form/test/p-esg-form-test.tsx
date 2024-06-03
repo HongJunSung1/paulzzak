@@ -47,9 +47,9 @@ const Environmental: React.FC = () => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        if (gridId === 'grid1') {
+        if (gridId === 'DataSet1') {
             grid1Changes = changes;
-        } else if (gridId === 'grid2') {
+        } else if (gridId === 'DataSet2') {
             grid2Changes = changes;
         }
     };
@@ -86,7 +86,7 @@ const Environmental: React.FC = () => {
                 console.log("시트 초기화");
                 break;
 
-            // 저장
+            // 조회
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
@@ -202,9 +202,9 @@ const Environmental: React.FC = () => {
                         <div>
                             테스트 1
                         </div>
-                        <Grid ref={grid1Ref} gridId="grid1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                        <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
                     </Splitter>
-                    <Grid ref={grid2Ref}  gridId="grid2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                    <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
                 </Splitter>
             </DynamicArea>
         </>

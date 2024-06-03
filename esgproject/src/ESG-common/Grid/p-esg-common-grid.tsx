@@ -197,17 +197,23 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
     // 우클릭 조회
     gridRef.current?.getInstance().on('mousedown', ev => {
-        let rightClickValue : any = []
+        let rightClickValue : any = []     
+        let rowAllValue : any = []; 
         window.oncontextmenu = function(){
             rightClickValue = gridRef.current?.getInstance().getFocusedCell();
             // 우클릭 조회한 데이터 가져오기
-            console.log(gridRef.current?.getInstance().getFocusedCell())
+            rowAllValue.push(gridRef.current?.getInstance().getRow(rightClickValue.rowKey))
+            if(rowAllValue.length > 0){
+                delete rowAllValue[0].rowSpanMap;
+                delete rowAllValue[0].uniqueKey;
+                delete rowAllValue[0].sortKey;
+                delete rowAllValue[0]._attributes;
+                delete rowAllValue[0]._disabledPriority;
+                delete rowAllValue[0]._relationListItemMap;
+            }
             return false; // 우클릭 시 윈도우 기본 속성 못나오게 막기 
         }
-        if(rightClickValue.length > 0){
-            console.log(rightClickValue)
-            return rightClickValue
-        }
+        return rowAllValue
     })
 
 
