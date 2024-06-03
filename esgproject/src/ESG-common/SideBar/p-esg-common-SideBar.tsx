@@ -14,7 +14,7 @@ const SideBar = ({ items }) => {
     <SbContainer>
       <div className = {styles.SideBarName}>ESG</div>
       {tree.map((subItem, index) =>
-        <SideBarItem item={subItem} key={index} />
+        <SideBarItem item={subItem} key={index}/>
       )}
     </SbContainer>
   )
