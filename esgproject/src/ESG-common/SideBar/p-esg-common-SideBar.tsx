@@ -8,18 +8,26 @@ import cookie from 'react-cookies';
 
 const SideBar = ({ items }) => {
 
-  const [menuData, setMenuData] = useState([]);
-  const TotMenuData = cookie.load('menuList');
+  const [menuData, setMenuData] = useState<any>([]);
+  const [TotMenuData, setTotMenuData] = useState<any>([]);
   const [isOpen,setIsOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("Environment");
   const menuRef = useRef<HTMLDivElement>(null);
   
+
   useEffect(() => {
-    if (TotMenuData && selectedMenu) {
+    // 컴포넌트가 처음 마운트될 때 쿠키에서 데이터 로드
+    const data = cookie.load('menuList') || [];
+    setTotMenuData(data);
+  }, []);
+
+   useEffect(() => {
+    if (selectedMenu) {
       const filteredData = TotMenuData.filter(item => item.LMenuName === selectedMenu);
       setMenuData(filteredData);
     }
-  }, [selectedMenu,TotMenuData]);
+  }, [selectedMenu, TotMenuData]);
+
 
   useEffect(() => {
     const handleClickOutside = (event : MouseEvent) => {
