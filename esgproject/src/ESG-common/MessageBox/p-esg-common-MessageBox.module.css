@@ -1,0 +1,51 @@
+.MessageContainer{
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height:100vh;
+    z-index: 99;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.MessageWrap{
+    z-index: 1000;
+    width: 40%;
+    height: 35%;
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.TitleWrap{
+    text-align:center;
+    margin: 30px 0;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.Message{
+    margin: 20px 15px;
+    height: 50%;
+    justify-content : center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.Button{
+    width: 60%;
+    height: 40px;
+    display :inline-block;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(243, 229, 229);
+    border-radius: 5px;
+}
+
+.Button:hover{
+    background-color: rgb(209, 190, 190);
+}

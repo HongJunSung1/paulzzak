@@ -8,7 +8,7 @@ import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.t
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
-
+import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
 type gridAr = {
@@ -20,15 +20,22 @@ type gridAr = {
 let LMenuCD = 0
 let MMenuCD = 0
 
+// 에러 메세지
+let message : any     = [];
+let title   : string  = "";
+
 const Menu: React.FC = () => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
-
+    
+    // 메세지박스
+    const [messageOpen, setMessageOpen] = useState(false)
+    const messageClose = () => {setMessageOpen(false)};
+    
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
     const [grid3Data, setGrid3Data] = useState([]);
-
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -251,8 +258,32 @@ const Menu: React.FC = () => {
                 setLoading(true);
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
-                    
+                    let errMsg : any[] = [];
                     if(result){
+                        for(let i in result){
+                            for(let j in result[i]){
+                                if(result[i][j].Status > 0){
+                                    if(i === '0'){
+                                        errMsg.push({text: "시트: 대메뉴 " + result[i][j].Message})
+                                    }
+                                    if( i === '1'){
+                                        errMsg.push({text: "시트: 중메뉴 " + result[i][j].Message})
+                                    }
+                                    if( i === '2'){
+                                        errMsg.push({text: "시트: 소메뉴 " + result[i][j].Message})
+                                    }
+                                }
+                            }
+                        }
+                        if(errMsg.length > 0){
+                            console.log(errMsg)
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "저장 에러";
+                            // setMessageBox({isShow: true, message: errMsg, title: "저장 에러"});
+                            setLoading(false);
+                            return;
+                        }   
                         // SP 호출 결과 값 처리
                         grid1Ref.current.setRowData(result[0]);
                         grid2Ref.current.setRowData(result[1]);
@@ -315,6 +346,8 @@ const Menu: React.FC = () => {
     return (
         <>
             <Loading loading={loading}/>
+            {/* <MessageBox isShow={messageBox.isShow} MessageData={messageBox.message} Title={messageBox.title}/> */}
+            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
             <DynamicArea>
                 <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
