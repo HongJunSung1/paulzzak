@@ -44,7 +44,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             if(gridRef.current){
                 gridRef.current.getInstance().refreshLayout();
             }
-        }, 2000);
+        }, 100);
 
         return () => clearTimeout(timer);
     }, []);
