@@ -35,6 +35,9 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     let rightClickValue : any = []     
     let rowAllValue : any = []; 
 
+    // 엔터키 방지용
+    let keyDownCellValue : any = [];
+
     useEffect(() => {
         const timer = setTimeout(()=> {
             setIsInitialized(true);
@@ -165,6 +168,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             return rowAllValue
         }
 
+
     }));
 
     // 주어진 키들이 모두 빈 값인지 확인하는 함수
@@ -204,7 +208,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     })
 
     // 우클릭 조회
-    gridRef.current?.getInstance().on('mousedown', ev => {
+    gridRef.current?.getInstance().on('mousedown', (ev :any) => {
         rightClickValue = []     
         rowAllValue = []; 
         window.oncontextmenu = function(){
@@ -213,8 +217,21 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             rowAllValue = gridRef.current?.getInstance().getRow(rightClickValue.rowKey)
             return false; // 우클릭 시 윈도우 기본 속성 못나오게 막기 
         }
+        keyDownCellValue = gridRef.current?.getInstance().getFocusedCell(); //엔터키 방지에 사용할 것
     })
 
+    // 엔터 키 방지
+    gridRef.current?.getInstance().on('keydown', (ev: any) => {
+        try {
+            if (ev.keyboardEvent.key === "Enter") {
+                if(keyDownCellValue.rowKey === null){
+                    ev.stop();
+                }
+            }
+        } catch (error) {
+            console.error("Error handling keydown event:", error);
+        }
+    });
 
     return (
         <div className={styles.GridWrap}>
@@ -245,7 +262,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         minRowHeight={30}
                         heightResizable={false} //테이블의 사이즈를 자동으로 조절
                         rowHeaders={[{type:"rowNum", align: 'center'}, {type:'checkbox'}]}
-                        contextMenu={null as any} // 우클릭 조회 없애기             
+                        contextMenu={null as any} // 우클릭 조회 없애기     
                 />
                 }
             </div>

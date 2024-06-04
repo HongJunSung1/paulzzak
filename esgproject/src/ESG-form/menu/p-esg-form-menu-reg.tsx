@@ -30,7 +30,6 @@ const Menu: React.FC = () => {
     const [grid3Data, setGrid3Data] = useState([]);
 
 
-
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
     let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -52,6 +51,7 @@ const Menu: React.FC = () => {
     const grid1Ref : any = useRef(null);
     const grid2Ref : any = useRef(null);    
     const grid3Ref : any = useRef(null);    
+
 
     // ========================================================================================
     // 우클릭 시 조회
