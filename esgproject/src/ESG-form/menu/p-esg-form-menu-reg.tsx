@@ -93,13 +93,34 @@ const Menu: React.FC = () => {
     // 2. 중분류 우클릭 → 소분류 조회
     const rightClick2 = (event: React.MouseEvent) => {
         event.preventDefault();  // 기본 우클릭 메뉴 비활성화
-        setTimeout(()=> {
+        setTimeout(async ()=> {
             MMenuCD = 0
             grid3Ref.current.clear();
 
             if(grid2Ref.current.rightClick() !== null){
                 MMenuCD = grid2Ref.current.rightClick().MMenuCD
-            }        
+            }     
+            
+            if(LMenuCD > 0){
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request("S_ESG_Menu_Sub_Sub_Query", [{MMenuCD: MMenuCD, DataSet : 'DataSet2'}]);
+                    if(result.length > 0){
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        setGrid3Data(result[0]);
+                    } else{
+                        // 결과값이 없을 경우 처리 로직
+                        window.alert("ㄴ")
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
+            }
         }, 100)
     };
 
@@ -119,17 +140,17 @@ const Menu: React.FC = () => {
     ];
     
     const columns2 = [
-        {name : "LMenuCD"  , header: "대분류코드"   , width:  70, hidden: true },
-        {name : "MMenuCD"  , header: "중분류코드"   , width:  70, hidden: true},
+        {name : "LMenuCD"  , header: "대분류코드"   , width:  70 },
+        {name : "MMenuCD"  , header: "중분류코드"   , width:  70},
         {name : "MMenuName", header: "중메뉴 이름"  , width: 250, editor: 'text'},
         {name : "MOrder"   , header: "순서"        , width:   40, editor: 'text'},
     ];
 
     const columns3 = [
         {name : "MMenuCD"  , header: "중분류코드"   , width:  70, hidden: true},
-        {name : "SMenuCD"  , header: "소분류코드"   , width:  70, hidden: true},
+        {name : "FormCD"   , header: "소분류코드"   , width:  70, hidden: true},
         {name : "SMenuName", header: "소메뉴 이름"  , width: 250, editor: 'text'},
-        {name : "SOrder"   , header: "순서"        , width:  40, editor: 'text'},
+        {name : "FormOrder", header: "순서"        , width:  40, editor: 'text'},
     ];
 
     // 툴바 이벤트
@@ -260,7 +281,7 @@ const Menu: React.FC = () => {
                     checkedData.push(grid3Ref.current.getCheckedRows());
 
                     // 삭제할 데이터 없을시 종료
-                    if(checkedData[0].grid.length === 0){
+                    if(checkedData[0].grid.length + checkedData[1].grid.length + checkedData[2].grid.length === 0){
                         window.alert('삭제할 데이터가 없습니다.');
                         setLoading(false);
                         return;
