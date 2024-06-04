@@ -73,7 +73,6 @@ const Menu: React.FC = () => {
                 try {
                     // 조회 SP 호출 후 결과 값 담기
                     const result = await SP_Request("S_ESG_Menu_Sub_Query", [{LMenuCD: LMenuCD, DataSet : 'DataSet1'}]);
-                    console.log(result)
                     if(result.length > 0){
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setGrid2Data(result[0]);
@@ -237,9 +236,6 @@ const Menu: React.FC = () => {
                         grid1Ref.current.setRowData(result[0]);
                         grid2Ref.current.setRowData(result[1]);
                         grid3Ref.current.setRowData(result[2]);
-                        console.log(result[0])
-                        console.log(result[1])
-                        console.log(result[2])
                         window.alert("저장 완료")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
