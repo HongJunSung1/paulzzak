@@ -16,6 +16,8 @@ const LoginPage = () => {
     // 쿠키 삭제
     cookie.remove('userInfo', {path : '/'}, 1000);
     cookie.remove('menuList', {path : '/'}, 1000);
+    cookie.remove('LmenuList', {path : '/'}, 1000);
+
 
     const navigate = useNavigate();
 
@@ -118,6 +120,11 @@ const LoginPage = () => {
                 const menuResult = await SP_Request("S_ESG_MenuList",[{ userCD : result[0][0].userCD , DataSet : 'DataSet'}]);
                 if(menuResult !== null && menuResult.length > 0){
                     cookie.save('menuList',menuResult[0],{
+                        path : '/',
+                        expires,
+                        secure : true   
+                    });
+                    cookie.save('LmenuList',menuResult[1],{
                         path : '/',
                         expires,
                         secure : true   
