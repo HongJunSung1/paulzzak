@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react';
 
 import {Container, DataContainer} from "./App.styles.tsx";
-import { Routes, Route, useLocation, useNavigate  } from 'react-router-dom'
+import { Routes, Route, useLocation  } from 'react-router-dom'
 
 // 공통 영역
 import SideBar from './ESG-common/SideBar/p-esg-common-SideBar.tsx';
@@ -32,7 +32,7 @@ function App() {
     const handleComplete = () => {
       setTimeout(() => {
         setIsLoading(false);
-      }, 2100); // 원하는 로딩 시간 설정
+      }, 500); // 원하는 로딩 시간 설정
     };
 
     handleComplete();
@@ -56,9 +56,9 @@ function App() {
                 {/* 실제 데이터 작성 구간 */}
                   <Route path="/main" element={<Main/>}></Route>
                   <Route path="/environmental" element={<Environmental/>}></Route>
-                  <Route path="/userinfo" element={<UserInfo/>}></Route>
-                  <Route path="/formReg" element={<FormReg/>}></Route>
-                  <Route path="/menu" element={<Menu/>}></Route>
+                  <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
+                  <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
+                  <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
                 {/* 실제 데이터 작성 구간 */}
               </Routes>
             </DataContainer>

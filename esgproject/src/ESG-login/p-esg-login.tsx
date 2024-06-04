@@ -15,6 +15,7 @@ const LoginPage = () => {
 
     // 쿠키 삭제
     cookie.remove('userInfo', {path : '/'}, 1000);
+    cookie.remove('menuList', {path : '/'}, 1000);
 
     const navigate = useNavigate();
 
@@ -98,7 +99,6 @@ const LoginPage = () => {
 
         try {
             result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW, checkPW, DataSet: 'DataSet'}]);
-            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -114,8 +114,24 @@ const LoginPage = () => {
             });
             // console.log(cookie.load('userid'));
 
-            setLoading(false);// 로딩창 종료
-            navigate("/main");// 메인 화면 이동
+            try{
+                const menuResult = await SP_Request("S_ESG_MenuList",[{ userCD : result[0][0].userCD , DataSet : 'DataSet'}]);
+                if(menuResult !== null && menuResult.length > 0){
+                    cookie.save('menuList',menuResult[0],{
+                        path : '/',
+                        expires,
+                        secure : true   
+                    });
+                    setLoading(false);// 로딩창 종료
+                    navigate("/main");// 메인 화면 이동
+                }else{
+                    setLoading(false);// 로딩창 종료
+                    navigate("/");// 로그인 이동
+                }
+            }catch (e){
+                console.log(e);
+            }
+
         }else{
             switch(result[0][0].Status){
 

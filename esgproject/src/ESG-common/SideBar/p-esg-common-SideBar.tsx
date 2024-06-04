@@ -1,10 +1,14 @@
 import React from 'react'
 import SideBarItem from './p-esg-common-SideBarItem.tsx';
-import menuData from './testdata.json';
+// import menuData from './testdata.json';
 import {SbContainer} from './p-esg-common-sideBarItem.styles.tsx';
 import styles from './p-esg-common-SideBarItem.module.css';
+import cookie from 'react-cookies';
 
 const SideBar = ({ items }) => {
+
+  const menuData = cookie.load('menuList');
+
   const nest = (menuData, menuId = "ROOT", link = 'pmenuId') =>
     menuData.filter(item => item[link] === menuId)
       .map(item => ({ ...item, childrens: nest(menuData, item.menuId) }));
