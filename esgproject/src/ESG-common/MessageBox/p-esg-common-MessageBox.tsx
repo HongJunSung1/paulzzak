@@ -9,7 +9,6 @@ const MessageBox = ({messageOpen, messageClose, MessageData, Title}) => {
         for(let i = 0; i < MessageData.length; i++){
            realMessage.push(MessageData[i].text)
         }
-        console.log(realMessage)
         return (
             <>
                 <div className={styles.MessageContainer}>
@@ -18,7 +17,6 @@ const MessageBox = ({messageOpen, messageClose, MessageData, Title}) => {
                             {Title}
                         </div>
                         <div className={styles.Message}>
-                            {/* {realMessage} */}
                             {realMessage.map((MsgItem, index) => {
                                 return (
                                     <div key={index}>{MsgItem}</div>
