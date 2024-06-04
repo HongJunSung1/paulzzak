@@ -22,18 +22,19 @@
 
 .TitleWrap{
     text-align:center;
-    margin: 30px 0;
+    margin: 20px 0 0 0;
     font-size: 25px;
     font-weight: 900;
 }
 
 .Message{
     margin: 20px 15px;
-    height: 50%;
-    justify-content : center;
+    height: 55%;
+    justify-content : flex-start;
     align-items: center;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .Button{
@@ -48,4 +49,22 @@
 
 .Button:hover{
     background-color: rgb(209, 190, 190);
+}
+
+.Message::-webkit-scrollbar {
+    width: 10px;  /* 세로축 스크롤바 폭 너비 */
+
+}
+
+.Message::-webkit-scrollbar-thumb {
+    background: #dbdad8; /* 스크롤바 막대 색상 */
+    border-radius: 8px 8px 8px 8px;
+}
+
+.Message::-webkit-scrollbar-thumb:hover {
+	background-color:#a0a0a5;
+}
+
+.Message::-webkit-scrollbar-track {
+	background: #f3f0ec; /* 스크롤바 뒷 배경 색상 */
 }

@@ -276,11 +276,9 @@ const Menu: React.FC = () => {
                             }
                         }
                         if(errMsg.length > 0){
-                            console.log(errMsg)
                             setMessageOpen(true);
                             message = errMsg;
                             title   = "저장 에러";
-                            // setMessageBox({isShow: true, message: errMsg, title: "저장 에러"});
                             setLoading(false);
                             return;
                         }   
@@ -346,7 +344,6 @@ const Menu: React.FC = () => {
     return (
         <>
             <Loading loading={loading}/>
-            {/* <MessageBox isShow={messageBox.isShow} MessageData={messageBox.message} Title={messageBox.title}/> */}
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
             <DynamicArea>
