@@ -1,4 +1,4 @@
-import React,{ useState, useEffect} from 'react'
+import React,{ useRef,useState, useEffect} from 'react'
 
 import styles from './p-esg-common-SearchBox.module.css';
 import { SP_Request } from '../../hooks/sp-request.tsx';
@@ -10,6 +10,7 @@ const SearchBox = (settings : any) => {
     const [text, setText] = useState(settings.value || '');
     const [result, setResult] = useState<any>();
     const [isOpen, setIsOpen] = useState(false);
+    const searchRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setText(settings.value || '');
@@ -51,10 +52,23 @@ const SearchBox = (settings : any) => {
             settings.onChange('');
         }
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event : MouseEvent) => {
+          if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+          }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+      }, [searchRef]);
     
     return (
         <>
-            <div className={styles.SearchBoxWrap}>
+            <div ref={searchRef} className={styles.SearchBoxWrap}>
                 <div className={styles.SearchBoxBoxTitle}>{settings.Title ? settings.Title : "서치박스명"}</div>
                 <div className={styles.InputWrap}>
                     <input className={styles.Input} type="text" value={text} style={{width: settings.width? settings.width : 200}} onChange={changeText}></input>
