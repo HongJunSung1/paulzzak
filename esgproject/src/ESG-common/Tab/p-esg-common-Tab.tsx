@@ -27,9 +27,9 @@ const Tab = () => {
     const [activeTab, setActiveTab] = useState<string | null>(initialMenuInfo.id);
     const [tabData, setTabData] = useState<MenuInfo[]>([initialMenuInfo]);
     const navigate = useNavigate();
-
+    
     useEffect(() => {
-        if (menuInfo && menuInfo.id) {
+        if (menuInfo && menuInfo.id && menuInfo.url !== "") {
           const newTab = {
             id: menuInfo.id,
             menuName: menuInfo.menuName,
@@ -45,6 +45,14 @@ const Tab = () => {
           });
     
           setActiveTab(menuInfo.id);
+          navigate(menuInfo.url);
+          
+        }
+
+        // 새로고침 시 맨 처음 화면으로 이동시키기
+        if(menuInfo === null){
+            setActiveTab(initialMenuInfo.id);
+            navigate(initialMenuInfo.url);
         }
     }, [menuInfo]);
 
@@ -58,7 +66,7 @@ const Tab = () => {
         let newTabData : any[] = [];
         let originTabData : any[] = [];
 
-        order = tabData.findIndex(i => i.id == tab.id);
+        order = tabData.findIndex(i => i.id === tab.id);
 
         setTimeout(()=>{
             newTabData = tabData.filter((item) => item.id !==tab.id)
