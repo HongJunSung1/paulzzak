@@ -51,20 +51,23 @@ function App() {
         <>
           <Navbar/>
           <Container>
-            <SideBar/>  
-            <DataContainer>
-            <Loading loading={isLoading}/>
-              <Routes>
-                {/* 실제 데이터 작성 구간 */}
-                  <Route path="/main" element={<Main/>}></Route>
-                  <Route path="/environmental" element={<Environmental/>}></Route>
-                  <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
-                  <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
-                  <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
-                  <Route path="/PEsgUserForm" element={<UserForm/>}></Route>
-                {/* 실제 데이터 작성 구간 */}
-              </Routes>
-            </DataContainer>
+            <MenuInfoProvider>
+              <SideBar/>  
+              <DataContainer>
+              <Loading loading={isLoading}/>
+                <Tab/>
+                <Routes>
+                  {/* 실제 데이터 작성 구간 */}
+                    <Route path="/main" element={<Main/>}></Route>
+                    <Route path="/environmental" element={<Environmental/>}></Route>
+                    <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
+                    <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
+                    <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
+                    <Route path="/PEsgUserForm" element={<UserForm/>}></Route>
+                  {/* 실제 데이터 작성 구간 */}
+                </Routes>
+              </DataContainer>
+            </MenuInfoProvider>
           </Container>
         </>
       }
