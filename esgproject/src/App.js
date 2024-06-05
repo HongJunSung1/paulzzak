@@ -15,6 +15,7 @@ import Environmental from './ESG-form/test/p-esg-form-test.tsx';
 import UserInfo from './ESG-form/admin/p-esg-form-admin-userInfo.tsx';
 import FormReg from './ESG-form/admin/p-esg-form-admin-form-reg.tsx';
 import Menu from './ESG-form/menu/p-esg-form-menu-reg.tsx';
+import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
 
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
                   <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
                   <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
                   <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
+                  <Route path="/PEsgUserForm" element={<UserForm/>}></Route>
                 {/* 실제 데이터 작성 구간 */}
               </Routes>
             </DataContainer>

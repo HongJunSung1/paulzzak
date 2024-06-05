@@ -69,7 +69,7 @@ const SearchBox = (settings : any) => {
     return (
         <>
             <div ref={searchRef} className={styles.SearchBoxWrap}>
-                <div className={styles.SearchBoxBoxTitle}>{settings.Title ? settings.Title : "서치박스명"}</div>
+                <div className={styles.SearchBoxBoxTitle}>{settings.name ? settings.name : "서치박스명"}</div>
                 <div className={styles.InputWrap}>
                     <input className={styles.Input} type="text" value={text} style={{width: settings.width? settings.width : 200}} onChange={changeText}></input>
                     <button className={styles.BtnClear} onClick={RemoveText} style={{display: text.length > 0 ? "block" : "none"}}></button>

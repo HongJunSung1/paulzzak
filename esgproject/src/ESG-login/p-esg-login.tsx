@@ -14,9 +14,9 @@ import cookie from 'react-cookies';
 const LoginPage = () => {
 
     // 쿠키 삭제
-    cookie.remove('userInfo', {path : '/'}, 1000);
-    cookie.remove('menuList', {path : '/'}, 1000);
-    cookie.remove('LmenuList', {path : '/'}, 1000);
+    cookie.remove('userInfo', {path : '/'});
+    cookie.remove('menuList', {path : '/'});
+    cookie.remove('LmenuList', {path : '/'});
 
 
     const navigate = useNavigate();
