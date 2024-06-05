@@ -8,7 +8,7 @@
 }
 
 .Tab{
-    padding: 3px 0 3px 15px;
+    padding: 5px 0 3px 15px;
     background-color: rgb(233, 225, 225);
     border-top: solid 3px gray;
     font-size: 12px;
@@ -16,7 +16,12 @@
     box-shadow: 5px 5px 5px 1px rgb(226, 217, 217);
     display:flex;
     font-weight: 600;
+    height:25px;
     overflow:hidden;
+    text-overflow: ellipsis;
+    /* white-space: nowrap;  */
+    word-break:break-all;
+    max-width: calc(100% - 5px);
 }
 
 .Tab:hover{
