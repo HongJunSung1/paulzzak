@@ -30,7 +30,7 @@
 .Message{
     margin: 20px 15px;
     height: 55%;
-    justify-content : flex-start;
+    justify-content : space-around;
     align-items: center;
     display: flex;
     flex-direction: column;

@@ -10,6 +10,8 @@ import FixedArea from "../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
 import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
+import Button from "../../ESG-common/Button/p-esg-common-Button.tsx";
+import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 
@@ -27,11 +29,18 @@ type condition = {
     DataSet    : string;
 }  
 
+// 에러 메세지
+let message : any     = [];
+let title   : string  = "";
 
 const UserInfo = () => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
+
+    // 메세지박스
+    const [messageOpen, setMessageOpen] = useState(false)
+    const messageClose = () => {setMessageOpen(false)};
 
     // 조회조건 값
     const [UserName, setCondition1] = useState('')
@@ -53,6 +62,58 @@ const UserInfo = () => {
     
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
+
+    // 클릭 이벤트
+    const clickEvent = async () => {
+        // 체크한 데이터 담기 
+        let checkedData : any[] = [];
+
+        checkedData.push(grid1Ref.current.getCheckedRows());
+
+        if(checkedData[0].grid.length === 0 ){
+            return;
+        }
+
+        if(checkedData[0].grid.length > 1 ){
+            let errMsg : any[] = [];
+            errMsg.push({text: "두 개 이상의 계정을 초기화할 수 없습니다."})
+            setMessageOpen(true);
+            message = errMsg;
+            title   = "초기화 에러";
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
+        try {
+            // SP 결과 값 담기
+            const initPW = SHA256('1234').toString();
+            checkedData[0].grid[0].initPW = initPW;
+
+            const result = await SP_Request("S_ESG_Admin_Password_Init", checkedData);
+            
+            if(result){
+                setLoading(false);
+                // SP 결과 값이 있을 때 로직
+                let completeMsg : any[] = [];
+                completeMsg.push({text: "아이디 " + result[0][0].UserID + "의 비밀번호가 초기화되었습니다."})
+                setMessageOpen(true);
+                message = completeMsg;
+                title   = "저장 완료";
+            } else{
+                // SP 결과 값이 없을 때 로직
+                let failMsg : any[] = [];
+                failMsg.push({text: "초기화 할 아이디가 없습니다."})
+                setMessageOpen(true);
+                message = failMsg;
+                title   = "저장 실패";
+            }
+        } catch (error) {
+            // SP 호출 시 에러 처리
+            console.log(error);
+        }
+        setLoading(false);
+
+    }
 
     // 툴바 
     const toolbar = [  
@@ -76,7 +137,7 @@ const UserInfo = () => {
         switch (clickID){
             // 신규
             case 0 :
-                console.log("시트 초기화");
+                grid1Ref.current.clear();
                 break;
 
             // 조회
@@ -182,12 +243,14 @@ const UserInfo = () => {
     return (
         <>
             <Loading loading={loading}/>
+            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
             <FixedArea name={"계정 조회 조건"}>
                 <FixedWrap>
                     <TextBox name={"이름"}   value={UserName} onChange={setCondition1}/>    
                     <TextBox name={"아이디"} value={UserID}   onChange={setCondition2}/>   
                     <TextBox name={"이메일"} value={EMail}    onChange={setCondition3} width={300}/>    
+                    <Button name={"계정 초기화"} clickEvent={clickEvent}></Button>
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
