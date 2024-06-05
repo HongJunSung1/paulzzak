@@ -11,6 +11,7 @@ import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.t
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
+import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -32,8 +33,9 @@ const FormReg = () => {
     const [loading,setLoading] = useState(false);
 
     // 조회조건 값
-    const [FormName, setCondition1] = useState('')
-    const [FormUrl  , setCondition2] = useState('')
+    const [FormName, setCondition1] = useState('');
+    const [FormUrl  , setCondition2] = useState('');
+    const [searchText, setSearchText] = useState('');
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -191,7 +193,8 @@ const FormReg = () => {
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
                     <TextBox name={"화면명"}  value={FormName} onChange={setCondition1} width={300}/>    
-                    <TextBox name={"화면 URL"} value={FormUrl}   onChange={setCondition2} width={300}/>    
+                    <TextBox name={"화면 URL"} value={FormUrl}   onChange={setCondition2} width={300}/>
+                    <SearchBox value={searchText} searchCode={1} onChange={setSearchText}/>
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
