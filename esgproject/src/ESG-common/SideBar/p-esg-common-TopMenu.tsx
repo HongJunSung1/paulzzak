@@ -16,8 +16,8 @@ const TopMenu = ({isOpen, selectMenu}) => {
                 <TopMenuWrap>
                     <div style={{width:"100%", 
                                 height:"44px", 
-                                textAlign:"center",
-                                fontSize:"25px",
+                                padding: "0px 10px",
+                                fontSize:"20px",
                                 fontWeight:"bold",
                                 lineHeight:"44px",
                                 backgroundColor:"#d34e4e",
@@ -35,7 +35,7 @@ const TopMenu = ({isOpen, selectMenu}) => {
 const TopMenuWrap = styled.div`
     top: 48px;
     left: 256px;
-    width: 250px;
+    width: 200px;
     height: auto;
     z-index: 50;
     position: fixed;
@@ -51,12 +51,12 @@ const TopMenuWrap = styled.div`
 `
 
 const TopMenuItems = styled.div`
-    padding: 10px 40px;
-    margin : 10px;
+    width: 100%;
+    padding: 10px 10px;
+    margin : 10px 0px;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 15px;
     cursor: pointer;
-    border-radius: 10px;
     &:hover {
         background: rgb(196, 133, 133);
         color: white;
