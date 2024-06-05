@@ -7,6 +7,8 @@ import { Routes, Route, useLocation  } from 'react-router-dom'
 import SideBar from './ESG-common/SideBar/p-esg-common-SideBar.tsx';
 import Navbar from './ESG-common/NavBar/p-esg-common-NavBar.tsx';
 import Loading from './ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
+import Tab     from './ESG-common/Tab/p-esg-common-Tab.tsx';
+import {MenuInfoProvider} from './hooks/use-menu-info.tsx';
 
 // 화면 영역
 import Login from './ESG-login/p-esg-login.tsx';
@@ -28,7 +30,6 @@ function App() {
   useEffect(() => {
     // 페이지 이동 전 이벤트
     setIsLoading(true);
-
     // 페이지 이동 후 이벤트
     const handleComplete = () => {
       setTimeout(() => {
