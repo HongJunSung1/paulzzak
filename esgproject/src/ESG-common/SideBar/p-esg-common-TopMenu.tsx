@@ -47,7 +47,8 @@ const TopMenuWrap = styled.div`
     border-radius: 0px 0px 20px 20px / 0px 0px 20px 20px;
     border-style : solid;
     border-width : 0.25px;
-    border-color : rgb(100, 100, 100, 0.4)
+    border-color : rgb(100, 100, 100, 0.4);
+    overflow: hidden;
 `
 
 const TopMenuItems = styled.div`
