@@ -22,6 +22,17 @@ import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
 
 function App() {
 
+  // 전역적으로 오류를 처리합니다.
+window.onerror = function (message, source, lineno, colno, error) {
+  // console.error("Global error caught:", message, source, lineno, colno, error);
+  if(message == "Uncaught TypeError: Cannot read properties of null (reading 'clientHeight')"){
+    alert("ASdasd");
+    return true;// 오류가 브라우저 콘솔에 출력되지 않도록 합니다.
+  }
+  return false; // 다른 오류는 콘솔 출력
+};
+
+
   const location = useLocation();
   const isLoginPage = location.pathname === '/';
 

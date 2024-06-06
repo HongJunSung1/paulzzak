@@ -27,6 +27,7 @@ type gridAr = {
 
 const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowBtn}: CustomGridProps, ref) => {
 
+
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
     const [isClickRowAppend, setCollapsed] = useState(false);
@@ -39,6 +40,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     let keyDownCellValue : any = [];
 
     useEffect(() => {
+        // setIsInitialized(false);
         const timer = setTimeout(()=> {
             setIsInitialized(true);
             if(gridRef.current){
@@ -271,6 +273,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             </div>
         </div>
     )   
+    
 }
 )
 
