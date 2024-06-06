@@ -76,7 +76,8 @@ const SearchBox = (settings : any) => {
                 <div className={styles.InputWrap}>
                     <input className={styles.Input} type="text" value={text} style={{width: settings.width? settings.width : 200}} onChange={changeText}></input>
                     <button className={styles.BtnClear} onClick={RemoveText} style={{display: text.length > 0 ? "block" : "none"}}></button>
-                    <img className={styles.SearchImg} src={ListIcon} alt={`${ListIcon}`} onClick={ClickHandler}/>
+                    {/* <img className={styles.SearchImg} src={ListIcon} alt={`${ListIcon}`} onClick={ClickHandler}/> */}
+                    <div className={styles.SearchImg} onClick={ClickHandler}/>
                 </div>
                 {isOpen &&<div className={styles.SearchWrap} style={{width: settings.width? settings.width : 200}}>
                     {result && result.map((Item, index) =>

@@ -28,10 +28,10 @@
     padding-left: 5px;
     padding-right: 25px;
     font-size: 12px;
-    color: rgb(104, 104, 104);
-    background-color: rgb(255, 245, 245);
+    color: rgb(96, 96, 96);
+    background-color: transparent;
     user-select: none;
-    border: 2px solid #d34e4e;
+    border: 1px solid #d2deee;
     border-radius: 3px;
     outline: none;
 }
@@ -43,32 +43,40 @@
 .SearchWrap{
     position: absolute;
     z-index: 50;
-    background-color: #d34e4e;
     /* border-radius: 8px; */
 }
 
 .SearchItem{
-    margin: 2px auto;
-    padding: 3px;
-    width: calc(100% - 4px);
-    background-color: white;
-    font-size: 10px;
+    padding: 5px 3px;
+    width: calc(100% - 22px);
+    background-color: #fff5f5;
+    font-size: 12px;
     cursor: pointer;
+    border-bottom: solid 1px #d2deee;
+    border-left: 1px solid #d2deee;
+    border-right: 1px solid #d2deee;
+    text-overflow:ellipsis;
+    box-shadow: 2px 2px 5px #d2deee;
     &:hover{
-        background-color: rgb(255, 245, 245);
+        background-color: rgb(233, 220, 220);
     }
 }
 
 .SearchImg {
     border-radius: 2px;
     position: absolute;
-    right: 5px;
+    right: -2px;
     top: 50%;
     transform: translateY(-50%);
-    height: 20px;
-    width: 20px; 
+    height: 25px;
+    width: 25px;
     cursor: pointer; 
-    filter: invert(49%) sepia(34%) saturate(7492%) hue-rotate(336deg) brightness(95%) contrast(74%);
+    /* filter: invert(49%) sepia(34%) saturate(7492%) hue-rotate(336deg) brightness(95%) contrast(74%); */
+    background: url('../../assets/image/searchbox-white.png') center center no-repeat;
+    background-size: 50%;
+    border: none;
+    outline: none;
+    background-color:#8c8fb9
 }
 
 .InputWrap .BtnClear {
