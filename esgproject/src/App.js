@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react';
 
 import {Container, DataContainer} from "./App.styles.tsx";
-import { Routes, Route, useLocation  } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 
 // 공통 영역
 import SideBar from './ESG-common/SideBar/p-esg-common-SideBar.tsx';
@@ -25,7 +25,7 @@ function App() {
   // 전역적으로 오류를 처리합니다.
 window.onerror = function (message, source, lineno, colno, error) {
   // console.error("Global error caught:", message, source, lineno, colno, error);
-  if(message == "Uncaught TypeError: Cannot read properties of null (reading 'clientHeight')"){
+  if(message === "Uncaught TypeError: Cannot read properties of null (reading 'clientHeight')"){
     // console.error("숙변 사업 등장");
     return true;// 오류가 브라우저 콘솔에 출력 중지
   }

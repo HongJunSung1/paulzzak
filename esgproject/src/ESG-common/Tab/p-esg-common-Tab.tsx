@@ -16,7 +16,7 @@ interface MenuInfoContextProps {
 
 // 초기 페이지 데이터 설정(현재 main)
 const initialMenuInfo: MenuInfo = {
-    id: '7',
+    id: '4',
     menuName: 'main',
     url: '/main'
 };
@@ -27,7 +27,7 @@ const Tab = () => {
     const [activeTab, setActiveTab] = useState<string | null>(initialMenuInfo.id);
     const [tabData, setTabData] = useState<MenuInfo[]>([initialMenuInfo]);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (menuInfo && menuInfo.id && menuInfo.url !== "") {
           const newTab = {
@@ -45,7 +45,7 @@ const Tab = () => {
           });
     
           setActiveTab(menuInfo.id);
-          navigate(menuInfo.url);
+        //   navigate(menuInfo.url);
           
         }
 
@@ -55,11 +55,12 @@ const Tab = () => {
             navigate(initialMenuInfo.url);
         }
     }, [menuInfo]);
-
+    
     const handleTabClick = (tab: MenuInfo) => {
         setActiveTab(tab.id);
         navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
     };
+
 
     const closeTab = (tab) => {
         let order : number = 0;

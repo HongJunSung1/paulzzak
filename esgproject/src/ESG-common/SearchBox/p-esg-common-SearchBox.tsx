@@ -2,7 +2,6 @@ import React,{ useRef,useState, useEffect} from 'react'
 
 import styles from './p-esg-common-SearchBox.module.css';
 import { SP_Request } from '../../hooks/sp-request.tsx';
-import ListIcon from '../../assets/image/ListIcon.svg';
 
 
 const SearchBox = (settings : any) => {
