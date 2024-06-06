@@ -117,7 +117,7 @@ const LoginPage = () => {
             // console.log(cookie.load('userid'));
 
             try{
-                const menuResult = await SP_Request("S_ESG_MenuList",[{ userCD : result[0][0].userCD , DataSet : 'DataSet'}]);
+                const menuResult = await SP_Request("S_ESG_MenuList",[{ UserCD : result[0][0].UserCD , DataSet : 'DataSet'}]);
                 if(menuResult !== null && menuResult.length > 0){
                     cookie.save('menuList',menuResult[0],{
                         path : '/',

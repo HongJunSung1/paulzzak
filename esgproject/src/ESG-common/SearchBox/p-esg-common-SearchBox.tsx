@@ -32,6 +32,9 @@ const SearchBox = (settings : any) => {
 
     const searchClick = (value) => {
         setText(value);
+        if (settings.onChange) {
+            settings.onChange(value);
+        }
         setIsOpen(false);
     }
     

@@ -79,6 +79,64 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
     }
 
+
+    //커스텀 렌더러 설정
+
+    // 1. 체크박스
+    class CheckBox {
+        el: HTMLInputElement;
+        grid: any;
+        rowKey: any;
+        columnName: any;
+      
+        constructor(props) {
+          const el = document.createElement('input');
+          el.type = 'checkbox';
+      
+          el.style.display = 'block';
+          el.style.margin = 'auto';
+          el.style.position = 'relative';
+          el.style.top = '50%';
+      
+          this.el = el;
+          this.grid = props.grid;
+          this.rowKey = props.rowKey;
+          this.columnName = props.columnInfo.name;
+      
+          this.render(props);
+      
+          // 이벤트 리스너 추가
+          this.el.addEventListener('change', this.onChange.bind(this));
+        }
+      
+        getElement() {
+          return this.el;
+        }
+      
+        render(props) {
+            const value = String(props.value);
+            this.el.checked = value === '1';
+            this.el.disabled = props.columnInfo.renderer.options?.disabled || false;
+          }
+      
+        onChange(event) {
+          const newValue = event.target.checked ? '1' : '0';
+          this.grid.dispatch('setValue', this.rowKey, this.columnName, newValue);
+        }
+      }
+
+    // 설정에 따른 커스텀 렌더러로 변경
+    columns.forEach(column => {
+        if (column.renderer && column.renderer.type === 'checkbox') {
+            column.renderer = {
+                type: CheckBox,
+                options: {
+                  disabled: column.disabled || false
+                }
+            };
+        }
+    });
+
     // 공통 함수
     useImperativeHandle(ref , () => ({
 
