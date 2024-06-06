@@ -26,7 +26,7 @@ function App() {
 window.onerror = function (message, source, lineno, colno, error) {
   // console.error("Global error caught:", message, source, lineno, colno, error);
   if(message == "Uncaught TypeError: Cannot read properties of null (reading 'clientHeight')"){
-    alert("ASdasd");
+    console.error("숙변 사업 등장");
     return true;// 오류가 브라우저 콘솔에 출력되지 않도록 합니다.
   }
   return false; // 다른 오류는 콘솔 출력
@@ -45,7 +45,7 @@ window.onerror = function (message, source, lineno, colno, error) {
     const handleComplete = () => {
       setTimeout(() => {
         setIsLoading(false);
-      }, 500); // 원하는 로딩 시간 설정
+      }, 10); // 원하는 로딩 시간 설정
     };
 
     handleComplete();

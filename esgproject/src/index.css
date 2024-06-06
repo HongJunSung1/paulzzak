@@ -25,3 +25,8 @@ div{
 button{
   font-family: "SpoqaHanSansNeo-Regular";
 }
+
+iframe
+{
+    display: none;
+}
