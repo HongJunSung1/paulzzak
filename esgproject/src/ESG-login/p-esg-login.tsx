@@ -10,6 +10,7 @@ import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import { SP_Request } from '../hooks/sp-request.tsx';
 import {SHA256} from 'crypto-js';
 import cookie from 'react-cookies';
+import emailjs from '@emailjs/browser';
 
 const LoginPage = () => {
 
@@ -184,11 +185,27 @@ const LoginPage = () => {
     const initPassword = async () => {
         setErrMsg('');
         // 비밀번호 변경
-        const cryptoPW = SHA256('1234').toString();
+        const newPW = Math.random().toString(36).substring(2, 11);
+        const cryptoPW = SHA256(newPW).toString();
         try {
             result = await SP_Request("S_ESG_LoginPasswordInit", [{userID, cryptoPW, DataSet: 'DataSet'}]);
             if(result){
                 setInfo(true);
+
+                // 이메일로 비밀번호 보내기
+                emailjs.send('service_m53l826','template_icrfdxr',{
+                    to_id: result[0][0].userID,
+                    newPW: newPW,
+                    to_email: result[0][0].Email
+                },{publicKey : "s4ZPyCNiNvQvTYxtZ"})
+                    .then(
+                        (response) => {
+                            console.log('성공',response.status);
+                        },
+                        (error) => {
+                            console.log('실패', error);
+                        },
+                    );
             } else{
                 window.alert("비밀번호 변경 실패");
             }
