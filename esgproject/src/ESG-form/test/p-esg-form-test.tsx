@@ -1,4 +1,4 @@
-import React, { useRef, useState }  from 'react'
+import React, { useRef, useState, useEffect }  from 'react'
 import '../../global.d.ts';
 
 
@@ -27,7 +27,7 @@ type condition = {
     DataSet    : string;
 }  
 
-const Environmental: React.FC = () => {
+const Environmental = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -184,7 +184,19 @@ const Environmental: React.FC = () => {
       
     }
 
+    // 탭에서 화면이 사라졌을 경우 화면 값 초기화
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/environmental') === undefined) {
+            setCondition1('');
+            setCondition2('');
+            setCondition3('');
+            setGrid1Data([]);
+            setGrid2Data([]);
+        }
+    }, [openTabs]);
+
     // 화면
+    if(strOpenUrl === '/environmental')
     return(
         <>
             <Loading loading={loading}/>

@@ -1,5 +1,5 @@
 // 메뉴 등록
-import React, { useRef, useState }  from 'react'
+import React, { useRef, useState, useEffect }  from 'react'
 import '../../global.d.ts';
 
 //공통 소스
@@ -24,7 +24,7 @@ let MMenuCD = 0
 let message : any     = [];
 let title   : string  = "";
 
-const Menu: React.FC = () => {
+const Menu = ({strOpenUrl,openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
     
@@ -172,9 +172,6 @@ const Menu: React.FC = () => {
 
             // 조회
             case 1: 
-                grid1Ref.current.clear();
-                grid2Ref.current.clear();
-                grid3Ref.current.clear();
 
                 // 로딩 뷰 보이기
                 setLoading(true);
@@ -339,8 +336,18 @@ const Menu: React.FC = () => {
                 break;
         }
     
-    } 
+    }
 
+    // 탭에서 화면이 사라졌을 경우 화면 값 초기화
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgFormMenuReg') === undefined) {
+            setGrid1Data([]);
+            setGrid2Data([]);
+            setGrid3Data([]);
+        }
+    }, [openTabs]); 
+
+    if(strOpenUrl === '/PEsgFormMenuReg')
     return (
         <>
             <Loading loading={loading}/>

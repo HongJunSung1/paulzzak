@@ -1,7 +1,8 @@
 import React from 'react'
 import '../../global.d.ts';
 
-const Main = () => {
+const Main = ({strOpenUrl}) => {
+    if(strOpenUrl === '/main')
     return(
         <>
             main

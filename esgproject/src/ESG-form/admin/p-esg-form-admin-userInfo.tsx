@@ -1,6 +1,6 @@
 // 계정 관리
 
-import React, { useRef, useState }  from 'react'
+import React, { useRef, useState, useEffect}  from 'react'
 import '../../global.d.ts';
 import {SHA256} from 'crypto-js';
 
@@ -33,7 +33,7 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
-const UserInfo = () => {
+const UserInfo = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -240,6 +240,18 @@ const UserInfo = () => {
       
     }
 
+
+    // 탭에서 화면이 사라졌을 경우 화면 값 초기화
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgFormAdminUserInfo') === undefined) {
+            setCondition1('');
+            setCondition2('');
+            setCondition3('');
+            setGrid1Data([]);
+        }
+    }, [openTabs]);
+
+    if(strOpenUrl === '/PEsgFormAdminUserInfo')
     return (
         <>
             <Loading loading={loading}/>

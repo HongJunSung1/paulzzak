@@ -23,15 +23,17 @@ import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
 function App() {
 
   // 전역적으로 오류를 처리합니다.
-window.onerror = function (message, source, lineno, colno, error) {
-  // console.error("Global error caught:", message, source, lineno, colno, error);
-  if(message === "Uncaught TypeError: Cannot read properties of null (reading 'clientHeight')"){
-    // console.error("숙변 사업 등장");
-    return true;// 오류가 브라우저 콘솔에 출력 중지
-  }
-  return false; // 다른 오류는 콘솔 출력
-};
+  window.onerror = function (message, source, lineno, colno, error) {
+    // console.error("Global error caught:", message, source, lineno, colno, error);
+    if(message === "Uncaught TypeError: Cannot read properties of null (reading 'clientHeight')"){
+      // console.error("숙변 사업 등장");
+      return true;// 오류가 브라우저 콘솔에 출력 중지
+    }
+    return false; // 다른 오류는 콘솔 출력
+  };
 
+  const [strOpenUrl,setStrOpenUrl] = useState('/main');
+  const [openTabs,setOpenTabs] = useState([]);
 
   const location = useLocation();
   const isLoginPage = location.pathname === '/';
@@ -49,7 +51,7 @@ window.onerror = function (message, source, lineno, colno, error) {
     };
 
     handleComplete();
-  }, [location]);
+  }, [strOpenUrl]);
 
   return (      
   <div className="App" style={{backgroundColor:"#faf9f8"}}>
@@ -63,20 +65,26 @@ window.onerror = function (message, source, lineno, colno, error) {
           <Navbar/>
           <Container>
             <MenuInfoProvider>
-              <SideBar/>  
+              <SideBar strOpenUrl={setStrOpenUrl}/>  
               <DataContainer>
               <Loading loading={isLoading}/>
-                <Tab/>
-                <Routes>
+                <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs}/>
+                {/* <Routes> */}
                   {/* 실제 데이터 작성 구간 */}
-                    <Route path="/main" element={<Main/>}></Route>
+                    {/* <Route path="/main" element={<Main/>}></Route>
                     <Route path="/environmental" element={<Environmental/>}></Route>
                     <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
                     <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
                     <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
-                    <Route path="/PEsgUserForm" element={<UserForm/>}></Route>
+                    <Route path="/PEsgUserForm" element={<UserForm/>}></Route> */}
                   {/* 실제 데이터 작성 구간 */}
-                </Routes>
+                {/* </Routes> */}
+                <Main           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <UserInfo       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <FormReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <Menu           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <UserForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
               </DataContainer>
             </MenuInfoProvider>
           </Container>

@@ -1,5 +1,5 @@
 //사용자별 화면 권한
-import React, { useRef, useState }  from 'react'
+import React, { useRef, useState, useEffect}  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -38,7 +38,7 @@ let title   : string  = "";
 // 우클릭 조회 시 받는 내부코드 값
 let UserCD = 0
 
-const UserForm = () => {
+const UserForm = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -234,6 +234,17 @@ const UserForm = () => {
         }, 100)
     };
 
+    // 탭에서 화면이 사라졌을 경우 화면 값 초기화
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgUserForm') === undefined) {
+            setCondition1('');
+            setCondition2('');
+            setGrid1Data([]);
+            setGrid2Data([]);
+        }
+    }, [openTabs]);
+
+    if(strOpenUrl === '/PEsgUserForm')
     return (
         <>
             <Loading loading={loading}/>

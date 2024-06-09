@@ -1,6 +1,6 @@
 // 화면 등록
 
-import React, { useRef, useState }  from 'react'
+import React, { useEffect, useRef, useState }  from 'react'
 import '../../global.d.ts';
 
 //공통 소스
@@ -26,7 +26,7 @@ type condition = {
 }  
 
 
-const FormReg = () => {
+const FormReg = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -72,6 +72,7 @@ const FormReg = () => {
             // 신규
             case 0 :
                 grid1Ref.current.clear();
+                setGrid1Data([]);
                 break;
 
             // 조회
@@ -184,6 +185,18 @@ const FormReg = () => {
       
     }
 
+    // 탭에서 화면이 사라졌을 경우 화면 값 초기화
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgFormAdminFormReg') === undefined) {
+            setCondition1('');
+            setCondition2('');
+            setGrid1Data([]);
+        }
+    }, [openTabs]);
+
+    // console.log(openTabs.find(item => item.url === '/PEsgFormAdminFormReg'));
+
+    if(strOpenUrl === '/PEsgFormAdminFormReg')
     return (
         <>
             <Loading loading={loading}/>
@@ -191,7 +204,7 @@ const FormReg = () => {
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
                     <TextBox name={"화면명"}  value={FormName} onChange={setCondition1} width={300}/>    
-                    <TextBox name={"화면 URL"} value={FormUrl}   onChange={setCondition2} width={300}/>
+                    <TextBox name={"화면 URL"} value={FormUrl} onChange={setCondition2} width={300}/>
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>

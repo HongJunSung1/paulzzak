@@ -6,14 +6,14 @@ import {SbContainer} from './p-esg-common-sideBarItem.styles.tsx';
 import styles from './p-esg-common-SideBarItem.module.css';
 import cookie from 'react-cookies';
 
-const SideBar = ({ items }) => {
+const SideBar = ({ items, strOpenUrl }) => {
 
   const [menuData, setMenuData] = useState<any>([]);
   const [TotMenuData, setTotMenuData] = useState<any>([]);
   const [isOpen,setIsOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("Environment");
   const menuRef = useRef<HTMLDivElement>(null);
-  
+
 
   useEffect(() => {
     // 컴포넌트가 처음 마운트될 때 쿠키에서 데이터 로드
@@ -42,6 +42,10 @@ const SideBar = ({ items }) => {
     };
   }, [menuRef]);
 
+  const handleUrlChange = (url) => {
+    strOpenUrl('/' + url);
+  };
+
 
   if(menuData !== undefined){
     const nest = (menuData, menuId = "ROOT", link = 'pmenuId') =>
@@ -64,7 +68,7 @@ const SideBar = ({ items }) => {
         </div>
         <div className = {styles.SideBarName} onClick={TopMenuOpen}>{selectedMenu}</div>
         {tree.map((subItem, index) =>
-          <SideBarItem item={subItem} key={index}/>
+          <SideBarItem item={subItem} key={index} strOpenUrl={handleUrlChange}/>
         )}
       </SbContainer>
     )

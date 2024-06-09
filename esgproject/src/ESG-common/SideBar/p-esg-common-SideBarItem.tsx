@@ -3,10 +3,9 @@ import React, {useState}  from 'react';
 import styles from './p-esg-common-SideBarItem.module.css';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 import {SideBarSub} from './p-esg-common-sideBarItem.styles.tsx';
-import { Link } from 'react-router-dom';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
 
-const SideBarItem = ({ item }) => {
+const SideBarItem = ({ item, strOpenUrl }) => {
   // 클릭 할 때마다 화살표 위아래 모양 바꾸기
   const [collapsed, setCollapsed] = useState(false);
   const icon = collapsed ? <HiChevronUp /> : <HiChevronDown />;
@@ -18,6 +17,7 @@ const SideBarItem = ({ item }) => {
 
   const handleClick = () => {
     setMenuInfo(item);
+    strOpenUrl(item.url);
   };
 
 
@@ -42,7 +42,7 @@ const SideBarItem = ({ item }) => {
         <div style={{overflow:"hidden"}}>
         <SideBarSub isopen={collapsed}>
           {item.childrens.map((child) => (
-            <SideBarItem key={child.id} item={child} />
+            <SideBarItem key={child.id} item={child} strOpenUrl={strOpenUrl} />
           ))}
         </SideBarSub>
         </div>
@@ -51,7 +51,7 @@ const SideBarItem = ({ item }) => {
   } else{
     return (
       <div>
-        <Link to = {item.url !== "" ? item.url : "main"} className = {styles.linkMenu}>
+        {/* <Link to = {item.url !== "" ? item.url : "main"} className = {styles.linkMenu}> */}
           <div className = {styles.menuName}
               style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
                         marginTop: item.pmenuId==="ROOT"? "15px": "5px",
@@ -61,7 +61,7 @@ const SideBarItem = ({ item }) => {
                     
               onClick={handleClick}>{item.menuName}
           </div>  
-        </Link>
+        {/* </Link> */}
       </div>
     )
   }
