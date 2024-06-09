@@ -1,0 +1,44 @@
+.WholeContainer {
+    padding: 2px 2px;
+}
+
+.FileWrap{
+    height: calc(100% - 20px);
+}
+
+.InputContainer{
+    height: 30px;
+    border-bottom: solid 1px #e5e7eb;
+}
+
+.InputWrap{
+    border: solid 1px rgb(200, 200, 200);
+    border-radius: 3px;
+    cursor: pointer;
+    background: inherit;
+    padding: 2px 15px; 
+    width: 120px;
+    display: flex;
+}
+
+.FileButton{
+    border: none;
+    background:inherit;
+    font-weight: 700;
+    color: rgb(131, 78, 95);
+    cursor: pointer;
+}
+
+.InputWrap:hover {
+    background: rgb(226, 213, 217);
+    color: white;
+}
+
+
+
+.InputFileImg {
+    width: 20px;
+    height: 20px;
+    line-height: calc(100% - 20px);
+}
+

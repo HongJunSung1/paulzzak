@@ -19,6 +19,9 @@ import FormReg from './ESG-form/admin/p-esg-form-admin-form-reg.tsx';
 import Menu from './ESG-form/menu/p-esg-form-menu-reg.tsx';
 import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
 
+// 테스트 화면
+import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
+
 
 function App() {
 
@@ -30,7 +33,7 @@ function App() {
       return true;// 오류가 브라우저 콘솔에 출력 중지
     }
     return false; // 다른 오류는 콘솔 출력
-  };
+  };  
 
   const [strOpenUrl,setStrOpenUrl] = useState('/main');
   const [openTabs,setOpenTabs] = useState([]);
@@ -85,6 +88,7 @@ function App() {
                 <Menu           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 <UserForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <FileTest       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
               </DataContainer>
             </MenuInfoProvider>
           </Container>

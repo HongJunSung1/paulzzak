@@ -12,7 +12,6 @@ import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
-
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
 type gridAr = {

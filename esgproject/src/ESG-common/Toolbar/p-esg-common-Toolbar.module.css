@@ -3,7 +3,9 @@
     background-color: white;
     display: flex;
     border: solid 0.5px rgb(200, 200, 200);
-    border-radius: 5px;
+    border-top: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     overflow: hidden;
     font-size:12px;
     font-weight:700;
@@ -11,6 +13,7 @@
     letter-spacing: -.3px;
     cursor: pointer;
     padding-left: 2px;
+    max-height: 32.22px;
 }
 
 .ToolbarContent{

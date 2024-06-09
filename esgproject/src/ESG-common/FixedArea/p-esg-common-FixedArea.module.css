@@ -1,7 +1,7 @@
 .FixedArea{
     min-height : 100px;
     background-color : white;
-    margin-top: 10px; /*툴바를 위해 띄워놓기*/
+    margin-top: 5px; /*툴바를 위해 띄워놓기*/
     padding: 10px;
     flex: 0 0 auto;
     border: solid 0.5px rgb(200, 200, 200);

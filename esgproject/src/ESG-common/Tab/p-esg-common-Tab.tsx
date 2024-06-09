@@ -109,7 +109,10 @@
                                 key={tab.id} 
                                 data-active={activeTab===tab.id ? "true" : "false"} 
                                 onClick={() => handleTabClick(tab)}
-                                style={{backgroundColor: activeTab===tab.id ? "white" : "rgb(233, 235, 235)"}}>
+                                style={{backgroundColor: activeTab===tab.id ? "white" : "rgb(233, 235, 235)",
+                                        borderTop: activeTab===tab.id ? "solid 3px black" : "solid 3px gray",
+                                        borderBottom: activeTab===tab.id ? "none" : "solid 0.5px rgb(200, 200, 200)"
+                                }}>
                                 {tab.menuName}
                                 <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button>
                             </div>
