@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import cookie from 'react-cookies';
 import styled from 'styled-components';
 
@@ -6,12 +6,19 @@ const TopMenu = ({isOpen, selectMenu}) => {
 
     const LMenuList = cookie.load('LmenuList');
 
+    const [isOpen2,setIsOpen2] = useState(isOpen);
+
+    useEffect(()=>{
+        setIsOpen2(isOpen);
+    }, [isOpen])
+
     const LMenuClick = (item) => {
+        setIsOpen2(false);
         selectMenu(item.LMenuName);
     }
 
     if(LMenuList !== undefined){
-        if(isOpen){
+        if(isOpen2){
             return (
                 <TopMenuWrap>
                     <div style={{width:"100%", 
