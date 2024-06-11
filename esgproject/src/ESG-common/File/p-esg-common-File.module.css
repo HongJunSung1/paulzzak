@@ -2,13 +2,16 @@
     padding: 2px 2px;
 }
 
-.FileWrap{
+.FileTableContainer{
     height: calc(100% - 20px);
 }
 
 .InputContainer{
     height: 30px;
-    border-bottom: solid 1px #e5e7eb;
+    /* border-bottom: solid 1px #e5e7eb; */
+    display: flex;
+    margin: 5px 0px;
+    float: right;
 }
 
 .InputWrap{
@@ -19,6 +22,7 @@
     padding: 2px 15px; 
     width: 120px;
     display: flex;
+    margin-right: 5px;
 }
 
 .FileButton{
@@ -37,8 +41,67 @@
 
 
 .InputFileImg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     line-height: calc(100% - 20px);
 }
 
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    border-top: 1px solid rgb(226, 213, 217);
+    border-bottom: 1px solid rgb(190, 171, 177);
+    padding: 4px 0px;
+}
+
+th, td {
+    text-align: center;
+}
+
+td {
+    border-bottom: 1px solid rgb(226, 213, 217);
+    padding: 10px 0px;
+}
+
+tr:hover{
+    background-color: rgb(248, 245, 246);
+}
+
+.FileName{
+    width: 40%;
+    text-overflow: ellipsis;
+}
+
+.FileSource{
+    width: 15%;
+}
+
+.FileVolume{
+    width: 15%;
+}
+
+.FileDownload{
+    width:15%;
+}
+
+.FileDelete{
+    width:15%;
+}
+
+.DownloadBtn, .DeleteBtn{
+    width: 80%;
+    height: 100%;
+    border-radius: 5px;
+    border: solid 1px gray;
+    background-color:inherit;
+    cursor: pointer;
+    padding: 5px 0px;
+}
+
+.DownloadBtn:hover, .DeleteBtn:hover{
+    background-color: rgb(104, 79, 87);
+    color: white;
+}
