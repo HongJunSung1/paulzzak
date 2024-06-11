@@ -24,17 +24,19 @@ let title   : string  = "";
 // 우클릭 조회 시 받는 내부코드 값
 let UserCD = 0
 
-const FileTest = ({strOpenUrl, openTabs}) => {
 
+const FileTest = ({strOpenUrl, openTabs}) => {
+    
     // 로딩뷰
     const [loading,setLoading] = useState(false);
-
+    
     // 메세지박스
     const [messageOpen, setMessageOpen] = useState(false)
     const messageClose = () => {setMessageOpen(false)};
-
+    
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
+    const [fileData, setFileData] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -48,6 +50,12 @@ const FileTest = ({strOpenUrl, openTabs}) => {
 
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
+
+    // 파일 첨부 
+    const fileRef : any = useRef(null);
+
+    let [fileAr] = useState<gridAr>({DataSet: '', grid: []});
+
 
     // 툴바 
     const toolbar = [  
@@ -82,10 +90,10 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                     try {
                         // 조회 SP 호출 후 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, []);
-                        
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
+                            console.log(grid1Data);
                         } else{
                             setLoading(false);
                             // 결과값이 없을 경우 처리 로직
@@ -114,14 +122,26 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
+                
 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
+                const fileSaveResult = await fileRef.current.handleSave();
+
+                if(fileSaveResult !== null){
+                    for(let i=0;i<fileSaveResult.length;i++){
+                        fileSaveResult[i].UserCD = UserCD;
+                    }
+                    fileAr.DataSet = 'DataSet2';
+                    fileAr.grid = fileSaveResult;
+                    combinedData.push(fileAr);
+                }
+
                 combinedData.push(grid1Changes);
 
                 // 저장할 데이터 없을시 종료
-                if(combinedData[0].grid.length === 0){
+                if(combinedData.length === 0){
                     setLoading(false);
                     let errMsg : any[] = [];
                     errMsg.push({text: "저장할 데이터가 없습니다."})
@@ -223,9 +243,45 @@ const FileTest = ({strOpenUrl, openTabs}) => {
     // 우클릭 시 조회
     const rightClick1 = (event: React.MouseEvent) => {
         event.preventDefault();
+        setFileData([]);
+        console.log(grid1Ref.current.rightClick());
         setTimeout(async () => {
-            console.log('우클릭')
-        })
+            // UserCD = 0;
+            if(grid1Ref.current.rightClick() !== null){
+                UserCD = grid1Ref.current.rightClick().UserCD;
+            }
+
+            // 조회 조건 담기
+            const conditionAr : any[] = [{UserCD : UserCD, DataSet : "DataSet1"}]
+
+            if(UserCD > 0){
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request("S_ESG_File_Test_Sub_Query", conditionAr);
+                    if(result.length > 0){
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        setFileData(result[0]);
+                    } else{
+                        // 결과값이 없을 경우 처리 로직
+                        setLoading(false);
+                        let errMsg : any[] = [];
+                        errMsg.push({text: "데이터가 없습니다."});
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "조회 내역 없음";
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
+            } else {
+                setFileData([]);
+            }
+        }, 100)
     }
 
     if(strOpenUrl === '/PEsgFormFileTest')
@@ -240,7 +296,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                         <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
                     </div>
                     <div>
-                        <File/>
+                        <File openUrl={strOpenUrl} ref={fileRef} source={fileData} />
                     </div>
                 </Splitter>
         </DynamicArea>

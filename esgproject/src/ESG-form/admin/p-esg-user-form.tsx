@@ -200,6 +200,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
 
             if(grid1Ref.current.rightClick() !== null){
                 UserCD = grid1Ref.current.rightClick().UserCD
+                console.log(grid1Ref.current.rightClick())
             }     
 
             // 조회 조건 담기
