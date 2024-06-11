@@ -1,28 +1,27 @@
-.SearchBoxWrap{
-    margin: 3px 5px 3px 5px;
+.SearchBoxWrap {
+    margin: 3px 5px;
 }
 
-.SearchBoxBoxTitle{
+.SearchBoxBoxTitle {
     font-size: 12px;
     color: rgb(144, 144, 144);
     text-align: left;
-    font-weight:700;
-    overflow:hidden;
-    height:20px;
+    font-weight: 700;
+    overflow: hidden;
+    height: 20px;
 }
-
 
 .InputWrap {
     position: relative;
     height: 25px;
     display: inline-block;
- }
-  
-.InputWrap input {
-  height: inherit;
 }
 
-.Input{
+.InputWrap input {
+    height: inherit;
+}
+
+.Input {
     height: 25px;
     text-align: left;
     padding-left: 5px;
@@ -36,31 +35,52 @@
     outline: none;
 }
 
-.Input:focus{
+.Input:focus {
     box-shadow: 0 0 1px 1px #d1eaee;
 }
 
-.SearchWrap{
+.SearchWrap {
     position: absolute;
     z-index: 50;
-    /* border-radius: 8px; */
+    border-spacing: 0px;
+    border-collapse: separate;
+    max-height: 40px;
+    overflow: auto;
 }
 
-.SearchItem{
-    padding: 5px 3px;
-    width: calc(100% - 22px);
+.SearchItem {
+    padding: 6px 4px;
     background-color: #fff5f5;
     font-size: 12px;
-    cursor: pointer;
     border-bottom: solid 1px #d2deee;
     border-left: 1px solid #d2deee;
     border-right: 1px solid #d2deee;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     box-shadow: 2px 2px 5px #d2deee;
-    &:hover{
-        background-color: rgb(233, 220, 220);
-    }
+    white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
 }
+
+.SearchItemNum{
+    padding: 6px 4px;
+    background-color: #adadad;
+    color:white;
+    font-size: 12px;
+    border-bottom: solid 1px #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    text-overflow: ellipsis;
+    text-align: center;
+    box-shadow: 2px 2px 5px #adadad;
+    font-weight: bold;
+}
+
+.tableTr {
+    cursor: pointer;
+}
+
+.tableTr:hover {
+    background-color: rgb(233, 220, 220);
+}   
 
 .SearchImg {
     border-radius: 2px;
@@ -70,13 +90,12 @@
     transform: translateY(-50%);
     height: 25px;
     width: 25px;
-    cursor: pointer; 
-    /* filter: invert(49%) sepia(34%) saturate(7492%) hue-rotate(336deg) brightness(95%) contrast(74%); */
+    cursor: pointer;
     background: url('../../assets/image/searchbox-white.png') center center no-repeat;
     background-size: 50%;
     border: none;
     outline: none;
-    background-color:#8c8fb9
+    background-color: #8c8fb9;
 }
 
 .InputWrap .BtnClear {

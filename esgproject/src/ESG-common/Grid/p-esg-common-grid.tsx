@@ -4,6 +4,8 @@ import styles from './p-esg-common-grid.module.css';
 
 import 'tui-grid/dist/tui-grid.css';
 import Grid from '@toast-ui/react-grid';
+import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
+import { createRoot } from 'react-dom/client';
 
 type CustomGridProps = {
     title: string;
@@ -125,6 +127,49 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
       }
 
+      // 2. 서치박스
+      class SearchBoxRenderer {
+        el: HTMLDivElement;
+        grid: any;
+        rowKey: any;
+        columnInfo: any;
+        root: any;
+    
+        constructor(props) {
+            const el = document.createElement('div');
+            this.el = el;
+            this.grid = props.grid;
+            this.rowKey = props.rowKey;
+            this.columnInfo = props.columnInfo;
+            this.root = createRoot(this.el); // createRoot 사용
+            this.render(props);
+        }
+    
+        getElement() {
+            return this.el;
+        }
+    
+        render(props) {
+            const value = props.value;
+            const input = this.el.querySelector('input');
+
+            if(input){
+                input.disabled = false;
+            }
+    
+            this.root.render(
+                <SearchBox
+                    value={value}
+                    onChange={(newValue) => this.onChange(newValue)}
+                    searchCode={this.columnInfo.renderer.options?.searchCode || 0}
+                />
+            );
+        }
+
+        onChange(newValue) {
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, newValue);
+        }
+    }
     // 설정에 따른 커스텀 렌더러로 변경
     columns.forEach(column => {
         if (column.renderer && column.renderer.type === 'checkbox') {
@@ -132,6 +177,14 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 type: CheckBox,
                 options: {
                   disabled: column.disabled || false
+                }
+            };
+        }else if(column.renderer && column.renderer.type === 'searchbox'){
+            column.renderer = {
+                type: SearchBoxRenderer,
+                options: {
+                  searchCode: column.renderer.options.searchCode || 0,
+                  
                 }
             };
         }

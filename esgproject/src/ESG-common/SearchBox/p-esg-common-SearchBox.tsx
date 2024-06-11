@@ -15,7 +15,7 @@ const SearchBox = (settings : any) => {
         setText(settings.value || '');
     }, [settings.value]);
 
-    const changeText = (e) => {
+    const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
 
         if (settings.onChange) {
@@ -23,14 +23,14 @@ const SearchBox = (settings : any) => {
         }
     };
 
-    const onkeyUp = async (e) =>{
+    const onkeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) =>{
         setResult([]);
         if(e.key === 'Enter'){
             setIsOpen(true);
 
-            if(text !== "" && e.target.value.trim() !== ""){
-                const result = await SP_Request("S_ESG_SearchBox_Query",[{SearchCode : settings.searchCode , Text : e.target.value, DataSet : "DataSet1"}]);
-                setResult(result[0]);
+            if(text !== "" && e.currentTarget.value.trim() !== ""){
+                const resultData = await SP_Request("S_ESG_SearchBox_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
+                setResult(resultData[0]);
             }
         }
     }
@@ -44,8 +44,8 @@ const SearchBox = (settings : any) => {
     }
     
     const ClickHandler = async () =>{
-        const result = await SP_Request("S_ESG_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
-        setResult(result[0]);
+        const resultData = await SP_Request("S_ESG_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
+        setResult(resultData[0]);
 
         if(isOpen){
             setIsOpen(false);
@@ -74,26 +74,92 @@ const SearchBox = (settings : any) => {
           document.removeEventListener('mousedown', handleClickOutside);
         };
       }, [searchRef]);
-    
-    return (
+
+
+
+      return (
         <>
             <div ref={searchRef} className={styles.SearchBoxWrap}>
-                <div className={styles.SearchBoxBoxTitle}>{settings.name ? settings.name : "서치박스명"}</div>
+                {settings.name && <div className={styles.SearchBoxBoxTitle}>{settings.name}</div>}
                 <div className={styles.InputWrap}>
-                    <input className={styles.Input} type="text" value={text} style={{width: settings.width? settings.width : 200}} onChange={changeText} onKeyUp={onkeyUp}></input>
-                    <button className={styles.BtnClear} onClick={RemoveText} style={{display: text.length > 0 ? "block" : "none"}}></button>
-                    {/* <img className={styles.SearchImg} src={ListIcon} alt={`${ListIcon}`} onClick={ClickHandler}/> */}
-                    <div className={styles.SearchImg} onClick={ClickHandler}/>
-                </div>
-                {isOpen &&<div className={styles.SearchWrap} style={{width: settings.width? settings.width : 200}}>
-                    {result && result.map((Item, index) =>
-                        <div className={styles.SearchItem} key={index} onClick={() => searchClick(Item.Value)} >{index + 1}. {Item.Value}</div>
+                    <input
+                        className={styles.Input}
+                        type="text"
+                        value={text}
+                        style={{ width: settings.width ? settings.width : '100%' }}
+                        onChange={changeText}
+                        onKeyUp={onkeyUp}
+                    />
+                    {settings.name && (
+                        <button
+                            className={styles.BtnClear}
+                            onClick={RemoveText}
+                            style={{ display: text.length > 0 ? "block" : "none" }}
+                        ></button>
                     )}
+                    <div className={styles.SearchImg} onClick={ClickHandler} />
                 </div>
-                }
+                {isOpen && (
+                    <div>
+                        <table className={styles.SearchWrap} >
+                            <tbody>
+                                    <tr>
+                                        <th className={styles.SearchItemNum}>no.</th>
+                                        <th className={styles.SearchItemNum}>{result[0].ColNameKr? result[0].ColNameKr : ""}</th>
+                                        {result[0].InfoCol1 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol1NameKr}</th>}
+                                        {result[0].InfoCol2 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol2NameKr}</th>}
+                                        {result[0].InfoCol3 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol3NameKr}</th>}
+                                    </tr>
+                                {result.map((Item, index) => (
+                                    <tr className={styles.tableTr} key={index}>
+                                        <td 
+                                            className={styles.SearchItemNum}
+                                        >
+                                            {index + 1}.
+                                        </td>
+                                        <td
+                                            className={styles.SearchItem}
+                                            style={{ width: Item.ColWidth ? Item.ColWidth+'px' : "auto" }}
+                                            onClick={() => searchClick(Item.Value)}
+                                        >
+                                            {Item.Value}
+                                        </td>
+                                        {Item.InfoCol1 !== undefined && (
+                                            <td
+                                                className={styles.SearchItem}
+                                                style={{ width: Item.InfoCol1Width ? Item.InfoCol1Width+'px' : "auto" }}
+                                                onClick={() => searchClick(Item.Value)}
+                                            >
+                                                {Item.InfoCol1}
+                                            </td>
+                                        )}
+                                        {Item.InfoCol2 !== undefined && (
+                                            <td
+                                                className={styles.SearchItem}
+                                                style={{ width: Item.InfoCol2Width ? Item.InfoCol2Width+'px' : "auto" }}
+                                                onClick={() => searchClick(Item.Value)}
+                                            >
+                                                {Item.InfoCol2}
+                                            </td>
+                                        )}
+                                        {Item.InfoCol3 !== undefined && (
+                                            <td
+                                                className={styles.SearchItem}
+                                                style={{ width: Item.InfoCol3Width ? Item.InfoCol3Width+'%' : "auto" }}
+                                                onClick={() => searchClick(Item.Value)}
+                                            >
+                                                {Item.InfoCol3}
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
         </>
-    )
+    );
   
 }
 

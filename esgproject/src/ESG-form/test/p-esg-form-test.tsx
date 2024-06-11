@@ -73,7 +73,8 @@ const Environmental = ({strOpenUrl, openTabs}) => {
 
     const columns2 = [
         {name : "id", header: "ID", width: 50, editor: 'text', validation: {dataType: 'number'}},
-        {name : "NickName", header: "NickName", width: 100, editor: 'text', align: 'center'},
+        {name : "NickName", header: "NickName", width: 100, editor: 'text', align: 'center', },
+        {name : "Searchbox", header: "Searchbox", width: 100, renderer: {type: 'searchbox',options: {searchCode: 2}}}
     ];
 
     // 툴바 이벤트
