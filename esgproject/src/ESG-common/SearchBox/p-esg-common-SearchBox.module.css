@@ -45,6 +45,7 @@
     border-spacing: 0px;
     border-collapse: separate;
     overflow: auto;
+    max-height: 500px !important;
 }
 
 .SearchItem {
@@ -78,10 +79,6 @@
     cursor: pointer;
 }
 
-.tableTr:hover {
-    background-color: rgb(233, 220, 220);
-}   
-
 .SearchImg {
     border-radius: 2px;
     position: absolute;
@@ -112,3 +109,31 @@
     opacity: 0.4;
 }
 
+.tableWrap{
+    position: absolute;
+    z-index: 50;
+    border-spacing: 0px;
+    border-collapse: separate;
+    overflow: auto;
+    max-height: 500px !important;
+}
+
+.tableWrap::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+.tableWrap::-webkit-scrollbar
+{
+  width: 12px;
+  background-color: #F5F5F5;
+}
+
+.tableWrap::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #848484;
+}

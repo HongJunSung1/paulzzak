@@ -103,7 +103,8 @@ const SearchBox = (settings : any) => {
                     <div className={styles.SearchImg} onClick={ClickHandler} />
                 </div>
                 {isOpen && result.length > 0 && (
-                        <table className={styles.SearchWrap} style={{width: result[0].TotSize+'px'}}>
+                    <div className={styles.tableWrap}>
+                        <table style={{width: result[0].TotSize+'px'}}>
                             <tbody>
                                     <tr>
                                         <th className={styles.SearchItemNum} style={{width:"25px"}}>no.</th>
@@ -157,6 +158,7 @@ const SearchBox = (settings : any) => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
                 )}
             </div>
         </>
