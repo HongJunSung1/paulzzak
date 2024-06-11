@@ -26,11 +26,13 @@ const SearchBox = (settings : any) => {
     const onkeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) =>{
         setResult([]);
         if(e.key === 'Enter'){
-            setIsOpen(true);
-
             if(text !== "" && e.currentTarget.value.trim() !== ""){
                 const resultData = await SP_Request("S_ESG_SearchBox_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
                 setResult(resultData[0]);
+
+                setTimeout(()=>{
+                    setIsOpen(true);
+                },100)
             }
         }
     }
@@ -40,13 +42,14 @@ const SearchBox = (settings : any) => {
         if (settings.onChange) {
             settings.onChange(value);
         }
+        
         setIsOpen(false);
     }
     
     const ClickHandler = async () =>{
         const resultData = await SP_Request("S_ESG_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
         setResult(resultData[0]);
-
+        
         if(isOpen){
             setIsOpen(false);
         }else{
@@ -99,13 +102,12 @@ const SearchBox = (settings : any) => {
                     )}
                     <div className={styles.SearchImg} onClick={ClickHandler} />
                 </div>
-                {isOpen && (
-                    <div>
-                        <table className={styles.SearchWrap} >
+                {isOpen && result.length > 0 && (
+                        <table className={styles.SearchWrap} style={{width: result[0].TotSize+'px'}}>
                             <tbody>
                                     <tr>
-                                        <th className={styles.SearchItemNum}>no.</th>
-                                        <th className={styles.SearchItemNum}>{result[0].ColNameKr? result[0].ColNameKr : ""}</th>
+                                        <th className={styles.SearchItemNum} style={{width:"25px"}}>no.</th>
+                                        <th className={styles.SearchItemNum}>{result[0]?.ColNameKr ? result[0].ColNameKr : ""}</th>
                                         {result[0].InfoCol1 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol1NameKr}</th>}
                                         {result[0].InfoCol2 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol2NameKr}</th>}
                                         {result[0].InfoCol3 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol3NameKr}</th>}
@@ -124,28 +126,28 @@ const SearchBox = (settings : any) => {
                                         >
                                             {Item.Value}
                                         </td>
-                                        {Item.InfoCol1 !== undefined && (
+                                        {Item.InfoCol1 !== undefined && Item.InfoCol1Width !== 0 && (
                                             <td
                                                 className={styles.SearchItem}
-                                                style={{ width: Item.InfoCol1Width ? Item.InfoCol1Width+'px' : "auto" }}
+                                                style={{ width: Item.InfoCol1Width }}
                                                 onClick={() => searchClick(Item.Value)}
                                             >
                                                 {Item.InfoCol1}
                                             </td>
                                         )}
-                                        {Item.InfoCol2 !== undefined && (
+                                        {Item.InfoCol2 !== undefined && Item.InfoCol2Width !== 0 && (
                                             <td
                                                 className={styles.SearchItem}
-                                                style={{ width: Item.InfoCol2Width ? Item.InfoCol2Width+'px' : "auto" }}
+                                                style={{ width: Item.InfoCol2Width }}
                                                 onClick={() => searchClick(Item.Value)}
                                             >
                                                 {Item.InfoCol2}
                                             </td>
                                         )}
-                                        {Item.InfoCol3 !== undefined && (
+                                        {Item.InfoCol3 !== undefined && Item.InfoCol3Width !== 0 && (
                                             <td
                                                 className={styles.SearchItem}
-                                                style={{ width: Item.InfoCol3Width ? Item.InfoCol3Width+'%' : "auto" }}
+                                                style={{ width: Item.InfoCol3Width }}
                                                 onClick={() => searchClick(Item.Value)}
                                             >
                                                 {Item.InfoCol3}
@@ -155,7 +157,6 @@ const SearchBox = (settings : any) => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
                 )}
             </div>
         </>
