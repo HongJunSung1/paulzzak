@@ -18,7 +18,7 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
     
     const [uploadFileData, setUploadFileData] = useState<any>([]);
     const [fileUpload, setFileUpload] = useState<any>([]);
-    
+
     // 파일 입력 요소에 대한 ref 생성
     const fileInput = React.useRef<any>(null);
 
@@ -30,13 +30,23 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
     }
 
     useEffect(() => {
-        console.log(uploadFileData)
-        console.log(source)
         setTimeout(()=> {
-            setFileUpload([...uploadFileData, ...source])
-            setFileOpen(uploadFileData.length > 0); 
+            setFileOpen(uploadFileData.length > 0 || source.length > 0); 
         }, 100)
     }, [uploadFileData, source]);
+
+    useEffect(() => {
+        setTimeout(()=> {
+            setFileUpload([...uploadFileData, ...source]);
+        }, 100)
+    }, [uploadFileData]);
+
+    useEffect(() => {
+        setTimeout(()=> {
+            setFileUpload(source);
+            setUploadFileData([]);
+        }, 100)
+    }, [source]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     
@@ -59,11 +69,10 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
         // 파일 저장
         handleSave : async () => {
             const formData = new FormData();
-    
             fileUpload.forEach(file => {
                 formData.append('files', file);
             });
-    
+
             // 화면 주소 추가
             formData.append('openUrl', openUrl?.openUrl ?  openUrl.openUrl.substr(1) : '');
     
@@ -76,8 +85,6 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
                 if (response.ok) {
                     const result = await response.json();
                     console.log('파일 저장 성공');
-                    // setUploadFileData([]);
-                    // setFileUpload([]);
                     return result;
                 } else {
                     console.error('파일 저장 실패', response.statusText);
@@ -98,11 +105,21 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
     };
 
     // 파일 첨부 내역에서 삭제
-    const deleteTempFile = (index) => {
-        setUploadFileData(prevFiles => {
-            const updatedFiles = prevFiles.filter((_, i) => i !== index);
-            return updatedFiles;
-        });
+    const deleteTempFile = (index, item) => {
+
+
+        // 아직 실제 저장한 데이터가 아닌 이번에 새로 첨부한 데이터라면 바로 화면에서 삭제
+        if(!item.FileCD){
+            setUploadFileData(prevFiles => {
+                const updatedFiles = prevFiles.filter((_, i) => i !== index);
+                return updatedFiles;
+            });
+        } else{
+            // 이미 저장한 데이터를 삭제했을 경우 
+            const uniqueFiles = source.filter((_, i) => i === index);
+            console.log(uniqueFiles);
+        }
+
     }
 
     return (
@@ -119,6 +136,7 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
                     <table>
                         <thead className={styles.FileTableHead}>
                             <tr>
+                                <th>파일코드</th>
                                 <th>파일명</th>
                                 <th>확장자</th>
                                 <th>크기</th>
@@ -130,6 +148,7 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
                             {fileOpen &&
                                 fileUpload.map((item, index) => (
                                         <tr key={index}>
+                                            <td className={styles.FileCD}>{item.FileCD}</td>
                                             <td className={styles.FileName}>{item.name}</td>
                                             <td className={styles.FileSource}>{item.name.substr(item.name.lastIndexOf('.') + 1, )}</td>
                                             <td className={styles.FileVolume}>{getFileSize(item.size)}</td>
@@ -137,7 +156,7 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
                                                 <button className={styles.DownloadBtn}>다운로드</button>
                                             </td>
                                             <td className={styles.FileDelete}>
-                                                <button className={styles.DeleteBtn} onClick={() => deleteTempFile(index)}>삭제</button>
+                                                <button className={styles.DeleteBtn} onClick={() => deleteTempFile(index, item)}>삭제</button>
                                             </td>
                                         </tr>
                                     ))

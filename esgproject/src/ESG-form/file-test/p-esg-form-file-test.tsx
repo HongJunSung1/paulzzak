@@ -57,6 +57,50 @@ const FileTest = ({strOpenUrl, openTabs}) => {
     let [fileAr] = useState<gridAr>({DataSet: '', grid: []});
 
 
+    // 우클릭 시 조회
+    const rightClick1 = (event: React.MouseEvent) => {
+        event.preventDefault();
+        setTimeout(async () => {
+            setFileData([]);
+            UserCD = 0;
+            if(grid1Ref.current.rightClick() !== null){
+                UserCD = grid1Ref.current.rightClick().UserCD;
+            }
+            // 조회 조건 담기
+            const conditionAr : any[] = [{UserCD : UserCD, DataSet : "DataSet1"}]
+
+            if(UserCD > 0){
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request("S_ESG_File_Test_Sub_Query", conditionAr);
+                    if(result.length > 0){
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        setFileData(result[0]);
+                    } else{
+                        // 결과값이 없을 경우 처리 로직
+                        setLoading(false);
+                        let errMsg : any[] = [];
+                        errMsg.push({text: "데이터가 없습니다."});
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "조회 내역 없음";
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
+            } else {
+                setFileData([]);
+            }
+        }, 100)
+    }
+
+
+
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
@@ -81,19 +125,22 @@ const FileTest = ({strOpenUrl, openTabs}) => {
             case 0 :
                 grid1Ref.current.clear();
                 setGrid1Data([]);
+                setFileData([]);
                 break;
 
             // 조회
             case 1 : 
                     // 로딩 뷰 보이기
                     setLoading(true);
+
+                    // 파일 데이터 초기화
+                    setFileData([]);
                     try {
                         // 조회 SP 호출 후 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, []);
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
-                            console.log(grid1Data);
                         } else{
                             setLoading(false);
                             // 결과값이 없을 경우 처리 로직
@@ -239,50 +286,6 @@ const FileTest = ({strOpenUrl, openTabs}) => {
             setGrid1Data([]);
         }
     }, [openTabs]);
-
-    // 우클릭 시 조회
-    const rightClick1 = (event: React.MouseEvent) => {
-        event.preventDefault();
-        setFileData([]);
-        console.log(grid1Ref.current.rightClick());
-        setTimeout(async () => {
-            // UserCD = 0;
-            if(grid1Ref.current.rightClick() !== null){
-                UserCD = grid1Ref.current.rightClick().UserCD;
-            }
-
-            // 조회 조건 담기
-            const conditionAr : any[] = [{UserCD : UserCD, DataSet : "DataSet1"}]
-
-            if(UserCD > 0){
-                // 로딩 뷰 보이기
-                setLoading(true);
-                try {
-                    // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_File_Test_Sub_Query", conditionAr);
-                    if(result.length > 0){
-                        // 결과값이 있을 경우 그리드에 뿌려주기
-                        setFileData(result[0]);
-                    } else{
-                        // 결과값이 없을 경우 처리 로직
-                        setLoading(false);
-                        let errMsg : any[] = [];
-                        errMsg.push({text: "데이터가 없습니다."});
-                        setMessageOpen(true);
-                        message = errMsg;
-                        title   = "조회 내역 없음";
-                    }
-                } catch (error) {
-                    // SP 호출 시 에러 처리 로직
-                    console.log(error);
-                }
-                // 로딩뷰 감추기
-                setLoading(false);
-            } else {
-                setFileData([]);
-            }
-        }, 100)
-    }
 
     if(strOpenUrl === '/PEsgFormFileTest')
     return (

@@ -59,6 +59,7 @@ th {
 
 th, td {
     text-align: center;
+    font-size: 14px;
 }
 
 td {
@@ -70,25 +71,30 @@ tr:hover{
     background-color: rgb(248, 245, 246);
 }
 
+
+.FileCD{
+    width: 10%;
+}
+
 .FileName{
-    width: 40%;
+    width: 30%;
     text-overflow: ellipsis;
 }
 
 .FileSource{
-    width: 15%;
+    width: 10%;
 }
 
 .FileVolume{
-    width: 15%;
+    width: 10%;
 }
 
 .FileDownload{
-    width:15%;
+    width:10%;
 }
 
 .FileDelete{
-    width:15%;
+    width:10%;
 }
 
 .DownloadBtn, .DeleteBtn{
