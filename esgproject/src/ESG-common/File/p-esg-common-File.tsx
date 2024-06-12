@@ -2,20 +2,32 @@ import React, {useState, useEffect, useRef, forwardRef, useImperativeHandle} fro
 import '../../global.d.ts';
 import styles from './p-esg-common-File.module.css';
 import inputFileImg from '../../assets/image/file/InputFile.svg';
+import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import { SP_Request } from '../../hooks/sp-request.tsx';
 
 type CustomFileProps = {
     openUrl: any;
     source : any[];
+    fileCD : any;
   };
 
+// 메시지 박스
+let message : any     = [];
+let title   : string  = "";
 
-const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
+const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
 
+    // 메세지박스
+    const [messageOpen, setMessageOpen] = useState(false)
+    const messageClose = () => {setMessageOpen(false)};    
+
+    // 파일 함수
     const fileRef = useRef(null);
 
     // 파일 등록 클릭 여부
     const [fileOpen, setFileOpen] = useState(false);
     
+    // 파일 데이터 설정
     const [uploadFileData, setUploadFileData] = useState<any>([]);
     const [fileUpload, setFileUpload] = useState<any>([]);
 
@@ -68,30 +80,34 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
     useImperativeHandle(ref, () => ({
         // 파일 저장
         handleSave : async () => {
-            const formData = new FormData();
-            fileUpload.forEach(file => {
-                formData.append('files', file);
-            });
 
-            // 화면 주소 추가
-            formData.append('openUrl', openUrl?.openUrl ?  openUrl.openUrl.substr(1) : '');
-    
-            try {
-                const response = await fetch('http://localhost:9090/uploadFiles', {
-                    method: 'POST',
-                    body: formData,
+            // 저장할 데이터가 있을 때만 진행
+            if(uploadFileData.length > 0){
+                const formData = new FormData();
+                fileUpload.forEach(file => {
+                    formData.append('files', file);
                 });
-    
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('파일 저장 성공');
-                    return result;
-                } else {
-                    console.error('파일 저장 실패', response.statusText);
-                    return null;
+
+                // 화면 주소 추가
+                formData.append('openUrl', openUrl ?  openUrl.substr(1) : '');
+                console.log(openUrl.substr(1))
+                try {
+                    const response = await fetch('http://localhost:9090/uploadFiles', {
+                        method: 'POST',
+                        body: formData,
+                    });
+        
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('파일 저장 성공');
+                        return result;
+                    } else {
+                        console.error('파일 저장 실패', response.statusText);
+                        return null;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
                 }
-            } catch (error) {
-                console.error('Error:', error);
             }
         }
     }))
@@ -107,7 +123,6 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
     // 파일 첨부 내역에서 삭제
     const deleteTempFile = (index, item) => {
 
-
         // 아직 실제 저장한 데이터가 아닌 이번에 새로 첨부한 데이터라면 바로 화면에서 삭제
         if(!item.FileCD){
             setUploadFileData(prevFiles => {
@@ -116,14 +131,115 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
             });
         } else{
             // 이미 저장한 데이터를 삭제했을 경우 
-            const uniqueFiles = source.filter((_, i) => i === index);
-            console.log(uniqueFiles);
+            // const uniqueFiles = source.filter((_, i) => i === index);
+            // console.log(uniqueFiles);
+            handleDelete(item.FileCD);
         }
-
     }
+
+    // 파일 다운로드
+    const handleDownload = async (FileCD) => {
+        try {
+            // 조회 SP 호출 후 결과 값 담기
+            const result = await SP_Request("S_ESG_COM_FileDown_Query", [{FileCD: FileCD, DataSet: "DataSet1"}]);
+            if(result[0].length > 0){
+                // 결과값이 있을 경우
+                try{
+                    const formData = new FormData();
+                    formData.append('fileName', result[0][0].uuidFileName);
+                    formData.append('filePath', result[0][0].filePath);
+
+                    const fetchPath = "http://localhost:9090/download/";
+                    const response = await fetch(fetchPath, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = result[0][0].originalFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);    
+
+                } catch(error){
+                    // 로컬에 파일 저장할 때 발생한 에러 처리 로직
+                    let errMsg : any[] = [];
+                    errMsg.push({text: "[저장오류] 해당 파일이 존재하는지 다시 한 번 확인해주세요."})
+                    setMessageOpen(true);
+                    message = errMsg;
+                    title   = "저장 에러";
+                    console.log(error);
+                }
+            } else{
+                // 결과값이 없을 경우 처리 로직
+                let errMsg : any[] = [];
+                errMsg.push({text: "저장된 파일이 없습니다."})
+                setMessageOpen(true);
+                message = errMsg;
+                title   = "저장 에러";
+                return;
+            }
+        } catch (error) {
+            // SP 호출 시 에러 처리 로직
+            console.log(error);
+        }
+    }
+
+    const handleDelete = async (FileCD) => {
+        try {
+            // 조회 SP 호출 후 결과 값 담기
+            const spResult = await SP_Request("S_ESG_COM_FileDown_Query", [{FileCD: FileCD, DataSet: "DataSet1"}]);
+            const formData = new FormData();
+
+            if(spResult[0].length > 0){
+                formData.append('fileName', spResult[0][0].uuidFileName);
+                formData.append('filePath', spResult[0][0].filePath);
+
+            }
+            const response = await fetch('http://localhost:9090/deleteFile', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete file');
+            }
+
+            // 서버에서 삭제 성공 시 로직
+            if(response.ok){
+                
+                const delResult = await SP_Request("S_ESG_COM_FileDown_Cut", [{FileCD: FileCD, DataSet: "DataSet1"}]);
+
+                if(delResult){
+                    // 삭제한 파일을 기존 source 배열에서 없애주기
+                    for(let i=0; i < source.length; i++){
+                        if(source[i].FileCD === FileCD){
+                            source.splice(i,1);
+                        }
+                    }
+                    // 파일 리스트에서 삭제
+                    setFileUpload([...uploadFileData, ...source]);
+                    
+                    // 실제 화면에 삭제한 fileCD 값 넘겨주기
+                    fileCD(FileCD);
+                }
+            }
+            
+        } catch (error) {
+            console.error('Error deleting file:', error);
+        }
+    };    
 
     return (
         <>
+            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <div className={styles.WholeContainer} ref = {fileRef}>
                 <div className={styles.InputContainer}>
                     <div className={styles.InputWrap} onClick={handleButtonClick}>
@@ -152,9 +268,10 @@ const File = forwardRef(({openUrl, source} : CustomFileProps, ref) => {
                                             <td className={styles.FileName}>{item.name}</td>
                                             <td className={styles.FileSource}>{item.name.substr(item.name.lastIndexOf('.') + 1, )}</td>
                                             <td className={styles.FileVolume}>{getFileSize(item.size)}</td>
-                                            <td className={styles.FileDownload}>
-                                                <button className={styles.DownloadBtn}>다운로드</button>
-                                            </td>
+                                                <td className={styles.FileDownload}>
+                                                    {item.FileCD && <button className={styles.DownloadBtn} onClick={() => handleDownload(item.FileCD)}>다운로드</button>}                                                
+                                                    {!item.FileCD && <div></div>}
+                                                </td>
                                             <td className={styles.FileDelete}>
                                                 <button className={styles.DeleteBtn} onClick={() => deleteTempFile(index, item)}>삭제</button>
                                             </td>

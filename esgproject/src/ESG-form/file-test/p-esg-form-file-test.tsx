@@ -51,6 +51,9 @@ const FileTest = ({strOpenUrl, openTabs}) => {
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
 
+    // 삭제 시 받는 FileCD 값
+    const [fileCD, setFileCD] = useState(0);
+
     // 파일 첨부 
     const fileRef : any = useRef(null);
 
@@ -100,6 +103,38 @@ const FileTest = ({strOpenUrl, openTabs}) => {
     }
 
 
+    // 저장된 파일 삭제 로직 : file 공통에서 서버 테이블의 file 데이터를 삭제했을 때 fileCD 값을 주어 fileCD 변화를 감지, deleteFile 함수를 실행시킨다.
+    useEffect(()=> {
+        if(fileCD > 0){
+            deleteFile(fileCD);
+        }
+    }, [fileCD]);
+
+    const deleteFile = async (fileCD) => {
+        setLoading(true);
+        setTimeout(async () => {
+            try{
+                const result = await SP_Request("S_ESG_File_FileDown_Cut", [{FileCD: fileCD, UserCD : UserCD, DataSet: "DataSet1"}]);
+                console.log(result)
+                if(result){
+                    let errMsg : any[] = [];
+                    errMsg.push({text: "삭제 완료 되었습니다."});
+                    setMessageOpen(true);
+                    message = errMsg;
+                    title   = "삭제 완료";
+                    
+                    // fileCD 값 초기화
+                    setFileCD(0);
+
+                }
+            } catch(error){
+                // SP 호출 시 에러 처리 로직
+                console.log(error);
+            }
+        }, 100)
+        // 로딩뷰 감추기
+        setLoading(false);
+    }
 
     // 툴바 
     const toolbar = [  
@@ -175,8 +210,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
                 const fileSaveResult = await fileRef.current.handleSave();
-
-                if(fileSaveResult !== null){
+                if(fileSaveResult !== null && fileSaveResult !== undefined){
                     for(let i=0;i<fileSaveResult.length;i++){
                         fileSaveResult[i].UserCD = UserCD;
                     }
@@ -188,7 +222,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                 combinedData.push(grid1Changes);
 
                 // 저장할 데이터 없을시 종료
-                if(combinedData.length === 0){
+                if(combinedData[0].grid.length === 0){
                     setLoading(false);
                     let errMsg : any[] = [];
                     errMsg.push({text: "저장할 데이터가 없습니다."})
@@ -203,13 +237,29 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                     
                     if(result){
                         // SP 호출 결과 값 처리
-                        grid1Ref.current.setRowData(result[0]);
-                        setLoading(false);
+                        // grid1Ref.current.setRowData(result[0]);
+
+                        // 파일 저장 건이 있다면 결과 값 담기
+                        if(fileSaveResult !== null){
+                            try{
+                                const conditionAr : any[] = [{UserCD : UserCD, DataSet : "DataSet1"}]
+                                const result = await SP_Request("S_ESG_File_Test_Sub_Query", conditionAr);
+                                if(result.length > 0){
+                                    // 결과값이 있을 경우 그리드에 뿌려주기
+                                    setFileData(result[0]);
+                                } 
+                            } catch (error) {
+                                // SP 호출 시 에러 처리 로직
+                                console.log(error);
+                            }                        
+                        }
+
                         let errMsg : any[] = [];
                         errMsg.push({text: "저장이 완료되었습니다."})
                         setMessageOpen(true);
                         message = errMsg;
                         title   = "저장 완료";
+
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
                         setLoading(false);
@@ -284,6 +334,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgFormFileTest') === undefined) {
             setGrid1Data([]);
+            setFileData([]);
         }
     }, [openTabs]);
 
@@ -298,9 +349,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                     <div onContextMenu={rightClick1} style={{height:"100%"}}>
                         <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
                     </div>
-                    <div>
-                        <File openUrl={strOpenUrl} ref={fileRef} source={fileData} />
-                    </div>
+                    <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD}/>
                 </Splitter>
         </DynamicArea>
     </>

@@ -1,5 +1,7 @@
 .WholeContainer {
     padding: 2px 2px;
+    overflow: auto;
+    height: calc(100% - 5px);
 }
 
 .FileTableContainer{
