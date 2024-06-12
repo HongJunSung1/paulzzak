@@ -21,6 +21,8 @@
         url: '/main'
     };
 
+    
+
 
     const Tab = ({strOpenUrl ,openTabs , gohome}) => {
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
@@ -30,10 +32,10 @@
 
         useEffect(()=>{
             openTabs(tabData);
-        },[tabData])
+        },[tabData, openTabs])
 
         useEffect(()=>{
-            setActiveTab("4");
+            setActiveTab("4");// 메인 화면 활성화
         },[gohome])
 
         useEffect(() => {
@@ -73,35 +75,37 @@
 
 
         const closeTab = (tab) => {
-            let order : number = 0;
-            let newTabData : any[] = [];
-            let originTabData : any[] = [];
+            if (tab.id !== "4"){
+                let order : number = 0;
+                let newTabData : any[] = [];
+                let originTabData : any[] = [];
 
-            order = tabData.findIndex(i => i.id === tab.id);
+                order = tabData.findIndex(i => i.id === tab.id);
 
-            setTimeout(()=>{
-                newTabData = tabData.filter((item) => item.id !==tab.id)
-                
-                if(newTabData.length > 0){
-                    setTabData(newTabData)
-                    if(activeTab === tab.id){
-                        if(newTabData.length > order){
-                            setActiveTab(newTabData[order].id);
-                            // navigate(newTabData[order].url); // URL을 변경하여 해당 경로로 이동합니다.
-                            strOpenUrl(newTabData[order].url);
-                        }else {
-                            setActiveTab(newTabData[order-1].id);
-                            // navigate(newTabData[order-1].url); // URL을 변경하여 해당 경로로 이동합니다.
-                            strOpenUrl(newTabData[order-1].url);
+                setTimeout(()=>{
+                    newTabData = tabData.filter((item) => item.id !==tab.id)
+                    
+                    if(newTabData.length > 0){
+                        setTabData(newTabData)
+                        if(activeTab === tab.id){
+                            if(newTabData.length > order){
+                                setActiveTab(newTabData[order].id);
+                                // navigate(newTabData[order].url); // URL을 변경하여 해당 경로로 이동합니다.
+                                strOpenUrl(newTabData[order].url);
+                            }else {
+                                setActiveTab(newTabData[order-1].id);
+                                // navigate(newTabData[order-1].url); // URL을 변경하여 해당 경로로 이동합니다.
+                                strOpenUrl(newTabData[order-1].url);
+                            }
+                        } else{
+                            originTabData = newTabData.filter((item) => item.id ===activeTab)
+                            setActiveTab(activeTab);
+                            // navigate(originTabData[0].url); // URL을 변경하여 해당 경로로 이동합니다.
+                            strOpenUrl(originTabData[0].url);
                         }
-                    } else{
-                        originTabData = newTabData.filter((item) => item.id ===activeTab)
-                        setActiveTab(activeTab);
-                        // navigate(originTabData[0].url); // URL을 변경하여 해당 경로로 이동합니다.
-                        strOpenUrl(originTabData[0].url);
                     }
-                }
-            },100)
+                },100)
+            }
         }
 
         return(

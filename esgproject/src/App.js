@@ -69,9 +69,9 @@ function App() {
       }
       {!isLoginPage && 
         <>
+          <MenuInfoProvider>
           <Navbar strOpenUrl= {setStrOpenUrl} gohome = {setGohome}/>
           <Container>
-            <MenuInfoProvider>
               <SideBar strOpenUrl={setStrOpenUrl}/>  
               <DataContainer>
               <Loading loading={isLoading}/>
@@ -94,8 +94,8 @@ function App() {
                 <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 <FileTest       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
               </DataContainer>
-            </MenuInfoProvider>
           </Container>
+          </MenuInfoProvider>
         </>
       }
   </div>

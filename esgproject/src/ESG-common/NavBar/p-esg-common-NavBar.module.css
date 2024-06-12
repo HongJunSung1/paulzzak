@@ -36,8 +36,9 @@
 }
 
 .SearchInput{
-    width: 200px;
-    height: 20px;
+    margin-top: 5px;
+    width: 300px;
+    height: 25px;
     vertical-align: middle;
     border-radius: 5px;
     border: none;
@@ -71,4 +72,52 @@
     line-height: 48px;
     cursor:pointer;
     box-sizing: content-box;
+}
+
+.SearchWrap {
+    position: absolute;
+    top: 40px; /* 검색창 바로 아래에 위치 */
+    width: 300px;
+    overflow-y: auto; /* 400px 넘을 경우 스크롤 생기도록 설정 */
+    max-height: 400px; /* 최대 높이 설정 */
+    background-color: white; /* 배경색 설정 */
+    border: 1px solid #ccc; /* 경계선 설정 */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
+}
+
+.SearchItem {
+    padding: 0px 5px;
+    cursor: pointer;
+    height: 30px;
+    line-height:30px;
+    color:black;
+    font-weight: 1;
+    font-size: 14px;
+    border-bottom: 1px solid #eee; /* 각 항목 구분선 */
+}
+
+.SearchItem:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+}
+
+.SearchWrap::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+.SearchWrap::-webkit-scrollbar
+{
+  width: 12px;
+  background-color: #F5F5F5;
+}
+
+.SearchWrap::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #848484;
 }
