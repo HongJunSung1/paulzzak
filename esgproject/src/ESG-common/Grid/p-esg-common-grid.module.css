@@ -68,3 +68,16 @@
     font-weight: 700;
     margin-right: 5px;
 }
+
+.ExportBtn {
+    margin : 5px;
+    margin-left: auto;
+    width: 25px;
+    height: 25px;
+    /* border: 1px solid #25a044; */
+    border-radius: 5px;
+    cursor: pointer;
+    background: url('../../assets/image/Excel.png') center center no-repeat;
+    background-size: 75%;
+    background-color: #e4e8ef;
+}

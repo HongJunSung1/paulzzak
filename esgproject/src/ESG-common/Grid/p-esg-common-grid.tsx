@@ -295,6 +295,19 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         return true;
     }
 
+    // 엑셀 내보내기
+    const ExportExcel = () => {
+        let today = new Date();   
+
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1;  // 월
+        let date = today.getDate();  // 날짜
+
+        let fileName = title + " " + year + "-" + month + "-" + date
+
+        gridRef.current?.getInstance().export('xlsx',{fileName : fileName});
+    }
+
     // 시트 수정 데이터 감지
     gridRef.current?.getInstance().on('afterChange', () => {
         const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
@@ -363,8 +376,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         </div>
                     }
                 </div>
-                {/* <button onClick={dataModified} className={styles.GridBtn}>변동 확인</button> */}
                 <div className = {styles.GridTitle}>{title}</div>
+                <div className = {styles.ExportBtn} onClick={ExportExcel}/>
             </div>
             <div className={styles.GridWrap}>  
                 {!isInitialized&&<div></div>}
