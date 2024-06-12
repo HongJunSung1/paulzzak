@@ -10,17 +10,17 @@ const SearchBox = (settings : any) => {
     const [result, setResult] = useState<any>();
     const [isOpen, setIsOpen] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
+    const InputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         setText(settings.value || '');
     }, [settings.value]);
 
     const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-
         if (settings.onChange) {
-            settings.onChange(e.target.value);
+            settings.onChange(0);
         }
+        setText(e.target.value);
     };
 
     const onkeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) =>{
@@ -28,7 +28,14 @@ const SearchBox = (settings : any) => {
         if(e.key === 'Enter'){
             if(text !== "" && e.currentTarget.value.trim() !== ""){
                 const resultData = await SP_Request("S_ESG_SearchBox_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
-                setResult(resultData[0]);
+                if(resultData.length > 0){
+                    setResult(resultData[0]);
+                }else{
+                    setText('');
+                    if (settings.onChange) {
+                        settings.onChange(0);
+                    }
+                }
 
                 setTimeout(()=>{
                     setIsOpen(true);
@@ -37,10 +44,10 @@ const SearchBox = (settings : any) => {
         }
     }
 
-    const searchClick = (value) => {
+    const searchClick = (value, valueCode) => {
         setText(value);
         if (settings.onChange) {
-            settings.onChange(value);
+            settings.onChange(valueCode);
         }
         
         setIsOpen(false);
@@ -61,7 +68,7 @@ const SearchBox = (settings : any) => {
         setIsOpen(false);
         setText('');
         if (settings.onChange) {
-            settings.onChange('');
+            settings.onChange(0);
         }
     };
 
@@ -78,6 +85,10 @@ const SearchBox = (settings : any) => {
         };
       }, [searchRef]);
 
+      const focusInput = () => {
+        InputRef.current?.focus();
+      }
+
 
 
       return (
@@ -86,12 +97,14 @@ const SearchBox = (settings : any) => {
                 {settings.name && <div className={styles.SearchBoxBoxTitle}>{settings.name}</div>}
                 <div className={styles.InputWrap}>
                     <input
+                        ref = {InputRef}
                         className={styles.Input}
                         type="text"
                         value={text}
                         style={{ width: settings.width ? settings.width : '100%' }}
                         onChange={changeText}
                         onKeyUp={onkeyUp}
+                        onClick={focusInput}
                     />
                     {settings.name && (
                         <button
@@ -123,7 +136,7 @@ const SearchBox = (settings : any) => {
                                         <td
                                             className={styles.SearchItem}
                                             style={{ width: Item.ColWidth ? Item.ColWidth+'px' : "auto" }}
-                                            onClick={() => searchClick(Item.Value)}
+                                            onClick={() => searchClick(Item.Value, Item.ValueCode)}
                                         >
                                             {Item.Value}
                                         </td>
@@ -131,7 +144,7 @@ const SearchBox = (settings : any) => {
                                             <td
                                                 className={styles.SearchItem}
                                                 style={{ width: Item.InfoCol1Width }}
-                                                onClick={() => searchClick(Item.Value)}
+                                                onClick={() => searchClick(Item.Value, Item.ValueCode)}
                                             >
                                                 {Item.InfoCol1}
                                             </td>
@@ -140,7 +153,7 @@ const SearchBox = (settings : any) => {
                                             <td
                                                 className={styles.SearchItem}
                                                 style={{ width: Item.InfoCol2Width }}
-                                                onClick={() => searchClick(Item.Value)}
+                                                onClick={() => searchClick(Item.Value, Item.ValueCode)}
                                             >
                                                 {Item.InfoCol2}
                                             </td>
@@ -149,7 +162,7 @@ const SearchBox = (settings : any) => {
                                             <td
                                                 className={styles.SearchItem}
                                                 style={{ width: Item.InfoCol3Width }}
-                                                onClick={() => searchClick(Item.Value)}
+                                                onClick={() => searchClick(Item.Value, Item.ValueCode)}
                                             >
                                                 {Item.InfoCol3}
                                             </td>

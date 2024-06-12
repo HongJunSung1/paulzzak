@@ -20,7 +20,7 @@ type gridAr = {
 };
 
 type condition = {
-    UserName   : string;
+    UserCD     : number;
     DataSet    : string;
 }  
 
@@ -48,6 +48,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
 
     // 조회조건 값
     const [UserName , setCondition1] = useState('');
+    const [searchUserCD   , setConditions1] = useState(0);// 서치박스 키값 필수
     const [FormName , setCondition2] = useState('');
 
     // 조회 시 받는 데이터 값
@@ -101,7 +102,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        UserName : UserName,
+                        UserCD : searchUserCD,
                         DataSet  : 'DataSet1'
                     })
 
@@ -252,7 +253,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
-                    <SearchBox name={"사용자명"} value={UserName}  onChange={setCondition1} width={200} searchCode={2}/>
+                    <SearchBox name={"사용자명"} value={UserName}  onChange={setConditions1} width={200} searchCode={2}/>
                     <TextBox   name={"화면명"}   value={FormName}  onChange={setCondition2} width={200}/>    
                 </FixedWrap>
             </FixedArea>  

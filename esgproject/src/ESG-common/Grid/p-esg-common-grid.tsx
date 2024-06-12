@@ -134,6 +134,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         rowKey: any;
         columnInfo: any;
         root: any;
+        codeColName : any;
+        
     
         constructor(props) {
             const el = document.createElement('div');
@@ -151,23 +153,20 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     
         render(props) {
             const value = props.value;
-            const input = this.el.querySelector('input');
-
-            if(input){
-                input.disabled = false;
-            }
     
             this.root.render(
                 <SearchBox
                     value={value}
-                    onChange={(newValue) => this.onChange(newValue)}
+                    onChange={(value) => this.onChange(value)}
                     searchCode={this.columnInfo.renderer.options?.searchCode || 0}
                 />
             );
         }
 
+
         onChange(newValue) {
-            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, newValue);
+            console.log(this.columnInfo.renderer.options);
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue);
         }
     }
     // 설정에 따른 커스텀 렌더러로 변경
@@ -184,7 +183,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 type: SearchBoxRenderer,
                 options: {
                   searchCode: column.renderer.options.searchCode || 0,
-                  
+                  CodeColName : column.renderer.options.CodeColName || ""
                 }
             };
         }
