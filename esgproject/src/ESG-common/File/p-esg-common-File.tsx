@@ -70,12 +70,23 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     
         if(e.target.files){
+            const limitFileSize = 10 * 1024 * 1024; // 파일 용량 제한 10MB
             const newFiles = Array.from(e.target.files) as File[];
             const uniqueFiles = newFiles.filter(
                 newFile => !uploadFileData.some((existingFile: File) => (
                     existingFile.name === newFile.name && existingFile.size === newFile.size
                 ))
             );
+            for(let i=0; i< uniqueFiles.length; i++){
+                if(uniqueFiles[i].size > limitFileSize){
+                    let errMsg : any[] = [];
+                    errMsg.push({text: "업로드 용량은 10MB를 넘을 수 없습니다."})
+                    setMessageOpen(true);
+                    message = errMsg;
+                    title   = "파일 업로드 오류";
+                    return;
+                }
+            }
             setUploadFileData([...uploadFileData, ...uniqueFiles]);
             setFileUpload([...uploadFileData]);
         }
@@ -90,6 +101,7 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
 
             // 저장할 데이터가 있을 때만 진행
             if(uploadFileData.length > 0){
+
                 const formData = new FormData();
                 fileUpload.forEach(file => {
                     formData.append('files', file);
@@ -113,6 +125,7 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                 } catch (error) {
                     console.error('Error:', error);
                 }
+
             }
         }
     }))
