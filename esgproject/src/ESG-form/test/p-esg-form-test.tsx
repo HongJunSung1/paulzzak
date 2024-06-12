@@ -11,6 +11,7 @@ import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
+import Dialogue from '../../ESG-common/Dialogue/p-esg-common-dialogue.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -57,6 +58,9 @@ const Environmental = ({strOpenUrl, openTabs}) => {
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
     const grid2Ref : any = useRef(null);
+
+    // 다이얼로그 오픈
+    const [isDlgOpen,setIsDlgOpen] = useState(false);
     
 
     const toolbar = [  
@@ -64,6 +68,7 @@ const Environmental = ({strOpenUrl, openTabs}) => {
                      , {id: 1, title:"조회", image:"query", spName:"S_Test"}
                      , {id: 2, title:"저장", image:"save" , spName:"S_Save_Test"}
                      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Cut_Test"}
+                     , {id: 4, title:"다이얼로그 테스트", image:"save"  , spName:""}
                     ]
     
     const columns1 = [
@@ -181,6 +186,12 @@ const Environmental = ({strOpenUrl, openTabs}) => {
                     setLoading(false);
 
                 break;
+
+            // 다이얼로그 
+            case 4 :
+                setIsDlgOpen(true);
+                
+                break;
         }
       
     }
@@ -220,6 +231,28 @@ const Environmental = ({strOpenUrl, openTabs}) => {
                     <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
                 </Splitter>
             </DynamicArea>
+
+            <Dialogue DlgName = "다이얼로그 테스트" isOpenDlg={isDlgOpen} setIsOpen={setIsDlgOpen} Dlgwidth={1200} Dlgheight={800}>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                <FixedArea name={"테스트 이름"}>
+                    <FixedWrap>
+                        <TextBox name={"신은규"} isRequire={"true"} value={condition1} onChange={setCondition1}/>   
+                        <TextBox name={"엉덩이"} value={condition2} onChange={setCondition2}/>    
+                        <TextBox name={"쥐어 뜯을 거"} width={300} value={condition3} onChange={setCondition3}/>    
+                    </FixedWrap>
+                </FixedArea>  
+                <DynamicArea>
+                    <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
+                        <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
+                            <div>
+                                테스트 1
+                            </div>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                        </Splitter>
+                        <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                    </Splitter>
+                </DynamicArea>
+            </Dialogue>
         </>
     )
 
