@@ -37,6 +37,7 @@ function App() {
 
   const [strOpenUrl,setStrOpenUrl] = useState('/main');
   const [openTabs,setOpenTabs] = useState([]);
+  const [gohome,setGohome] = useState(false);
 
   const location = useLocation();
   const isLoginPage = location.pathname === '/';
@@ -49,6 +50,9 @@ function App() {
     // 페이지 이동 후 이벤트
     const handleComplete = () => {
       setTimeout(() => {
+        if(gohome){
+          setGohome(false);
+        }
         setIsLoading(false);
       }, 500); // 원하는 로딩 시간 설정
     };
@@ -65,13 +69,13 @@ function App() {
       }
       {!isLoginPage && 
         <>
-          <Navbar/>
+          <Navbar strOpenUrl= {setStrOpenUrl} gohome = {setGohome}/>
           <Container>
             <MenuInfoProvider>
               <SideBar strOpenUrl={setStrOpenUrl}/>  
               <DataContainer>
               <Loading loading={isLoading}/>
-                <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs}/>
+                <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs} gohome={gohome}/>
                 {/* <Routes> */}
                   {/* 실제 데이터 작성 구간 */}
                     {/* <Route path="/main" element={<Main/>}></Route>

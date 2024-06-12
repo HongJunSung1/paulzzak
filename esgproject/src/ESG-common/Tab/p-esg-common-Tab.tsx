@@ -22,7 +22,7 @@
     };
 
 
-    const Tab = ({strOpenUrl ,openTabs}) => {
+    const Tab = ({strOpenUrl ,openTabs , gohome}) => {
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
         const [activeTab, setActiveTab] = useState<string | null>(initialMenuInfo.id);
         const [tabData, setTabData] = useState<MenuInfo[]>([initialMenuInfo]);
@@ -31,6 +31,10 @@
         useEffect(()=>{
             openTabs(tabData);
         },[tabData])
+
+        useEffect(()=>{
+            setActiveTab("4");
+        },[gohome])
 
         useEffect(() => {
             if (menuInfo && menuInfo.id && menuInfo.url !== "") {
