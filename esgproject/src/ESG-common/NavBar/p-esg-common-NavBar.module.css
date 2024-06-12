@@ -17,6 +17,7 @@
 
 .NavBarLeft{
     display: flex;
+    cursor: pointer;
 }
 
 .MainTitle{
