@@ -1,10 +1,10 @@
-// 메세지 박스(확인)
+// 메세지 박스(YesNo)
 import React from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-MessageBox.module.css';
 
-const MessageBox = ({messageOpen, messageClose, MessageData, Title}) => {
-    if(messageOpen === true) {
+const MessageBoxYesNo = ({messageYesNoOpen, btnYes, btnNo, MessageData, Title}) => {
+    if(messageYesNoOpen === true) {
         let realMessage : any[] = [];
         for(let i = 0; i < MessageData.length; i++){
            realMessage.push(MessageData[i].text)
@@ -23,8 +23,11 @@ const MessageBox = ({messageOpen, messageClose, MessageData, Title}) => {
                                 )
                             })}
                         </div>
-                        <button className={styles.Button} onClick={messageClose}>
+                        <button className={styles.ButtonYesNo} onClick={btnYes}>
                             확인
+                        </button>
+                        <button className={styles.ButtonYesNo} onClick={btnNo}>
+                            취소
                         </button>
                     </div>
                 </div>
@@ -33,4 +36,4 @@ const MessageBox = ({messageOpen, messageClose, MessageData, Title}) => {
     }
 }
 
-export default MessageBox;
+export default MessageBoxYesNo;

@@ -3,6 +3,7 @@ import '../../global.d.ts';
 import styles from './p-esg-common-File.module.css';
 import inputFileImg from '../../assets/image/file/InputFile.svg';
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
 type CustomFileProps = {
@@ -16,10 +17,15 @@ let message : any     = [];
 let title   : string  = "";
 
 const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
-
+    
     // 메세지박스
     const [messageOpen, setMessageOpen] = useState(false)
-    const messageClose = () => {setMessageOpen(false)};    
+    const messageClose = () => {setMessageOpen(false)};
+
+    // YesNo메세지박스
+    const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
+    const messageYesNoClose = () => {setMessageYesNoOpen(false)};   
+    const [deleteFileCD, setDeleteFileCD] = useState(0);
 
     // 파일 함수
     const fileRef = useRef(null);
@@ -60,6 +66,7 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
         }, 100)
     }, [source]);
 
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     
         if(e.target.files){
@@ -90,7 +97,6 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
 
                 // 화면 주소 추가
                 formData.append('openUrl', openUrl ?  openUrl.substr(1) : '');
-                console.log(openUrl.substr(1))
                 try {
                     const response = await fetch('http://localhost:9090/uploadFiles', {
                         method: 'POST',
@@ -99,7 +105,6 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
         
                     if (response.ok) {
                         const result = await response.json();
-                        console.log('파일 저장 성공');
                         return result;
                     } else {
                         console.error('파일 저장 실패', response.statusText);
@@ -130,12 +135,24 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                 return updatedFiles;
             });
         } else{
-            // 이미 저장한 데이터를 삭제했을 경우 
-            // const uniqueFiles = source.filter((_, i) => i === index);
-            // console.log(uniqueFiles);
-            handleDelete(item.FileCD);
+            // 파일 삭제 메세지 체크로직
+            let errMsg : any[] = [];
+            errMsg.push({text: item.name + " 파일을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다."});
+            message = errMsg;
+            title   = "삭제 확인";
+            setMessageYesNoOpen(true);
+            setDeleteFileCD(item.FileCD);
         }
     }
+
+    
+    // 삭제 YES 버튼 클릭 시 삭제 로직 수행
+    const messageYes = () => {
+        setTimeout(() => {
+            handleDelete(deleteFileCD);
+            messageYesNoClose();
+        }, 100)
+    }; 
 
     // 파일 다운로드
     const handleDownload = async (FileCD) => {
@@ -239,6 +256,7 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
 
     return (
         <>
+            <MessageBoxYesNo messageYesNoOpen = {messageYesNoOpen} btnYes = {messageYes} btnNo = {messageYesNoClose} MessageData = {message} Title={title}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <div className={styles.WholeContainer} ref = {fileRef}>
                 <div className={styles.InputContainer}>

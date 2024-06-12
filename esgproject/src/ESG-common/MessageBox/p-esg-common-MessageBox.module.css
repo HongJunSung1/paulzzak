@@ -47,7 +47,18 @@
     border-radius: 5px;
 }
 
-.Button:hover{
+.ButtonYesNo{
+    width: 35%;
+    height: 40px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(243, 229, 229);
+    border-radius: 5px;
+    margin: 0 10px;    
+}
+
+.Button:hover, .ButtonYesNo:hover{
     background-color: rgb(209, 190, 190);
 }
 
