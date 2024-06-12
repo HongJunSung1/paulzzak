@@ -79,6 +79,11 @@
     cursor: pointer;
 }
 
+th{
+    position: sticky;
+    top: 0px;
+}
+
 .SearchImg {
     border-radius: 2px;
     position: absolute;
@@ -115,7 +120,7 @@
     border-spacing: 0px;
     border-collapse: separate;
     overflow: auto;
-    max-height: 500px !important;
+    max-height: 400px !important;
 }
 
 .tableWrap::-webkit-scrollbar-track
