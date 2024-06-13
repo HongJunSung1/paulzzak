@@ -6,6 +6,7 @@ import 'tui-grid/dist/tui-grid.css';
 import Grid from '@toast-ui/react-grid';
 import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
 import { createRoot } from 'react-dom/client';
+import GridBtn from '../../assets/image/append-bar.png';
 
 type CustomGridProps = {
     title: string;
@@ -33,6 +34,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
     const [isClickRowAppend, setCollapsed] = useState(false);
+    const [appendRowText, setAppendRowText] = useState(false);
 
     // 우클릭 조회 담기 용
     let rightClickValue : any = []     
@@ -56,6 +58,9 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     // 행 추가 화면 나타내기
     function clickRowAppend(){
         setCollapsed(prevValue => !prevValue);
+        if(isClickRowAppend === false){
+            setAppendRowText(false);
+        }
     }
 
     // 행 추가 개수 구하기
@@ -66,13 +71,20 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     }
 
     const handleAppendRows = () => {
-        if(gridRef.current){
-            for(let i = 0; i<parseInt(setNumber); i++){
-                gridRef.current.getInstance().appendRow();
+
+        if(parseInt(setNumber) > 100){
+            setAppendRowText(true);
+            return;
+        } else{
+            setAppendRowText(false);
+            if(gridRef.current){
+                for(let i = 0; i<parseInt(setNumber); i++){
+                    gridRef.current.getInstance().appendRow();
+                }
             }
+            clickRowAppend();
+            setText('0');
         }
-        clickRowAppend();
-        setText('0');
     }
 
     const activeEnter = (e) => {
@@ -372,6 +384,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                             <span className={styles.AppendUnit}>
                                 <input type= "number" className={styles.AppendRowInput} onChange={changeNumber} value={setNumber} onKeyDown={(e) => activeEnter(e)}></input>
                                 <button onClick={handleAppendRows} className={styles.GridBtn}>행 추가</button>
+                                {appendRowText && <div className={styles.AppendRowText}>행 추가는 최대 100개까지만 가능합니다.</div>}
                             </span>
                         </div>
                     }

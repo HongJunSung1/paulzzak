@@ -80,6 +80,10 @@
     cursor: pointer;
 }
 
+.SearchItem:hover {
+    background-color: #f0e7e7;
+}
+
 th{
     position: sticky;
     top: 0px;

@@ -8,6 +8,14 @@
     color: black;
 }
 
+.sideBarNameWrap{
+    display: flex;
+    background-color: #d34e4e;
+    justify-content: space-between;
+    cursor:pointer;
+    line-height:23px;
+}
+
 .SideBarName{
     height: 45px;
     background-color: #d34e4e;
@@ -17,4 +25,11 @@
     font-size: 25px;
     color: white;
     cursor: pointer;
+}
+
+.sideBarImage{
+    width: 36px;
+    height: 19px;
+    margin: auto 0;
+    padding-right: 10px;
 }
