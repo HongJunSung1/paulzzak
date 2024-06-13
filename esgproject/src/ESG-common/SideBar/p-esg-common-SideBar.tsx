@@ -6,6 +6,8 @@ import {SbContainer} from './p-esg-common-sideBarItem.styles.tsx';
 import styles from './p-esg-common-SideBarItem.module.css';
 import cookie from 'react-cookies';
 
+import SideBarImage from '../../assets/image/menu-bar.png';
+
 const SideBar = ({ items, strOpenUrl }) => {
 
   const [menuData, setMenuData] = useState<any>([]);
@@ -66,7 +68,10 @@ const SideBar = ({ items, strOpenUrl }) => {
         <div ref={menuRef}>
           <TopMenu isOpen={isOpen} selectMenu={setSelectedMenu}/>
         </div>
-        <div className = {styles.SideBarName} onClick={TopMenuOpen}>{selectedMenu}</div>
+        <div className={styles.sideBarNameWrap} onClick={TopMenuOpen}>
+          <div className = {styles.SideBarName}>{selectedMenu}</div>
+          <img className={styles.sideBarImage} src={SideBarImage} alt={"sidebarImage"}></img>
+        </div>
         {tree.map((subItem, index) =>
           <SideBarItem item={subItem} key={index} strOpenUrl={handleUrlChange}/>
         )}
