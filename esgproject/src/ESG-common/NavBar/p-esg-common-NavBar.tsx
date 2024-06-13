@@ -425,8 +425,8 @@ const Navbar = ({strOpenUrl}) => {
                                         <div className={styles.inputHeight}>
                                             <input type="password" placeholder="신규비밀번호 확인" className={styles.InputContents} onChange={newPasswordChangeCheck} value={newPasswordCheck}/>
                                         </div>    
-                                        <div className={styles.inputCheck} onClick={passwordChange}>
-                                            <div className={styles.OkWrap}>
+                                        <div className={styles.inputCheck}>
+                                            <div className={styles.OkWrap} onClick={passwordChange}>
                                                 <div className={styles.inputOk}>확인</div>
                                                 <img src={ImageCheckButton} alt="CheckButton" className={styles.CheckButton}/>
                                             </div>

@@ -156,6 +156,7 @@ const LoginPage = () => {
                     setUserID("");
                     setUserPW("");
                     setLoading(false);// 로딩창 종료
+                    setPassword(false); // 비밀번호 초기화 버튼 없애기
                     setErrMsg(result[0][0].Message);
                     if(idInputRef.current){
                         idInputRef.current.focus();// 아이디 입력 필드에 포커스
@@ -241,7 +242,8 @@ const LoginPage = () => {
                         setErrMsg(result[0][0].Message);
                         if(idChangeInputRef.current){
                             idChangeInputRef.current.focus();// 아이디 입력 필드에 포커스
-                        }
+                        }                       
+
                     break;
     
                     //비밀번호 오류 : 901
