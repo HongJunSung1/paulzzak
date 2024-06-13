@@ -28,10 +28,11 @@
 }
 
 .BtnClose{
-    width: 30px;
+    margin : 0px 7.5px;
+    width: 15px;
     height: 15px;
     background: url('../../assets/image/condition/xButton.png') center center no-repeat;
-    background-size: 50%;
+    background-size: 100%;
     border: none;
     outline: none;
     cursor: pointer;
