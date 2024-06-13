@@ -289,6 +289,11 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
         rightClick : () => {
             return rowAllValue
+        },
+
+        //그리드 전체 데이터 가져오기
+        getAllData : () => {
+            return gridRef.current?.getInstance().getData();
         }
 
 

@@ -167,6 +167,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
                             return;
                         }   
                         grid1Ref.current.setRowData(result[0]);
+                        const gridAllData = grid1Ref.current.getAllData();
+                        setGrid1Data(gridAllData);
                         window.alert("저장 완료")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
@@ -204,6 +206,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
                         if(result){
                             // SP 결과 값이 있을 때 로직
                             grid1Ref.current.removeRows(result[0]);
+                            const gridAllData = grid1Ref.current.getAllData();
+                            setGrid1Data(gridAllData);
                             window.alert("삭제 완료")
                         } else{
                             // SP 결과 값이 없을 때 로직
