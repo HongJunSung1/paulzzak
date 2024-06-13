@@ -17,18 +17,6 @@ import cookie from 'react-cookies';
 let message : any     = [];
 let title   : string  = "";
 
-interface MenuInfo {
-    id: string;
-    menuName: string;
-    url: string;
-}
-
-// 초기 페이지 데이터 설정(현재 main)
-const initialMenuInfo: MenuInfo = {
-    id: '4',
-    menuName: 'main',
-    url: '/main'
-};
 
 const data = cookie.load('menuList') || [];
 
