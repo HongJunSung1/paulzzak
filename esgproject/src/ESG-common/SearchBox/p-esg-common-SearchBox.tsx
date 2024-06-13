@@ -27,7 +27,7 @@ const SearchBox = (settings : any) => {
         setResult([]);
         if(e.key === 'Enter'){
             if(text !== "" && e.currentTarget.value.trim() !== ""){
-                const resultData = await SP_Request("S_ESG_SearchBox_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
+                const resultData = await SP_Request("S_ESG_SearchBox_Input_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
                 if(resultData.length > 0){
                     setResult(resultData[0]);
                 }else{
