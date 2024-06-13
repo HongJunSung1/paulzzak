@@ -108,7 +108,7 @@ const LoginPage = () => {
         if(result !== null && result[0][0].Status === "0"){
             // 로그인 정보 쿠키 저장
             const expires = new Date();
-            expires.setMinutes(expires.getMinutes() + 60)
+            expires.setTime(expires.getTime() + (24 * 60 * 60 * 1000));   // 로그인 유지 시간 24시간
             cookie.save('userInfo', result[0][0], {
                 path : '/',
                 expires,

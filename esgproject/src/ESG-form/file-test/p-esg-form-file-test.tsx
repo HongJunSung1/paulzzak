@@ -8,7 +8,6 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
-import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 import File from '../../ESG-common/File/p-esg-common-File.tsx';
 

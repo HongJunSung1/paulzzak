@@ -76,6 +76,131 @@
     box-sizing: content-box;
 }
 
+
+.settingWrap{
+    color: black;
+    font-size: 12px;
+    background-color: rgb(238, 245, 225);
+    width: 350px;
+    position:absolute;
+    right: 10px;
+    border-radius: 15px;
+    padding: 0 15px 0 15px;
+    box-shadow: 2px 2px 5px 2px #e3cccc;
+    z-index: 999;
+}
+
+.settingTitle{
+    width: 100%;
+    text-align:center;
+    margin: 15px 0;
+    padding-bottom: 35px;
+    border-bottom: solid 2px #e3cccc;
+}
+
+.settingContents{
+    width: 100%;
+}
+
+.userInfoManageWrap, .passwordManageWrap{
+    border-bottom: solid 1px #e3cccc;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.userInfoManage, .passwordManage{
+    cursor: pointer;
+    line-height: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+   
+.ImageUserInfo, .ImagePassword{
+    width: 20px;
+    margin: auto 0px;
+}
+
+.contentsLeft{
+    display:flex;
+}
+
+.userInfoContents{
+    height: 100%;
+}
+
+.userInfoText, .passwordText{
+    margin-left: 5px;
+}
+
+.inputHeight{
+    height: 100%;
+}
+
+.InputContents {
+    height: 40px;
+    width: 100%;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 25px;
+    font-size: 12px;
+    color: rgb(12, 10, 10);
+    background-color: white;
+    user-select: none;
+    border: 1px solid #d2deee;
+    border-radius: 3px;
+    outline: none;
+}
+
+.OkWrap{
+    display: flex;
+    margin: 2px 15px;
+    cursor:pointer;
+    padding: 0 10px;
+}
+
+.OkWrap:hover{
+    color: rgb(255, 0, 0);
+}
+
+.InputContents:focus{
+    box-shadow: 0 0 1px 1px #d1eaee;
+}
+
+.inputCheck{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.CheckButton{
+    width: 15px;
+    margin-top: 0px;
+}
+
+.inputOk, .inputCancel{
+    margin: 0px 10px 0 15px;
+}
+
+.passwordManage{
+    cursor: pointer;
+}
+
+.UserInfo{
+    font-size: 12px;
+}
+
+.ID{
+    font-size: 20px;
+    height: 35px;
+}
+
+.TelNo, .Email{
+    height: 25px;
+    font-size: 12px;
+    color: gray;
+    font-weight: 500;
+}
+
 .SearchWrap {
     position: absolute;
     top: 40px; /* 검색창 바로 아래에 위치 */
