@@ -6,7 +6,6 @@ import 'tui-grid/dist/tui-grid.css';
 import Grid from '@toast-ui/react-grid';
 import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
 import { createRoot } from 'react-dom/client';
-import GridBtn from '../../assets/image/append-bar.png';
 
 type CustomGridProps = {
     title: string;

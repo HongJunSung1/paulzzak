@@ -3,17 +3,26 @@ import styles from './p-esg-common-NavBar.module.css'
 import '../../global.d.ts';
 
 import ImageLogo from '../../assets/image/logo.png';
-import ImageSetting from '../../assets/image/setting.png';
-import ImageUser from '../../assets/image/user.png';
-import ImageAlarm from '../../assets/image/alarm.png';
+import ImageSetting from '../../assets/image/navbar-setting.png';
+import ImageLogout from '../../assets/image/navbar-logout.png';
+
+import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 
 import { useNavigate  } from 'react-router-dom';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
 import cookie from 'react-cookies';
 
+// 메시지 박스
+let message : any     = [];
+let title   : string  = "";
+
 const Navbar = ({strOpenUrl,gohome}) => {
 
+    // YesNo메세지박스
+    const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
+    const messageYesNoClose = () => {setMessageYesNoOpen(false)};   
+    
     const navigate = useNavigate()
     const [searchText,setSearchText] = useState('');
     const [resultData,setResultData] = useState<any>();
@@ -32,6 +41,21 @@ const Navbar = ({strOpenUrl,gohome}) => {
     const goMain = () =>{
         strOpenUrl("/main");
         gohome(true);
+    }
+
+    // 로그아웃 버튼 클릭 시
+    const LogOutClick = () => {
+        let errMsg : any[] = [];
+        errMsg.push({text: "로그아웃 하시겠습니까?"});
+        message = errMsg;
+        title   = "로그아웃 확인";
+        setMessageYesNoOpen(true);
+    }
+
+    // 로그아웃 예 클릭 시 
+    const messageYes = () => {
+        // 로그인 화면으로 이동
+        navigate("/");
     }
 
     const searchHandler = async (e) =>{
@@ -82,6 +106,7 @@ const Navbar = ({strOpenUrl,gohome}) => {
     
     return (
         <div>
+            <MessageBoxYesNo messageYesNoOpen = {messageYesNoOpen} btnYes = {messageYes} btnNo = {messageYesNoClose} MessageData = {message} Title={title}/>
             <div className = {styles.NavBarContainer}>
                     <div className = {styles.NavBarLeft} onClick={goMain}>
                         <div className = {styles.ImageLogoWrap}>
@@ -102,9 +127,8 @@ const Navbar = ({strOpenUrl,gohome}) => {
                     </div>
                     <div className = {styles.ImageContainer}>
                         <div className = {styles.ImageWrap}>
-                            <img className = {styles.ImageComponent} src={ImageAlarm} alt={"Alarm"}/>
                             <img className = {styles.ImageComponent} src={ImageSetting} alt={"Setting"}/>
-                            <img className = {styles.ImageComponent} src={ImageUser} alt={"User"}/>
+                            <img className = {styles.ImageComponent} src={ImageLogout} alt={"Logout"} onClick={LogOutClick}/>
                         </div>
                     </div>
                 </div>

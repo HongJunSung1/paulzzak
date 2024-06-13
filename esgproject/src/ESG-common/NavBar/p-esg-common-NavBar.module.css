@@ -32,7 +32,7 @@
 
 .search{
     height: 48px;
-    line-height: 41px;
+    line-height: 40px;
     padding-right: 15px;
 }
 
@@ -61,7 +61,7 @@
 .ImageContainer{
     height: 48px;
     line-height: 50px;
-    min-width:105px;
+    min-width:85px;
 }
 
 
@@ -69,7 +69,8 @@
 .ImageComponent{
     width: 20px;
     object-fit: cover;
-    padding-right:15px;
+    /* padding-right:15px; */
+    margin: auto 10px;
     line-height: 48px;
     cursor:pointer;
     box-sizing: content-box;
