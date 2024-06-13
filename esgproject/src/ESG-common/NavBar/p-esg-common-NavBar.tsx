@@ -25,7 +25,10 @@ import cookie from 'react-cookies';
 let message : any     = [];
 let title   : string  = "";
 
-const Navbar = ({strOpenUrl,gohome}) => {
+
+const data = cookie.load('menuList') || [];
+
+const Navbar = ({strOpenUrl}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -82,9 +85,14 @@ const Navbar = ({strOpenUrl,gohome}) => {
     }, [navigate]); 
 
 
+
+
     const goMain = () =>{
-        strOpenUrl("/main");
-        gohome(true);
+        const filterData = data.filter((item => item.menuId === 'main'));
+        setTimeout(()=>{
+            setMenuInfo(filterData[0]);
+            strOpenUrl("/main");
+        },100)
     }
 
     // 로그아웃 버튼 클릭 시
@@ -167,12 +175,13 @@ const Navbar = ({strOpenUrl,gohome}) => {
         
         setSearchText('');
         setIsOpen(false);
-        strOpenUrl("/" + formUrl);
-
-        const data = cookie.load('menuList') || [];
+        
         const filterData = data.filter((item => item.menuId === formUrl));
-
-        setMenuInfo(filterData[0]);
+        
+        setTimeout(()=>{
+            setMenuInfo(filterData[0]);
+            strOpenUrl("/" + formUrl);
+        },100)
     }
 
     useEffect(() => {

@@ -67,8 +67,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "SearchBoxCD"   , header: "서치박스 코드"       , width:    100 },
-        {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text'},
+        {name : "SearchBoxCD"   , header: "서치박스 코드"       , width: 100 },
+        {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text' , validation : [{require : true }]},
         {name : "TableName"     , header: "테이블명"            , width: 200 , editor: 'text'},
         {name : "ColumnName"    , header: "메인 컬럼명"         , width: 100 , editor: 'text'},
         {name : "CodeColName"   , header: "메인 컬럼 코드"      , width: 110 , editor: 'text'},
@@ -167,6 +167,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
                             return;
                         }   
                         grid1Ref.current.setRowData(result[0]);
+                        const gridAllData = grid1Ref.current.getAllData();
+                        setGrid1Data(gridAllData);
                         window.alert("저장 완료")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
@@ -204,6 +206,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
                         if(result){
                             // SP 결과 값이 있을 때 로직
                             grid1Ref.current.removeRows(result[0]);
+                            const gridAllData = grid1Ref.current.getAllData();
+                            setGrid1Data(gridAllData);
                             window.alert("삭제 완료")
                         } else{
                             // SP 결과 값이 없을 때 로직
