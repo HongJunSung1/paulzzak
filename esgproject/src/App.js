@@ -18,6 +18,7 @@ import UserInfo from './ESG-form/admin/p-esg-form-admin-userInfo.tsx';
 import FormReg from './ESG-form/admin/p-esg-form-admin-form-reg.tsx';
 import Menu from './ESG-form/menu/p-esg-form-menu-reg.tsx';
 import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
+import SearchBoxReg from './ESG-form/admin/p-esg-form-admin-searchbox.tsx';
 
 // 테스트 화면
 import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
@@ -93,6 +94,7 @@ function App() {
                 <UserForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 <FileTest       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                <SearchBoxReg   strOpenUrl={strOpenUrl} openTabs={openTabs}/>
               </DataContainer>
           </Container>
           </MenuInfoProvider>
