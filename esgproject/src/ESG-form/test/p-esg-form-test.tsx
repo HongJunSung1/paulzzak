@@ -12,6 +12,7 @@ import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Dialogue from '../../ESG-common/Dialogue/p-esg-common-dialogue.tsx';
+import ToastEditor from '../../ESG-common/Editor/p-esg-common-Editor.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -226,7 +227,7 @@ const Environmental = ({strOpenUrl, openTabs}) => {
                 <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                     <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
                         <div>
-                            테스트 1
+                            <ToastEditor/>
                         </div>
                         <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
                     </Splitter>
