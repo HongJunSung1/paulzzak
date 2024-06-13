@@ -304,6 +304,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
         let fileName = title + " " + year + "-" + month + "-" + date
 
+        gridRef.current?.getInstance().finishEditing();
         gridRef.current?.getInstance().export('xlsx',{fileName : fileName});
     }
 
