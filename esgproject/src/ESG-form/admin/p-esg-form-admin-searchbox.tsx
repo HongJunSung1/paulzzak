@@ -67,8 +67,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "SearchBoxCD"   , header: "서치박스 코드"       , width:    100 },
-        {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text'},
+        {name : "SearchBoxCD"   , header: "서치박스 코드"       , width: 100 },
+        {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text' , validation : [{require : true }]},
         {name : "TableName"     , header: "테이블명"            , width: 200 , editor: 'text'},
         {name : "ColumnName"    , header: "메인 컬럼명"         , width: 100 , editor: 'text'},
         {name : "CodeColName"   , header: "메인 컬럼 코드"      , width: 110 , editor: 'text'},

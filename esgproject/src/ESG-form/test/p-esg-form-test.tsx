@@ -80,7 +80,8 @@ const Environmental = ({strOpenUrl, openTabs}) => {
         {name : "id", header: "ID", width: 50, editor: 'text', validation: {dataType: 'number'}},
         {name : "NickName", header: "NickName", width: 100, editor: 'text', align: 'center', },
         {name : "Searchbox", header: "Searchbox", width: 100, renderer: {type: 'searchbox',options: {searchCode: 2, CodeColName :"SearchboxCD"}}},
-        {name : "SearchboxCD", header: "SearchboxCD", width: 100, }
+        {name : "SearchboxCD", header: "SearchboxCD", width: 100, },
+        {name : "btnTest", header: "btnTest", width: 100, renderer: {type: 'button',options: {btnName: "button", clickFunc : (rowkey,colName) =>{ console.log(rowkey +"/"+colName)}}}},
     ];
 
     // 툴바 이벤트

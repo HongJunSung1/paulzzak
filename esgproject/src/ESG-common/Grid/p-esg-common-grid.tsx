@@ -180,6 +180,62 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue);
         }
     }
+
+    // 3. 버튼
+    class Button {
+        el: HTMLInputElement;
+        grid: any;
+        rowKey: any;
+        columnName: any;
+        clickFunc: Function;
+      
+        constructor(props) {
+            const el = document.createElement('input');
+            el.type = 'button';
+      
+            // 스타일 추가
+            el.style.display = 'block';
+            el.style.margin = 'auto';
+            el.style.position = 'relative';
+            el.style.top = '50%';
+            el.style.height = '80%';
+            el.style.width = '85%';
+            el.style.padding = '3px 5px';
+            el.style.fontSize = '14px';
+            el.style.fontWeight = "bold";
+            el.style.backgroundColor = 'white';
+            el.style.color = '#606060';
+            el.style.border = '1px solid #606060';
+            el.style.borderRadius = '4px';
+            el.style.cursor = 'pointer';
+            el.style.transition = 'background-color 0.3s ease';
+      
+            this.el = el;
+            this.grid = props.grid;
+            this.rowKey = props.rowKey;
+            this.columnName = props.columnInfo.name;
+            this.clickFunc = props.columnInfo.renderer.options?.clickFunc || function() {};
+      
+            this.render(props);
+      
+            // 이벤트 리스너 추가
+            this.el.addEventListener('click', this.onClick.bind(this));
+        }
+      
+        getElement() {
+          return this.el;
+        }
+      
+        render(props) {
+          const btnName = props.columnInfo.renderer.options?.btnName || '+';
+          this.el.value = btnName;
+          this.el.disabled = props.columnInfo.renderer.options?.disabled || false;
+        }
+      
+        onClick(event) {
+          this.clickFunc(this.rowKey, this.columnName);
+        }
+      }
     // 설정에 따른 커스텀 렌더러로 변경
     columns.forEach(column => {
         if (column.renderer && column.renderer.type === 'checkbox') {
@@ -195,6 +251,14 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 options: {
                   searchCode: column.renderer.options.searchCode || 0,
                   CodeColName : column.renderer.options.CodeColName || ""
+                }
+            };
+        }else if(column.renderer && column.renderer.type === 'button'){
+            column.renderer = {
+                type: Button,
+                options: {
+                    btnName   : column.renderer.options.btnName   || "", 
+                    clickFunc : column.renderer.options.clickFunc || function(){}
                 }
             };
         }
