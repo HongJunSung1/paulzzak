@@ -2,6 +2,7 @@
     import '../../global.d.ts';
     import styles from './p-esg-common-Tab.module.css';
     import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
+    import cookie from 'react-cookies';
     // import { useNavigate } from 'react-router-dom';
 
     interface MenuInfo {
@@ -22,21 +23,19 @@
     };
 
     
+    const data = cookie.load('menuList') || [];
 
-
-    const Tab = ({strOpenUrl ,openTabs , gohome}) => {
+    const Tab = ({strOpenUrl ,openTabs }) => {
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
+        const { setMenuInfo } = useMenuInfo();
         const [activeTab, setActiveTab] = useState<string | null>(initialMenuInfo.id);
         const [tabData, setTabData] = useState<MenuInfo[]>([initialMenuInfo]);
+
         // const navigate = useNavigate();
 
         useEffect(()=>{
             openTabs(tabData);
         },[tabData, openTabs])
-
-        useEffect(()=>{
-            setActiveTab("4");// 메인 화면 활성화
-        },[gohome])
 
         useEffect(() => {
             if (menuInfo && menuInfo.id && menuInfo.url !== "") {
@@ -70,6 +69,11 @@
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
+
+            const filterData = data.filter((item => item.menuId === tab.url));
+
+            setMenuInfo(filterData[0]);
+            
             strOpenUrl(tab.url);
         };
 
