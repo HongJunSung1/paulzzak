@@ -29,10 +29,20 @@ let messageType : string = ""; // 한 화면에서 YesNo 메세지박스를 2개
 // 화면 이동 URL
 let displayUrl : string = "";
 
-
+interface MenuInfo {
+    id: string;
+    menuName: string;
+    url: string;
+  }
+  
+  interface MenuInfoContextProps {
+    menuInfo: MenuInfo | null;
+  }
+  
 const data = cookie.load('menuList') || [];
 
 const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
+    const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -87,9 +97,6 @@ const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
             navigate("/"); // 기본 주소로 리다이렉트
         }
     }, [navigate]); 
-
-
-
 
     const goMain = () =>{
         const filterData = data.filter((item => item.menuId === 'main'));
@@ -183,7 +190,7 @@ const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
     
     const handleSearch = (formUrl) => {
         displayUrl = formUrl;
-        if(isDataChanged === true){
+        if(isDataChanged === true && formUrl !== menuInfo?.url){
             messageType = "moveUrl";
             setMessageYesNoOpen(true);
             let errMsg : any[] = [];
