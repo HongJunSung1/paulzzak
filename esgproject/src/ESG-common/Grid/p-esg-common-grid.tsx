@@ -62,6 +62,13 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
     }
 
+    // 한 행만 추가하기
+    const clickRowOneAppend = () => {
+        if(gridRef.current){
+            gridRef.current.getInstance().appendRow();
+        }
+    }
+
     // 행 추가 개수 구하기
     const[setNumber, setText] = useState('');
 
@@ -445,7 +452,15 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>
                 <div className={styles.AppendRowContainer}>
-                    {addRowBtn && <button onClick={clickRowAppend} className={styles.GridBtn}>행 추가</button>}
+                    {addRowBtn && 
+                    <div className={styles.GridBtnWrap}>
+                        <div>
+                            <button onClick={clickRowOneAppend} className={styles.GridSimpleBtn}>+</button>
+                        </div>
+                        <div>
+                            <button onClick={clickRowAppend} className={styles.GridBtn}>행 추가</button>
+                        </div>
+                    </div>}
                     {isClickRowAppend &&   
                         <div className={styles.AppendRowWrap}>
                             <span className={styles.AppendUnit}>
