@@ -24,11 +24,15 @@ import cookie from 'react-cookies';
 // 메시지 박스
 let message : any     = [];
 let title   : string  = "";
+let messageType : string = ""; // 한 화면에서 YesNo 메세지박스를 2개로 쓰기 때문에 나눠주기 위한 플래그
+
+// 화면 이동 URL
+let displayUrl : string = "";
 
 
 const data = cookie.load('menuList') || [];
 
-const Navbar = ({strOpenUrl}) => {
+const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -97,7 +101,7 @@ const Navbar = ({strOpenUrl}) => {
 
     // 로그아웃 버튼 클릭 시
     const LogOutClick = () => {
-        
+        messageType = "isLogOut";
         let errMsg : any[] = [];
         errMsg.push({text: "로그아웃 하시겠습니까?"});
         message = errMsg;
@@ -107,8 +111,14 @@ const Navbar = ({strOpenUrl}) => {
 
     // 로그아웃 예 클릭 시 
     const messageYes = () => {
-        // 로그인 화면으로 이동
-        navigate("/");
+        if(messageType === "isLogOut"){
+            // 로그인 화면으로 이동
+            navigate("/");
+        } else if(messageType === "moveUrl"){
+            clickSearch(displayUrl);
+            setMessageYesNoOpen(false);
+            setIsDataChanged(false);
+        }
     }
 
     // 설정 클릭 시
@@ -171,8 +181,22 @@ const Navbar = ({strOpenUrl}) => {
       }, [searchRef]);
 
     
+    const handleSearch = (formUrl) => {
+        displayUrl = formUrl;
+        if(isDataChanged === true){
+            messageType = "moveUrl";
+            setMessageYesNoOpen(true);
+            let errMsg : any[] = [];
+            errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
+            title   = "※ 경고";
+            message = errMsg;
+        } else{
+            clickSearch(formUrl);
+        }
+    }
+
     const clickSearch = (formUrl) => {
-        
+
         setSearchText('');
         setIsOpen(false);
         
@@ -358,7 +382,8 @@ const Navbar = ({strOpenUrl}) => {
                         <input type="text" className={styles.SearchInput} onChange={searchHandler} value={searchText}></input>
                         {isOpen && <div className = {styles.SearchWrap} ref={searchRef}>
                                 {resultData.map((Item, index) => (
-                                    <div className={styles.SearchItem} key={index} onClick={() => clickSearch(Item.FormUrl)}>{Item.FormName}</div>
+                                    // <div className={styles.SearchItem} key={index} onClick={() => clickSearch(Item.FormUrl)}>{Item.FormName}</div>
+                                    <div className={styles.SearchItem} key={index} onClick={() => handleSearch(Item.FormUrl)}>{Item.FormName}</div>
                                 ))}
                         </div>}
                     </div>

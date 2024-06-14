@@ -37,7 +37,7 @@ let title   : string  = "";
 // 우클릭 조회 시 받는 내부코드 값
 let UserCD = 0
 
-const UserForm = ({strOpenUrl, openTabs}) => {
+const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -60,6 +60,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
+        setIsDataChanged(true);
         if(gridId === 'DataSet2'){
             grid2Changes = changes;
         }

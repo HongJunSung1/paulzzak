@@ -44,7 +44,11 @@ function App() {
 
   const [isLoading,setIsLoading] = useState(false);
 
+  // 그리드 변동 값 감지
+  const [isDataChanged, setIsDataChanged] = useState(false);
+
   useEffect(() => {
+
     // 페이지 이동 전 이벤트
     setIsLoading(true);
     // 페이지 이동 후 이벤트
@@ -58,45 +62,45 @@ function App() {
   }, [strOpenUrl]);
 
   return (      
-  <div className="App" style={{backgroundColor:"#faf9f8"}}>
-      {isLoginPage && 
-        <Routes>
-          <Route path="/" exact element={<Login/>}></Route>
-        </Routes>
-      }
-      {!isLoginPage && 
-        <>
-          <MenuInfoProvider>
-          <Navbar strOpenUrl= {setStrOpenUrl}/>
-          <Container>
-              <SideBar strOpenUrl={setStrOpenUrl}/>  
-              <DataContainer>
-              <Loading loading={isLoading}/>
-                <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs}/>
-                {/* <Routes> */}
-                  {/* 실제 데이터 작성 구간 */}
-                    {/* <Route path="/main" element={<Main/>}></Route>
-                    <Route path="/environmental" element={<Environmental/>}></Route>
-                    <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
-                    <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
-                    <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
-                    <Route path="/PEsgUserForm" element={<UserForm/>}></Route> */}
-                  {/* 실제 데이터 작성 구간 */}
-                {/* </Routes> */}
-                <Main           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <UserInfo       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <FormReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <Menu           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <UserForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <FileTest       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                <SearchBoxReg   strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-              </DataContainer>
-          </Container>
-          </MenuInfoProvider>
-        </>
-      }
-  </div>
+    <div className="App" style={{backgroundColor:"#faf9f8"}}>
+        {isLoginPage && 
+          <Routes>
+            <Route path="/" exact element={<Login/>}></Route>
+          </Routes>
+        }
+        {!isLoginPage && 
+          <>
+            <MenuInfoProvider>
+            <Navbar strOpenUrl= {setStrOpenUrl} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>
+            <Container>
+                <SideBar strOpenUrl={setStrOpenUrl} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>  
+                <DataContainer>
+                <Loading loading={isLoading}/>
+                  <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>
+                  {/* <Routes> */}
+                    {/* 실제 데이터 작성 구간 */}
+                      {/* <Route path="/main" element={<Main/>}></Route>
+                      <Route path="/environmental" element={<Environmental/>}></Route>
+                      <Route path="/PEsgFormAdminUserInfo" element={<UserInfo/>}></Route>
+                      <Route path="/PEsgFormAdminFormReg" element={<FormReg/>}></Route>
+                      <Route path="/PEsgFormMenuReg" element={<Menu/>}></Route>
+                      <Route path="/PEsgUserForm" element={<UserForm/>}></Route> */}
+                    {/* 실제 데이터 작성 구간 */}
+                  {/* </Routes> */}
+                  <Main           strOpenUrl={strOpenUrl} openTabs={openTabs} />
+                  <UserInfo       strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <FormReg        strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <Menu           strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <UserForm       strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <FileTest       strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <SearchBoxReg   strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                </DataContainer>
+            </Container>
+            </MenuInfoProvider>
+          </>
+        }
+    </div>
   );  
 }
 

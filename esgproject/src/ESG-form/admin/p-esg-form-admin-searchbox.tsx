@@ -29,7 +29,7 @@ let message : any     = [];
 let title   : string  = "";
 
 
-const SearchBoxReg = ({strOpenUrl, openTabs}) => {
+const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -49,6 +49,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
+        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             grid1Changes = changes;
         }

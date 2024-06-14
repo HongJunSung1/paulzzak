@@ -25,7 +25,7 @@ let title   : string  = "";
 let UserCD = 0
 
 
-const FileTest = ({strOpenUrl, openTabs}) => {
+const FileTest = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -43,6 +43,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
+        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             grid1Changes = changes;
         } 

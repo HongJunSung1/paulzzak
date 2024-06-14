@@ -3,6 +3,9 @@
     import styles from './p-esg-common-Tab.module.css';
     import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
     import cookie from 'react-cookies';
+
+    import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
+
     // import { useNavigate } from 'react-router-dom';
 
     interface MenuInfo {
@@ -25,13 +28,21 @@
     
     const data = cookie.load('menuList') || [];
 
-    const Tab = ({strOpenUrl ,openTabs }) => {
+    let message    : any     = [];
+    let title      : string  = "";
+
+    const Tab = ({strOpenUrl ,openTabs, isDataChanged, setIsDataChanged}) => {
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
         const { setMenuInfo } = useMenuInfo();
         const [activeTab, setActiveTab] = useState<string | null>(initialMenuInfo.id);
         const [tabData, setTabData] = useState<MenuInfo[]>([initialMenuInfo]);
-
+        const [menuChange, setMenuChange] = useState<any>([]);
         // const navigate = useNavigate();
+        
+        // YesNo메세지박스
+        const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
+        const messageYesNoClose = () => {setMessageYesNoOpen(false)};  
+
 
         useEffect(()=>{
             openTabs(tabData);
@@ -71,11 +82,28 @@
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
 
             const filterData = data.filter((item => item.menuId === tab.url));
-
             setMenuInfo(filterData[0]);
-            
             strOpenUrl(tab.url);
         };
+
+        const handleTabClickMsg = (tab: MenuInfo) => {
+            if(isDataChanged === true){
+                setMessageYesNoOpen(true);
+                let errMsg : any[] = [];
+                errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
+                title   = "※ 경고";
+                message = errMsg;
+                setMenuChange({id: tab.id, menuName: tab.menuName, url: tab.url});
+            } else{
+                handleTabClick(tab);
+            }
+        }
+
+        const messageYes = () => {
+            handleTabClick(menuChange);
+            setMessageYesNoOpen(false);
+            setIsDataChanged(false);
+        }
 
 
         const closeTab = (tab) => {
@@ -114,13 +142,15 @@
 
         return(
             <>
+                <MessageBoxYesNo messageYesNoOpen = {messageYesNoOpen} btnYes = {messageYes} btnNo = {messageYesNoClose} MessageData = {message} Title={title}/>            
                 <div className={styles.TabContainer}>
                     <div className={styles.TabWrap}>
                         {tabData.map((tab)=> (
                             <div className={styles.Tab} 
                                 key={tab.id} 
                                 data-active={activeTab===tab.id ? "true" : "false"} 
-                                onClick={() => handleTabClick(tab)}
+                                // onClick={() => handleTabClick(tab)}
+                                onClick={() => handleTabClickMsg(tab)}
                                 style={{backgroundColor: activeTab===tab.id ? "white" : "rgb(233, 235, 235)",
                                         borderTop: activeTab===tab.id ? "solid 3px black" : "solid 3px gray",
                                         borderBottom: activeTab===tab.id ? "none" : "solid 0.5px rgb(200, 200, 200)"
