@@ -45,7 +45,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     useEffect(() => {
         // setIsInitialized(false);
         const timer = setTimeout(()=> {
-            setIsInitialized(true);
+            setIsInitialized(true); // 시트값 변동 감지
             if(gridRef.current){
                 gridRef.current.getInstance().refreshLayout();
             }
@@ -445,9 +445,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
     });
     
-   
     
-
     return (
         <div className={styles.GridWrap}>
             <div className = {styles.GridStatus}>
@@ -486,7 +484,10 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         minRowHeight={30}
                         heightResizable={false} //테이블의 사이즈를 자동으로 조절
                         rowHeaders={[{type:"rowNum", align: 'center'}, {type:'checkbox'}]}
-                        contextMenu={null as any} // 우클릭 조회 없애기     
+                        contextMenu={null as any} // 우클릭 조회 없애기    
+                        header={{
+                            height: 30
+                        }}
                 />
                 }
             </div>
