@@ -6,11 +6,17 @@ import OurLogo from '../assets/image/belly.png';
 import EYLogo from '../assets/image/EYLogo.svg';
 import LoginPicture from '../assets/image/LoginPicture.jpg';
 import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
+import MessageBoxYesNo from '../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
+import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 
 import { SP_Request } from '../hooks/sp-request.tsx';
 import {SHA256} from 'crypto-js';
 import cookie from 'react-cookies';
 import emailjs from '@emailjs/browser';
+
+// 메시지 박스
+let message : any     = [];
+let title   : string  = "";
 
 const LoginPage = () => {
 
@@ -33,6 +39,14 @@ const LoginPage = () => {
 
     // 비밀번호 초기화(이메일 양식)
     const [userInfoCheck, setInfo] = useState(false);
+
+    // 메세지박스
+    const [messageOpen, setMessageOpen] = useState(false)
+    const messageClose = () => {setMessageOpen(false)};    
+
+    // YesNo메세지박스
+    const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
+    const messageYesNoClose = () => {setMessageYesNoOpen(false)}; 
 
     // 아이디, 비밀번호 변수 설정
     const [userID,setUserID] = useState('');
@@ -182,8 +196,18 @@ const LoginPage = () => {
         }
     }
 
+    // 비밀번호 초기화 로직
+    const initPasswordMsg = () => {
+        let errMsg : any[] = [];
+        errMsg.push({text: userID + " 의 비밀번호를 변경하시겠습니까? 확인 클릭 시 등록된 이메일로 임시 비밀번호가 전송됩니다."});
+        message = errMsg;
+        title   = "삭제 확인";
+        setMessageYesNoOpen(true);
+    }
+
     // 비밀번호 이메일 발송 양식
     const initPassword = async () => {
+        messageYesNoClose();
         setErrMsg('');
         // 비밀번호 변경
         const newPW = Math.random().toString(36).substring(2, 11);
@@ -202,13 +226,22 @@ const LoginPage = () => {
                     .then(
                         (response) => {
                             console.log('성공',response.status);
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "임시 비밀번호가 " + userID + "에 등록된 이메일로 전송되었습니다. 이메일 확인 후 즉시 비밀번호를 변경해주세요."});
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "비밀번호 변경";                                
                         },
                         (error) => {
                             console.log('실패', error);
                         },
                     );
             } else{
-                window.alert("비밀번호 변경 실패");
+                let errMsg : any[] = [];
+                errMsg.push({text: "비밀번호 변경 실패"})
+                setMessageOpen(true);
+                message = errMsg;
+                title   = "비밀번호 에러";                
             }
         } catch (error) {
             console.log(error);
@@ -228,7 +261,11 @@ const LoginPage = () => {
             result = await SP_Request("S_ESG_LoginPasswordChange", [{userID, cryptoPWOrigin, cryptoPW, DataSet: 'DataSet'}])
 
             if(result !== null && result[0][0].Status === "0"){
-                window.alert("비밀번호 변경 완료");
+                let errMsg : any[] = [];
+                errMsg.push({text: "비밀번호 변경이 완료 되었습니다."});
+                setMessageOpen(true);
+                message = errMsg;
+                title   = "비밀번호 변경";              
                 setInfo(false);
                 setErrMsg('');
                 setUserPWOrigin('');
@@ -276,6 +313,8 @@ const LoginPage = () => {
     return (
         <>
             <Loading loading={loading}/>
+            <MessageBoxYesNo messageYesNoOpen = {messageYesNoOpen} btnYes = {initPassword} btnNo = {messageYesNoClose} MessageData = {message} Title={title}/>
+            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <div className = {styles.LoginContainer}>
                 <div className = {styles.LoginWrap}>
                     <div className = {styles.LoginLeft}>
@@ -303,7 +342,7 @@ const LoginPage = () => {
                                     <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW} onKeyDown={(e) => activeEnter(e)} ref={passwordInputRef} autoComplete="off"></input>
                                     <div className={styles.loginAlert}>{errMsg}</div>
                                     <button className = {styles.LoginBtn} onClick={loginCheck}>로그인</button>
-                                    {isPassWord && <div className = {styles.initPassword} onClick={initPassword}>비밀번호 초기화</div>}
+                                    {isPassWord && <div className = {styles.initPassword} onClick={initPasswordMsg}>비밀번호 초기화</div>}
                                 </div>
                                 <div className={styles.copyright}>
                                     Copyright © 2024.Bblock. All rights reserved
