@@ -444,6 +444,20 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             console.error("Error handling keydown event:", error);
         }
     });
+
+    // 
+    useEffect(() => {
+        const handleClickOutside = (event : MouseEvent) => {
+          if (gridRef.current) {
+            gridRef.current.getInstance().finishEditing();
+          }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+      }, [gridRef]);
     
     
     return (
