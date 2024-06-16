@@ -10,6 +10,7 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
     const tabRefs = useRef<HTMLDivElement[]>([]);
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
+    // 탭 클릭 이벤트(클릭한 탭을 나오게 하고 아닌 탭은 display를 none으로 바꾼다.)
     const handleTabClick = (index: number) => {
         setActiveIndex(index); // 활성화된 탭 찾기
         tabRefs.current.forEach((ref, idx) => {
@@ -21,6 +22,7 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
 
     useEffect(() => {
         // 랜더링 될 때 모든 정보 초기화
+        // 처음엔 무조건 첫 번째 탭이 활성화 탭으로 나타나게 함
         tabRefs.current.forEach((ref, idx) => {
             if (ref) {
                 ref.style.display = idx === 0 ? 'block' : 'none';
