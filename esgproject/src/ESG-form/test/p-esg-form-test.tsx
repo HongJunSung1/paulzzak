@@ -14,6 +14,8 @@ import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Dialogue from '../../ESG-common/Dialogue/p-esg-common-dialogue.tsx';
 import ToastEditor from '../../ESG-common/Editor/p-esg-common-Editor.tsx';
 import EditorViewer from '../../ESG-common/Editor/p-esg-common-Editor-Viewer.tsx';
+import GridTab from '../../ESG-common/GridTab/p-esg-common-GridTab.tsx';
+import GridTabItem from '../../ESG-common/GridTab/p-esg-common-GridTabItem.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -258,7 +260,14 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         {/* <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/> */}
                         <EditorViewer contents={EditText}/>
                     </Splitter>
-                    <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                    <GridTab>
+                        <GridTabItem name={"탭1"}>
+                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                        </GridTabItem>
+                        <GridTabItem name={"탭2"}>
+                            <EditorViewer contents={EditText}/>
+                        </GridTabItem>
+                    </GridTab>
                 </Splitter>
             </DynamicArea>
 
