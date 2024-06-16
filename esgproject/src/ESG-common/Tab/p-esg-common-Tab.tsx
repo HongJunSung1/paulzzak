@@ -27,9 +27,12 @@
 
     
     const data = cookie.load('menuList') || [];
+    // const currentDisplay : string = tabData;
 
     let message    : any     = [];
     let title      : string  = "";
+
+    let tabMove    : string  = "";
 
     const Tab = ({strOpenUrl ,openTabs, isDataChanged, setIsDataChanged}) => {
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
@@ -50,12 +53,13 @@
 
         useEffect(() => {
             if (menuInfo && menuInfo.id && menuInfo.url !== "") {
+
             const newTab = {
                 id: menuInfo.id,
                 menuName: menuInfo.menuName,
                 url: "/" + menuInfo.url
             };
-        
+
             setTabData(prevTabData => {
                 if (prevTabData.some(tab => tab.id === newTab.id)) {
                 return prevTabData;
@@ -80,29 +84,48 @@
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
-
-            const filterData = data.filter((item => item.menuId === tab.url));
+            const filterData = data.filter((item => item.menuId === tab.url.replace('/', '')));
             setMenuInfo(filterData[0]);
             strOpenUrl(tab.url);
         };
 
         const handleTabClickMsg = (tab: MenuInfo) => {
-            if(isDataChanged === true){
-                setMessageYesNoOpen(true);
+
+            if(isDataChanged === true && tab.id !== activeTab){
+                tabMove = "handleTabClick";
                 let errMsg : any[] = [];
                 errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
                 title   = "※ 경고";
                 message = errMsg;
-                setMenuChange({id: tab.id, menuName: tab.menuName, url: tab.url});
+                setMessageYesNoOpen(true);
             } else{
                 handleTabClick(tab);
             }
         }
 
         const messageYes = () => {
-            handleTabClick(menuChange);
+            if(tabMove === "handleTabClick"){
+                handleTabClick(menuChange);
+            } else if(tabMove === "handleTabCloseClick"){
+                closeTab(menuChange);                                    
+            }
             setMessageYesNoOpen(false);
             setIsDataChanged(false);
+                
+        }
+
+        const handleTabCloseClickMsg = (tab: MenuInfo) => {
+            if(isDataChanged === true && tab.id === activeTab){
+                tabMove = "handleTabCloseClick";
+                let errMsg : any[] = [];
+                errMsg.push({text: "화면을 닫을 경우 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
+                title   = "※ 경고";
+                message = errMsg;
+                setMenuChange({id: tab.id, menuName: tab.menuName, url: tab.url});
+                setMessageYesNoOpen(true);
+            } else{
+                closeTab(tab);
+            }
         }
 
 
@@ -150,13 +173,15 @@
                                 key={tab.id} 
                                 data-active={activeTab===tab.id ? "true" : "false"} 
                                 // onClick={() => handleTabClick(tab)}
-                                onClick={() => handleTabClickMsg(tab)}
                                 style={{backgroundColor: activeTab===tab.id ? "white" : "rgb(233, 235, 235)",
                                         borderTop: activeTab===tab.id ? "solid 3px black" : "solid 3px gray",
                                         borderBottom: activeTab===tab.id ? "none" : "solid 0.5px rgb(200, 200, 200)"
                                 }}>
-                                {tab.menuName}
-                                <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button>
+                                <div onClick={() => handleTabClickMsg(tab)}>
+                                    {tab.menuName}
+                                </div>
+                                {/* <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button> */}
+                                <button className={styles.BtnClose} onClick={() => handleTabCloseClickMsg(tab)}></button>
                             </div>
                         ))}
                     </div>

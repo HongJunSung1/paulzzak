@@ -46,6 +46,7 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         setIsDataChanged(true);
         if (gridId === 'DataSet1') {
             grid1Changes = changes;
+            
         } 
     };
     

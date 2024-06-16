@@ -1,5 +1,5 @@
 import '../../global.d.ts';
-import React, {useState}  from 'react';
+import React, {useState, useEffect}  from 'react';
 import styles from './p-esg-common-SideBarItem.module.css';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 import {SideBarSub} from './p-esg-common-sideBarItem.styles.tsx';
@@ -9,21 +9,44 @@ import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBox
 let message    : any     = [];
 let title      : string  = "";
 
+interface MenuInfo {
+  id: string;
+  menuName: string;
+  url: string;
+}
+
+interface MenuInfoContextProps {
+  menuInfo: MenuInfo | null;
+}
+
+// 초기 페이지 데이터 설정(현재 main)
+const initialMenuInfo: MenuInfo = {
+    id: '4',
+    menuName: 'main',
+    url: '/main'
+};
+
 const SideBarItem = ({ item, strOpenUrl, isDataChanged, setIsDataChanged }) => {
   // 클릭 할 때마다 화살표 위아래 모양 바꾸기
   const [collapsed, setCollapsed] = useState(false);
   const icon = collapsed ? <HiChevronUp /> : <HiChevronDown />;
   const { setMenuInfo } = useMenuInfo();
-  
+  const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
+  const [activeMenu, setActiveMenu] = useState<string | null>(initialMenuInfo.id);
+
   // YesNo메세지박스
   const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
   const messageYesNoClose = () => {setMessageYesNoOpen(false)};  
 
-
-
   function toggleCollapse() {
     setCollapsed(prevValue => !prevValue);
   }
+
+  useEffect(() => {
+    if (menuInfo && menuInfo.id && menuInfo.url !== "") {
+      setActiveMenu(menuInfo.id);
+    }
+  }, [menuInfo, strOpenUrl])
 
   const handleClick = () => {
     setMenuInfo(item);
@@ -31,7 +54,7 @@ const SideBarItem = ({ item, strOpenUrl, isDataChanged, setIsDataChanged }) => {
   };
 
   const handleClickMsg = () => {
-    if(isDataChanged === true){
+    if(isDataChanged === true && item.id !== activeMenu){
       setMessageYesNoOpen(true);
       let errMsg : any[] = [];
       errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
