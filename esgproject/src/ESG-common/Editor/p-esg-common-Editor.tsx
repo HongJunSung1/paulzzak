@@ -1,10 +1,11 @@
-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useRef, forwardRef } from 'react';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import { Editor } from '@toast-ui/react-editor';
+import styles from './p-esg-common-Editor.module.css';
 
 type CustomEditProps = {
   editId : string
@@ -33,7 +34,7 @@ const ToastEditor = forwardRef(({editId, onChange}: CustomEditProps, ref) => {
 
 
   return (
-    <div>
+    <div className={styles.EditorWrap}>
         <Editor
         ref={EditRef}
         initialValue="혹중선"
