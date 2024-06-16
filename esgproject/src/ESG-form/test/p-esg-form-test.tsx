@@ -13,11 +13,17 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Dialogue from '../../ESG-common/Dialogue/p-esg-common-dialogue.tsx';
 import ToastEditor from '../../ESG-common/Editor/p-esg-common-Editor.tsx';
+import EditorViewer from '../../ESG-common/Editor/p-esg-common-Editor-Viewer.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
 
 type gridAr = {
+    DataSet    : string;
+    grid       : any[];
+};
+
+type editAr = {
     DataSet    : string;
     grid       : any[];
 };
@@ -46,6 +52,7 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
     let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [edit1Changes] = useState<editAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
@@ -56,10 +63,24 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             grid2Changes = changes;
         }
     };
+
+    // 에디터 변경 감지
+    const handleEditorChange = (editId : string , changes : editAr) => {
+        setIsDataChanged(true);
+        if(editId === 'DataSet3'){
+            edit1Changes = changes;
+        }
+    }
     
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
     const grid2Ref : any = useRef(null);
+
+    // 에디터 Ref
+    const Editor1Ref : any = useRef(null);
+
+    // 에디터 뷰어 값
+    const [EditText,setEditText] = useState('');
 
     // 다이얼로그 오픈
     const [isDlgOpen,setIsDlgOpen] = useState(false);
@@ -133,7 +154,7 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 저장
             case 2 : 
                 //시트 수정 종료
-                grid1Ref.current.setEditFinish();
+                // grid1Ref.current.setEditFinish();
                 grid2Ref.current.setEditFinish();
                 
                 // 시트 내 변동 값 담기
@@ -141,6 +162,7 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                 combinedData.push(grid1Changes)
                 combinedData.push(grid2Changes)
+                combinedData.push(edit1Changes)
 
                 setLoading(true);
                 try {
@@ -149,6 +171,8 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     if(result){
                         // SP 호출 결과 값 처리
                         console.log(result);
+
+                        setEditText(result[2][0].text);
 
                         // 저장 성공 시 데이터 변화 감지 값 false로 변경시켜 화면 이동 시 메세지 박스 출력하지 않도록 함
                         setIsDataChanged(false);
@@ -230,10 +254,9 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             <DynamicArea>
                 <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                     <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
-                        <div>
-                            <ToastEditor/>
-                        </div>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                        <ToastEditor ref={Editor1Ref} editId="DataSet3" onChange={handleEditorChange}/>
+                        {/* <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/> */}
+                        <EditorViewer contents={EditText}/>
                     </Splitter>
                     <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
                 </Splitter>
