@@ -37,7 +37,7 @@ const ToastEditor = forwardRef(({editId, onChange}: CustomEditProps, ref) => {
     <div className={styles.EditorWrap}>
         <Editor
         ref={EditRef}
-        initialValue="혹중선"
+        initialValue=" "
         previewStyle="vertical"
         initialEditType="wysiwyg" // WYSIWYG 모드 설정
         hideModeSwitch= {true}
@@ -45,6 +45,7 @@ const ToastEditor = forwardRef(({editId, onChange}: CustomEditProps, ref) => {
         language="ko-KR" 
         plugins={[colorSyntax]}
         onChange={changeHandle}
+        placeholder= '텍스트를 입력해주세요.'
         />
     </div>
   );

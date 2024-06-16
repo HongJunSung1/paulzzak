@@ -1,8 +1,13 @@
 .ViewerWrap{
-    background-color: aqua;
-    height: 100% !important; 
+    height: 100%; 
+    padding: 18px 25px;
     overflow-y: auto;
 }
+
+.ViewerWrap div{
+  height: 0px;
+}
+
 
 .ViewerWrap::-webkit-scrollbar-track
 {
@@ -23,3 +28,24 @@
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   background-color: #848484;
 }
+
+.toastui-editor::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+.toastui-editor::-webkit-scrollbar
+{
+  width: 12px;
+  background-color: #F5F5F5;
+}
+
+.toastui-editor::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #848484;
+}
+
