@@ -445,14 +445,13 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
     });
 
-    // 
+    
     useEffect(() => {
         const handleClickOutside = (event : MouseEvent) => {
           if (gridRef.current) {
             gridRef.current.getInstance().finishEditing();
           }
         };
-    
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
           document.removeEventListener('mousedown', handleClickOutside);
@@ -501,6 +500,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         contextMenu={null as any} // 우클릭 조회 없애기    
                         header={{
                             height: 30
+                            
                         }}
                 />
                 }
