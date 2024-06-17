@@ -54,22 +54,22 @@
         useEffect(() => {
             if (menuInfo && menuInfo.id && menuInfo.url !== "") {
 
-            const newTab = {
-                id: menuInfo.id,
-                menuName: menuInfo.menuName,
-                url: "/" + menuInfo.url
-            };
+                const newTab = {
+                    id: menuInfo.id,
+                    menuName: menuInfo.menuName,
+                    url: "/" + menuInfo.url
+                };
 
-            setTabData(prevTabData => {
-                if (prevTabData.some(tab => tab.id === newTab.id)) {
-                return prevTabData;
-                } else {
-                return [...prevTabData, newTab];
-                }
-            });
-        
-            setActiveTab(menuInfo.id);
-            //   navigate(menuInfo.url);
+                setTabData(prevTabData => {
+                    if (prevTabData.some(tab => tab.id === newTab.id)) {
+                    return prevTabData;
+                    } else {
+                    return [...prevTabData, newTab];
+                    }
+                });
+            
+                setActiveTab(menuInfo.id);
+                //   navigate(menuInfo.url);
             
             }
 
@@ -84,7 +84,7 @@
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
-            const filterData = data.filter((item => item.menuId === tab.url.replace('/', '')));
+            const filterData = data.filter((item => item.url === tab.url.replace('/', '')));
             setMenuInfo(filterData[0]);
             strOpenUrl(tab.url);
         };
@@ -97,6 +97,7 @@
                 errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
                 title   = "※ 경고";
                 message = errMsg;
+                setMenuChange({id: tab.id, menuName: tab.menuName, url: tab.url});
                 setMessageYesNoOpen(true);
             } else{
                 handleTabClick(tab);

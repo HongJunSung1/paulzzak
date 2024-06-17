@@ -63,7 +63,6 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
-        console.log(changes)
         if (gridId === 'DataSet1') {
             setGrid1Changes(changes);
         } 
@@ -141,13 +140,13 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         {name : "EmpNo"          , header: "사번"    , width: 100, editor: 'text'},
         {name : "TelNo"          , header: "전화번호", width: 160, editor: 'text'},
         {name : "Email"          , header: "이메일"  , width: 200, editor: 'text'},
-        {name : "CompanyCD"      , header: "회사코드", width: 100, hidden: false},
         {name : "CompanyName"    , header: "회사명"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 6, CodeColName :"CompanyCD"}}},
-        {name : "DepartmentCD"   , header: "부서코드", width: 100, hidden: true},
-        {name : "DepartmentName" , header: "부서명"  , width: 170, editor: 'text'},
-        {name : "FirstCheck"     , header: "1차승인" , width: 100, editor: 'text', renderer: { type: 'checkbox' }},
-        {name : "SecondCheck"    , header: "2차승인" , width: 100, editor: 'text', renderer: { type: 'checkbox' }},
-        {name : "ThirdCheck"     , header: "3차승인" , width: 100, editor: 'text', renderer: { type: 'checkbox' }}
+        {name : "CompanyCD"      , header: "회사코드", width: 100, hidden: false},
+        {name : "DepartmentCD"   , header: "부서코드", width: 100, hidden: false},
+        {name : "DepartmentName" , header: "부서명"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 7, CodeColName :"DepartmentCD"}}},
+        {name : "FirstCheck"     , header: "1차승인" , width: 100, renderer: { type: 'checkbox' }},
+        {name : "SecondCheck"    , header: "2차승인" , width: 100, renderer: { type: 'checkbox' }},
+        {name : "ThirdCheck"     , header: "3차승인" , width: 100, renderer: { type: 'checkbox' }}
     ];
 
     // 툴바 이벤트
@@ -227,8 +226,13 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         setMessageOpen(true);
                         message = errMsg;
                         title   = "저장 완료";
+
+                        // 시트 값 입력
+                        grid1Ref.current.setRowData(result[0]);                        
                         // 데이터 변화 감지 값 false
                         setIsDataChanged(false);
+                        //시트 변경 내역 초기화
+                        setGrid1Changes({ DataSet : '', grid: []});
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
                         let errMsg : any[] = [];
@@ -306,8 +310,8 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     <TextBox name={"이메일"} value={EMail}    onChange={setCondition3} width={300}/>    
                 </FixedWrap>
                 <FixedWrap>
-                    <SearchBox name={"회사명"} value={CompanyName} onChange={setConditions1} searchCode={6}/>   
-                    <TextBox name={"이메일"} value={EMail}    onChange={setCondition3}/> 
+                    <SearchBox name={"회사명"} value={CompanyName}    onChange={setConditions1} searchCode={6} width={200}/>   
+                    <SearchBox name={"부서명"} value={DepartmentName} onChange={setConditions2} searchCode={7} width={200}/> 
                     <Button name={"계정 초기화"} clickEvent={clickEvent}></Button>
                 </FixedWrap>
             </FixedArea>  
