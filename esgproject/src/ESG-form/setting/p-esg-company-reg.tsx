@@ -10,7 +10,6 @@ import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
-import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -25,13 +24,10 @@ type condition = {
     DataSet     : string;
 }  
 
-
 // 메시지 박스
 let message : any     = [];
 let title   : string  = "";
 
-// 우클릭 조회 시 받는 내부코드 값
-let UserCD = 0
 
 const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
@@ -51,16 +47,16 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const [grid2Data, setGrid2Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
-    let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
-    let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
         if(gridId === 'DataSet1'){
-            grid1Changes = changes;
+            setGrid1Changes(changes);
         }else if(gridId === 'DataSet2'){
-            grid2Changes = changes;
+            setGrid2Changes(changes);
         }
     };
     
@@ -79,14 +75,14 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
      // 시트 컬럼 값
      const columns1 = [
         {name : "CompanyCD"   , header: "회사코드"     , width:  70 , hidden: true},
-        {name : "CompanyName" , header: "회사명"       , width: 200},
-        {name : "Remark"      , header: "비고"         , width: 250},
+        {name : "CompanyName" , header: "회사명"       , width: 200 , editor: 'text'},
+        {name : "Remark"      , header: "비고"         , width: 250 , editor: 'text'},
     ];
 
     const columns2 = [
-        {name : "BizUnitCD"   , header: "사업부문 코드" , width: 70, hidden: true},
-        {name : "BizUnitName" , header: "사업부문명"    , width: 200},
-        {name : "Remark"      , header: "비고"          , width: 250},
+        {name : "BizUnitCD"   , header: "사업부문 코드" , width: 70  , hidden: true},
+        {name : "BizUnitName" , header: "사업부문명"    , width: 200 , editor: 'text'},
+        {name : "Remark"      , header: "비고"          , width: 250 , editor: 'text'},
     ];
 
     // 툴바 이벤트
@@ -149,11 +145,13 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 grid2Changes.grid = grid2Ref.current.setColumCheck(grid2Changes.grid);
                 
-                combinedData.push(grid1Changes)
+                combinedData.push(grid1Changes);
                 combinedData.push(grid2Changes);
 
+                console.log(combinedData);
+
                 // 저장할 데이터 없을시 종료
-                if(combinedData[0].grid.length === 0){
+                if(combinedData[0].grid.length === 0 && combinedData[1].grid.length === 0){
                     window.alert('저장할 데이터가 없습니다.');
                     setLoading(false);
                     return;
@@ -168,7 +166,7 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: "시트: 화면 정보 " + result[i][j].Message})
+                                    errMsg.push({text: '시트 : 회사 정보 에러 : '  + result[i][j].Message})
                                 }
                             }
                         }
@@ -179,7 +177,17 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setLoading(false);
                             return;
                         }   
-                        grid2Ref.current.setRowData(result[0]);
+                        // 시트 값 입력
+                        grid1Ref.current.setRowData(result[0]);
+                        grid2Ref.current.setRowData(result[1]);
+                        
+                        //시트 변경 내역 초기화
+                        setGrid1Changes({ DataSet : '', grid: []});
+                        setGrid2Changes({ DataSet : '', grid: []});
+
+                        // 화면 이동 가능하도록 변경
+                        setIsDataChanged(false);
+
                         window.alert("저장 완료")
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직

@@ -152,8 +152,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         rowKey: any;
         columnInfo: any;
         root: any;
-        codeColName : any;
-        
+        codeColName : any;  
     
         constructor(props) {
             const el = document.createElement('div');
@@ -171,12 +170,13 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     
         render(props) {
             const value = props.value;
-    
+
             this.root.render(
                 <SearchBox
                     value={value}
                     onChange={(value) => this.onChange(value)}
                     searchCode={this.columnInfo.renderer.options?.searchCode || 0}
+                    onGridChange={(value) => this.gridChange(value)}
                 />
             );
         }
@@ -184,6 +184,10 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
         onChange(newValue) {
             this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue);
+        }
+
+        gridChange(newValue){
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, newValue);
         }
     }
 

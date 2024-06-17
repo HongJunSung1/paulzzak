@@ -12,9 +12,9 @@ const SearchBox = (settings : any) => {
     const searchRef = useRef<HTMLDivElement>(null);
     const InputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        setText(settings.value || '');
-    }, [settings.value]);
+    // useEffect(() => {
+    //     setText(settings.value || '');
+    // }, [settings.value]);
 
     const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (settings.onChange) {
@@ -46,8 +46,13 @@ const SearchBox = (settings : any) => {
 
     const searchClick = (value, valueCode) => {
         setText(value);
+
         if (settings.onChange) {
             settings.onChange(valueCode);
+        }
+
+        if(settings.onGridChange){
+            settings.onGridChange(value);
         }
         
         setIsOpen(false);
