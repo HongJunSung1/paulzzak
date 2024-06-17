@@ -19,6 +19,7 @@ import FormReg from './ESG-form/admin/p-esg-form-admin-form-reg.tsx';
 import Menu from './ESG-form/menu/p-esg-form-menu-reg.tsx';
 import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
 import SearchBoxReg from './ESG-form/admin/p-esg-form-admin-searchbox.tsx';
+import CompanyReg from './ESG-form/setting/p-esg-company-reg.tsx';
 
 // 테스트 화면
 import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
@@ -95,6 +96,7 @@ function App() {
                   <Environmental  strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
                   <FileTest       strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
                   <SearchBoxReg   strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <CompanyReg     strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
                 </DataContainer>
             </Container>
             </MenuInfoProvider>
