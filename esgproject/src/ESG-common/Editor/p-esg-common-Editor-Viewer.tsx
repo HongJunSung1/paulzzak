@@ -1,4 +1,4 @@
-import React,{ useRef, useEffect} from 'react';
+import React,{ useRef } from 'react';
 import { Viewer } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styles from './p-esg-common-Editor.module.css';
