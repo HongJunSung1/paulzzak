@@ -8,16 +8,16 @@
     width: 100%;
     display: flex;
     line-height: 30px;
-    border-bottom: 1px solid #dadada
+    border-bottom: 1px solid #dadada;
 }
 
 .GridTabTitle, .ActiveTab{
-    padding: 0 5px;
-    margin: 0 2px;
+    padding: 0 8px;
+    
     min-width: 50px;
 
     font-weight: 700;
-    font-size: 14px;
+    font-size: 12px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     text-align:center;
@@ -30,8 +30,10 @@
 }
 
 .GridTabTitle{
-    background-color: white;
+    background-color: #f7f6f6;
     color: black;
+    border: solid 1px #dadada;
+    border-bottom: none;
 }
 
 .GridTabContentsWrap{

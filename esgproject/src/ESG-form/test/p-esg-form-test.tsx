@@ -261,10 +261,10 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         <EditorViewer contents={EditText}/>
                     </Splitter>
                     <GridTab>
-                        <GridTabItem name={"탭1"}>
+                        <GridTabItem name={"제목 테스트"}>
                             <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
                         </GridTabItem>
-                        <GridTabItem name={"탭2"}>
+                        <GridTabItem name={"에디터 화면"}>
                             <EditorViewer contents={EditText}/>
                         </GridTabItem>
                     </GridTab>
