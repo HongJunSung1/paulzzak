@@ -54,8 +54,8 @@ function App() {
     setIsLoading(true);
     // 페이지 이동 후 이벤트
     const handleComplete = () => {
+      window.dispatchEvent(new Event('resize'));
       setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
         setIsLoading(false);
       }, 500); // 원하는 로딩 시간 설정
     };

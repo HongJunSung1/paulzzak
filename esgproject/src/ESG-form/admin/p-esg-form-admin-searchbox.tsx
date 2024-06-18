@@ -1,6 +1,6 @@
 // 서치박스
 
-import React, { useRef, useState, useEffect, useLayoutEffect}  from 'react'
+import React, { useRef, useState, useEffect}  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -137,8 +137,6 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 //그리드 변동 내역 가져오기
                 grid1Changes = grid1Ref.current.getModifiedData();
 
-                console.log(grid1Changes);
-
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
@@ -239,19 +237,9 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
-    // useEffect(() => {
-    //     if (strOpenUrl === '/PEsgFormAdminSearchBox') {
-    //         // 강제 업데이트 트리거
-    //         window.dispatchEvent(new Event('resize'));
-    //         setTimeout(()=>{
-    //             window.dispatchEvent(new Event('resize'));
-    //         },100)
-    //     }
-    // }, [strOpenUrl]);
-
-    // if(strOpenUrl === '/PEsgFormAdminSearchBox')
+    if(strOpenUrl === '/PEsgFormAdminSearchBox')
     return (
-        <div style={{height:"calc(100% - 170px)", display: strOpenUrl === '/PEsgFormAdminSearchBox' ? "block" : "none"}}>
+        <>
             <Loading loading={loading}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
@@ -263,7 +251,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             <DynamicArea>
                 <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
             </DynamicArea>
-        </div>
+        </>
     )
 }
 

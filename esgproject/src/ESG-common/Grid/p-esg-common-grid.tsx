@@ -407,6 +407,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
         // 시트 변경된 데이터 가져오기
         getModifiedData : () =>{
+            // console.log(gridArChange);
             return gridArChange;
         },
 
@@ -448,7 +449,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     //     grid    : []
     // })
 
-    // // 시트 수정 데이터 감지
+    // 시트 수정 데이터 감지
     // gridRef.current?.getInstance().on('afterChange', () => {
     //     const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
     //     const changes: ModifiedRows = {
@@ -464,14 +465,14 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
     //     for(let i in gridAr) delete gridAr[i]._attributes
 
-    //     // const gridArChange : gridAr = ({
-    //     //     DataSet : gridId,
-    //     //     grid    : gridAr
-    //     // })
-    //     gridArChange.DataSet = gridId;
-    //     gridArChange.grid    = gridAr;
+    //     const gridArChange : gridAr = ({
+    //         DataSet : gridId,
+    //         grid    : gridAr
+    //     })
+    //     // gridArChange.DataSet = gridId;
+    //     // gridArChange.grid    = gridAr;
 
-    //     // onChange(gridId, gridArChange);
+    //     onChange(gridId, gridArChange);
     // })
 
     // 우클릭 조회
