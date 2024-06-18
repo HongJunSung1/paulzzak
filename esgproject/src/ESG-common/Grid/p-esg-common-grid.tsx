@@ -556,8 +556,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         contextMenu={null as any} // 우클릭 조회 없애기    
                         header={{
                             height: 30
-                            
                         }}
+                        columnOptions={{resizable:true}}
                 />
                 }
             </div>

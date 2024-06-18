@@ -1,4 +1,4 @@
-// 서치박스
+// 서치박스 등록
 
 import React, { useRef, useState, useEffect}  from 'react'
 
@@ -71,7 +71,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         {name : "SearchBoxCD"   , header: "서치박스 코드"       , width: 100 },
         {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text' , validation : [{require : true }]},
         {name : "TableName"     , header: "테이블명"            , width: 200 , editor: 'text'},
-        {name : "ColumnName"    , header: "메인 컬럼명"         , width: 100 , editor: 'text'},
+        {name : "ColumnName"    , header: "메인 컬럼명"         , width: 140 , editor: 'text'},
+        {name : "ColNameKr"     , header: "메인 컬럼 한글"      , width: 100 , editor: 'text'},
         {name : "CodeColName"   , header: "메인 컬럼 코드"      , width: 110 , editor: 'text'},
         {name : "ColumnWidth"   , header: "메인 컬럼 넓이"      , width: 100 , editor: 'text'},
         {name : "InfoCol1NameKr", header: "컬럼명1"             , width: 120 , editor: 'text'},
