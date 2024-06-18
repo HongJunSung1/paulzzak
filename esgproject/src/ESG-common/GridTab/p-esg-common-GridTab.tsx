@@ -13,10 +13,15 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
     // 탭 클릭 이벤트(클릭한 탭을 나오게 하고 아닌 탭은 display를 none으로 바꾼다.)
     const handleTabClick = (index: number) => {
         setActiveIndex(index); // 활성화된 탭 찾기
+        
         tabRefs.current.forEach((ref, idx) => {
             if (ref) {
                 ref.style.display = idx === index ? 'block' : 'none';
             }
+            if(ref.style.display === 'block'){
+                window.dispatchEvent(new Event('resize'));
+            }
+
         });
     };
 
@@ -26,6 +31,9 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
         tabRefs.current.forEach((ref, idx) => {
             if (ref) {
                 ref.style.display = idx === 0 ? 'block' : 'none';
+            }
+            if(ref.style.display === 'block'){
+                window.dispatchEvent(new Event('resize'));
             }
         });
     }, []);

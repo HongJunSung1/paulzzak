@@ -1,7 +1,7 @@
 import React,{useEffect, useRef, useState} from 'react'
 import styles from './p-esg-common-NavBar.module.css'
 import '../../global.d.ts';
-import {SHA256} from 'crypto-js';
+import SHA256 from 'crypto-js/sha256';
 
 import ImageLogo from '../../assets/image/logo.png';
 import ImageSetting from '../../assets/image/navbar-setting.png';
@@ -41,7 +41,7 @@ interface MenuInfo {
   
 const data = cookie.load('menuList') || [];
 
-const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
+const Navbar = ({strOpenUrl, isDataChanged}) => {
     const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
 
     // 로딩뷰
@@ -124,7 +124,6 @@ const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
         } else if(messageType === "moveUrl"){
             clickSearch(displayUrl);
             setMessageYesNoOpen(false);
-            setIsDataChanged(false);
         }
     }
 
@@ -190,16 +189,7 @@ const Navbar = ({strOpenUrl, isDataChanged, setIsDataChanged}) => {
     
     const handleSearch = (formUrl) => {
         displayUrl = formUrl;
-        if(isDataChanged === true && formUrl !== menuInfo?.url){
-            messageType = "moveUrl";
-            setMessageYesNoOpen(true);
-            let errMsg : any[] = [];
-            errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
-            title   = "※ 경고";
-            message = errMsg;
-        } else{
-            clickSearch(formUrl);
-        }
+        clickSearch(formUrl);
     }
 
     const clickSearch = (formUrl) => {

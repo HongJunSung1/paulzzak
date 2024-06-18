@@ -24,7 +24,7 @@ let MMenuCD = 0
 let message : any     = [];
 let title   : string  = "";
 
-const Menu = ({strOpenUrl,openTabs}) => {
+const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
     
@@ -38,18 +38,18 @@ const Menu = ({strOpenUrl,openTabs}) => {
     const [grid3Data, setGrid3Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
-    let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
-    let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
-    let [grid3Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid3Changes, setGrid3Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         if (gridId === 'DataSet1') {
-            grid1Changes = changes;
+            setGrid1Changes(changes);
         } else if (gridId === 'DataSet2') {
-            grid2Changes = changes;
+            setGrid2Changes(changes);
         } else if (gridId === 'DataSet3') {
-            grid3Changes = changes;
+            setGrid3Changes(changes);
         }
     };
 
@@ -81,11 +81,13 @@ const Menu = ({strOpenUrl,openTabs}) => {
                     // 조회 SP 호출 후 결과 값 담기
                     const result = await SP_Request("S_ESG_Menu_Sub_Query", [{LMenuCD: LMenuCD, DataSet : 'DataSet1'}]);
                     if(result.length > 0){
+                        setGrid2Data([]);
+                        setGrid3Data([]);
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setGrid2Data(result[0]);
                     } else{
-                        // 결과값이 없을 경우 처리 로직
-                        window.alert("ㄴ")
+                        setGrid2Data([]);
+                        setGrid3Data([]);
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리 로직
@@ -115,11 +117,12 @@ const Menu = ({strOpenUrl,openTabs}) => {
                     // 조회 SP 호출 후 결과 값 담기
                     const result = await SP_Request("S_ESG_Menu_Sub_Sub_Query", [{MMenuCD: MMenuCD, DataSet : 'DataSet2'}]);
                     if(result.length > 0){
+                        setGrid3Data([]);
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setGrid3Data(result[0]);
                     } else{
                         // 결과값이 없을 경우 처리 로직
-                        window.alert("ㄴ")
+                        setGrid3Data([]);
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리 로직
@@ -168,10 +171,19 @@ const Menu = ({strOpenUrl,openTabs}) => {
                 grid1Ref.current.clear();
                 grid2Ref.current.clear();
                 grid3Ref.current.clear();
+                setGrid1Data([]);
+                setGrid2Data([]);
+                setGrid3Data([]);
+
+                // 데이터 변화 감지 값 false
+                setIsDataChanged(false);
+
                 break;
 
             // 조회
             case 1: 
+                // 탭 이동 여부 초기화
+                setIsDataChanged(false);
 
                 // 로딩 뷰 보이기
                 setLoading(true);
@@ -185,7 +197,16 @@ const Menu = ({strOpenUrl,openTabs}) => {
                         setGrid1Data(result[0]);
                     } else{
                         // 결과값이 없을 경우 처리 로직
-                        window.alert("ㄴ")
+                        // 조회 결과 초기화
+                        setGrid1Data([]);
+                        setGrid2Data([]);
+                        setGrid3Data([]);
+
+                        message  = [];
+                        message.push({text: "조회 결과가 없습니다."})
+                        setMessageOpen(true);
+                        title   = "조회 오류";
+                        setLoading(false);
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리 로직
@@ -283,10 +304,24 @@ const Menu = ({strOpenUrl,openTabs}) => {
                         grid1Ref.current.setRowData(result[0]);
                         grid2Ref.current.setRowData(result[1]);
                         grid3Ref.current.setRowData(result[2]);
-                        window.alert("저장 완료")
+
+                        //시트 변경 내역 초기화
+                        setGrid1Changes({ DataSet : '', grid: []});
+                        setGrid2Changes({ DataSet : '', grid: []});
+                        setGrid3Changes({ DataSet : '', grid: []});
+
+                        // 화면 이동 가능하도록 변경
+                        setIsDataChanged(false);
+
+                        // SP 결과 값이 있을 때 로직
+                        errMsg  = [];
+                        errMsg.push({text: "저장 완료하였습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "저장 완료";
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 실패")
+                        console.log("저장 에러");
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리
@@ -298,21 +333,21 @@ const Menu = ({strOpenUrl,openTabs}) => {
 
             // 삭제
             case 3 :
-                    setLoading(true);
-                    // 체크한 데이터 담기 
-                    let checkedData : any[] = [];
-
-                    checkedData.push(grid1Ref.current.getCheckedRows());
-                    checkedData.push(grid2Ref.current.getCheckedRows());
-                    checkedData.push(grid3Ref.current.getCheckedRows());
-
-                    // 삭제할 데이터 없을시 종료
-                    if(checkedData[0].grid.length + checkedData[1].grid.length + checkedData[2].grid.length === 0){
-                        window.alert('삭제할 데이터가 없습니다.');
-                        setLoading(false);
-                        return;
-                    }
-
+                // 체크한 데이터 담기 
+                let checkedData : any[] = [];
+                
+                checkedData.push(grid1Ref.current.getCheckedRows());
+                checkedData.push(grid2Ref.current.getCheckedRows());
+                checkedData.push(grid3Ref.current.getCheckedRows());
+                
+                // 삭제할 데이터 없을시 종료
+                if(checkedData[0].grid.length + checkedData[1].grid.length + checkedData[2].grid.length === 0){
+                    window.alert('삭제할 데이터가 없습니다.');
+                    setLoading(false);
+                    return;
+                }
+                
+                setLoading(true);
                     try {
                         // SP 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, checkedData);
@@ -322,11 +357,22 @@ const Menu = ({strOpenUrl,openTabs}) => {
                             grid1Ref.current.removeRows(result[0]);
                             grid2Ref.current.removeRows(result[1]);
                             grid3Ref.current.removeRows(result[2]);
-                            window.alert("삭제 완료")
+
+                            // SP 결과 값이 있을 때 로직
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "삭제 완료하였습니다."})
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "삭제 완료";
                         } else{
                             // SP 결과 값이 없을 때 로직
-                            window.alert("저장 실패")
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "삭제할 데이터가 없습니다."})
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "삭제 실패";
                         }
+
                     } catch (error) {
                         // SP 호출 시 에러 처리
                         console.log(error);
@@ -347,25 +393,26 @@ const Menu = ({strOpenUrl,openTabs}) => {
         }
     }, [openTabs]); 
 
-    if(strOpenUrl === '/PEsgFormMenuReg')
     return (
         <>
-            <Loading loading={loading}/>
-            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
-            <Toolbar items={toolbar} clickID={toolbarEvent}/>
-            <DynamicArea>
-                <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
-                    <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
-                    </div>
-                    <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
-                        <div onContextMenu={rightClick2} style={{height:"100%"}}>
-                            <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormMenuReg' ? "block" : "none"}}>
+                <Loading loading={loading}/>
+                <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                <DynamicArea>
+                    <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
+                        <div onContextMenu={rightClick1} style={{height:"100%"}}>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
                         </div>
-                        <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} columns = {columns3} onChange={handleGridChange} addRowBtn = {true}/>
+                        <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
+                            <div onContextMenu={rightClick2} style={{height:"100%"}}>
+                                <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                            </div>
+                            <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} columns = {columns3} onChange={handleGridChange} addRowBtn = {true}/>
+                        </Splitter>
                     </Splitter>
-                </Splitter>
-            </DynamicArea>
+                </DynamicArea>
+            </div>
         </>
     )
 

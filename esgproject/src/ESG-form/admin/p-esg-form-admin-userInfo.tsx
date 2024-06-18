@@ -155,6 +155,7 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 신규
             case 0 :
                 grid1Ref.current.clear();
+                setGrid1Data([]);
                 // 데이터 변화 감지 값 false
                 setIsDataChanged(false);
                 break;
@@ -171,6 +172,9 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         DataSet     : 'DataSet1'
                     })
 
+                    // 탭 이동 여부 초기화
+                    setIsDataChanged(false);
+
                     // 로딩 뷰 보이기
                     setLoading(true);
                     try {
@@ -180,10 +184,10 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
-                            // 데이터 변화 감지 값 false
-                            setIsDataChanged(false);
                         } else{
                             // 결과값이 없을 경우 처리 로직
+                            // 조회 결과 초기화
+                            setGrid1Data([]);
                             let errMsg : any[] = [];
                             errMsg.push({text: "조회 결과가 없습니다."})
                             setMessageOpen(true);
@@ -202,10 +206,18 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             
             // 저장
             case 2 : 
-                
+
+                //시트 입력 종료
+                grid1Ref.current.setEditFinish();
+
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
+
+                //모든 컬럼이 빈값인지 체크
+                grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
+
                 combinedData.push(grid1Changes)
+
                 // 신규 등록일 경우 비밀번호 지정해서 저장
                 for(let i = 0; i< combinedData[0].grid.length; i++){
                     if(combinedData[0].grid[i].UserCD == null){
@@ -214,25 +226,53 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     }
                 }
 
+                // 저장할 데이터 없을시 종료
+                if(combinedData[0].grid.length === 0){
+                    message  = [];
+                    message.push({text: "저장할 데이터가 없습니다."})
+                    setMessageOpen(true);
+                    title   = "저장 오류";
+                    setLoading(false);
+                    return;
+                }
+
                 setLoading(true);
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
                   
-                    if(result[0].length > 0){
+                    if(result){
+                        let errMsg : any[] = [];
+                        // SP 호출 결과 값 처리
+                        for(let i in result){
+                            for(let j in result[i]){
+                                if(result[i][j].Status > 0){
+                                    errMsg.push({text: '시트 : 계정 관리 : '  + result[i][j].Message})
+                                }
+                            }
+                        }
+                        if(errMsg.length > 0){
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "저장 에러";
+                            setLoading(false);
+                            return;
+                        }   
+
                         // SP 호출 결과 값 처리
                         grid1Ref.current.setRowData(result[0]);
-                        let errMsg : any[] = [];
+
+                        //시트 변경 내역 초기화
+                        setGrid1Changes({ DataSet : '', grid: []});
+
+                        // 데이터 변화 감지 값 false
+                        setIsDataChanged(false);
+
+                        // SP 결과 값이 있을 때 로직
+                        errMsg = [];
                         errMsg.push({text: "저장 완료되었습니다."})
                         setMessageOpen(true);
                         message = errMsg;
                         title   = "저장 완료";
-
-                        // 시트 값 입력
-                        grid1Ref.current.setRowData(result[0]);                        
-                        // 데이터 변화 감지 값 false
-                        setIsDataChanged(false);
-                        //시트 변경 내역 초기화
-                        setGrid1Changes({ DataSet : '', grid: []});
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
                         let errMsg : any[] = [];
@@ -255,7 +295,7 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     let checkedData : any[] = [];
 
                     checkedData.push(grid1Ref.current.getCheckedRows());
-
+                    console.log(toolbar[clickID].spName);
                     setLoading(true);
                     try {
                         // SP 결과 값 담기
@@ -297,27 +337,28 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
-    if(strOpenUrl === '/PEsgFormAdminUserInfo')
     return (
         <>
-            <Loading loading={loading}/>
-            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
-            <Toolbar items={toolbar} clickID={toolbarEvent}/>
-            <FixedArea name={"계정 조회 조건"}>
-                <FixedWrap>
-                    <TextBox name={"이름"}   value={UserName} onChange={setCondition1}/>    
-                    <TextBox name={"아이디"} value={UserID}   onChange={setCondition2}/>   
-                    <TextBox name={"이메일"} value={EMail}    onChange={setCondition3} width={300}/>    
-                </FixedWrap>
-                <FixedWrap>
-                    <SearchBox name={"회사명"} value={CompanyName}    onChange={setConditions1} searchCode={6} width={200}/>   
-                    <SearchBox name={"부서명"} value={DepartmentName} onChange={setConditions2} searchCode={7} width={200}/> 
-                    <Button name={"계정 초기화"} clickEvent={clickEvent}></Button>
-                </FixedWrap>
-            </FixedArea>  
-            <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "계정 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
-            </DynamicArea>
+            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormAdminUserInfo' ? "block" : "none"}}>
+                <Loading loading={loading}/>
+                <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                <FixedArea name={"계정 조회 조건"}>
+                    <FixedWrap>
+                        <TextBox name={"이름"}   value={UserName} onChange={setCondition1}/>    
+                        <TextBox name={"아이디"} value={UserID}   onChange={setCondition2}/>   
+                        <TextBox name={"이메일"} value={EMail}    onChange={setCondition3} width={300}/>    
+                    </FixedWrap>
+                    <FixedWrap>
+                        <SearchBox name={"회사명"} value={CompanyName}    onChange={setConditions1} searchCode={6} width={200}/>   
+                        <SearchBox name={"부서명"} value={DepartmentName} onChange={setConditions2} searchCode={7} width={200}/> 
+                        <Button name={"계정 초기화"} clickEvent={clickEvent}></Button>
+                    </FixedWrap>
+                </FixedArea>  
+                <DynamicArea>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "계정 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                </DynamicArea>
+            </div>
         </>
     )
 }

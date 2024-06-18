@@ -45,14 +45,14 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const [grid1Data, setGrid1Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
-    let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
-        // if(gridId === 'DataSet1'){
-        //     grid1Changes = changes;
-        // }
+        if(gridId === 'DataSet1'){
+            setGrid1Changes(changes);
+        }
     };
     
     // 삭제 시 넘기는 컬럼 값
@@ -92,6 +92,8 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 신규
             case 0 :
                 setGrid1Data([]);
+                // 데이터 변화 감지 값 false
+                setIsDataChanged(false);
                 break;
 
             // 조회
@@ -113,7 +115,10 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setGrid1Data(result[0]);
                         }else{
                             // 결과값이 없을 경우 처리 로직
-                            window.alert("조회 결과가 없습니다.");
+                            message  = [];
+                            message.push({text: "조회 결과가 없습니다."})
+                            setMessageOpen(true);
+                            title   = "조회 오류";
                             setGrid1Data([]);
                         }
                     } catch (error) {
@@ -129,6 +134,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 저장
             case 2 :
                 setLoading(true); 
+
                 //시트 입력 종료
                 grid1Ref.current.setEditFinish();
 
@@ -136,17 +142,19 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 let combinedData : any[] = [];
 
                 //그리드 변동 내역 가져오기
-                grid1Changes = grid1Ref.current.getModifiedData();
+                // grid1Changes = grid1Ref.current.getModifiedData();
 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
-
                 combinedData.push(grid1Changes);
 
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length === 0){
-                    window.alert('저장할 데이터가 없습니다.');
+                    message  = [];
+                    message.push({text: "저장할 데이터가 없습니다."})
+                    setMessageOpen(true);
+                    title   = "저장 오류";
                     setLoading(false);
                     return;
                 }
@@ -171,13 +179,27 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setLoading(false);
                             return;
                         }   
+
+                        // 시트 값 입력
                         grid1Ref.current.setRowData(result[0]);
+
+                        // 시트 변경 내역 초기화
+                        setGrid1Changes({ DataSet : '', grid: []});
+
+                        // 화면 이동 가능하도록 변경
+                        setIsDataChanged(false);
+
                         const gridAllData = grid1Ref.current.getAllData();
                         setGrid1Data(gridAllData);
-                        window.alert("저장 완료")
+
+                        errMsg  = [];
+                        errMsg.push({text: "저장 완료하였습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "저장 완료";
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 에러")
+                        console.log("저장 에러");
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리
@@ -199,7 +221,11 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                     // 삭제할 데이터 없을시 종료
                     if(checkedData[0].grid.length === 0){
-                        window.alert('삭제할 데이터가 없습니다.');
+                        let errMsg : any[] = [];
+                        errMsg.push({text: "삭제할 데이터가 없습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "삭제 실패";
                         setLoading(false);
                         return;
                     }
@@ -213,10 +239,18 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             grid1Ref.current.removeRows(result[0]);
                             const gridAllData = grid1Ref.current.getAllData();
                             setGrid1Data(gridAllData);
-                            window.alert("삭제 완료")
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "삭제 완료하였습니다."})
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "삭제 완료";
                         } else{
                             // SP 결과 값이 없을 때 로직
-                            window.alert("저장 실패")
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "삭제할 데이터가 없습니다."})
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "삭제 실패";
                         }
                     } catch (error) {
                         // SP 호출 시 에러 처리
@@ -238,20 +272,22 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
-    if(strOpenUrl === '/PEsgFormAdminSearchBox')
+    // if(strOpenUrl === '/PEsgFormAdminSearchBox')
     return (
         <>
-            <Loading loading={loading}/>
-            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
-            <Toolbar items={toolbar} clickID={toolbarEvent}/>
-            <FixedArea name={"조회 조건"}>
-                <FixedWrap>
-                    <TextBox   name={"서치박스명"}   value={searchBoxName}  onChange={setCondition1} width={200}/>    
-                </FixedWrap>
-            </FixedArea>  
-            <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
-            </DynamicArea>
+            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormAdminSearchBox' ? "block" : "none"}}>
+                <Loading loading={loading}/>
+                <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                <FixedArea name={"조회 조건"}>
+                    <FixedWrap>
+                        <TextBox   name={"서치박스명"}   value={searchBoxName}  onChange={setCondition1} width={200}/>    
+                    </FixedWrap>
+                </FixedArea>  
+                <DynamicArea>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                </DynamicArea>
+            </div>
         </>
     )
 }

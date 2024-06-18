@@ -52,7 +52,7 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        // setIsDataChanged(true);
+        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             setGrid1Changes(changes);
         }else if(gridId === 'DataSet2'){
@@ -92,6 +92,8 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 0 :
                 setGrid1Data([]);
                 setGrid2Data([]);
+                // 데이터 변화 감지 값 false
+                setIsDataChanged(false);
                 break;
 
             // 조회
@@ -118,7 +120,15 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setGrid2Data(result[1]);
                         }else{
                             // 결과값이 없을 경우 처리 로직
-                            window.alert("조회 결과가 없습니다.")
+                            // 조회 결과 초기화
+                            setGrid1Data([]);
+                            setGrid2Data([]);
+
+                            message  = [];
+                            message.push({text: "조회 결과가 없습니다."})
+                            setMessageOpen(true);
+                            title   = "조회 오류";
+                            setLoading(false);
                         }
                     } catch (error) {
                         // SP 호출 시 에러 처리 로직
@@ -151,11 +161,12 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 combinedData.push(grid1Changes);
                 combinedData.push(grid2Changes);
 
-                console.log(combinedData);
-
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length === 0 && combinedData[1].grid.length === 0){
-                    window.alert('저장할 데이터가 없습니다.');
+                    message  = [];
+                    message.push({text: "저장할 데이터가 없습니다."})
+                    setMessageOpen(true);
+                    title   = "저장 오류";
                     setLoading(false);
                     return;
                 }

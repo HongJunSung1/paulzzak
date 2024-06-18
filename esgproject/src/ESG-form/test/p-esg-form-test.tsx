@@ -52,17 +52,17 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const [grid2Data, setGrid2Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
-    let [grid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
-    let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
-    let [edit1Changes] = useState<editAr>({ DataSet : '', grid: []});
+    let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [edit1Changes, setEdit1Changes] = useState<editAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
         if (gridId === 'DataSet1') {
-            grid1Changes = changes;
+            setGrid1Changes(changes);
         } else if (gridId === 'DataSet2') {
-            grid2Changes = changes;
+            setGrid2Changes(changes);
         }
     };
 
@@ -70,7 +70,7 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const handleEditorChange = (editId : string , changes : editAr) => {
         setIsDataChanged(true);
         if(editId === 'DataSet3'){
-            edit1Changes = changes;
+            setEdit1Changes(changes);
         }
     }
     
@@ -241,37 +241,11 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     }, [openTabs]);
 
     // 화면
-    if(strOpenUrl === '/environmental')
+    // if(strOpenUrl === '/environmental')
     return(
         <>
-            <Loading loading={loading}/>
-            <Toolbar items={toolbar} clickID={toolbarEvent}/>
-            <FixedArea name={"테스트 이름"}>
-                <FixedWrap>
-                    <TextBox name={"신은규"} isRequire={"true"} value={condition1} onChange={setCondition1}/>   
-                    <TextBox name={"엉덩이"} value={condition2} onChange={setCondition2}/>    
-                    <TextBox name={"쥐어 뜯을 거"} width={300} value={condition3} onChange={setCondition3}/>    
-                </FixedWrap>
-            </FixedArea>  
-            <DynamicArea>
-                <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
-                    <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
-                        <ToastEditor ref={Editor1Ref} editId="DataSet3" onChange={handleEditorChange}/>
-                        {/* <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/> */}
-                        <EditorViewer contents={EditText}/>
-                    </Splitter>
-                    <GridTab>
-                        <GridTabItem name={"제목 테스트"}>
-                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
-                        </GridTabItem>
-                        <GridTabItem name={"에디터 화면"}>
-                            <EditorViewer contents={EditText}/>
-                        </GridTabItem>
-                    </GridTab>
-                </Splitter>
-            </DynamicArea>
-
-            <Dialogue DlgName = "다이얼로그 테스트" isOpenDlg={isDlgOpen} setIsOpen={setIsDlgOpen} Dlgwidth={1200} Dlgheight={800}>
+            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/environmental' ? "block" : "none"}}>
+                <Loading loading={loading}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"테스트 이름"}>
                     <FixedWrap>
@@ -283,15 +257,45 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                         <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
-                            <div>
-                                테스트 1
-                            </div>
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                            <ToastEditor ref={Editor1Ref} editId="DataSet3" onChange={handleEditorChange}/>
+                            {/* <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/> */}
+                            <EditorViewer contents={EditText}/>
                         </Splitter>
-                        <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                        <GridTab>
+                            <GridTabItem name={"제목 테스트"}>
+                                <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                            </GridTabItem>
+                            <GridTabItem name={"에디터 화면"}>
+                                {/* <EditorViewer contents={EditText}/> */}
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+
+                            </GridTabItem>
+                        </GridTab>
                     </Splitter>
                 </DynamicArea>
-            </Dialogue>
+
+                <Dialogue DlgName = "다이얼로그 테스트" isOpenDlg={isDlgOpen} setIsOpen={setIsDlgOpen} Dlgwidth={1200} Dlgheight={800}>
+                    <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                    <FixedArea name={"테스트 이름"}>
+                        <FixedWrap>
+                            <TextBox name={"신은규"} isRequire={"true"} value={condition1} onChange={setCondition1}/>   
+                            <TextBox name={"엉덩이"} value={condition2} onChange={setCondition2}/>    
+                            <TextBox name={"쥐어 뜯을 거"} width={300} value={condition3} onChange={setCondition3}/>    
+                        </FixedWrap>
+                    </FixedArea>  
+                    <DynamicArea>
+                        <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
+                            <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
+                                <div>
+                                    테스트 1
+                                </div>
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                            </Splitter>
+                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                        </Splitter>
+                    </DynamicArea>
+                </Dialogue>
+            </div>
         </>
     )
 

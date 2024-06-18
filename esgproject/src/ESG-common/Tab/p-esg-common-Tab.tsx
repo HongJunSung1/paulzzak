@@ -90,18 +90,7 @@
         };
 
         const handleTabClickMsg = (tab: MenuInfo) => {
-
-            if(isDataChanged === true && tab.id !== activeTab){
-                tabMove = "handleTabClick";
-                let errMsg : any[] = [];
-                errMsg.push({text: "화면 이동 시 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
-                title   = "※ 경고";
-                message = errMsg;
-                setMenuChange({id: tab.id, menuName: tab.menuName, url: tab.url});
-                setMessageYesNoOpen(true);
-            } else{
-                handleTabClick(tab);
-            }
+            handleTabClick(tab);
         }
 
         const messageYes = () => {

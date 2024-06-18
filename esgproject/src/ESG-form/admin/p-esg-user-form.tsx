@@ -56,13 +56,13 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const [grid2Data, setGrid2Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
-    let [grid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
         if(gridId === 'DataSet2'){
-            grid2Changes = changes;
+            setGrid2Changes(changes);
         }
     };
     
@@ -97,6 +97,8 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 0 :
                 grid1Ref.current.clear();
                 grid2Ref.current.clear();
+                // 데이터 변화 감지 값 false
+                setIsDataChanged(false);                
                 break;
 
             // 조회
@@ -106,6 +108,9 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         UserCD : searchUserCD,
                         DataSet  : 'DataSet1'
                     })
+
+                    // 탭 이동 여부 초기화
+                    setIsDataChanged(false);                    
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -119,7 +124,14 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             grid2Ref.current.clear();
                         }else{
                             // 결과값이 없을 경우 처리 로직
-                            window.alert("조회 결과가 없습니다.")
+                            // 조회 결과 초기화
+                            setGrid1Data([]);
+                            setGrid2Data([]);
+                            message  = [];
+                            message.push({text: "조회 결과가 없습니다."})
+                            setMessageOpen(true);
+                            title   = "조회 오류";
+                            setLoading(false);
                         }
                     } catch (error) {
                         // SP 호출 시 에러 처리 로직
@@ -151,7 +163,10 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length === 0){
-                    window.alert('저장할 데이터가 없습니다.');
+                    message  = [];
+                    message.push({text: "저장할 데이터가 없습니다."})
+                    setMessageOpen(true);
+                    title   = "저장 오류";
                     setLoading(false);
                     return;
                 }
@@ -176,11 +191,24 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setLoading(false);
                             return;
                         }   
+                        // 시트 값 입력
                         grid2Ref.current.setRowData(result[0]);
-                        window.alert("저장 완료")
+
+                        //시트 변경 내역 초기화
+                        setGrid2Changes({ DataSet : '', grid: []});  
+
+                        // 화면 이동 가능하도록 변경
+                        setIsDataChanged(false);
+
+                        // SP 결과 값이 있을 때 로직
+                        errMsg  = [];
+                        errMsg.push({text: "저장 완료하였습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "저장 완료";
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 에러")
+                        console.log("저장 에러");
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리
@@ -246,26 +274,28 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
-    if(strOpenUrl === '/PEsgUserForm')
+    // if(strOpenUrl === '/PEsgUserForm')
     return (
         <>
-            <Loading loading={loading}/>
-            <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
-            <Toolbar items={toolbar} clickID={toolbarEvent}/>
-            <FixedArea name={"조회 조건"}>
-                <FixedWrap>
-                    <SearchBox name={"사용자명"} value={UserName}  onChange={setConditions1} width={200} searchCode={2}/>
-                    <TextBox   name={"화면명"}   value={FormName}  onChange={setCondition2} width={200}/>    
-                </FixedWrap>
-            </FixedArea>  
-            <DynamicArea>
-                <Splitter SplitType={"horizontal"} FirstSize={40} SecondSize={60}>
-                    <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {false}/>
-                    </div>
-                    <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
-                </Splitter>
-            </DynamicArea>
+            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgUserForm' ? "block" : "none"}}>
+                <Loading loading={loading}/>
+                <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                <FixedArea name={"조회 조건"}>
+                    <FixedWrap>
+                        <SearchBox name={"사용자명"} value={UserName}  onChange={setConditions1} width={200} searchCode={2}/>
+                        <TextBox   name={"화면명"}   value={FormName}  onChange={setCondition2} width={200}/>    
+                    </FixedWrap>
+                </FixedArea>  
+                <DynamicArea>
+                    <Splitter SplitType={"horizontal"} FirstSize={40} SecondSize={60}>
+                        <div onContextMenu={rightClick1} style={{height:"100%"}}>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {false}/>
+                        </div>
+                        <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                    </Splitter>
+                </DynamicArea>
+            </div>
         </>
     )
 }

@@ -9,7 +9,7 @@ import cookie from 'react-cookies';
 import SideBarImage from '../../assets/image/menu-bar.png';
 
 
-const SideBar = ({ items, strOpenUrl, isDataChanged, setIsDataChanged }) => {
+const SideBar = ({ items, strOpenUrl, isDataChanged}) => {
 
   const [menuData, setMenuData] = useState<any>([]);
   const [TotMenuData, setTotMenuData] = useState<any>([]);
@@ -73,7 +73,7 @@ const SideBar = ({ items, strOpenUrl, isDataChanged, setIsDataChanged }) => {
           <img className={styles.sideBarImage} src={SideBarImage} alt={"sidebarImage"}></img>
         </div>
         {tree.map((subItem, index) =>
-          <SideBarItem item={subItem} key={index} strOpenUrl={handleUrlChange} isDataChanged={isDataChanged} setIsDataChanged={setIsDataChanged}/>
+          <SideBarItem item={subItem} key={index} strOpenUrl={handleUrlChange} isDataChanged={isDataChanged}/>
         )}
       </SbContainer>
     )

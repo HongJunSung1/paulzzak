@@ -75,9 +75,9 @@ function App() {
         {!isLoginPage && 
           <>
             <MenuInfoProvider>
-            <Navbar strOpenUrl= {setStrOpenUrl} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>
+            <Navbar strOpenUrl= {setStrOpenUrl} isDataChanged = {isDataChanged}/>
             <Container>
-                <SideBar strOpenUrl={setStrOpenUrl} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>  
+                <SideBar strOpenUrl={setStrOpenUrl} isDataChanged = {isDataChanged}/>  
                 <DataContainer>
                 <Loading loading={isLoading}/>
                   <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>
