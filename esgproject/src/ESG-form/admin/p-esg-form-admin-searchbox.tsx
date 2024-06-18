@@ -1,6 +1,6 @@
 // 서치박스
 
-import React, { useRef, useState, useEffect}  from 'react'
+import React, { useRef, useState, useEffect, useLayoutEffect}  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -50,9 +50,9 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
-        if(gridId === 'DataSet1'){
-            grid1Changes = changes;
-        }
+        // if(gridId === 'DataSet1'){
+        //     grid1Changes = changes;
+        // }
     };
     
     // 삭제 시 넘기는 컬럼 값
@@ -133,6 +133,11 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
+
+                //그리드 변동 내역 가져오기
+                grid1Changes = grid1Ref.current.getModifiedData();
+
+                console.log(grid1Changes);
 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
@@ -227,16 +232,32 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
-    useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgFormAdminSearchBox') === undefined) {
-            setCondition1('');
-            setGrid1Data([]);
-        }
-    }, [openTabs]);
+    // useEffect(() => {
+    //     if (openTabs.find(item => item.url === '/PEsgFormAdminSearchBox') === undefined) {
+    //         setCondition1('');
+    //         setGrid1Data([]);
+    //     }
+    // }, [openTabs]);
 
-    if(strOpenUrl === '/PEsgFormAdminSearchBox')
+    // useEffect(() => {
+    //     if (strOpenUrl === '/PEsgFormAdminSearchBox') {
+    //         // 강제 업데이트 트리거
+    //         window.dispatchEvent(new Event('resize'));
+    //         setTimeout(()=>{
+    //             window.dispatchEvent(new Event('resize'));
+    //         },100)
+    //     }
+    // }, [strOpenUrl]);
+
+    useLayoutEffect(() => {
+        if (strOpenUrl === '/PEsgFormAdminSearchBox') {
+            window.dispatchEvent(new Event('resize'));
+        }
+    }, [strOpenUrl]);
+
+    // if(strOpenUrl === '/PEsgFormAdminSearchBox')
     return (
-        <>
+        <div style={{height:"calc(100% - 170px)", display: strOpenUrl === '/PEsgFormAdminSearchBox' ? "block" : "none"}}>
             <Loading loading={loading}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent}/>
@@ -247,8 +268,9 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             </FixedArea>  
             <DynamicArea>
                 <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                {/* <div>테스트</div> */}
             </DynamicArea>
-        </>
+        </div>
     )
 }
 
