@@ -259,9 +259,9 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     
 
-    if(strOpenUrl === '/PEsgCompanyReg')
+    // if(strOpenUrl === '/PEsgCompanyReg')
     return (
-        <>
+        <div style={{height:"calc(100% - 170px)", display: strOpenUrl === '/PEsgCompanyReg' ? "block" : "none"}}>
             <Loading loading={loading}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent} />
@@ -277,7 +277,7 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     <Grid ref={grid2Ref} gridId="DataSet2" title = "사업부문 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
                 </Splitter>
             </DynamicArea>
-        </>
+        </div>
     )
 }
 

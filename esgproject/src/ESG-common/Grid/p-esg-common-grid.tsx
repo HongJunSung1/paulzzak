@@ -408,6 +408,11 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         // 시트 변경된 데이터 가져오기
         getModifiedData : () =>{
             return gridArChange;
+        },
+
+        // 그리드 사이즈 초기화
+        refreshLayout : () => {
+            gridRef.current?.getInstance().refreshLayout();
         }
 
 

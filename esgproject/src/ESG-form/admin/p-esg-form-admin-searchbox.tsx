@@ -232,12 +232,12 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
-    // useEffect(() => {
-    //     if (openTabs.find(item => item.url === '/PEsgFormAdminSearchBox') === undefined) {
-    //         setCondition1('');
-    //         setGrid1Data([]);
-    //     }
-    // }, [openTabs]);
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgFormAdminSearchBox') === undefined) {
+            setCondition1('');
+            setGrid1Data([]);
+        }
+    }, [openTabs]);
 
     // useEffect(() => {
     //     if (strOpenUrl === '/PEsgFormAdminSearchBox') {
@@ -248,12 +248,6 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     //         },100)
     //     }
     // }, [strOpenUrl]);
-
-    useLayoutEffect(() => {
-        if (strOpenUrl === '/PEsgFormAdminSearchBox') {
-            window.dispatchEvent(new Event('resize'));
-        }
-    }, [strOpenUrl]);
 
     // if(strOpenUrl === '/PEsgFormAdminSearchBox')
     return (
@@ -268,7 +262,6 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             </FixedArea>  
             <DynamicArea>
                 <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
-                {/* <div>테스트</div> */}
             </DynamicArea>
         </div>
     )

@@ -55,12 +55,15 @@ function App() {
     // 페이지 이동 후 이벤트
     const handleComplete = () => {
       setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
         setIsLoading(false);
       }, 500); // 원하는 로딩 시간 설정
     };
 
     handleComplete();
   }, [strOpenUrl]);
+
+
 
   return (      
     <div className="App" style={{backgroundColor:"#faf9f8"}}>
