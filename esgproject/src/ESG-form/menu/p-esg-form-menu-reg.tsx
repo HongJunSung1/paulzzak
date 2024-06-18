@@ -393,12 +393,13 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]); 
 
+
     return (
         <>
             <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormMenuReg' ? "block" : "none"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
-                <Toolbar items={toolbar} clickID={toolbarEvent}/>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/> 
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
                         <div onContextMenu={rightClick1} style={{height:"100%"}}>

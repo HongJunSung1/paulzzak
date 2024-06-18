@@ -240,6 +240,8 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
+
+
     // 화면
     // if(strOpenUrl === '/environmental')
     return(
@@ -268,12 +270,10 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             <GridTabItem name={"에디터 화면"}>
                                 {/* <EditorViewer contents={EditText}/> */}
                                 <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
-
                             </GridTabItem>
                         </GridTab>
                     </Splitter>
                 </DynamicArea>
-
                 <Dialogue DlgName = "다이얼로그 테스트" isOpenDlg={isDlgOpen} setIsOpen={setIsDlgOpen} Dlgwidth={1200} Dlgheight={800}>
                     <Toolbar items={toolbar} clickID={toolbarEvent}/>
                     <FixedArea name={"테스트 이름"}>

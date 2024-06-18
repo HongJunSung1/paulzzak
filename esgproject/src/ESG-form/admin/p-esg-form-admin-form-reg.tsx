@@ -114,7 +114,6 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             message  = [];
                             message.push({text: "조회 결과가 없습니다."})
                             setMessageOpen(true);
-                            message = message;
                             title   = "조회 오류";
                             setLoading(false);
                         }
@@ -147,7 +146,6 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     message  = [];
                     message.push({text: "저장할 데이터가 없습니다."})
                     setMessageOpen(true);
-                    message = message;
                     title   = "저장 오류";
                     setLoading(false);
                     return;
@@ -185,7 +183,6 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         message  = [];
                         message.push({text: "삭제할 데이터가 없습니다."})
                         setMessageOpen(true);
-                        message = message;
                         title   = "삭제 오류";
                         setLoading(false);
                         return;

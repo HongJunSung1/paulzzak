@@ -337,6 +337,7 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
+
     return (
         <>
             <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormAdminUserInfo' ? "block" : "none"}}>
