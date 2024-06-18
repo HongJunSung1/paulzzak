@@ -52,12 +52,12 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
-        // if(gridId === 'DataSet1'){
-        //     setGrid1Changes(changes);
-        // }else if(gridId === 'DataSet2'){
-        //     setGrid2Changes(changes);
-        // }
+        // setIsDataChanged(true);
+        if(gridId === 'DataSet1'){
+            setGrid1Changes(changes);
+        }else if(gridId === 'DataSet2'){
+            setGrid2Changes(changes);
+        }
     };
     
     // 삭제 시 넘기는 컬럼 값
@@ -141,8 +141,8 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 let combinedData : any[] = [];
 
                 // 시트 변동 내역 가져오기
-                grid1Changes = grid1Ref.current.getModifiedData();
-                grid2Changes = grid2Ref.current.getModifiedData();
+                // grid1Changes = grid1Ref.current.getModifiedData();
+                // grid2Changes = grid2Ref.current.getModifiedData();
 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
@@ -236,6 +236,8 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         message = errMsg;
                         title   = "삭제 실패";
                     }
+                    grid1Ref.current.removeRows(result[0]);
+                    grid2Ref.current.removeRows(result[1]);
                 } catch (error) {
                     // SP 호출 시 에러 처리
                     console.log(error);
@@ -259,9 +261,9 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     
 
-    if(strOpenUrl === '/PEsgCompanyReg')
+    // if(strOpenUrl === '/PEsgCompanyReg')
     return (
-        <>
+        <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgCompanyReg' ? "block" : "none"}}>
             <Loading loading={loading}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent} />
@@ -277,7 +279,7 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     <Grid ref={grid2Ref} gridId="DataSet2" title = "사업부문 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
                 </Splitter>
             </DynamicArea>
-        </>
+        </div>
     )
 }
 

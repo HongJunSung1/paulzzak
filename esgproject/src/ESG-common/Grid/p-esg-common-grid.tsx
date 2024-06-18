@@ -54,6 +54,42 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         return () => clearTimeout(timer);
     }, []);
 
+    // 탭 이동시 입력 시작 막기
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                let rowKey  : any = gridRef.current?.getInstance().getFocusedCell().rowKey;
+                const colName : any = gridRef.current?.getInstance().getFocusedCell().columnName;
+                const rowCnt  : any = gridRef.current?.getInstance().getRowCount();
+
+                const showCol = columns.filter(item => item.hidden !== true)
+                const currentColumnIndex : any = showCol.findIndex(column => column.name === colName);;
+                const nextColumnIndex    : any = (currentColumnIndex + 1) % showCol.length;
+
+                if(rowKey !== null){
+                    if(nextColumnIndex === 0){
+                        rowKey += 1
+                        if(rowKey >= rowCnt){
+                            rowKey = 0
+                        }
+                    }
+                    gridRef.current?.getInstance().focusAt(rowKey, nextColumnIndex);
+                }
+            }
+        };
+    
+        document.addEventListener('keydown', handleKeyDown, true);
+    
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown, true);
+        };
+    }, [columns]);
+
+
+
     // 행 추가 화면 나타내기
     function clickRowAppend(){
         setCollapsed(prevValue => !prevValue);
@@ -277,36 +313,36 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     });
 
 
-    const gridArChange : gridAr = ({
-        DataSet : '',
-        grid    : []
-    })
+    // const gridArChange : gridAr = ({
+    //     DataSet : '',
+    //     grid    : []
+    // })
 
-    // 시트 수정 데이터 감지
-    gridRef.current?.getInstance().on('afterChange', () => {
-        const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
-        const changes: ModifiedRows = {
-          createdRows: modifiedRows?.createdRows ?? [],
-          updatedRows: modifiedRows?.updatedRows ?? [],
-          deletedRows: modifiedRows?.deletedRows ?? [],
-        };
+    // // 시트 수정 데이터 감지
+    // gridRef.current?.getInstance().on('afterChange', () => {
+    //     const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
+    //     const changes: ModifiedRows = {
+    //       createdRows: modifiedRows?.createdRows ?? [],
+    //       updatedRows: modifiedRows?.updatedRows ?? [],
+    //       deletedRows: modifiedRows?.deletedRows ?? [],
+    //     };
 
-        let gridAr : any[] = [];
+    //     let gridAr : any[] = [];
 
-        gridAr.push(...changes.createdRows);
-        gridAr.push(...changes.updatedRows);
+    //     gridAr.push(...changes.createdRows);
+    //     gridAr.push(...changes.updatedRows);
 
-        for(let i in gridAr) delete gridAr[i]._attributes
+    //     for(let i in gridAr) delete gridAr[i]._attributes
 
-        // const gridArChange : gridAr = ({
-        //     DataSet : gridId,
-        //     grid    : gridAr
-        // })
-        gridArChange.DataSet = gridId;
-        gridArChange.grid    = gridAr;
+    //     // const gridArChange : gridAr = ({
+    //     //     DataSet : gridId,
+    //     //     grid    : gridAr
+    //     // })
+    //     gridArChange.DataSet = gridId;
+    //     gridArChange.grid    = gridAr;
 
-        // onChange(gridId, gridArChange);
-    })
+    //     // onChange(gridId, gridArChange);
+    // })
 
 
     // 공통 함수
@@ -406,10 +442,10 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         },
 
         // 시트 변경된 데이터 가져오기
-        getModifiedData : () =>{
-            // console.log(gridArChange);
-            return gridArChange;
-        },
+        // getModifiedData : () =>{
+        //     // console.log(gridArChange);
+        //     return gridArChange;
+        // },
 
         // 그리드 사이즈 초기화
         refreshLayout : () => {
@@ -450,30 +486,30 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     // })
 
     // 시트 수정 데이터 감지
-    // gridRef.current?.getInstance().on('afterChange', () => {
-    //     const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
-    //     const changes: ModifiedRows = {
-    //       createdRows: modifiedRows?.createdRows ?? [],
-    //       updatedRows: modifiedRows?.updatedRows ?? [],
-    //       deletedRows: modifiedRows?.deletedRows ?? [],
-    //     };
+    gridRef.current?.getInstance().on('afterChange', () => {
+        const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
+        const changes: ModifiedRows = {
+          createdRows: modifiedRows?.createdRows ?? [],
+          updatedRows: modifiedRows?.updatedRows ?? [],
+          deletedRows: modifiedRows?.deletedRows ?? [],
+        };
 
-    //     let gridAr : any[] = [];
+        let gridAr : any[] = [];
 
-    //     gridAr.push(...changes.createdRows);
-    //     gridAr.push(...changes.updatedRows);
+        gridAr.push(...changes.createdRows);
+        gridAr.push(...changes.updatedRows);
 
-    //     for(let i in gridAr) delete gridAr[i]._attributes
+        for(let i in gridAr) delete gridAr[i]._attributes
 
-    //     const gridArChange : gridAr = ({
-    //         DataSet : gridId,
-    //         grid    : gridAr
-    //     })
-    //     // gridArChange.DataSet = gridId;
-    //     // gridArChange.grid    = gridAr;
+        const gridArChange : gridAr = ({
+            DataSet : gridId,
+            grid    : gridAr
+        })
+        // gridArChange.DataSet = gridId;
+        // gridArChange.grid    = gridAr;
 
-    //     onChange(gridId, gridArChange);
-    // })
+        onChange(gridId, gridArChange);
+    })
 
     // 우클릭 조회
     gridRef.current?.getInstance().on('mousedown', (ev :any) => {
