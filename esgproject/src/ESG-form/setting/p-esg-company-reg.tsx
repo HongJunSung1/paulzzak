@@ -53,11 +53,11 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
-        if(gridId === 'DataSet1'){
-            setGrid1Changes(changes);
-        }else if(gridId === 'DataSet2'){
-            setGrid2Changes(changes);
-        }
+        // if(gridId === 'DataSet1'){
+        //     setGrid1Changes(changes);
+        // }else if(gridId === 'DataSet2'){
+        //     setGrid2Changes(changes);
+        // }
     };
     
     // 삭제 시 넘기는 컬럼 값
@@ -116,7 +116,6 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
                             setGrid2Data(result[1]);
-                            grid2Ref.current.clear();
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             window.alert("조회 결과가 없습니다.")
@@ -140,6 +139,10 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
+
+                // 시트 변동 내역 가져오기
+                grid1Changes = grid1Ref.current.getModifiedData();
+                grid2Changes = grid2Ref.current.getModifiedData();
 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
@@ -188,10 +191,15 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         // 화면 이동 가능하도록 변경
                         setIsDataChanged(false);
 
-                        window.alert("저장 완료")
+                        // SP 결과 값이 있을 때 로직
+                        errMsg  = [];
+                        errMsg.push({text: "저장 완료하였습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "저장 완료";
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 에러")
+                        console.log("저장 에러");
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리
@@ -199,7 +207,42 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 }
                 setLoading(false);
 
-                break;
+            break;
+
+            // 삭제
+            case 3 :
+                // 체크한 데이터 담기 
+                let checkedData : any[] = [];
+
+                checkedData.push(grid1Ref.current.getCheckedRows());
+                checkedData.push(grid2Ref.current.getCheckedRows());
+
+                setLoading(true);
+                try {
+                    // SP 결과 값 담기
+                    const result = await SP_Request(toolbar[clickID].spName, checkedData);
+                    if(result.length > 0){
+                        // SP 결과 값이 있을 때 로직
+                        let errMsg : any[] = [];
+                        errMsg.push({text: "삭제 완료하였습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "삭제 완료";
+                    } else{
+                        // SP 결과 값이 없을 때 로직
+                        let errMsg : any[] = [];
+                        errMsg.push({text: "삭제할 데이터가 없습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "삭제 실패";
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리
+                    console.log(error);
+                }
+                setLoading(false);
+
+            break;
         }
       
     }
@@ -214,12 +257,14 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
+    
+
     if(strOpenUrl === '/PEsgCompanyReg')
     return (
         <>
             <Loading loading={loading}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
-            <Toolbar items={toolbar} clickID={toolbarEvent}/>
+            <Toolbar items={toolbar} clickID={toolbarEvent} />
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
                     <TextBox   name={"회사명"}       value={CompanyName}  onChange={setCondition1} width={200}/>   

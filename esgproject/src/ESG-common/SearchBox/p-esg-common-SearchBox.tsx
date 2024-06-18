@@ -106,6 +106,7 @@ const SearchBox = (settings : any) => {
                         className={styles.Input}
                         type="text"
                         value={text}
+                        tabIndex={-1}
                         style={{ width: settings.width ? settings.width : '100%' }}
                         onChange={changeText}
                         onKeyUp={onkeyUp}
