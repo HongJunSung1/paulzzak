@@ -49,9 +49,9 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const [UserName          , setCondition1]  = useState('')
     const [UserID            , setCondition2]  = useState('')
     const [EMail             , setCondition3]  = useState('')
-    const [CompanyName       , setCondition4]  = useState('')
+    const [CompanyName   ]                     = useState('')
     const [searchCompanyCD   , setConditions1] = useState(0)
-    const [DepartmentName    , setCondition5]  = useState('')
+    const [DepartmentName]                     = useState('')
     const [searchDepartmentCD, setConditions2] = useState(0)
 
     // 조회 시 받는 데이터 값
@@ -140,9 +140,9 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         {name : "EmpNo"          , header: "사번"    , width: 100, editor: 'text'},
         {name : "TelNo"          , header: "전화번호", width: 160, editor: 'text'},
         {name : "Email"          , header: "이메일"  , width: 200, editor: 'text'},
+        {name : "CompanyCD"      , header: "회사코드", width: 100, hidden: true},
         {name : "CompanyName"    , header: "회사명"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 6, CodeColName :"CompanyCD"}}},
-        {name : "CompanyCD"      , header: "회사코드", width: 100, hidden: false},
-        {name : "DepartmentCD"   , header: "부서코드", width: 100, hidden: false},
+        {name : "DepartmentCD"   , header: "부서코드", width: 100, hidden: true},
         {name : "DepartmentName" , header: "부서명"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 7, CodeColName :"DepartmentCD"}}},
         {name : "FirstCheck"     , header: "1차승인" , width: 100, renderer: { type: 'checkbox' }},
         {name : "SecondCheck"    , header: "2차승인" , width: 100, renderer: { type: 'checkbox' }},
