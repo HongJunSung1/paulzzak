@@ -99,3 +99,9 @@
     background-size: 75%;
     background-color: #e4e8ef;
 }
+
+
+tr {
+    font-size: 12px;
+    white-space: pre-wrap !important;
+}
