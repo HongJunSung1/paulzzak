@@ -5,8 +5,6 @@ import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 import {SideBarSub} from './p-esg-common-sideBarItem.styles.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
 
-let message    : any     = [];
-let title      : string  = "";
 
 interface MenuInfo {
   id: string;
@@ -33,9 +31,6 @@ const SideBarItem = ({ item, strOpenUrl, isDataChanged}) => {
   const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
   const [activeMenu, setActiveMenu] = useState<string | null>(initialMenuInfo.id);
 
-  // YesNo메세지박스
-  const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
-  const messageYesNoClose = () => {setMessageYesNoOpen(false)};  
 
   function toggleCollapse() {
     setCollapsed(prevValue => !prevValue);
