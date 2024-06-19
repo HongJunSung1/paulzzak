@@ -4,7 +4,7 @@ import TopMenu from './p-esg-common-TopMenu.tsx';
 
 import {SbContainer} from './p-esg-common-sideBarItem.styles.tsx';
 import styles from './p-esg-common-SideBarItem.module.css';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 
 import SideBarImage from '../../assets/image/menu-bar.png';
 
@@ -19,7 +19,12 @@ const SideBar = ({ items, strOpenUrl, isDataChanged}) => {
 
   useEffect(() => {
     // 컴포넌트가 처음 마운트될 때 쿠키에서 데이터 로드
-    const data = cookie.load('menuList') || [];
+    // const data = cookie.load('menuList') || [];
+    const sessionStr = sessionStorage.getItem('menuList');
+    let data : any;
+    if(sessionStr){
+      data = JSON.parse(sessionStr);
+    }
     setTotMenuData(data);
   }, []);
 

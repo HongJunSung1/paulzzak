@@ -19,7 +19,7 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import { useNavigate  } from 'react-router-dom';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 
 // 메시지 박스
 let message : any     = [];
@@ -39,7 +39,13 @@ interface MenuInfo {
     menuInfo: MenuInfo | null;
   }
   
-const data = cookie.load('menuList') || [];
+// const data = cookie.load('menuList') || [];
+const sessionStr = sessionStorage.getItem('menuList');
+let data : any;
+if(sessionStr) {
+    data = JSON.parse(sessionStr);
+}
+
 
 const Navbar = ({strOpenUrl, isDataChanged}) => {
     const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
@@ -69,15 +75,24 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const passwordArrow = passwordCollapsed ? <HiChevronUp /> : <HiChevronDown />;
     
     // ID 정보
-    let UserID = cookie.load('userInfo').UserID;
-    let UserEmail = cookie.load('userInfo').Email;
+    const sessionStr = sessionStorage.getItem('userInfo');
+    let userInfo : any;
+    if(sessionStr){
+        userInfo = JSON.parse(sessionStr);
+    }
+
+    // let UserID = cookie.load('userInfo').UserID;
+    // let UserEmail = cookie.load('userInfo').Email;
+    let UserID = userInfo.UserID;
+    let UserEmail = userInfo.Email
+    let TelNo = userInfo.TelNo;
     let UserTelNo = "";
 
     // 전화번호(정규식 사용)
-    if(cookie.load('userInfo').TelNo.length === 11){
-        UserTelNo = cookie.load('userInfo').TelNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
-    } else if(cookie.load('userInfo').TelNo.length === 13){
-        UserTelNo = cookie.load('userInfo').TelNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    if(TelNo.length === 11){
+        UserTelNo = TelNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
+    } else if(TelNo.length === 13){
+        UserTelNo = TelNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
     }
 
     // 유저정보 변경 시 사용할 input
@@ -92,7 +107,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
 
     useEffect(() => {
-        const isLogin = cookie.load('userInfo') !== undefined;
+        const isLogin = userInfo !== undefined;
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }

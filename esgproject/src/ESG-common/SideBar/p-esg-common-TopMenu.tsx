@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import styled from 'styled-components';
 
 const TopMenu = ({isOpen, selectMenu}) => {
 
-    const LMenuList = cookie.load('LmenuList');
+    // const LMenuList = cookie.load('LmenuList');
+    const sessionStr = sessionStorage.getItem('LmenuList');
+    let LMenuList : any;
+    if(sessionStr){
+        LMenuList = JSON.parse(sessionStr);
+    }
+
 
     const [isOpen2,setIsOpen2] = useState(isOpen);
 

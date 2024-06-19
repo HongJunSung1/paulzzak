@@ -2,7 +2,7 @@
     import '../../global.d.ts';
     import styles from './p-esg-common-Tab.module.css';
     import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
-    import cookie from 'react-cookies';
+    // import cookie from 'react-cookies';
 
     import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 
@@ -18,21 +18,33 @@
         menuInfo: MenuInfo | null;
     }
 
-    // 초기 페이지 데이터 설정(현재 main)
-    const initialMenuInfo: MenuInfo = {
-        id: '4',
-        menuName: 'main',
-        url: '/main'
-    };
+    // // 초기 페이지 데이터 설정(현재 main)
+    // const initialMenuInfo: MenuInfo = {
+    //     id: '4',
+    //     menuName: 'main',
+    //     url: '/main'
+    // };
 
-    
-    const data = cookie.load('menuList') || [];
+    const sessionStr = sessionStorage.getItem('menuList')
+    let data : any;
+    if(sessionStr){
+        data = JSON.parse(sessionStr);
+    }
+
+    // const data = cookie.load('menuList') || [];
     // const currentDisplay : string = tabData;
 
     let message    : any     = [];
     let title      : string  = "";
 
     let tabMove    : string  = "";
+
+    const sessionStr2 = sessionStorage.getItem('menuList');
+    let initialMenuInfo : MenuInfo;
+    if(sessionStr2){
+        initialMenuInfo = JSON.parse(sessionStr2).find(item => item.url === 'main')
+    }
+
 
     const Tab = ({strOpenUrl ,openTabs, isDataChanged, setIsDataChanged}) => {
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
