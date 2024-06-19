@@ -384,6 +384,24 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
     
     }
 
+    // 시트 클릭시 나머지 시트 포커스 해제
+    const gridClick = (ref : any) => {
+        const grid1Inst = grid1Ref.current.getInstance();
+        const grid2Inst = grid2Ref.current.getInstance();
+        const grid3Inst = grid3Ref.current.getInstance();
+
+        if(ref === grid1Inst){
+            grid2Ref.current.blur();
+            grid3Ref.current.blur();
+        }else if (ref === grid2Inst){
+            grid1Ref.current.blur();
+            grid3Ref.current.blur();
+        }else if (ref === grid3Inst){
+            grid1Ref.current.blur();
+            grid2Ref.current.blur();
+        }
+    }
+
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgFormMenuReg') === undefined) {
@@ -403,13 +421,13 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
                         <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </div>
                         <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                             <div onContextMenu={rightClick2} style={{height:"100%"}}>
-                                <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                                <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </div>
-                            <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} columns = {columns3} onChange={handleGridChange} addRowBtn = {true}/>
+                            <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} columns = {columns3} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </Splitter>
                     </Splitter>
                 </DynamicArea>

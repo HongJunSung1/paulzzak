@@ -260,6 +260,19 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       
     }
 
+    // 시트 클릭시 나머지 시트 포커스 해제
+    const gridClick = (ref : any) => {
+
+        const grid1Inst = grid1Ref.current.getInstance();
+        const grid2Inst = grid2Ref.current.getInstance();
+
+        if(ref === grid1Inst){
+            grid2Ref.current.blur();
+        }else if (ref === grid2Inst){
+            grid1Ref.current.blur();
+        }
+    }
+
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgCompanyReg') === undefined) {
@@ -270,9 +283,6 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }
     }, [openTabs]);
 
-    
-
-    // if(strOpenUrl === '/PEsgCompanyReg')
     return (
         <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgCompanyReg' ? "block" : "none"}}>
             <Loading loading={loading}/>
@@ -286,8 +296,8 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             </FixedArea>  
             <DynamicArea>
                 <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "회사 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
-                    <Grid ref={grid2Ref} gridId="DataSet2" title = "사업부문 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "회사 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid2Ref} gridId="DataSet2" title = "사업부문 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                 </Splitter>
             </DynamicArea>
         </div>

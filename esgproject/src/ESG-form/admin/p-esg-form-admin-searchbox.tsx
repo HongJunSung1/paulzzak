@@ -263,6 +263,11 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       
     }
 
+    // 시트 클릭시 나머지 시트 포커스 해제
+    const gridClick = (ref : any) => {
+
+    }
+
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
@@ -285,7 +290,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                 </DynamicArea>
             </div>
         </>

@@ -264,6 +264,19 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         }, 100)
     };
 
+    // 시트 클릭시 나머지 시트 포커스 해제
+    const gridClick = (ref : any) => {
+
+        const grid1Inst = grid1Ref.current.getInstance();
+        const grid2Inst = grid2Ref.current.getInstance();
+
+        if(ref === grid1Inst){
+            grid2Ref.current.blur();
+        }else if (ref === grid2Inst){
+            grid1Ref.current.blur();
+        }
+    }
+
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgUserForm') === undefined) {
@@ -290,9 +303,9 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={40} SecondSize={60}>
                         <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {false}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
                         </div>
-                        <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                        <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                     </Splitter>
                 </DynamicArea>
             </div>

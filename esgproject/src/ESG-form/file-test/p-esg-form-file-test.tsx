@@ -331,6 +331,11 @@ const FileTest = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       
     }
 
+    // 시트 클릭시 나머지 시트 포커스 해제
+    const gridClick = (ref : any) => {
+
+    }
+
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgFormFileTest') === undefined) {
@@ -348,7 +353,7 @@ const FileTest = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         <DynamicArea>
                 <Splitter SplitType={"horizontal"} FirstSize={60} SecondSize={40}>
                     <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                        <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                     </div>
                     <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD}/>
                 </Splitter>
