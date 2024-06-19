@@ -16,11 +16,14 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
         
         tabRefs.current.forEach((ref, idx) => {
             if (ref) {
-                ref.style.display = idx === index ? 'block' : 'none';
+                ref.style.display = idx === index ? 'flex' : 'none';
+                ref.style.flexDirection = 'column';
             }
-            if(ref.style.display === 'block'){
-                window.dispatchEvent(new Event('resize'));
-            }
+            setTimeout(()=> {
+                if(ref.style.display === 'flex'){
+                    window.dispatchEvent(new Event('resize'));
+                }
+            }, 100)
 
         });
     };
@@ -30,10 +33,11 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
         // 처음엔 무조건 첫 번째 탭이 활성화 탭으로 나타나게 함
         tabRefs.current.forEach((ref, idx) => {
             if (ref) {
-                ref.style.display = idx === 0 ? 'block' : 'none';
-            }
-            if(ref.style.display === 'block'){
-                window.dispatchEvent(new Event('resize'));
+                ref.style.display = idx === 0 ? 'flex' : 'none';
+                ref.style.flexDirection = 'column';
+                if(ref.style.display === 'flex'){
+                    window.dispatchEvent(new Event('resize'));
+                }
             }
         });
     }, []);
@@ -56,7 +60,7 @@ const GridTab: React.FC<GridTabProps> = ({ children }) => {
                     {React.Children.map(children, (child, index) =>
                         React.cloneElement(child as React.ReactElement, {
                             ref: (el: HTMLDivElement) => (tabRefs.current[index] = el),
-                            style: { display: index === 0 ? 'block' : 'none' }
+                            style: { display: index === 0 ? 'flex' : 'none' }
                         })
                     )}
                 </div>
