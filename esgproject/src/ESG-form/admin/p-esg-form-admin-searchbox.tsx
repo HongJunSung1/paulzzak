@@ -280,7 +280,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // if(strOpenUrl === '/PEsgFormAdminSearchBox')
     return (
         <>
-            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormAdminSearchBox' ? "block" : "none"}}>
+        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgFormAdminSearchBox' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>

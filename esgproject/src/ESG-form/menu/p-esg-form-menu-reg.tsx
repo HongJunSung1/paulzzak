@@ -414,7 +414,7 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
 
     return (
         <>
-            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/PEsgFormMenuReg' ? "block" : "none"}}>
+            <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgFormMenuReg' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/> 

@@ -9,6 +9,7 @@ export const Container = styled.div`
 export const DataContainer = styled.div`
     width: 100vw;
     height: calc(100vh - 68px);
+    width : calc(100vw - 276px);
     display: flex;
     margin: 10px 10px;
     flex-direction: column;
