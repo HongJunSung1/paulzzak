@@ -1,3 +1,8 @@
+.EditorWrap{
+  height: 100%;
+  width: 100%;
+}
+
 .ViewerWrap{
     height: 100%; 
     padding: 18px 25px;

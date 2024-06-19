@@ -229,6 +229,20 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       
     }
 
+    // 시트 클릭시 나머지 시트 포커스 해제
+    const gridClick = (ref : any) => {
+
+        const grid1Inst = grid1Ref.current.getInstance();
+        const grid2Inst = grid2Ref.current.getInstance();
+
+        if(ref === grid1Inst){
+            grid2Ref.current.blur();
+        }else if (ref === grid2Inst){
+            grid1Ref.current.blur();
+        }
+    }
+
+
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
         if (openTabs.find(item => item.url === '/environmental') === undefined) {
@@ -243,10 +257,9 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
 
     // 화면
-    // if(strOpenUrl === '/environmental')
     return(
         <>
-            <div style={{height:"calc(100% - 170px)", display : strOpenUrl === '/environmental' ? "block" : "none"}}>
+            <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/environmental' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"테스트 이름"}>
@@ -265,11 +278,10 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         </Splitter>
                         <GridTab>
                             <GridTabItem name={"제목 테스트"}>
-                                <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                                <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </GridTabItem>
                             <GridTabItem name={"에디터 화면"}>
-                                {/* <EditorViewer contents={EditText}/> */}
-                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </GridTabItem>
                         </GridTab>
                     </Splitter>
@@ -289,9 +301,9 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                                 <div>
                                     테스트 1
                                 </div>
-                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/>
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </Splitter>
-                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true}/>
+                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </Splitter>
                     </DynamicArea>
                 </Dialogue>

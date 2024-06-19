@@ -46,6 +46,11 @@ const ToastEditor = forwardRef(({editId, onChange}: CustomEditProps, ref) => {
         plugins={[colorSyntax]}
         onChange={changeHandle}
         placeholder= '텍스트를 입력해주세요.'
+        toolbarItems={[    ['bold', 'italic', 'strike'],
+          ['hr'],
+          ['image', 'link'],
+          ['ul', 'ol'],
+        ]}
         />
     </div>
   );
