@@ -157,12 +157,13 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
     ];
 
     const columns3 = [
+        {name : "SMenuCD"  , header: "소분류코드"   , width:  70, hidden: true},
         {name : "MMenuCD"  , header: "중분류코드"   , width:  70, hidden: true},
         {name : "FormCD"   , header: "소분류코드"   , width:  70, hidden: true},
-        {name : "FormName" , header: "소메뉴 이름"  , width: 250, editor: 'text'},
-        {name : "FormOrder", header: "순서"        , width:  40, editor: 'text'},
+        {name : "FormName" , header: "소메뉴 이름"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 1, CodeColName :"FormCD"}}},
+        {name : "FormOrder", header: "순서"         , width:  40, editor: 'text'},
     ];
-
+    
     // 툴바 이벤트
     const toolbarEvent = async (clickID) =>{
         switch(clickID){
