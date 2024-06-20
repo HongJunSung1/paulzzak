@@ -85,7 +85,8 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         {name : "Franchise"            , header: "14. 프랜차이즈"                            , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "Investment"           , header: "15. 투자"                                  , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "OtherUpEmission"      , header: "16. 기타 업스트림\n배출량"                 , width: 120, editor: 'text', renderer : {type: 'number'}},
-        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, editor: 'text', renderer : {type: 'number'}}
+        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, editor: 'text', renderer : {type: 'number'}},
+        {name : "Total"                , header: "소계"                                      , width: 120, renderer : {type: 'sum', options:{sumAr : ["PurItemService", "CapitalGoods", "ExceptFuelEnergy", "UpLogistics", "WorkWasted", "BusinessTrip", "Commute", "UpLeaseProperties", "DownLogistics", "SoldItemManufacturing", "SoldItemUse", "SoldItemWasted", "DownLeaseProperties", "Franchise", "Investment", "OtherUpEmission", "OtherDownEmission"]}}},
     ];
 
 
