@@ -154,7 +154,7 @@
 
 
         const closeTab = (tab) => {
-            if (tab.id !== "4"){
+            if (tab.id !== "5"){
                 let order : number = 0;
                 let newTabData : any[] = [];
                 let originTabData : any[] = [];

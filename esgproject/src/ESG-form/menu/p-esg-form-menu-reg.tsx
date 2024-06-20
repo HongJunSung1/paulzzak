@@ -159,7 +159,7 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
     const columns3 = [
         {name : "MMenuCD"  , header: "중분류코드"   , width:  70, hidden: true},
         {name : "FormCD"   , header: "소분류코드"   , width:  70, hidden: true},
-        {name : "SMenuName", header: "소메뉴 이름"  , width: 250, editor: 'text'},
+        {name : "FormName" , header: "소메뉴 이름"  , width: 250, editor: 'text'},
         {name : "FormOrder", header: "순서"        , width:  40, editor: 'text'},
     ];
 

@@ -286,6 +286,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
           this.clickFunc(this.rowKey, this.columnName);
         }
       }
+
+
     // 설정에 따른 커스텀 렌더러로 변경
     columns.forEach(column => {
         if (column.renderer && column.renderer.type === 'checkbox') {
@@ -562,9 +564,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         heightResizable={false} //테이블의 사이즈를 자동으로 조절
                         rowHeaders={[{type:"rowNum", align: 'center'}, {type:'checkbox'}]}
                         contextMenu={null as any} // 우클릭 조회 없애기    
-                        header={{
-                            height: 30
-                        }}
+                        header={{height: 40}}
                         columnOptions={{resizable:true}}
                 />
                 }

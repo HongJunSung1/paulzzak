@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect}  from 'react'
 import '../../global.d.ts';
-import {SHA256} from 'crypto-js';
+import SHA256 from 'crypto-js/sha256';
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -302,11 +302,14 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         const result = await SP_Request(toolbar[clickID].spName, checkedData);
                         if(result.length > 0){
                             // SP 결과 값이 있을 때 로직
+                            grid1Ref.current.removeRows(result[0]);
+
                             let errMsg : any[] = [];
                             errMsg.push({text: "삭제 완료하였습니다."})
                             setMessageOpen(true);
                             message = errMsg;
                             title   = "삭제 완료";
+
                         } else{
                             // SP 결과 값이 없을 때 로직
                             let errMsg : any[] = [];

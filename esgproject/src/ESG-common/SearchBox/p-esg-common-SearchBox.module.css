@@ -87,6 +87,7 @@
 th{
     position: sticky;
     top: 0px;
+    white-space: pre-wrap !important;
 }
 
 .SearchImg {
