@@ -112,7 +112,7 @@
                 // navigate(initialMenuInfo.url);
                 strOpenUrl(initialMenuInfo.url);
             }
-        }, [menuInfo, strOpenUrl]);
+        }, [menuInfo, strOpenUrl, initialMenuInfo]);
         
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
