@@ -25,11 +25,11 @@
     //     url: '/main'
     // };
 
-    const sessionStr = sessionStorage.getItem('menuList')
-    let data : any;
-    if(sessionStr){
-        data = JSON.parse(sessionStr);
-    }
+    // const sessionStr = sessionStorage.getItem('menuList')
+    // let data : any;
+    // if(sessionStr){
+    //     data = JSON.parse(sessionStr);
+    // }
 
     // const data = cookie.load('menuList') || [];
     // const currentDisplay : string = tabData;
@@ -39,20 +39,41 @@
 
     let tabMove    : string  = "";
 
-    const sessionStr2 = sessionStorage.getItem('menuList');
-    let initialMenuInfo : MenuInfo;
-    if(sessionStr2){
-        initialMenuInfo = JSON.parse(sessionStr2).find(item => item.url === 'main')
-    }
+    // const sessionStr2 = sessionStorage.getItem('menuList');
+    // let initialMenuInfo : MenuInfo;
+    // if(sessionStr2){
+    //     initialMenuInfo = JSON.parse(sessionStr2).find(item => item.url === 'main')
+    // }
 
 
     const Tab = ({strOpenUrl ,openTabs, isDataChanged, setIsDataChanged}) => {
+
+        const [data,setData] = useState<any>(null);
+        const [initialMenuInfo,setInitialMenuInfo] = useState<MenuInfo | null>(null);
+
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
         const { setMenuInfo } = useMenuInfo();
-        const [activeTab, setActiveTab] = useState<string | null>(initialMenuInfo.id);
-        const [tabData, setTabData] = useState<MenuInfo[]>([initialMenuInfo]);
+        const [activeTab, setActiveTab] = useState<string | null>(null);
+        const [tabData, setTabData] = useState<MenuInfo[]>([]);
         const [menuChange, setMenuChange] = useState<any>([]);
         // const navigate = useNavigate();
+
+        useEffect(() => {
+            const sessionStr = sessionStorage.getItem('menuList');
+            if (sessionStr) {
+                const parsedData = JSON.parse(sessionStr);
+                setData(parsedData);
+                const mainMenu = parsedData.find((item: MenuInfo) => item.url === 'main');
+                setInitialMenuInfo(mainMenu || null);
+            }
+        }, []);
+
+        useEffect(()=>{
+            if(initialMenuInfo){
+                setActiveTab(initialMenuInfo.id);
+                setTabData([initialMenuInfo])
+            }
+        },[initialMenuInfo,data])
         
         // YesNo메세지박스
         const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
@@ -86,7 +107,7 @@
             }
 
             // 새로고침 시 맨 처음 화면으로 이동시키기
-            if(menuInfo === null){
+            if(menuInfo === null && initialMenuInfo){
                 setActiveTab(initialMenuInfo.id);
                 // navigate(initialMenuInfo.url);
                 strOpenUrl(initialMenuInfo.url);
@@ -96,6 +117,7 @@
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
+            console.log(data);
             const filterData = data.filter((item => item.url === tab.url.replace('/', '')));
             setMenuInfo(filterData[0]);
             strOpenUrl(tab.url);

@@ -19,7 +19,7 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import { useNavigate  } from 'react-router-dom';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
-// import cookie from 'react-cookies';
+import cookie from 'react-cookies';
 
 // 메시지 박스
 let message : any     = [];
@@ -75,24 +75,21 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const passwordArrow = passwordCollapsed ? <HiChevronUp /> : <HiChevronDown />;
     
     // ID 정보
-    const sessionStr = sessionStorage.getItem('userInfo');
-    let userInfo : any;
-    if(sessionStr){
-        userInfo = JSON.parse(sessionStr);
-    }
+    // const sessionStr = sessionStorage.getItem('userInfo');
+    // let userInfo : any;
+    // if(sessionStr){
+    //     userInfo = JSON.parse(sessionStr);
+    // }
 
-    // let UserID = cookie.load('userInfo').UserID;
-    // let UserEmail = cookie.load('userInfo').Email;
-    let UserID = userInfo.UserID;
-    let UserEmail = userInfo.Email
-    let TelNo = userInfo.TelNo;
+    let UserID = cookie.load('userInfo')?.UserID;
+    let UserEmail = cookie.load('userInfo')?.Email;
     let UserTelNo = "";
 
     // 전화번호(정규식 사용)
-    if(TelNo.length === 11){
-        UserTelNo = TelNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
-    } else if(TelNo.length === 13){
-        UserTelNo = TelNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    if(cookie.load('userInfo')?.length === 11){
+        UserTelNo = cookie.load('userInfo')?.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
+    } else if(cookie.load('userInfo')?.length === 13){
+        UserTelNo = cookie.load('userInfo')?.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
     }
 
     // 유저정보 변경 시 사용할 input
@@ -107,7 +104,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
 
     useEffect(() => {
-        const isLogin = userInfo !== undefined;
+        const isLogin = cookie.load('userInfo') !== null;
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }

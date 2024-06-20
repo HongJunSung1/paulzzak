@@ -3,6 +3,7 @@ import '../../global.d.ts';
 import styles from './p-esg-common-grid.module.css';
 
 import 'tui-grid/dist/tui-grid.css';
+import 'tui-date-picker/dist/tui-date-picker.css';
 import Grid from '@toast-ui/react-grid';
 import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
 import { createRoot } from 'react-dom/client';
@@ -454,7 +455,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     }
 
     // 시트 수정 데이터 감지
-    gridRef.current?.getInstance().on('afterChange', () => {
+    gridRef.current?.getInstance().on('afterChange', (ev) => {
         const modifiedRows = gridRef.current?.getInstance().getModifiedRows();
         const changes: ModifiedRows = {
           createdRows: modifiedRows?.createdRows ?? [],

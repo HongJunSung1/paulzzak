@@ -19,8 +19,8 @@ type gridAr = {
 };
 
 type condition = {  
-    searchBoxName   : string;
-    DataSet         : string;
+    Scope1Year    : string;
+    DataSet       : string;
 }  
 
 
@@ -39,7 +39,7 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const messageClose = () => {setMessageOpen(false)};
 
     // 조회조건 값
-    const [searchBoxName , setCondition1] = useState('');
+    const [Scope1Year , setCondition1] = useState('');
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -68,22 +68,11 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "SearchBoxCD"   , header: "서치박스 코드"       , width: 100 },
-        {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text' , validation : [{require : true }]},
-        {name : "TableName"     , header: "테이블명"            , width: 200 , editor: 'text'},
-        {name : "ColumnName"    , header: "메인 컬럼명"         , width: 140 , editor: 'text'},
-        {name : "ColNameKr"     , header: "메인 컬럼 한글"      , width: 100 , editor: 'text'},
-        {name : "CodeColName"   , header: "메인 컬럼 코드"      , width: 110 , editor: 'text'},
-        {name : "ColumnWidth"   , header: "메인 컬럼 넓이"      , width: 100 , editor: 'text'},
-        {name : "InfoCol1NameKr", header: "컬럼명1"             , width: 120 , editor: 'text'},
-        {name : "InfoCol1"      , header: "컬럼코드1"           , width: 120 , editor: 'text'},
-        {name : "InfoCol1Width" , header: "컬럼 1 넓이"         , width: 120 , editor: 'text'},
-        {name : "InfoCol2NameKr", header: "컬럼명 2"            , width: 120 , editor: 'text'},
-        {name : "InfoCol2"      , header: "컬럼코드 2"          , width: 120 , editor: 'text'},
-        {name : "InfoCol2Width" , header: "컬럼 2 넓이"         , width: 120 , editor: 'text'},
-        {name : "InfoCol3NameKr", header: "컬럼명 3"            , width: 120 , editor: 'text'},
-        {name : "InfoCol3"      , header: "컬럼코드 3"          , width: 120 , editor: 'text'},
-        {name : "InfoCol3Width" , header: "컬럼 3 넓이"         , width: 120 , editor: 'text'},
+        {name : "Scope1CD"   , header: "Scope 1 코드"        , width: 100 , hidden : true},
+        {name : "Scope1Year" , header: "연도"                , width: 100 , editor: {type :'datePicker', options:{format: 'yyyy',type:'year'}}},
+        {name : "Scope1"     , header: "Scope 1"             , width: 150 , editor: 'text'},
+        {name : "Scope2"     , header: "Scope 2"             , width: 150 , editor: 'text'},
+        {name : "Scope1to2"  , header: "Scope 1 + Scope 2"   , width: 200 },
     ];
 
     // 툴바 이벤트
@@ -100,7 +89,7 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        searchBoxName : searchBoxName,
+                        Scope1Year : Scope1Year,
                         DataSet  : 'DataSet1'
                     })
 
@@ -265,7 +254,7 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
-
+        ;
     }
 
 
@@ -285,11 +274,11 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <TextBox   name={"서치박스명"}   value={searchBoxName}  onChange={setCondition1} width={200}/>    
+                        <TextBox   name={"연도"}   value={Scope1Year}  onChange={setCondition1} width={200}/>    
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "Scope 1 - 2" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                 </DynamicArea>
             </div>
         </>

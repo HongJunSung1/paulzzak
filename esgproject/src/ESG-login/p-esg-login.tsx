@@ -11,7 +11,7 @@ import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 
 import { SP_Request } from '../hooks/sp-request.tsx';
 import SHA256 from 'crypto-js/sha256';
-// import cookie from 'react-cookies';
+import cookie from 'react-cookies';
 import emailjs from '@emailjs/browser';
 
 // 메시지 박스
@@ -21,11 +21,11 @@ let title   : string  = "";
 const LoginPage = () => {
 
     // 쿠키 삭제
-    // cookie.remove('userInfo', {path : '/'});
+    cookie.remove('userInfo', {path : '/'});
     // cookie.remove('menuList', {path : '/'});
     // cookie.remove('LmenuList', {path : '/'});
 
-    sessionStorage.removeItem('userInfo');
+    // sessionStorage.removeItem('userInfo');
     sessionStorage.removeItem('menuList');
     sessionStorage.removeItem('LmenuList');
 
@@ -125,15 +125,15 @@ const LoginPage = () => {
         }
         if(result !== null && result[0][0].Status === "0"){
             // 로그인 정보 쿠키 저장
-            // const expires = new Date();
-            // expires.setTime(expires.getTime() + (24 * 60 * 60 * 1000));   // 로그인 유지 시간 24시간
-            // cookie.save('userInfo', result[0][0], {
-            //     path : '/',
-            //     expires,
-            //     secure : true
-            //     // httpOnly : true
-            // });
-            sessionStorage.setItem('userInfo',JSON.stringify(result[0][0]));
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (24 * 60 * 60 * 1000));   // 로그인 유지 시간 24시간
+            cookie.save('userInfo', result[0][0], {
+                path : '/',
+                expires,
+                secure : true
+                // httpOnly : true
+            });
+            // sessionStorage.setItem('userInfo',JSON.stringify(result[0][0]));
             // console.log(cookie.load('userid'));
 
             try{
@@ -151,8 +151,10 @@ const LoginPage = () => {
                     //     expires,
                     //     secure : true   
                     // });
-                    setLoading(false);// 로딩창 종료
-                    navigate("/main");// 메인 화면 이동
+                    setTimeout(()=>{
+                        setLoading(false);// 로딩창 종료
+                        navigate("/main");// 메인 화면 이동
+                    },500)
                 }else{
                     setLoading(false);// 로딩창 종료
                     navigate("/");// 로그인 이동
