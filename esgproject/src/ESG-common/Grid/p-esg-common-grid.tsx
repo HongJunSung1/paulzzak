@@ -310,9 +310,15 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
       
         formatValue(value) {
-          if (value === null || value === undefined || isNaN(Number(value))) {
-            return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, '');
+          let commaValue = '0';
+          if(value){
+              commaValue = value.replace(/,/gi, '');
           }
+          if (commaValue === null || commaValue === undefined || isNaN(Number(commaValue))) {
+            return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
+          }
+          
+          this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
           return (Number(value).toLocaleString('ko-KR'));
         }
       }

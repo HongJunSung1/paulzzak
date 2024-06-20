@@ -60,9 +60,9 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:""}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Env_Scope3_Query"}
       , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Env_Scope3_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:""}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_Scope3_Cut"}
      ]
 
      // 시트 컬럼 값
@@ -155,7 +155,7 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 combinedData.push(grid1Changes);
 
                 // 저장할 데이터 없을시 종료
-                if(combinedData[0].grid.length === 0 && combinedData[1].grid.length === 0){
+                if(combinedData[0].grid.length === 0 ){
                     message  = [];
                     message.push({text: "저장할 데이터가 없습니다."})
                     setMessageOpen(true);
@@ -166,8 +166,8 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
-                    
-                    if(result){
+
+                    if(result.length > 0){
                         let errMsg : any[] = [];
                         // SP 호출 결과 값 처리
                         for(let i in result){
@@ -228,6 +228,8 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     const result = await SP_Request(toolbar[clickID].spName, checkedData);
                     if(result.length > 0){
                         // SP 결과 값이 있을 때 로직
+                        grid1Ref.current.removeRows(result[0]);
+
                         let errMsg : any[] = [];
                         errMsg.push({text: "삭제 완료하였습니다."})
                         setMessageOpen(true);
@@ -241,7 +243,6 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         message = errMsg;
                         title   = "삭제 실패";
                     }
-                    grid1Ref.current.removeRows(result[0]);
                 } catch (error) {
                     // SP 호출 시 에러 처리
                     console.log(error);
