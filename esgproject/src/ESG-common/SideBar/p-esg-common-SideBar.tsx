@@ -14,7 +14,7 @@ const SideBar = ({ items, strOpenUrl, isDataChanged}) => {
   const [menuData, setMenuData] = useState<any>([]);
   const [TotMenuData, setTotMenuData] = useState<any>([]);
   const [isOpen,setIsOpen] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState("Environment");
+  const [selectedMenu, setSelectedMenu] = useState(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,6 +26,7 @@ const SideBar = ({ items, strOpenUrl, isDataChanged}) => {
       data = JSON.parse(sessionStr);
     }
     setTotMenuData(data);
+    setSelectedMenu(data.find(item => item.id === '1').LMenuName)
   }, []);
 
    useEffect(() => {

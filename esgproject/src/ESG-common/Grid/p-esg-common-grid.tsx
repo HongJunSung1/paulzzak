@@ -287,6 +287,36 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
       }
 
+    // 4. 숫자 유효성 검사
+    class NumberCheck {
+        el: HTMLElement;
+        grid: any;
+        rowKey: any;
+        columnName: any;
+        columnInfo: any;
+
+        constructor(props) {
+          const el = document.createElement('span');
+          this.grid = props.grid;
+          this.rowKey = props.rowKey;
+          this.columnInfo = props.columnInfo;
+          const formattedValue = this.formatValue(props.value?.replace(',', ''));
+          el.innerText = formattedValue;
+          this.el = el;
+        }
+      
+        getElement() {
+          return this.el;
+        }
+      
+        formatValue(value) {
+          if (value === null || value === undefined || isNaN(Number(value))) {
+            return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, '');
+          }
+          return (Number(value).toLocaleString('ko-KR'));
+        }
+      }
+    
 
     // 설정에 따른 커스텀 렌더러로 변경
     columns.forEach(column => {
@@ -313,6 +343,10 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                     clickFunc : column.renderer.options.clickFunc || function(){}
                 }
             };
+        } else if(column.renderer && column.renderer.type === 'number'){
+            column.renderer = {
+                type: NumberCheck
+            }
         }
     });
 

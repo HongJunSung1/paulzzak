@@ -29,8 +29,8 @@
 
 .Message{
     margin: 20px 15px;
-    height: 55%;
-    justify-content : space-around;
+    height: 65%;
+    justify-content : center;
     align-items: center;
     display: flex;
     flex-direction: column;

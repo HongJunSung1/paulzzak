@@ -61,7 +61,7 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
       , {id: 1, title:"조회", image:"query", spName:""}
-      , {id: 2, title:"저장", image:"save" , spName:""}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Env_Scope3_Save"}
       , {id: 3, title:"삭제", image:"cut"  , spName:""}
      ]
 
@@ -69,23 +69,23 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
      const columns1 = [
         {name : "Scope3CD"             , header: "내부코드"                                  , width:  70, hidden: true},
         {name : "Year"                 , header: "연도"                                      , width: 100, editor: 'text'},
-        {name : "PurItemService"       , header: "1.  구매한 제품\n및 서비스"                , width: 100, editor: 'text'},
-        {name : "CapitalGoods"         , header: "2.  자본재"                                , width: 100, editor: 'text'},
-        {name : "ExceptFuelEnergy"     , header: "3.  Scope 1,2에 포함되지\n않는 연료&에너지", width: 150, editor: 'text'},
-        {name : "UpLogistics"          , header: "4.  업스트림\n운송 및 물류"                , width: 100, editor: 'text'},
-        {name : "WorkWasted"           , header: "5.  작업 중\n발생한 폐기물"                , width: 100, editor: 'text'},
-        {name : "BusinessTrip"         , header: "6.  출장"                                  , width: 100, editor: 'text'},
-        {name : "Commute"              , header: "7.  직원 출퇴근"                           , width: 100, editor: 'text'},
-        {name : "UpLeaseProperties"    , header: "8.  업스트림\n임대(차) 자산"               , width: 100, editor: 'text'},
-        {name : "DownLogistics"        , header: "9.  다운스트림\n운송 및 물류"              , width: 100, editor: 'text'},
-        {name : "SoldItemManufacturing", header: "10. 판매된\n제품의 가공"                   , width: 100, editor: 'text'},
-        {name : "SoldItemUse"          , header: "11. 판매된\n제품의 사용"                   , width: 100, editor: 'text'},
-        {name : "SoldItemWasted"       , header: "12. 판매된\n제품의 폐기"                   , width: 100, editor: 'text'},
-        {name : "DownLeaseProperties"  , header: "13. 다운스트림\n임대(차) 자산"             , width: 100, editor: 'text'},
-        {name : "Franchise"            , header: "14. 프랜차이즈"                            , width: 100, editor: 'text'},
-        {name : "Investment"           , header: "15. 투자"                                  , width: 100, editor: 'text'},
-        {name : "OtherUpEmission"      , header: "16. 기타 업스트림\n배출량"                 , width: 120, editor: 'text'},
-        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, editor: 'text'},
+        {name : "PurItemService"       , header: "1.  구매한 제품\n및 서비스"                , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "CapitalGoods"         , header: "2.  자본재"                                , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "ExceptFuelEnergy"     , header: "3.  Scope 1,2에 포함되지\n않는 연료&에너지", width: 150, editor: 'text', renderer : {type: 'number'}},
+        {name : "UpLogistics"          , header: "4.  업스트림\n운송 및 물류"                , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "WorkWasted"           , header: "5.  작업 중\n발생한 폐기물"                , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "BusinessTrip"         , header: "6.  출장"                                  , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "Commute"              , header: "7.  직원 출퇴근"                           , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "UpLeaseProperties"    , header: "8.  업스트림\n임대(차) 자산"               , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "DownLogistics"        , header: "9.  다운스트림\n운송 및 물류"              , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "SoldItemManufacturing", header: "10. 판매된\n제품의 가공"                   , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "SoldItemUse"          , header: "11. 판매된\n제품의 사용"                   , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "SoldItemWasted"       , header: "12. 판매된\n제품의 폐기"                   , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "DownLeaseProperties"  , header: "13. 다운스트림\n임대(차) 자산"             , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "Franchise"            , header: "14. 프랜차이즈"                            , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "Investment"           , header: "15. 투자"                                  , width: 100, editor: 'text', renderer : {type: 'number'}},
+        {name : "OtherUpEmission"      , header: "16. 기타 업스트림\n배출량"                 , width: 120, editor: 'text', renderer : {type: 'number'}},
+        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, editor: 'text', renderer : {type: 'number'}}
     ];
 
 
@@ -184,6 +184,10 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setLoading(false);
                             return;
                         }   
+
+                        // SP 호출 결과 값 처리
+                        grid1Ref.current.setRowData(result[0]);
+
                         // 시트 값 입력
                         grid1Ref.current.setRowData(result[0]);
                         
