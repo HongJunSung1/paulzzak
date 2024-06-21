@@ -343,6 +343,9 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         constructor(props) {
             const el = document.createElement('div');
             this.el = el;
+            el.style.width = "100%";
+            el.style.height = "100%";
+
             this.grid = props.grid;
             this.rowKey = props.rowKey;
             this.columnInfo = props.columnInfo;
@@ -370,6 +373,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         onChange(newValue) {
             this.grid.dispatch('setValue', this.rowKey, this.columnName, newValue);
         }
+
 
     }
     
@@ -718,6 +722,7 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         contextMenu={null as any} // 우클릭 조회 없애기    
                         header={{height: 40}}
                         columnOptions={{resizable:true}}
+
                 />
                 }
             </div>

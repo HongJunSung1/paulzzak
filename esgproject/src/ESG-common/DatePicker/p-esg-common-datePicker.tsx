@@ -1,4 +1,4 @@
-import React,{useState, useRef} from 'react';
+import React,{useState, useRef, forwardRef} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './p-esg-common-datePicker.module.css';
@@ -26,6 +26,8 @@ const DatePick = (settings : any) => {
         }
     };
 
+
+
     const RemoveDate = () => {
         
         setSelectedDate(null);
@@ -35,17 +37,14 @@ const DatePick = (settings : any) => {
         }
     };
 
-    const clickDate = () => {
-        if (datePickerRef.current) {
-            datePickerRef.current.setFocus(); // DatePicker에 포커스 설정하여 캘린더 열기
-        }
-    }
+
+    
 
     if(settings.type === 'year'){
         return (
             <div className={styles.Wrap}>
                 {settings.name && <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : ''}</div>}
-                <div className={styles.DatePickerWrap} onClick={clickDate}>
+                <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
                         className={styles.DatePicker}
@@ -57,6 +56,9 @@ const DatePick = (settings : any) => {
                         maxDate={new Date('2999-12-31')} // maxDate 이후 날짜 선택 불가
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
+                        popperPlacement='bottom-start'
+                        yearItemNumber={8}
+                        calendarClassName={styles.calenderWrapper}
                     />
                     <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
                 </div>
@@ -66,7 +68,7 @@ const DatePick = (settings : any) => {
         return (
             <div className={styles.Wrap}>
                 <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : 'Default'}</div>
-                <div className={styles.DatePickerWrap} onClick={clickDate}>
+                <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
                         className={styles.DatePicker}
@@ -78,6 +80,8 @@ const DatePick = (settings : any) => {
                         maxDate={new Date('2999-12')} // maxDate 이후 날짜 선택 불가
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
+                        calendarClassName="calendarClass"
+                        popperPlacement='bottom-start'
                     />
                     <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
                 </div>
@@ -87,7 +91,7 @@ const DatePick = (settings : any) => {
         return (
             <div className={styles.Wrap}>
                 <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : 'Default'}</div>
-                <div className={styles.DatePickerWrap} onClick={clickDate}>
+                <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
                         className={styles.DatePicker}
@@ -99,6 +103,8 @@ const DatePick = (settings : any) => {
                         maxDate={new Date('2999-12-31')} // maxDate 이후 날짜 선택 불가
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
+                        calendarClassName="calendarClass"
+                        popperPlacement='bottom-start'                        
                     />
                     <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
                 </div>
