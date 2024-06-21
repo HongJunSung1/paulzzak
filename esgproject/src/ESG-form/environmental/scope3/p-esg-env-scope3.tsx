@@ -143,18 +143,17 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             
             // 저장
             case 2 :
-                setLoading(true); 
                 //시트 입력 종료
                 grid1Ref.current.setEditFinish();
-
+                
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
-
+                
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
                 combinedData.push(grid1Changes);
-
+                
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length === 0 ){
                     message  = [];
@@ -164,7 +163,8 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     setLoading(false);
                     return;
                 }
-
+                
+                setLoading(true); 
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
 
