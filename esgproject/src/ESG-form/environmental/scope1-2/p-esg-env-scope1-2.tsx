@@ -7,10 +7,10 @@ import Toolbar from "../../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
 import FixedArea from "../../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
 import FixedWrap from "../../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
-import TextBox from "../../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import DatePick from '../../../ESG-common/DatePicker/p-esg-common-datePicker.tsx'
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 
 type gridAr = {
@@ -69,7 +69,7 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
      // 시트 컬럼 값
      const columns1 = [
         {name : "Scope1CD"   , header: "Scope 1 코드"        , width: 100 , hidden : true},
-        {name : "Scope1Year" , header: "연도"                , width: 100 , editor: {type :'datePicker', options:{format: 'yyyy',type:'year'}}},
+        {name : "Scope1Year" , header: "연도"                , width: 100 , renderer: {type: "datebox", options:{dateType:"year"}}},
         {name : "Scope1"     , header: "Scope 1"             , width: 150 , editor: 'text'},
         {name : "Scope2"     , header: "Scope 2"             , width: 150 , editor: 'text'},
         {name : "Scope1to2"  , header: "Scope 1 + Scope 2"   , width: 200 },
@@ -274,7 +274,7 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <TextBox   name={"연도"}   value={Scope1Year}  onChange={setCondition1} width={200}/>    
+                        <DatePick name={"연도"}   value={Scope1Year}  onChange={setCondition1} width={200} type={"year"}/>    
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
