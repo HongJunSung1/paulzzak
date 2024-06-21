@@ -298,6 +298,9 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
         constructor(props) {
           const el = document.createElement('span');
+          el.style.float = 'right';
+          el.style.paddingRight = '5px';
+
           this.grid = props.grid;
           this.rowKey = props.rowKey;
           this.columnInfo = props.columnInfo;
@@ -311,12 +314,21 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
       
         formatValue(value) {
-          if (value === null || value === undefined || isNaN(Number(value))) {
-            return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, '');
+          let commaValue = '0';
+          if(value){
+              commaValue = value.replace(/,/gi, '');
           }
-          return (Number(value).toLocaleString('ko-KR'));
+          if (commaValue === null || commaValue === undefined || isNaN(Number(commaValue))) {
+            return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
+          }
+          const option = {
+            maximumFractionDigits: 10 // 소수점 10자리까지 표시
+          };
+          this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
+          return (Number(value).toLocaleString('ko-KR', option));
         }
     }
+
 
 
     // 5. 날짜박스
@@ -361,6 +373,53 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
 
     }
     
+    // 6. 합계
+    class SumData {
+        el: HTMLElement;
+        grid: any;
+        rowKey: any;
+        columnName: any;
+        columnInfo: any;
+
+        constructor(props) {    
+            const el = document.createElement('span');
+            el.style.float = 'right';
+            el.style.paddingRight = '5px';
+
+            this.grid = props.grid;
+            this.rowKey = props.rowKey;
+            this.columnInfo = props.columnInfo;
+            const formattedValue = this.sumValue();
+            el.innerText = formattedValue;
+            this.el = el;
+          }
+
+        getElement() {
+            return this.el;
+        }
+
+        sumValue() {
+            const rowData = this.grid.getRow(this.rowKey);
+            const columnsToSum = this.columnInfo.renderer.options.sumAr;
+
+            let total = 0;
+ 
+            if(columnsToSum.length > 0){
+                columnsToSum.forEach((column) => {
+                  const value = rowData[column];
+                  if (!isNaN(Number(value))) {
+                    total += Number(value);
+                  }
+                });
+            }
+            const option = {
+                maximumFractionDigits: 10 // 소수점 10자리까지 표시
+              };
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, total);
+
+            return total.toLocaleString('ko-KR', option); 
+        }
+    }
     
 
     // 설정에 따른 커스텀 렌더러로 변경
@@ -397,6 +456,13 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 type: DateBox,
                 options:{
                     dateType : column.renderer.options.dateType || "date"
+                }
+            }
+        } else if(column.renderer && column.renderer.type === 'sum'){
+            column.renderer = {
+                type: SumData,
+                options: {
+                    sumAr : column.renderer.options.sumAr || []
                 }
             }
         }

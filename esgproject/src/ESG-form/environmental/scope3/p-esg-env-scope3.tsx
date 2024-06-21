@@ -60,9 +60,9 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:""}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Env_Scope3_Query"}
       , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Env_Scope3_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:""}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_Scope3_Cut"}
      ]
 
      // 시트 컬럼 값
@@ -85,7 +85,8 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         {name : "Franchise"            , header: "14. 프랜차이즈"                            , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "Investment"           , header: "15. 투자"                                  , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "OtherUpEmission"      , header: "16. 기타 업스트림\n배출량"                 , width: 120, editor: 'text', renderer : {type: 'number'}},
-        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, editor: 'text', renderer : {type: 'number'}}
+        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, editor: 'text', renderer : {type: 'number'}},
+        {name : "Total"                , header: "소계"                                      , width: 120, renderer : {type: 'sum', options:{sumAr : ["PurItemService", "CapitalGoods", "ExceptFuelEnergy", "UpLogistics", "WorkWasted", "BusinessTrip", "Commute", "UpLeaseProperties", "DownLogistics", "SoldItemManufacturing", "SoldItemUse", "SoldItemWasted", "DownLeaseProperties", "Franchise", "Investment", "OtherUpEmission", "OtherDownEmission"]}}},
     ];
 
 
@@ -142,20 +143,19 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             
             // 저장
             case 2 :
-                setLoading(true); 
                 //시트 입력 종료
                 grid1Ref.current.setEditFinish();
-
+                
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
-
+                
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
                 combinedData.push(grid1Changes);
-
+                
                 // 저장할 데이터 없을시 종료
-                if(combinedData[0].grid.length === 0 && combinedData[1].grid.length === 0){
+                if(combinedData[0].grid.length === 0 ){
                     message  = [];
                     message.push({text: "저장할 데이터가 없습니다."})
                     setMessageOpen(true);
@@ -163,11 +163,12 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     setLoading(false);
                     return;
                 }
-
+                
+                setLoading(true); 
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
-                    
-                    if(result){
+
+                    if(result.length > 0){
                         let errMsg : any[] = [];
                         // SP 호출 결과 값 처리
                         for(let i in result){
@@ -228,6 +229,8 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     const result = await SP_Request(toolbar[clickID].spName, checkedData);
                     if(result.length > 0){
                         // SP 결과 값이 있을 때 로직
+                        grid1Ref.current.removeRows(result[0]);
+
                         let errMsg : any[] = [];
                         errMsg.push({text: "삭제 완료하였습니다."})
                         setMessageOpen(true);
@@ -241,7 +244,6 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         message = errMsg;
                         title   = "삭제 실패";
                     }
-                    grid1Ref.current.removeRows(result[0]);
                 } catch (error) {
                     // SP 호출 시 에러 처리
                     console.log(error);
