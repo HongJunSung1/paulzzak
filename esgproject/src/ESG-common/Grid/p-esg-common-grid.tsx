@@ -6,6 +6,7 @@ import 'tui-grid/dist/tui-grid.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import Grid from '@toast-ui/react-grid';
 import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
+import DatePick from '../DatePicker/p-esg-common-datePicker.tsx';
 import { createRoot } from 'react-dom/client';
 
 type CustomGridProps = {
@@ -315,7 +316,51 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
           }
           return (Number(value).toLocaleString('ko-KR'));
         }
-      }
+    }
+
+
+    // 5. 날짜박스
+    class DateBox {
+        el: HTMLDivElement;
+        grid: any;
+        rowKey: any;
+        columnInfo: any;
+        root: any;
+        columnName: any;
+    
+        constructor(props) {
+            const el = document.createElement('div');
+            this.el = el;
+            this.grid = props.grid;
+            this.rowKey = props.rowKey;
+            this.columnInfo = props.columnInfo;
+            this.columnName = props.columnInfo.name;
+            this.root = createRoot(this.el); // createRoot 사용
+            this.render(props);
+        }
+    
+        getElement() {
+            return this.el;
+        }
+    
+        render(props) {
+            const value = props.value;
+
+            this.root.render(
+                <DatePick
+                    value={value}
+                    onChange={(value) => this.onChange(value)}
+                    type={this.columnInfo.renderer.options?.dateType || "date"}
+                />
+            );
+        }
+
+        onChange(newValue) {
+            this.grid.dispatch('setValue', this.rowKey, this.columnName, newValue);
+        }
+
+    }
+    
     
 
     // 설정에 따른 커스텀 렌더러로 변경
@@ -343,9 +388,16 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                     clickFunc : column.renderer.options.clickFunc || function(){}
                 }
             };
-        } else if(column.renderer && column.renderer.type === 'number'){
+        }else if(column.renderer && column.renderer.type === 'number'){
             column.renderer = {
                 type: NumberCheck
+            }
+        }else if(column.renderer && column.renderer.type === 'datebox'){
+            column.renderer = {
+                type: DateBox,
+                options:{
+                    dateType : column.renderer.options.dateType || "date"
+                }
             }
         }
     });
