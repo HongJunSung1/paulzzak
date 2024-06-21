@@ -321,9 +321,9 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
             return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
           }
           const option = {
-            maximumFractionDigits: 10 // 소수점 10자리까지 표시
+            maximumFractionDigits: 5 // 소수점 10자리까지 표시
           };
-          this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
+          this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, Number(commaValue).toFixed(5));
           return (Number(value).toLocaleString('ko-KR', option));
         }
     }
@@ -368,9 +368,9 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                 });
             }
             const option = {
-                maximumFractionDigits: 10 // 소수점 10자리까지 표시
+                maximumFractionDigits: 5 // 소수점 10자리까지 표시
               };
-            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, total);
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, Number(total).toFixed);
 
             return total.toLocaleString('ko-KR', option); 
         }
