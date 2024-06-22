@@ -1,4 +1,5 @@
-import React,{useState, useRef, forwardRef} from 'react';
+//Scope 1 - 2
+import React,{useState, useRef, useEffect} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './p-esg-common-datePicker.module.css';
@@ -8,25 +9,54 @@ const DatePick = (settings : any) => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const datePickerRef = useRef<any>(null);
 
+    const parseDateValue = (value) => {
+        if (!value) return null;
+
+        let dateValue : Date;
+
+        if (settings.type === 'year') {
+            dateValue = new Date(value, 0); // 1월 1일
+        } else if (settings.type === 'month') {
+            const year = Math.floor(value / 100);
+            const month = value % 100 - 1; // 0부터 시작
+
+            dateValue = new Date(year, month);
+        } else {
+            const year = Math.floor(value / 10000);
+            const month = Math.floor((value % 10000) / 100) - 1;
+            const day = value % 100;
+
+            dateValue = new Date(year, month, day);
+        }
+
+        return isNaN(dateValue.getTime()) ? null : dateValue;
+    };
+
+
+    useEffect(() => {
+        const dateValue = parseDateValue(settings.value);
+        setSelectedDate(dateValue);
+    }, [settings.value]);
+
     const changeDate = (date) => {
 
         setSelectedDate(date);
 
-        if (settings.onChange) {
+        console.log(selectedDate)
+
+        if (settings.onChange && date !== null) {
             if(settings.type === 'year'){
                 settings.onChange(date.getFullYear());
             }else if(settings.type === 'month'){
                 const monthData = date.getFullYear().toString() + (((date.getMonth() + 1).toString().length === 1) ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString());
                 settings.onChange(monthData);
             }else{
-                const dateData = date.getFullYear().toString() + ((date.getMonth().toString().length === 1) ? "0" + date.getMonth().toString() : date.getMonth().toString())
+                const dateData = date.getFullYear().toString() + ((date.getMonth().toString().length === 1) ? "0" + (date.getMonth() + 1).toString()  : (date.getMonth() + 1).toString() )
                                     + (date.getDate().toString().length === 1 ? "0" + date.getDate().toString() : date.getDate().toString());
                 settings.onChange(dateData);
             }
         }
     };
-
-
 
     const RemoveDate = () => {
         
@@ -36,8 +66,6 @@ const DatePick = (settings : any) => {
             settings.onChange('');
         }
     };
-
-
     
 
     if(settings.type === 'year'){
@@ -60,14 +88,14 @@ const DatePick = (settings : any) => {
                         yearItemNumber={8}
                         calendarClassName={styles.calenderWrapper}
                     />
-                    <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
+                    {settings.isGrid === false && <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>}
                 </div>
             </div>
         )
     }else if(settings.type === 'month'){
         return (
             <div className={styles.Wrap}>
-                <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : 'Default'}</div>
+                {settings.name && <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : 'Default'}</div>}
                 <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
@@ -80,17 +108,17 @@ const DatePick = (settings : any) => {
                         maxDate={new Date('2999-12')} // maxDate 이후 날짜 선택 불가
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
-                        calendarClassName="calendarClass"
                         popperPlacement='bottom-start'
+                        calendarClassName={styles.calenderWrapper}
                     />
-                    <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
+                    {settings.isGrid === false && <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>}
                 </div>
             </div>
         )
     }else{
         return (
             <div className={styles.Wrap}>
-                <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : 'Default'}</div>
+                {settings.name && <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : 'Default'}</div>}
                 <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
@@ -103,10 +131,10 @@ const DatePick = (settings : any) => {
                         maxDate={new Date('2999-12-31')} // maxDate 이후 날짜 선택 불가
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
-                        calendarClassName="calendarClass"
-                        popperPlacement='bottom-start'                        
+                        popperPlacement='bottom-start'
+                        calendarClassName={styles.calenderWrapper}
                     />
-                    <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
+                    {settings.isGrid === false && <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>}
                 </div>
             </div>
         )

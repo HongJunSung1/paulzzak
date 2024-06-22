@@ -330,7 +330,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
     }
 
 
-
     // 5. 날짜박스
     class DateBox {
         el: HTMLDivElement;
@@ -359,13 +358,13 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         }
     
         render(props) {
-            const value = props.value;
 
             this.root.render(
                 <DatePick
-                    value={value}
+                    value={props.value}
                     onChange={(value) => this.onChange(value)}
                     type={this.columnInfo.renderer.options?.dateType || "date"}
+                    isGrid={true}
                 />
             );
         }
@@ -373,8 +372,6 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
         onChange(newValue) {
             this.grid.dispatch('setValue', this.rowKey, this.columnName, newValue);
         }
-
-
     }
     
     // 6. 합계

@@ -61,18 +61,18 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_SearchBox_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_SearchBox_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_SearchBox_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Env_Scope1_2_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Env_Scope1_2_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_Scope1_2_Cut"}
      ]
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "Scope1CD"   , header: "Scope 1 코드"        , width: 100 , hidden : true},
-        {name : "Scope1Year" , header: "연도"                , width: 100 , renderer: {type: "datebox", options:{dateType:"year"}}},
-        {name : "Scope1"     , header: "Scope 1"             , width: 150 , editor: 'text'},
-        {name : "Scope2"     , header: "Scope 2"             , width: 150 , editor: 'text'},
-        {name : "Scope1to2"  , header: "Scope 1 + Scope 2"   , width: 200 },
+        {name : "Scope1CD"       , header: "Scope 1 코드"        , width: 100 , hidden : true},
+        {name : "Year"           , header: "연도"                , width: 100 , renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "Scope1"         , header: "Scope 1"             , width: 150 , editor: 'text', renderer : {type: 'number'}},
+        {name : "Scope2"         , header: "Scope 2"             , width: 150 , editor: 'text', renderer : {type: 'number'}},
+        {name : "Scope1to2"      , header: "Scope 1 + Scope 2"   , width: 200 , renderer : {type: 'sum', options:{sumAr : ["Scope1", "Scope2"]}}},
     ];
 
     // 툴바 이벤트
@@ -274,7 +274,7 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <DatePick name={"연도"}   value={Scope1Year}  onChange={setCondition1} width={200} type={"year"}/>    
+                        <DatePick name={"연도"}   value={Scope1Year}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>    
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
