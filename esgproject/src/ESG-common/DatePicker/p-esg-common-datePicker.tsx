@@ -88,7 +88,10 @@ const DatePick = (settings : any) => {
                         yearItemNumber={8}
                         calendarClassName={styles.calenderWrapper}
                     />
-                    {settings.isGrid === false && <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>}
+                    {settings.isGrid === false && 
+                    <div className={styles.xBtnWrap}>
+                        <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
+                    </div>}
                 </div>
             </div>
         )
@@ -109,9 +112,13 @@ const DatePick = (settings : any) => {
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
                         popperPlacement='bottom-start'
-                        calendarClassName={styles.calenderWrapper}
+                        // calendarClassName={styles.calenderWrapper}
                     />
-                    {settings.isGrid === false && <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>}
+                    {settings.isGrid === false && 
+                    <div className={styles.xBtnWrap}>
+                        <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
+                    </div>    
+                    }
                 </div>
             </div>
         )
@@ -132,9 +139,13 @@ const DatePick = (settings : any) => {
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
                         popperPlacement='bottom-start'
-                        calendarClassName={styles.calenderWrapper}
+                        // calendarClassName={styles.calenderWrapper}
                     />
-                    {settings.isGrid === false && <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>}
+                    {settings.isGrid === false && 
+                    <div className={styles.xBtnWrap}> 
+                        <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
+                    </div>    
+                    }
                 </div>
             </div>
         )
