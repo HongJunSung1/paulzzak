@@ -5,6 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styles from './p-esg-common-datePicker.module.css';
 import {ko} from 'date-fns/locale/ko';
 
+
 const DatePick = (settings : any) => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const datePickerRef = useRef<any>(null);
@@ -42,8 +43,6 @@ const DatePick = (settings : any) => {
 
         setSelectedDate(date);
 
-        console.log(selectedDate)
-
         if (settings.onChange && date !== null) {
             if(settings.type === 'year'){
                 settings.onChange(date.getFullYear());
@@ -66,11 +65,18 @@ const DatePick = (settings : any) => {
             settings.onChange('');
         }
     };
+
+    // 캘린더 이미지 눌렀을 때 캘린더 열기
+    const dateOpen = () => {
+        if(datePickerRef.current){
+            datePickerRef.current.setOpen(true);
+        }
+    }
     
 
     if(settings.type === 'year'){
         return (
-            <div className={styles.Wrap}>
+            <div className={styles.Wrap} style={{margin: settings.isGrid ? "0 5px" : "3px 5px"}}>
                 {settings.name && <div className={styles.DatePickTitle} style={{color: settings.isRequire? "red" : "rgb(144, 144, 144)"}}>{settings.name? settings.name : ''}</div>}
                 <div className={styles.DatePickerWrap}>
                     <DatePicker
@@ -88,6 +94,9 @@ const DatePick = (settings : any) => {
                         yearItemNumber={8}
                         calendarClassName={styles.calenderWrapper}
                     />
+                    <div className={styles.calendarImgWrap} onClick={dateOpen}>
+                        <div className={styles.calendarImg}/>
+                    </div>
                     {settings.isGrid === false && 
                     <div className={styles.xBtnWrap}>
                         <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
@@ -114,6 +123,9 @@ const DatePick = (settings : any) => {
                         popperPlacement='bottom-start'
                         // calendarClassName={styles.calenderWrapper}
                     />
+                    <div className={styles.calendarImgWrap} onClick={dateOpen}>
+                        <div className={styles.calendarImg}/>
+                    </div>
                     {settings.isGrid === false && 
                     <div className={styles.xBtnWrap}>
                         <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>
@@ -141,6 +153,9 @@ const DatePick = (settings : any) => {
                         popperPlacement='bottom-start'
                         // calendarClassName={styles.calenderWrapper}
                     />
+                    <div className={styles.calendarImgWrap} onClick={dateOpen}>
+                        <div className={styles.calendarImg}/>
+                    </div>
                     {settings.isGrid === false && 
                     <div className={styles.xBtnWrap}> 
                         <button className={styles.BtnClear} onClick={RemoveDate} style={{display: selectedDate ? "inline-block" : "none"}}></button>

@@ -117,7 +117,6 @@
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
-            console.log(data);
             const filterData = data.filter((item => item.url === tab.url.replace('/', '')));
             setMenuInfo(filterData[0]);
             strOpenUrl(tab.url);

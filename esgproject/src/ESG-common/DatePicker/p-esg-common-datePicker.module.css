@@ -1,5 +1,4 @@
 .Wrap{
-    margin: 0 5px;
     z-index:20;
 }
 
@@ -16,11 +15,12 @@
 .DatePickerWrap {
     height: 25px;
     display: flex;
-    
+    width: 100%;
  }
   
 .DatePickerWrap input {
   height: inherit;
+  padding: 0 2px;
 }
 
 .xBtnWrap{
@@ -32,7 +32,7 @@
     display:block;
     position: absolute;
     top: -3px;
-    right: 0;
+    right: 14px;
     width: 30px;
     height: 30px;
     height: inherit;
@@ -67,3 +67,21 @@
     /* font-size: 14px !important; */
 }
 
+.calendarImgWrap{
+    position: relative;
+}
+
+.calendarImg{
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 0px;  
+    right: -2px;
+    cursor:pointer;
+    background: url('../../assets/image/calendar.png') center center no-repeat;
+    background-size: 60%;
+    border-radius: 2px;
+    border:none;
+    outline: none;
+    background-color: #0d1136;
+}
