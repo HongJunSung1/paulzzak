@@ -10,6 +10,8 @@ import DatePick from '../../../ESG-common/DatePicker/p-esg-common-datePicker.tsx
 import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import GridTab from '../../../ESG-common/GridTab/p-esg-common-GridTab.tsx';
+import GridTabItem from '../../../ESG-common/GridTab/p-esg-common-GridTabItem.tsx';
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 
 type gridAr = {
@@ -39,20 +41,30 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
+    const [grid2Data, setGrid2Data] = useState([]);
+    const [grid3Data, setGrid3Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let [grid3Changes, setGrid3Changes] = useState<gridAr>({ DataSet : '', grid: []});
     
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             setGrid1Changes(changes);
+        } else if(gridId === 'DataSet2'){
+            setGrid2Changes(changes);
+        } else if(gridId === 'DataSet3'){
+            setGrid3Changes(changes);
         }
     };
 
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
+    const grid2Ref : any = useRef(null);
+    const grid3Ref : any = useRef(null);
 
     // 툴바 
     const toolbar = [  
@@ -62,13 +74,19 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_GeneralWaste_Cut"}
      ]
 
-     const complexColumns =[
-                        {
-                            header: '재활용',
-                            name: 'mergeColumn1',
-                            childNames: ['a', 'b']
-                        }
-                    ]
+    // 헤더 정보
+    const complexColumns =[
+                            {
+                                header: '재활용',
+                                name: 'mergeColumn1',
+                                childNames: ['RecyclingPreProc', 'Recycling']
+                            },
+                            {
+                                header: '소각',
+                                name: 'mergeColumn2',
+                                childNames: ['EnergyRecover', 'EnergyNonRecover']
+                            }
+                          ]
 
     const headerOptions = {
         height: 80,
@@ -77,11 +95,40 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "WasteCD"             , header: "내부코드"                                  , width:  70, hidden: true},
-        {name : "a"             , header: "A"                                  , width:  70, hidden: false},
-        {name : "b"             , header: "B"                                  , width:  70, hidden: false},
+        {name : "GeneralWasteCD"      , header: "내부코드"             , width: 100, hidden: true},
+        {name : "Year"                , header: "연도"                 , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "RecyclingPreProc"    , header: "재활용을\n위한 전처리", width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Recycling"           , header: "재활용"               , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Bury"                , header: "매립"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "EnergyRecover"       , header: "에너지회수"           , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "EnergyNonRecover"    , header: "에너지비회수"         , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Etc"                 , header: "기타"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum', options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
      ]
 
+     const columns2 = [
+        {name : "GeneralWasteCD"      , header: "내부코드"             , width: 100, hidden: true},
+        {name : "Year"                , header: "연도"                 , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "RecyclingPreProc"    , header: "재활용을\n위한 전처리", width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Recycling"           , header: "재활용"               , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Bury"                , header: "매립"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "EnergyRecover"       , header: "에너지회수"           , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "EnergyNonRecover"    , header: "에너지비회수"         , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Etc"                 , header: "기타"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum', options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
+     ]
+
+     const columns3 = [
+        {name : "GeneralWasteCD"      , header: "내부코드"             , width: 100, hidden: true},
+        {name : "Year"                , header: "연도"                 , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "RecyclingPreProc"    , header: "재활용을\n위한 전처리", width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Recycling"           , header: "재활용"               , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Bury"                , header: "매립"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "EnergyRecover"       , header: "에너지회수"           , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "EnergyNonRecover"    , header: "에너지비회수"         , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Etc"                 , header: "기타"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum', options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
+     ]
 
     // 툴바 이벤트
     const toolbarEvent = async (clickID) =>{
@@ -89,6 +136,11 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 신규
             case 0 :
                 setGrid1Data([]);
+                setGrid2Data([]);
+                setGrid3Data([]);
+                setGrid1Changes({DataSet : '', grid: []})
+                setGrid2Changes({DataSet : '', grid: []})
+                setGrid3Changes({DataSet : '', grid: []})
                 // 데이터 변화 감지 값 false
                 setIsDataChanged(false);
                 break;
@@ -113,10 +165,14 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
+                            setGrid2Data(result[1]);
+                            setGrid3Data(result[2]);
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             // 조회 결과 초기화
                             setGrid1Data([]);
+                            setGrid2Data([]);
+                            setGrid3Data([]);
 
                             message  = [];
                             message.push({text: "조회 결과가 없습니다."})
@@ -138,17 +194,23 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 2 :
                 //시트 입력 종료
                 grid1Ref.current.setEditFinish();
+                grid2Ref.current.setEditFinish();
+                grid3Ref.current.setEditFinish();
                 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
                 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
+                grid2Changes.grid = grid2Ref.current.setColumCheck(grid2Changes.grid);
+                grid3Changes.grid = grid3Ref.current.setColumCheck(grid3Changes.grid);
                 
                 combinedData.push(grid1Changes);
-                
-                // 저장할 데이터 없을시 종료
-                if(combinedData[0].grid.length === 0 ){
+                combinedData.push(grid2Changes);
+                combinedData.push(grid3Changes);
+
+                // 저장할 데이터 없을 시 종료
+                if(combinedData[0].grid.length === 0 && combinedData[1].grid.length === 0 && combinedData[2].grid.length === 0){
                     message  = [];
                     message.push({text: "저장할 데이터가 없습니다."})
                     setMessageOpen(true);
@@ -180,13 +242,16 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         }   
 
                         // SP 호출 결과 값 처리
-                        grid1Ref.current.setRowData(result[0]);
-
+                        
                         // 시트 값 입력
                         grid1Ref.current.setRowData(result[0]);
+                        grid2Ref.current.setRowData(result[1]);
+                        grid3Ref.current.setRowData(result[2]);
                         
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
+                        setGrid2Changes({ DataSet : '', grid: []});
+                        setGrid3Changes({ DataSet : '', grid: []});
 
                         // 화면 이동 가능하도록 변경
                         setIsDataChanged(false);
@@ -215,14 +280,18 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 let checkedData : any[] = [];
 
                 checkedData.push(grid1Ref.current.getCheckedRows());
+                checkedData.push(grid2Ref.current.getCheckedRows());
+                checkedData.push(grid3Ref.current.getCheckedRows());
 
                 setLoading(true);
                 try {
                     // SP 결과 값 담기
                     const result = await SP_Request(toolbar[clickID].spName, checkedData);
-                    if(result.length > 0){
+                    if(result){
                         // SP 결과 값이 있을 때 로직
                         grid1Ref.current.removeRows(result[0]);
+                        grid2Ref.current.removeRows(result[1]);
+                        grid3Ref.current.removeRows(result[2]);
 
                         let errMsg : any[] = [];
                         errMsg.push({text: "삭제 완료하였습니다."})
@@ -258,6 +327,11 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         if (openTabs.find(item => item.url === '/PEsgEnvGeneralWaste') === undefined) {
             setYear('');
             setGrid1Data([]);
+            setGrid2Data([]);
+            setGrid3Data([]);
+            setGrid1Changes({DataSet : '', grid: []})
+            setGrid2Changes({DataSet : '', grid: []})
+            setGrid3Changes({DataSet : '', grid: []})
         }
     }, [openTabs]);
 
@@ -272,7 +346,17 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "일반 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                <GridTab>
+                    <GridTabItem name={"글로벌"}>
+                        <Grid ref={grid1Ref} gridId="DataSet1" title = "일반 폐기물 발생량(글로벌)" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    </GridTabItem>
+                    <GridTabItem name={"건설"}>
+                        <Grid ref={grid2Ref} gridId="DataSet2" title = "일반 폐기물 발생량(건설)"   source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    </GridTabItem>
+                    <GridTabItem name={"모멘텀"}>
+                        <Grid ref={grid3Ref} gridId="DataSet3" title = "일반 폐기물 발생량(모멘텀)" source = {grid3Data} headerOptions={headerOptions} columns = {columns3} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    </GridTabItem>
+                </GridTab>
             </DynamicArea>
         </div>
     )

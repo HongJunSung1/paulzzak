@@ -326,7 +326,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
             return this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, commaValue);
           }
           const option = {
-            maximumFractionDigits: 5 // 소수점 10자리까지 표시
+            maximumFractionDigits: 5 // 소수점 5자리까지 표시
           };
           this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, Number(commaValue).toFixed(5));
           return (Number(value).toLocaleString('ko-KR', option));
