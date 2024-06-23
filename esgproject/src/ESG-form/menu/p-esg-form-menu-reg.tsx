@@ -143,6 +143,14 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
       , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Menu_Cut"}
      ]
 
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+
      const columns1 = [
         {name : "LMenuCD"  , header: "내부코드"   , width:  70, hidden: true },
         {name : "LMenuName", header: "대메뉴 이름", width: 250, editor: 'text'},
@@ -422,13 +430,13 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
                         <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </div>
                         <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
                             <div onContextMenu={rightClick2} style={{height:"100%"}}>
-                                <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </div>
-                            <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} columns = {columns3} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} headerOptions={headerOptions} columns = {columns3} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </Splitter>
                     </Splitter>
                 </DynamicArea>

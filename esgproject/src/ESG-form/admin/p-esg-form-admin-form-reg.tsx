@@ -69,6 +69,14 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Form_Admin_FormReg_Cut"}
      ]
 
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+
      // 시트 컬럼 값
      const columns1 = [
         {name : "FormCD"    , header: "화면코드", width:  70},
@@ -157,10 +165,18 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     if(result){
                         // SP 호출 결과 값 처리
                         grid1Ref.current.setRowData(result[0]);
-                        window.alert("저장 완료")
+                        message  = [];
+                        message.push({text: "저장이 완료되었습니다."})
+                        setMessageOpen(true);
+                        title   = "저장 완료";
+                        setLoading(false);
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 에러")
+                        message  = [];
+                        message.push({text: "저장 시 오류가 발생했습니다. 다시 시도해주세요."})
+                        setMessageOpen(true);
+                        title   = "저장 오류";
+                        setLoading(false);
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리
@@ -249,7 +265,7 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "화면 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "화면 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                 </DynamicArea>
             </div>
         </>

@@ -13,6 +13,10 @@ type CustomGridProps = {
     title: string;
     source: any[];
     columns: any[];
+    headerOptions: {
+        height: number;
+        complexColumns?: any[];
+    };
     onChange: (gridId: string, changes: gridAr) => void;
     gridId: string;
     addRowBtn: boolean;
@@ -30,7 +34,7 @@ type gridAr = {
     grid       : any[];
 };
 
-const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowBtn, onClick}: CustomGridProps, ref) => {
+const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, gridId, addRowBtn, onClick}: CustomGridProps, ref) => {
 
     
     const gridRef = useRef<Grid | null>(null);
@@ -717,7 +721,8 @@ const ToastGrid = forwardRef(({title, source, columns, onChange, gridId, addRowB
                         heightResizable={false} //테이블의 사이즈를 자동으로 조절
                         rowHeaders={[{type:"rowNum", align: 'center'}, {type:'checkbox'}]}
                         contextMenu={null as any} // 우클릭 조회 없애기    
-                        header={{height: 40}}
+                        // header={{height: 40}}
+                        header={headerOptions}
                         columnOptions={{resizable:true}}
 
                 />

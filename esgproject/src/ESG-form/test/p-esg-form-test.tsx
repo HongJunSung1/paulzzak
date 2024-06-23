@@ -95,7 +95,15 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Cut_Test"}
                      , {id: 4, title:"다이얼로그 테스트", image:"save"  , spName:""}
                     ]
-    
+
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+
     const columns1 = [
         {name : "id", header: "ID", width: 50},
         {name : "name", header: "Name", width: 100, editor: 'text'},
@@ -278,10 +286,10 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         </Splitter>
                         <GridTab>
                             <GridTabItem name={"제목 테스트"}>
-                                <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </GridTabItem>
                             <GridTabItem name={"에디터 화면"}>
-                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </GridTabItem>
                         </GridTab>
                     </Splitter>
@@ -301,9 +309,9 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                                 <div>
                                     테스트 1
                                 </div>
-                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </Splitter>
-                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </Splitter>
                     </DynamicArea>
                 </Dialogue>

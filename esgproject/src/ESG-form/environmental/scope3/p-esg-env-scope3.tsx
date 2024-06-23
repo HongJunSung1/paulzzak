@@ -6,7 +6,7 @@ import Toolbar from "../../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
 import FixedArea from "../../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
 import FixedWrap from "../../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
-import TextBox from "../../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
+import DatePick from '../../../ESG-common/DatePicker/p-esg-common-datePicker.tsx'
 import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
@@ -65,10 +65,18 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_Scope3_Cut"}
      ]
 
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+
      // 시트 컬럼 값
      const columns1 = [
         {name : "Scope3CD"             , header: "내부코드"                                  , width:  70, hidden: true},
-        {name : "Year"                 , header: "연도"                                      , width: 100, editor: 'text'},
+        {name : "Year"                 , header: "연도"                                      , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
         {name : "PurItemService"       , header: "1.  구매한 제품\n및 서비스"                , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "CapitalGoods"         , header: "2.  자본재"                                , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "ExceptFuelEnergy"     , header: "3.  Scope 1,2에 포함되지\n않는 연료&에너지", width: 150, editor: 'text', renderer : {type: 'number'}},
@@ -276,11 +284,11 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             <Toolbar items={toolbar} clickID={toolbarEvent} />
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
-                    <TextBox   name={"연도"} value={year}  onChange={setYear} width={200}/>   
+                    <DatePick name={"연도"}   value={year}  onChange={setYear} width={200} type={"year"} isGrid={false}/>    
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "Scope3" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                <Grid ref={grid1Ref} gridId="DataSet1" title = "Scope3" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
             </DynamicArea>
         </div>
     )

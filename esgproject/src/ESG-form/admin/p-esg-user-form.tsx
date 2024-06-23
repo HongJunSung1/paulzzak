@@ -77,6 +77,14 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       , {id: 2, title:"저장", image:"save" , spName:"S_ESG_User_Form_Save"}
      ]
 
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+
      // 시트 컬럼 값
      const columns1 = [
         {name : "UserCD"    , header: "사용자코드"     , width:  70 , hidden: true},
@@ -303,9 +311,9 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={40} SecondSize={60}>
                         <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
                         </div>
-                        <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                        <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                     </Splitter>
                 </DynamicArea>
             </div>

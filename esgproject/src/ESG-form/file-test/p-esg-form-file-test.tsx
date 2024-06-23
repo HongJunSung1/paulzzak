@@ -145,6 +145,14 @@ const FileTest = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_File_Test_Cut"}
     ]
 
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+    
      // 시트 컬럼 값
      const columns1 = [
         {name : "UserCD"    , header: "사용자코드"     , width:  70 , hidden: true},
@@ -353,7 +361,7 @@ const FileTest = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         <DynamicArea>
                 <Splitter SplitType={"horizontal"} FirstSize={60} SecondSize={40}>
                     <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                        <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                     </div>
                     <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD}/>
                 </Splitter>

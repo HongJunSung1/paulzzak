@@ -22,8 +22,10 @@ import SearchBoxReg from './ESG-form/admin/p-esg-form-admin-searchbox.tsx';
 import CompanyReg from './ESG-form/setting/p-esg-company-reg.tsx';
 
 // 화면 : Environmental
-import Scope3 from './ESG-form/environmental/scope3/p-esg-env-scope3.tsx';
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
+import Scope3 from './ESG-form/environmental/scope3/p-esg-env-scope3.tsx';
+import GeneralWaste from './ESG-form/environmental/general-waste/p-esg-env-general-waste.tsx';
+
 
 // 테스트 화면
 import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
@@ -106,6 +108,7 @@ function App() {
                   <CompanyReg     strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
                   <Scope3         strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
                   <Scope1to2      strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
+                  <GeneralWaste   strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
                 </DataContainer>
             </Container>
             </MenuInfoProvider>

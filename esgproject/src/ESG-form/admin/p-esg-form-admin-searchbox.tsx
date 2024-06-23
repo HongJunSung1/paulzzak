@@ -66,6 +66,15 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
       , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_SearchBox_Cut"}
      ]
 
+    // 헤더 정보
+    const complexColumns =[]
+
+    const headerOptions = {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+    };
+
+
      // 시트 컬럼 값
      const columns1 = [
         {name : "SearchBoxCD"   , header: "서치박스 코드"       , width: 100 },
@@ -290,7 +299,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "서치박스 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                 </DynamicArea>
             </div>
         </>
