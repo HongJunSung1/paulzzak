@@ -221,6 +221,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                     onChange={(value) => this.onChange(value)}
                     searchCode={this.columnInfo.renderer.options?.searchCode || 0}
                     onGridChange={(value) => this.gridChange(value)}
+                    isGrid={true}
                 />
             );
         }

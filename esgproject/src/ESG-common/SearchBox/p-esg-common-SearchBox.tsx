@@ -103,7 +103,7 @@ const SearchBox = (settings : any) => {
                 <div className={styles.InputWrap}>
                     <input
                         ref = {InputRef}
-                        className={styles.Input}
+                        className={settings.isGrid ? styles.InputGrid : styles.Input}
                         type="text"
                         value={text}
                         tabIndex={-1}
@@ -119,7 +119,7 @@ const SearchBox = (settings : any) => {
                             style={{ display: text.length > 0 ? "block" : "none" }}
                         ></button>
                     )}
-                    <div className={styles.SearchImg} onClick={ClickHandler} />
+                    <div className={settings.isGrid ? styles.SearchGridImg : styles.SearchImg} onClick={ClickHandler} />
                 </div>
                 {isOpen && result.length > 0 && (
                     <div className={styles.tableWrap}>

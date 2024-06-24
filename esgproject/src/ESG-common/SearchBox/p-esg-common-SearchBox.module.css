@@ -36,7 +36,20 @@
     outline: none;
 }
 
-.Input:focus {
+.InputGrid{
+    height: 25px;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 25px;
+    font-size: 12px;
+    color: rgb(96, 96, 96);
+    background-color: transparent;
+    user-select: none;
+    border: none;
+    outline: none;
+}
+
+.Input:focus, .InputGrid:focus {
     box-shadow: 0 0 1px 1px #d1eaee;
 }
 
@@ -101,6 +114,22 @@ th{
     cursor: pointer;
     background: url('../../assets/image/searchbox-white.png') center center no-repeat;
     background-size: 50%;
+    border: none;
+    outline: none;
+    background-color: #8c8fb9;
+}
+
+.SearchGridImg{
+    border-radius: 2px;
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 28px;
+    width: 28px;
+    cursor: pointer;
+    background: url('../../assets/image/searchbox-white.png') center center no-repeat;
+    background-size: 58%;
     border: none;
     outline: none;
     background-color: #8c8fb9;
