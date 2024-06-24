@@ -319,6 +319,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
       
         formatValue(value) {
           let commaValue = '0';
+
           if(value){
               commaValue = value.replace(/,/gi, '');
           }
@@ -328,6 +329,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
           const option = {
             maximumFractionDigits: 5 // 소수점 5자리까지 표시
           };
+
           this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, Number(commaValue).toFixed(5));
           return (Number(value).toLocaleString('ko-KR', option));
         }
@@ -418,12 +420,82 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                 });
             }
             const option = {
-                maximumFractionDigits: 5 // 소수점 10자리까지 표시
-              };
-            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, Number(total).toFixed);
+                maximumFractionDigits: 5 // 소수점 5자리까지 표시
+            };
 
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, total.toLocaleString('ko-KR', option));
+            
             return total.toLocaleString('ko-KR', option); 
         }
+    }
+
+    // 7. 비율
+    class PercentData {
+        el: HTMLElement;
+        grid: any;
+        rowKey: any;
+        columnName: any;
+        columnInfo: any;
+
+        constructor(props) {    
+            const el = document.createElement('span');
+            el.style.float = 'right';
+            el.style.paddingRight = '5px';
+
+            this.grid = props.grid;
+            this.rowKey = props.rowKey;
+            this.columnInfo = props.columnInfo;
+            const formattedValue = this.percentValue();
+            el.innerText = formattedValue;
+            this.el = el;
+        }
+
+        getElement() {
+            return this.el;
+        }
+
+        percentValue() {
+            const rowData = this.grid.getRow(this.rowKey);
+            const columnsToSum = this.columnInfo.renderer.options.sumAr;
+            const columnsToDivide = this.columnInfo.renderer.options.divideAr;
+
+            let sumTotal    = 0;
+            let divideTotal = 0;
+            let result      = 0;
+
+            if(columnsToSum.length > 0){
+                columnsToSum.forEach((column) => {
+                  const value = rowData[column];
+                  if (!isNaN(Number(value))) {
+                    sumTotal += Number(value);
+                  }
+                });
+            }
+
+            if(columnsToDivide.length > 0){
+                columnsToDivide.forEach((column) => {
+                  const value = rowData[column];
+                  if (!isNaN(Number(value))) {
+                    divideTotal += Number(value);
+                  }
+                });
+            }
+
+            const option = {
+                maximumFractionDigits: 2 // 소수점 2자리까지 표시
+            };
+
+            result = Number(sumTotal / divideTotal) * 100;
+
+            if(isNaN(result)){
+                this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, '0');
+                return '0';
+            } else{
+                this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, result.toLocaleString('ko-KR', option) + '%');
+                return result.toLocaleString('ko-KR', option) + '%';             
+            }
+        }
+
     }
     
 
@@ -468,6 +540,14 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                 type: SumData,
                 options: {
                     sumAr : column.renderer.options.sumAr || []
+                }
+            }
+        } else if(column.renderer && column.renderer.type === 'percent'){
+            column.renderer = {
+                type: PercentData,
+                options: {
+                    sumAr : column.renderer.options.sumAr || [],
+                    divideAr : column.renderer.options.divideAr || []
                 }
             }
         }

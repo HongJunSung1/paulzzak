@@ -81,7 +81,7 @@ const DatePick = (settings : any) => {
                 <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
-                        className={styles.DatePicker}
+                        className={settings.isGrid ? styles.DatePickerGrid : styles.DatePicker}
                         dateFormat='yyyy' // 날짜 형태
                         shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                         showYearPicker // 연도 선택
@@ -95,7 +95,7 @@ const DatePick = (settings : any) => {
                         calendarClassName={styles.calenderWrapper}
                     />
                     <div className={styles.calendarImgWrap} onClick={dateOpen}>
-                        <div className={styles.calendarImg}/>
+                        <div className={settings.isGrid ? styles.calendarImgGrid : styles.calendarImg}/>
                     </div>
                     {settings.isGrid === false && 
                     <div className={styles.xBtnWrap}>

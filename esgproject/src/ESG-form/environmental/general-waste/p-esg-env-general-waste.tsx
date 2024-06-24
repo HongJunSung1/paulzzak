@@ -103,7 +103,8 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         {name : "EnergyRecover"       , header: "에너지회수"           , width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "EnergyNonRecover"    , header: "에너지비회수"         , width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "Etc"                 , header: "기타"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
-        {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum', options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
+        {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}},
+        {name : "RecyclePortion"      , header: "재활용률"             , width: 150, renderer : {type: 'percent', options:{sumAr: ["RecyclingPreProc", "Recycling"], divideAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
      ]
 
      const columns2 = [
@@ -153,8 +154,7 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         DataSet  : 'DataSet1'
                     })
 
-                    // 탭 이동 여부 초기화
-                    setIsDataChanged(false);
+
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -167,6 +167,9 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                             setGrid1Data(result[0]);
                             setGrid2Data(result[1]);
                             setGrid3Data(result[2]);
+
+                            // 탭 이동 여부 초기화
+                            setIsDataChanged(false);
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             // 조회 결과 초기화
@@ -184,9 +187,9 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         // SP 호출 시 에러 처리 로직
                         console.log(error);
                     }
+
                     // 로딩뷰 감추기
                     setLoading(false);
-
 
                 break;
             
