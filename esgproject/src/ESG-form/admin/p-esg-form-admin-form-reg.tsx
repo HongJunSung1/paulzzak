@@ -246,6 +246,7 @@ const FormReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             setCondition1('');
             setCondition2('');
             setGrid1Data([]);
+            setGrid1Changes({DataSet : '', grid: []});
         }
     }, [openTabs]);
 

@@ -350,6 +350,7 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             setCondition2('');
             setCondition3('');
             setGrid1Data([]);
+            setGrid1Changes({DataSet : '', grid: []});
         }
     }, [openTabs]);
 

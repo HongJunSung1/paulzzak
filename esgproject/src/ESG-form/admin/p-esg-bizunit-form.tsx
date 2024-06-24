@@ -20,14 +20,14 @@ type gridAr = {
 };
 
 type condition = {
-    UserCD     : number;
+    BizUnitCD  : number;
     DataSet    : string;
 }  
 
 type condition2 = {
-    FormName : string;
-    UserCD   : number;
-    DataSet  : string;
+    FormName  : string;
+    BizUnitCD : number;
+    DataSet   : string;
 }
 
 // 메시지 박스
@@ -35,7 +35,7 @@ let message : any     = [];
 let title   : string  = "";
 
 // 우클릭 조회 시 받는 내부코드 값
-let UserCD = 0
+let BizUnitCode = 0
 
 const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
@@ -47,8 +47,8 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const messageClose = () => {setMessageOpen(false)};
 
     // 조회조건 값
-    const [UserName , setCondition1] = useState('');
-    const [searchUserCD   , setConditions1] = useState(0);// 서치박스 키값 필수
+    const [BizUnitName , setCondition1] = useState('');
+    const [BizUnitCD   , setConditions1] = useState(0);// 서치박스 키값 필수
     const [FormName , setCondition2] = useState('');
 
     // 조회 시 받는 데이터 값
@@ -73,8 +73,8 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_User_Form_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_User_Form_Save"}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_BizUnit_Form_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_BizUnit_Form_Save"}
      ]
 
     // 헤더 정보
@@ -87,9 +87,8 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "UserCD"    , header: "사용자코드"     , width:  70 , hidden: true},
-        {name : "UserName"  , header: "사용자명"       , width: 200},
-        {name : "UserID"    , header: "사용자 아이디"  , width: 200},
+        {name : "BizUnitCD"    , header: "사업부문코드"   , width:  70 , hidden: true},
+        {name : "BizUnitName"  , header: "사업부문명"     , width: 170},
     ];
 
     const columns2 = [
@@ -113,7 +112,7 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        UserCD : searchUserCD,
+                        BizUnitCD : BizUnitCD,
                         DataSet  : 'DataSet1'
                     })
 
@@ -145,6 +144,7 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         // SP 호출 시 에러 처리 로직
                         console.log(error);
                     }
+                    setGrid2Changes({DataSet : '', grid: []});
                     // 로딩뷰 감추기
                     setLoading(false);
 
@@ -164,7 +164,7 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 grid2Changes.grid = grid2Ref.current.setColumCheck(grid2Changes.grid);
                 
                 for(let i in grid2Changes.grid){
-                    grid2Changes.grid[i].UserCD = UserCD;
+                    grid2Changes.grid[i].BizUnitCD = BizUnitCode;
                 }
 
                 combinedData.push(grid2Changes);
@@ -233,27 +233,26 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     const rightClick1 = (event: React.MouseEvent) => {
         event.preventDefault();  // 기본 우클릭 메뉴 비활성화
         setTimeout(async ()=> {
-            UserCD = 0
+            BizUnitCode = 0
             grid2Ref.current.clear();
 
             if(grid1Ref.current.rightClick() !== null){
-                UserCD = grid1Ref.current.rightClick().UserCD
-                console.log(grid1Ref.current.rightClick())
+                BizUnitCode = grid1Ref.current.rightClick().BizUnitCD
             }     
 
             // 조회 조건 담기
             const condition2Ar : condition2 = ({
-                FormName : FormName,
-                UserCD   : UserCD,
-                DataSet  : 'DataSet1'
+                FormName  : FormName,
+                BizUnitCD : BizUnitCode,
+                DataSet   : 'DataSet1'
             })
 
-            if(UserCD > 0){
+            if(BizUnitCode > 0){
                 // 로딩 뷰 보이기
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_User_Form_SubQuery", [condition2Ar]);
+                    const result = await SP_Request("S_ESG_BizUnit_Form_SubQuery", [condition2Ar]);
                     if(result.length > 0){
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setGrid2Data(result[0]);
@@ -292,6 +291,7 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             setCondition2('');
             setGrid1Data([]);
             setGrid2Data([]);
+            setGrid2Changes({DataSet : '', grid: []});
         }
     }, [openTabs]);
 
@@ -304,14 +304,14 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <SearchBox name={"사용자명"} value={UserName}  onChange={setConditions1} width={200} searchCode={2} isGrid={false}/>
+                        <SearchBox name={"사업부문명"} value={BizUnitName}  onChange={setConditions1} width={200} searchCode={7} isGrid={false}/>
                         <TextBox   name={"화면명"}   value={FormName}  onChange={setCondition2} width={200}/>    
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
                     <Splitter SplitType={"horizontal"} FirstSize={40} SecondSize={60}>
                         <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "사업부문 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
                         </div>
                         <Grid ref={grid2Ref} gridId="DataSet2" title = "화면 정보"   source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                     </Splitter>

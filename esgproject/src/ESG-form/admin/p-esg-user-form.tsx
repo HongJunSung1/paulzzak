@@ -292,6 +292,7 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             setCondition2('');
             setGrid1Data([]);
             setGrid2Data([]);
+            setGrid2Changes({DataSet : '', grid: []});
         }
     }, [openTabs]);
 

@@ -283,6 +283,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
         if (openTabs.find(item => item.url === '/PEsgFormAdminSearchBox') === undefined) {
             setCondition1('');
             setGrid1Data([]);
+            setGrid1Changes({DataSet : '', grid: []});
         }
     }, [openTabs]);
 
