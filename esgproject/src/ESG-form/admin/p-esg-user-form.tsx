@@ -304,7 +304,7 @@ const UserForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <SearchBox name={"사용자명"} value={UserName}  onChange={setConditions1} width={200} searchCode={2}/>
+                        <SearchBox name={"사용자명"} value={UserName}  onChange={setConditions1} width={200} searchCode={2} isGrid={false}/>
                         <TextBox   name={"화면명"}   value={FormName}  onChange={setCondition2} width={200}/>    
                     </FixedWrap>
                 </FixedArea>  

@@ -111,7 +111,7 @@ const DatePick = (settings : any) => {
                 <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
-                        className={styles.DatePicker}
+                        className={settings.isGrid ? styles.DatePickerGrid : styles.DatePicker}
                         dateFormat='yyyy-MM' // 날짜 형태
                         shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                         showMonthYearPicker // 월 선택
@@ -141,7 +141,7 @@ const DatePick = (settings : any) => {
                 <div className={styles.DatePickerWrap}>
                     <DatePicker
                         ref={datePickerRef}
-                        className={styles.DatePicker}
+                        className={settings.isGrid ? styles.DatePickerGrid : styles.DatePicker}
                         dateFormat='yyyy-MM-dd' // 날짜 형태
                         shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                         showYearDropdown // 연도 선택

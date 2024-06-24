@@ -367,8 +367,8 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         <TextBox name={"이메일"} value={EMail}    onChange={setCondition3} width={300}/>    
                     </FixedWrap>
                     <FixedWrap>
-                        <SearchBox name={"회사명"} value={CompanyName}    onChange={setConditions1} searchCode={6} width={200}/>   
-                        <SearchBox name={"부서명"} value={DepartmentName} onChange={setConditions2} searchCode={7} width={200}/> 
+                        <SearchBox name={"회사명"} value={CompanyName}    onChange={setConditions1} searchCode={6} width={200} isGrid={false}/>   
+                        <SearchBox name={"부서명"} value={DepartmentName} onChange={setConditions2} searchCode={7} width={200} isGrid={false}/> 
                         <Button name={"계정 초기화"} clickEvent={clickEvent}></Button>
                     </FixedWrap>
                 </FixedArea>  
