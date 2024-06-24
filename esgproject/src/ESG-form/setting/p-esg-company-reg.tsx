@@ -29,7 +29,7 @@ let message : any     = [];
 let title   : string  = "";
 
 
-const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const CompanyReg = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -52,7 +52,6 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             setGrid1Changes(changes);
         }else if(gridId === 'DataSet2'){
@@ -100,8 +99,6 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 0 :
                 setGrid1Data([]);
                 setGrid2Data([]);
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);
                 break;
 
             // 조회
@@ -112,9 +109,6 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         BizUnitName : BizUnitName,
                         DataSet  : 'DataSet1'
                     })
-
-                    // 탭 이동 여부 초기화
-                    setIsDataChanged(false);
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -206,9 +200,6 @@ const CompanyReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
                         setGrid2Changes({ DataSet : '', grid: []});
-
-                        // 화면 이동 가능하도록 변경
-                        setIsDataChanged(false);
 
                         // SP 결과 값이 있을 때 로직
                         errMsg  = [];

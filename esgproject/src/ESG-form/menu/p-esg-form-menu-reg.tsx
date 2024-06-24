@@ -24,7 +24,7 @@ let MMenuCD = 0
 let message : any     = [];
 let title   : string  = "";
 
-const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
+const Menu = ({strOpenUrl,openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
     
@@ -184,16 +184,10 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
                 setGrid2Data([]);
                 setGrid3Data([]);
 
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);
-
                 break;
 
             // 조회
             case 1: 
-                // 탭 이동 여부 초기화
-                setIsDataChanged(false);
-
                 // 로딩 뷰 보이기
                 setLoading(true);
                 try {
@@ -318,9 +312,6 @@ const Menu = ({strOpenUrl,openTabs, setIsDataChanged}) => {
                         setGrid1Changes({ DataSet : '', grid: []});
                         setGrid2Changes({ DataSet : '', grid: []});
                         setGrid3Changes({ DataSet : '', grid: []});
-
-                        // 화면 이동 가능하도록 변경
-                        setIsDataChanged(false);
 
                         // SP 결과 값이 있을 때 로직
                         errMsg  = [];

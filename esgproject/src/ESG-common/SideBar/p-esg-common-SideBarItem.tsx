@@ -8,7 +8,7 @@ import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
 
 
 
-const SideBarItem = ({ item, strOpenUrl, isDataChanged}) => {
+const SideBarItem = ({ item, strOpenUrl}) => {
   // 클릭 할 때마다 화살표 위아래 모양 바꾸기
   const [collapsed, setCollapsed] = useState(false);
   const icon = collapsed ? <HiChevronUp /> : <HiChevronDown />;
@@ -48,7 +48,7 @@ const SideBarItem = ({ item, strOpenUrl, isDataChanged}) => {
         <div style={{overflow:"hidden", marginBottom: collapsed ? "15px" : "0px"}}>
         <SideBarSub isopen={collapsed}>
           {item.childrens.map((child) => (
-            <SideBarItem key={child.id} item={child} strOpenUrl={strOpenUrl} isDataChanged={isDataChanged}/>
+            <SideBarItem key={child.id} item={child} strOpenUrl={strOpenUrl}/>
           ))}
         </SideBarSub>
         </div>

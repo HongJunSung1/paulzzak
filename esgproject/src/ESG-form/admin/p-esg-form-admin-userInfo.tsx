@@ -36,7 +36,7 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
-const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const UserInfo = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -62,7 +62,6 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if (gridId === 'DataSet1') {
             setGrid1Changes(changes);
         } 
@@ -164,8 +163,6 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 0 :
                 grid1Ref.current.clear();
                 setGrid1Data([]);
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);
                 break;
 
             // 조회
@@ -179,9 +176,6 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         DepartmentCD: searchDepartmentCD,
                         DataSet     : 'DataSet1'
                     })
-
-                    // 탭 이동 여부 초기화
-                    setIsDataChanged(false);
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -271,9 +265,6 @@ const UserInfo = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
-
-                        // 데이터 변화 감지 값 false
-                        setIsDataChanged(false);
 
                         // SP 결과 값이 있을 때 로직
                         errMsg = [];

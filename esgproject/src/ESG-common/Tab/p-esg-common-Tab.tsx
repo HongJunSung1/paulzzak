@@ -4,8 +4,6 @@
     import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
     // import cookie from 'react-cookies';
 
-    import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
-
     // import { useNavigate } from 'react-router-dom';
 
     interface MenuInfo {
@@ -34,11 +32,6 @@
     // const data = cookie.load('menuList') || [];
     // const currentDisplay : string = tabData;
 
-    let message    : any     = [];
-    let title      : string  = "";
-
-    let tabMove    : string  = "";
-
     // const sessionStr2 = sessionStorage.getItem('menuList');
     // let initialMenuInfo : MenuInfo;
     // if(sessionStr2){
@@ -46,7 +39,7 @@
     // }
 
 
-    const Tab = ({strOpenUrl ,openTabs, isDataChanged, setIsDataChanged}) => {
+    const Tab = ({strOpenUrl ,openTabs}) => {
 
         const [data,setData] = useState<any>(null);
         const [initialMenuInfo,setInitialMenuInfo] = useState<MenuInfo | null>(null);
@@ -55,7 +48,6 @@
         const { setMenuInfo } = useMenuInfo();
         const [activeTab, setActiveTab] = useState<string | null>(null);
         const [tabData, setTabData] = useState<MenuInfo[]>([]);
-        const [menuChange, setMenuChange] = useState<any>([]);
         // const navigate = useNavigate();
 
         useEffect(() => {
@@ -75,10 +67,6 @@
             }
         },[initialMenuInfo,data])
         
-        // YesNo메세지박스
-        const [messageYesNoOpen, setMessageYesNoOpen] = useState(false);
-        const messageYesNoClose = () => {setMessageYesNoOpen(false)};  
-
 
         useEffect(()=>{
             openTabs(tabData);
@@ -122,34 +110,6 @@
             strOpenUrl(tab.url);
         };
 
-        const handleTabClickMsg = (tab: MenuInfo) => {
-            handleTabClick(tab);
-        }
-
-        const messageYes = () => {
-            if(tabMove === "handleTabClick"){
-                handleTabClick(menuChange);
-            } else if(tabMove === "handleTabCloseClick"){
-                closeTab(menuChange);                                    
-            }
-            setMessageYesNoOpen(false);
-            setIsDataChanged(false);
-                
-        }
-
-        const handleTabCloseClickMsg = (tab: MenuInfo) => {
-            if(isDataChanged === true){
-                tabMove = "handleTabCloseClick";
-                let errMsg : any[] = [];
-                errMsg.push({text: "화면을 닫을 경우 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})
-                title   = "※ 경고";
-                message = errMsg;
-                setMenuChange({id: tab.id, menuName: tab.menuName, url: tab.url});
-                setMessageYesNoOpen(true);
-            } else{
-                closeTab(tab);
-            }
-        }
 
 
         const closeTab = (tab) => {
@@ -187,8 +147,7 @@
         }
 
         return(
-            <>
-                <MessageBoxYesNo messageYesNoOpen = {messageYesNoOpen} btnYes = {messageYes} btnNo = {messageYesNoClose} MessageData = {message} Title={title}/>            
+            <>        
                 <div className={styles.TabContainer}>
                     <div className={styles.TabWrap}>
                         {tabData.map((tab)=> (
@@ -200,11 +159,11 @@
                                         borderTop: activeTab===tab.id ? "solid 3px black" : "solid 3px gray",
                                         borderBottom: activeTab===tab.id ? "none" : "solid 0.5px rgb(200, 200, 200)"
                                 }}>
-                                <div onClick={() => handleTabClickMsg(tab)}>
+                                <div onClick={() => handleTabClick(tab)}>
                                     {tab.menuName}
                                 </div>
                                 {/* <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button> */}
-                                <button className={styles.BtnClose} onClick={() => handleTabCloseClickMsg(tab)}></button>
+                                <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button>
                             </div>
                         ))}
                     </div>

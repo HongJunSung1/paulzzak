@@ -37,7 +37,7 @@ let title   : string  = "";
 // 우클릭 조회 시 받는 내부코드 값
 let BizUnitCode = 0
 
-const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const BizUnitForm = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -60,7 +60,6 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if(gridId === 'DataSet2'){
             setGrid2Changes(changes);
         }
@@ -103,9 +102,7 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 신규
             case 0 :
                 grid1Ref.current.clear();
-                grid2Ref.current.clear();
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);                
+                grid2Ref.current.clear();             
                 break;
 
             // 조회
@@ -114,10 +111,7 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                     const conditionAr : condition = ({
                         BizUnitCD : BizUnitCD,
                         DataSet  : 'DataSet1'
-                    })
-
-                    // 탭 이동 여부 초기화
-                    setIsDataChanged(false);                    
+                    })              
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -204,9 +198,6 @@ const BizUnitForm = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                         //시트 변경 내역 초기화
                         setGrid2Changes({ DataSet : '', grid: []});  
-
-                        // 화면 이동 가능하도록 변경
-                        setIsDataChanged(false);
 
                         // SP 결과 값이 있을 때 로직
                         errMsg  = [];

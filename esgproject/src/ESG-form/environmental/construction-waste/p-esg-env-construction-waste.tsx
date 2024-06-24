@@ -28,7 +28,7 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
-const ConstructionWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const ConstructionWaste = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
 
@@ -48,7 +48,6 @@ const ConstructionWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             setGrid1Changes(changes);
         } 
@@ -110,8 +109,6 @@ const ConstructionWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             case 0 :
                 setGrid1Data([]);
                 setGrid1Changes({DataSet : '', grid: []})
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);
                 break;
 
             // 조회
@@ -132,9 +129,6 @@ const ConstructionWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
-
-                            // 탭 이동 여부 초기화
-                            setIsDataChanged(false);
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             // 조회 결과 초기화
@@ -211,9 +205,6 @@ const ConstructionWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
-
-                        // 화면 이동 가능하도록 변경
-                        setIsDataChanged(false);
 
                         // SP 결과 값이 있을 때 로직
                         errMsg  = [];

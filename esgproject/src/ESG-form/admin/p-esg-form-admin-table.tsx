@@ -37,7 +37,7 @@ let title   : string  = "";
 let TableCD = 0
 let SendTableName = "";
 
-const TableReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const TableReg = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -59,7 +59,6 @@ const TableReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             setGrid1Changes(changes);
         }else if(gridId === 'DataSet2'){
@@ -108,9 +107,7 @@ const TableReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 신규
             case 0 :
                 grid1Ref.current.clear();
-                grid2Ref.current.clear();
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);                
+                grid2Ref.current.clear();             
                 break;
 
             // 조회
@@ -120,10 +117,7 @@ const TableReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         TableName : TableName,
                         DataSet  : 'DataSet1'
                     })
-
-                    // 탭 이동 여부 초기화
-                    setIsDataChanged(false);                    
-
+            
                     // 로딩 뷰 보이기
                     setLoading(true);
                     try {
@@ -224,9 +218,6 @@ const TableReg = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
                         setGrid2Changes({ DataSet : '', grid: []});  
-
-                        // 화면 이동 가능하도록 변경
-                        setIsDataChanged(false);
 
                         // SP 결과 값이 있을 때 로직
                         errMsg  = [];

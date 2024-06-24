@@ -54,9 +54,6 @@ function App() {
 
   const [isLoading,setIsLoading] = useState(false);
 
-  // 그리드 변동 값 감지
-  const [isDataChanged, setIsDataChanged] = useState(false);
-
   useEffect(() => {
 
     // 페이지 이동 전 이벤트
@@ -84,12 +81,12 @@ function App() {
         {!isLoginPage && 
           <>
             <MenuInfoProvider>
-            <Navbar strOpenUrl= {setStrOpenUrl} isDataChanged = {isDataChanged}/>
+            <Navbar strOpenUrl= {setStrOpenUrl}/>
             <Container>
-                <SideBar strOpenUrl={setStrOpenUrl} isDataChanged = {isDataChanged}/>  
+                <SideBar strOpenUrl={setStrOpenUrl}/>  
                 <DataContainer>
                 <Loading loading={isLoading}/>
-                  <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs} isDataChanged = {isDataChanged} setIsDataChanged={setIsDataChanged}/>
+                  <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs}/>
                   {/* <Routes> */}
                     {/* 실제 데이터 작성 구간 */}
                       {/* <Route path="/main" element={<Main/>}></Route>
@@ -101,21 +98,21 @@ function App() {
                     {/* 실제 데이터 작성 구간 */}
                   {/* </Routes> */}
                   <Main              strOpenUrl={strOpenUrl} openTabs={openTabs} />
-                  <UserInfo          strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <FormReg           strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <Menu              strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <UserForm          strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <Environmental     strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <FileTest          strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <SearchBoxReg      strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <CompanyReg        strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
-                  <Scope3            strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
-                  <Scope1to2         strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
-                  <GeneralWaste      strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
-                  <DesignatedWaste   strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
-                  <ConstructionWaste strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
-                  <TableReg          strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
-                  <BizUnitForm       strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <UserInfo          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <FormReg           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <Menu              strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <UserForm          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <Environmental     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <FileTest          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <SearchBoxReg      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <CompanyReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <Scope3            strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <Scope1to2         strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <GeneralWaste      strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <DesignatedWaste   strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <ConstructionWaste strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <TableReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <BizUnitForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 </DataContainer>
             </Container>
             </MenuInfoProvider>

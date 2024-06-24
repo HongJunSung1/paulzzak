@@ -29,7 +29,7 @@ let message : any     = [];
 let title   : string  = "";
 
 
-const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const Scope1to2 = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -49,7 +49,6 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if(gridId === 'DataSet1'){
             setGrid1Changes(changes);
         }
@@ -89,8 +88,6 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
             // 신규
             case 0 :
                 setGrid1Data([]);
-                // 데이터 변화 감지 값 false
-                setIsDataChanged(false);
                 break;
 
             // 조회
@@ -182,9 +179,6 @@ const Scope1to2 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                         // 시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
-
-                        // 화면 이동 가능하도록 변경
-                        setIsDataChanged(false);
 
                         const gridAllData = grid1Ref.current.getAllData();
                         setGrid1Data(gridAllData);

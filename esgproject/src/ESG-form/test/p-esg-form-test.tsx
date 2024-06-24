@@ -37,7 +37,7 @@ type condition = {
     DataSet    : string;
 }  
 
-const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
+const Environmental = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -58,7 +58,6 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
-        setIsDataChanged(true);
         if (gridId === 'DataSet1') {
             setGrid1Changes(changes);
         } else if (gridId === 'DataSet2') {
@@ -68,7 +67,6 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 에디터 변경 감지
     const handleEditorChange = (editId : string , changes : editAr) => {
-        setIsDataChanged(true);
         if(editId === 'DataSet3'){
             setEdit1Changes(changes);
         }
@@ -184,8 +182,7 @@ const Environmental = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
                         setEditText(result[2][0].text);
 
-                        // 저장 성공 시 데이터 변화 감지 값 false로 변경시켜 화면 이동 시 메세지 박스 출력하지 않도록 함
-                        setIsDataChanged(false);
+
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
                         window.alert("저장 실패")
