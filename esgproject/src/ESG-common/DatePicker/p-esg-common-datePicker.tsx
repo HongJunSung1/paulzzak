@@ -1,5 +1,5 @@
 //Scope 1 - 2
-import React,{useState, useRef, useEffect} from 'react';
+import React,{useState, useRef, useEffect,useCallback} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './p-esg-common-datePicker.module.css';
@@ -10,7 +10,7 @@ const DatePick = (settings : any) => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const datePickerRef = useRef<any>(null);
 
-    const parseDateValue = (value) => {
+    const parseDateValue = useCallback((value) => {
         if (!value) return null;
 
         let dateValue : Date;
@@ -31,13 +31,13 @@ const DatePick = (settings : any) => {
         }
 
         return isNaN(dateValue.getTime()) ? null : dateValue;
-    };
+    }, [settings.type]);
 
 
     useEffect(() => {
         const dateValue = parseDateValue(settings.value);
         setSelectedDate(dateValue);
-    }, [settings.value]);
+    }, [settings.value,parseDateValue]);
 
     const changeDate = (date) => {
 

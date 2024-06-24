@@ -21,6 +21,7 @@ import UserForm from './ESG-form/admin/p-esg-user-form.tsx';
 import SearchBoxReg from './ESG-form/admin/p-esg-form-admin-searchbox.tsx';
 import CompanyReg from './ESG-form/setting/p-esg-company-reg.tsx';
 import TableReg from './ESG-form/admin/p-esg-form-admin-table.tsx';
+import BizUnitForm from './ESG-form/admin/p-esg-bizunit-form.tsx';
 
 // 화면 : Environmental
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
@@ -112,6 +113,7 @@ function App() {
                   <GeneralWaste    strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
                   <DesignatedWaste strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/> 
                   <TableReg        strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
+                  <BizUnitForm     strOpenUrl={strOpenUrl} openTabs={openTabs} setIsDataChanged={setIsDataChanged}/>
                 </DataContainer>
             </Container>
             </MenuInfoProvider>
