@@ -86,7 +86,7 @@ const DesignatedWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
     
      // 시트 컬럼 값
      const columns1 = [
-        {name : "GeneralWasteCD"      , header: "내부코드"             , width: 100, hidden: true},
+        {name : "DesignatedWasteCD"   , header: "내부코드"             , width: 100, hidden: true},
         {name : "Year"                , header: "연도"                 , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
         {name : "BizUnitCD"           , header: "사업부문코드"         , width: 100, hidden: true},
         {name : "BizUnitName"         , header: "사업부문"             , width: 170, renderer: {type: 'searchbox', options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
