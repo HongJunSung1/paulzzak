@@ -33,16 +33,19 @@ const SideBarItem = ({ item, strOpenUrl, isDataChanged}) => {
                               lineHeight: item.pmenuId==="ROOT"? "35px": "15px",
                               paddingLeft: "10px",
                               paddingRight: "10px",
-                              marginBottom: "-5px",
+                              marginBottom: "0px",
+                              marginTop: "0px",
                               cursor: "pointer",
                               display: "flex",
-                              justifyContent: "space-between"
+                              justifyContent: "space-between",
+                              backgroundColor: "rgb(239 238 230)",
+                              fontSize: "14px"
                           }}
                     onClick={toggleCollapse}      
                           >{item.menuName}
           <span style={{paddingTop: "2px"}}>{icon}</span>
         </div>
-        <div style={{overflow:"hidden"}}>
+        <div style={{overflow:"hidden", marginBottom: collapsed ? "15px" : "0px"}}>
         <SideBarSub isopen={collapsed}>
           {item.childrens.map((child) => (
             <SideBarItem key={child.id} item={child} strOpenUrl={strOpenUrl} isDataChanged={isDataChanged}/>

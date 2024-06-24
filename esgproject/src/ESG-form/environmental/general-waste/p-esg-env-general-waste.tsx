@@ -67,38 +67,40 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
 
     // 헤더 정보
     const complexColumns =[
-                            {
-                                header: '재활용',
-                                name: 'mergeColumn1',
-                                childNames: ['RecyclingPreProc', 'Recycling']
-                            },
-                            {
-                                header: '소각',
-                                name: 'mergeColumn2',
-                                childNames: ['EnergyRecover', 'EnergyNonRecover']
-                            }
-                          ]
+        {
+            header: '재활용',
+            name: 'mergeColumn1',
+            childNames: ['RecyclingPreProc', 'Recycling', 'TotalRecycle']
+        },
+        {
+            header: '소각',
+            name: 'mergeColumn2',
+            childNames: ['EnergyRecover', 'EnergyNonRecover', 'TotalEnergy']
+        }
+      ]
 
     const headerOptions = {
         height: 80,
         complexColumns: complexColumns.length > 0 ? complexColumns : undefined
     };
 
-     // 시트 컬럼 값
-     const columns1 = [
+    // 시트 컬럼 값
+    const columns1 = [
         {name : "GeneralWasteCD"      , header: "내부코드"             , width: 100, hidden: true},
         {name : "Year"                , header: "연도"                 , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
         {name : "BizUnitCD"           , header: "사업부문코드"         , width: 100, hidden: true},
         {name : "BizUnitName"         , header: "사업부문"             , width: 170, renderer: {type: 'searchbox', options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
         {name : "RecyclingPreProc"    , header: "재활용을\n위한 전처리", width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "Recycling"           , header: "재활용"               , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "TotalRecycle"        , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["RecyclingPreProc", "Recycling"]}}},
         {name : "Bury"                , header: "매립"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "EnergyRecover"       , header: "에너지회수"           , width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "EnergyNonRecover"    , header: "에너지비회수"         , width: 150, editor: 'text', renderer: {type: 'number'}},
+        {name : "TotalEnergy"         , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["EnergyRecover", "EnergyNonRecover"]}}},
         {name : "Etc"                 , header: "기타"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}},
         {name : "RecyclePortion"      , header: "재활용률"             , width: 150, renderer : {type: 'percent', options:{sumAr: ["RecyclingPreProc", "Recycling"], divideAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
-     ]
+    ]
 
 
     // 툴바 이벤트

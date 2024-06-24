@@ -58,7 +58,7 @@ const SideBar = ({ items, strOpenUrl, isDataChanged}) => {
   if(menuData !== undefined){
     const nest = (menuData, menuId = "ROOT", link = 'pmenuId') =>
       menuData.filter(item => item[link] === menuId)
-        .map(item => ({ ...item, childrens: nest(menuData, item.menuId) }));
+        .map(item => ({ ...item, childrens: nest(menuData, item.menuId)}));
     const tree = nest(menuData);
 
     const TopMenuOpen = async () => {
