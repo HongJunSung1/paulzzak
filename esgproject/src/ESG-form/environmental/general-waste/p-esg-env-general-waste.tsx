@@ -149,6 +149,9 @@ const GeneralWaste = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         console.log(error);
                     }
 
+                    // 수정된 내역 초기화
+                    setGrid1Changes({DataSet : '', grid: []});
+
                     // 로딩뷰 감추기
                     setLoading(false);
 

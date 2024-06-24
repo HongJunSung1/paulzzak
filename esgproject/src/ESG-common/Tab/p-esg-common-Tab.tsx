@@ -138,7 +138,7 @@
         }
 
         const handleTabCloseClickMsg = (tab: MenuInfo) => {
-            if(isDataChanged === true && tab.id === activeTab){
+            if(isDataChanged === true){
                 tabMove = "handleTabCloseClick";
                 let errMsg : any[] = [];
                 errMsg.push({text: "화면을 닫을 경우 저장되지 않은 데이터는 사라집니다. 이동하시겠습니까?"})

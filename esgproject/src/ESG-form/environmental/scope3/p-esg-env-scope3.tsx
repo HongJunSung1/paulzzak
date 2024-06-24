@@ -143,6 +143,10 @@ const Scope3 = ({strOpenUrl, openTabs, setIsDataChanged}) => {
                         // SP 호출 시 에러 처리 로직
                         console.log(error);
                     }
+
+                    // 수정된 내역 초기화
+                    setGrid1Changes({DataSet : '', grid: []});
+                                        
                     // 로딩뷰 감추기
                     setLoading(false);
 
