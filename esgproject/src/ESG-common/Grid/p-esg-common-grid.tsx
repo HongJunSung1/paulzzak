@@ -673,7 +673,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
     function isRowEmpty(row : any, keys : any) {
         for (const key of keys) {
             const value = row[key];
-            if (value !== null && value !== undefined && value.toString().trim() !== '') {
+            if (value !== null && value !== undefined && value.toString().trim() !== '' && value !== 0 && value !== '0' && value !== 0.00000 && value !== '0.00000') {
                 return false;
             }
         }
