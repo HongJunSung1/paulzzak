@@ -1,4 +1,4 @@
-// 건설 폐기물 발생량
+// 지정 폐기물 발생량
 import React, { useRef, useState, useEffect}  from 'react'
 
 //공통 소스
@@ -28,7 +28,7 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
-const ConstructionWaste = ({strOpenUrl, openTabs}) => {
+const DesignatedWaste = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
 
@@ -59,9 +59,9 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Env_ConstructionWaste_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Env_ConstructionWaste_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_ConstructionWaste_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Env_DesignatedWaste_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Env_DesignatedWaste_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Env_DesignatedWaste_Cut"}
      ]
 
     // 헤더 정보
@@ -270,15 +270,16 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgEnvConstructionWaste') === undefined) {
+        if (openTabs.find(item => item.url === '/PEsgEnvDesignatedWaste') === undefined) {
             setYear('');
+            setBizUnitCD(0);
             setGrid1Data([]);
             setGrid1Changes({DataSet : '', grid: []})
         }
     }, [openTabs]);
 
     return (
-        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgEnvConstructionWaste' ? "flex" : "none", flexDirection:"column"}}>
+        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgEnvDesignatedWaste' ? "flex" : "none", flexDirection:"column"}}>
             <Loading loading={loading}/>
             <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
             <Toolbar items={toolbar} clickID={toolbarEvent} />
@@ -289,10 +290,10 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "건설 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                <Grid ref={grid1Ref} gridId="DataSet1" title = "지정 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
             </DynamicArea>
         </div>
     )
 }
 
-export default ConstructionWaste
+export default DesignatedWaste

@@ -26,9 +26,10 @@ import BizUnitForm from './ESG-form/admin/p-esg-bizunit-form.tsx';
 // 화면 : Environmental
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
 import Scope3 from './ESG-form/environmental/scope3/p-esg-env-scope3.tsx';
-import GeneralWaste from './ESG-form/environmental/general-waste/p-esg-env-general-waste.tsx';
-import DesignatedWaste from './ESG-form/environmental/designated-waste/p-esg-env-designated-waste.tsx';
-import ConstructionWaste from './ESG-form/environmental/construction-waste/p-esg-env-construction-waste.tsx';
+import GeneralWaste from './ESG-form/environmental/waste-general/p-esg-env-general-waste.tsx';
+import DesignatedWaste from './ESG-form/environmental/waste-designated/p-esg-env-designated-waste.tsx';
+import ConstructionWaste from './ESG-form/environmental/waste-construction/p-esg-env-construction-waste.tsx';
+import TotalWaste from './ESG-form/environmental/waste-total/p-esg-env-total-waste.tsx';
 
 // 테스트 화면
 import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
@@ -113,6 +114,7 @@ function App() {
                   <ConstructionWaste strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
                   <TableReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <BizUnitForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <TotalWaste        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                 </DataContainer>
             </Container>
             </MenuInfoProvider>

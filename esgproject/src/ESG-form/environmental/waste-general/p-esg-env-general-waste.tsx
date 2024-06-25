@@ -272,6 +272,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgEnvGeneralWaste') === undefined) {
             setYear('');
+            setBizUnitCD(0);
             setGrid1Data([]);
             setGrid1Changes({DataSet : '', grid: []})
         }
