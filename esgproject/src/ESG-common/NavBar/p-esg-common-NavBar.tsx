@@ -75,21 +75,21 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const passwordArrow = passwordCollapsed ? <HiChevronUp /> : <HiChevronDown />;
     
     // ID 정보
-    // const sessionStr = sessionStorage.getItem('userInfo');
-    // let userInfo : any;
-    // if(sessionStr){
-    //     userInfo = JSON.parse(sessionStr);
-    // }
+    const sessionStr = sessionStorage.getItem('userInfo');
+    let userInfo : any;
+    if(sessionStr){
+        userInfo = JSON.parse(sessionStr);
+    }
 
-    let UserID = cookie.load('userInfo')?.UserID;
-    let UserEmail = cookie.load('userInfo')?.Email;
+    let UserID = userInfo?.UserID;
+    let UserEmail = userInfo?.Email;
     let UserTelNo = "";
 
     // 전화번호(정규식 사용)
-    if(cookie.load('userInfo')?.length === 11){
-        UserTelNo = cookie.load('userInfo')?.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
-    } else if(cookie.load('userInfo')?.length === 13){
-        UserTelNo = cookie.load('userInfo')?.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    if(userInfo?.TelNo.length === 11){
+        UserTelNo = userInfo?.TelNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
+    } else if(userInfo?.TelNo.length === 13){
+        UserTelNo = userInfo?.TelNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
     }
 
     // 유저정보 변경 시 사용할 input
@@ -104,7 +104,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
 
     useEffect(() => {
-        const isLogin = cookie.load('userInfo');
+        const isLogin = userInfo !== undefined;
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }
