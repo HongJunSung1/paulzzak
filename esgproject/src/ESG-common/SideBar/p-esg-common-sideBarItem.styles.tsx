@@ -8,7 +8,8 @@ export const SbContainer = styled.div`
   width: 256px;
   min-height: 70vh;
   font-size: 14px;
-  background: #f8f7f3;
+  // background: #f8f7f3;
+  background: rgb(31, 60, 126);
 `
 
 interface IisOpen{

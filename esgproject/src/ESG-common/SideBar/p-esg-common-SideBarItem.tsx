@@ -28,7 +28,7 @@ const SideBarItem = ({ item, strOpenUrl}) => {
     return (
       <div>
         <div className = {styles.menuName}
-                    style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
+                    style={{ fontWeight: item.pmenuId==="ROOT"? "600": "100",
                               height: item.pmenuId==="ROOT"? "35px": "15px",
                               lineHeight: item.pmenuId==="ROOT"? "35px": "15px",
                               paddingLeft: "10px",
@@ -38,8 +38,10 @@ const SideBarItem = ({ item, strOpenUrl}) => {
                               cursor: "pointer",
                               display: "flex",
                               justifyContent: "space-between",
-                              backgroundColor: "rgb(239 238 230)",
-                              fontSize: "14px"
+                              // backgroundColor: "rgb(239 238 230)",
+                              backgroundColor: "rgb(31, 60, 126)",
+                              fontSize: "14px",
+                              color: "white"
                           }}
                     onClick={toggleCollapse}      
                           >{item.menuName}
@@ -58,13 +60,13 @@ const SideBarItem = ({ item, strOpenUrl}) => {
     return (
       <div>
         {/* <Link to = {item.url !== "" ? item.url : "main"} className = {styles.linkMenu}> */}
-          <div className = {styles.menuName}
+          <div className = {styles.menuName} 
               style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
                         marginTop: item.pmenuId==="ROOT"? "15px": "5px",
                         paddingLeft: "10px",
                         cursor: "pointer",
+                        color: "rgb(199, 192, 192)"
                     }}
-                    
               // onClick={handleClick}>{item.menuName}
               onClick={handleClick}>{item.menuName}
           </div>  

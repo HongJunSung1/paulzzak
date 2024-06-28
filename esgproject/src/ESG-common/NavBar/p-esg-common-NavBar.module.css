@@ -1,13 +1,15 @@
 .NavBarContainer{
     height: 48px;
-    background-color: brown;
-    color: white;
+    /* background-color: brown; */
+    background-color: white;
+    color: black;
     font-weight: bold;
     padding-left: 5px;
     font-size: 25px;
     line-height:48px;
     display: flex;
     justify-content: space-between;
+    box-shadow: 0px 1px 3px 1px rgb(236, 235, 235);
 }
 
 .LogoClick{
@@ -42,9 +44,11 @@
     height: 25px;
     vertical-align: middle;
     border-radius: 5px;
-    border: none;
+    border: solid 1px rgb(236, 235, 235);
     outline: none;
-    padding: 1px 10px 1px 10px
+    padding: 1px 10px 1px 10px;
+    background-color: rgb(247, 243, 243);
+    box-shadow: 1px 1px 3px 1px rgb(236, 235, 235);
 }
 
 .ImageLogoWrap{
@@ -80,7 +84,7 @@
 .settingWrap{
     color: black;
     font-size: 12px;
-    background-color: rgb(238, 245, 225);
+    background-color: rgb(31, 60, 126);
     width: 350px;
     position:absolute;
     right: 10px;
@@ -95,7 +99,8 @@
     text-align:center;
     margin: 15px 0;
     padding-bottom: 35px;
-    border-bottom: solid 2px #e3cccc;
+    border-bottom: solid 2px rgb(75, 110, 228);
+    color: white;
 }
 
 .settingContents{
@@ -103,7 +108,7 @@
 }
 
 .userInfoManageWrap, .passwordManageWrap{
-    border-bottom: solid 1px #e3cccc;
+    border-bottom: solid 1px rgb(75, 110, 228);
     margin-bottom: 15px;
     padding-bottom: 10px;
 }
@@ -130,6 +135,7 @@
 
 .userInfoText, .passwordText{
     margin-left: 5px;
+    color: white;
 }
 
 .inputHeight{
@@ -159,7 +165,7 @@
 }
 
 .OkWrap:hover{
-    color: rgb(255, 0, 0);
+    color: rgb(75, 110, 228);
 }
 
 .InputContents:focus{
@@ -179,6 +185,11 @@
 
 .inputOk, .inputCancel{
     margin: 0px 10px 0 15px;
+    color: white;
+}
+
+.inputOk:hover, .inputCancel:hover{
+    color: rgb(75, 110, 228);
 }
 
 .passwordManage{
@@ -197,7 +208,7 @@
 .TelNo, .Email{
     height: 25px;
     font-size: 12px;
-    color: gray;
+    color: white;
     font-weight: 500;
 }
 

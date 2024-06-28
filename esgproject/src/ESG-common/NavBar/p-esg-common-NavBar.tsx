@@ -4,8 +4,8 @@ import '../../global.d.ts';
 import SHA256 from 'crypto-js/sha256';
 
 import ImageLogo from '../../assets/image/logo.png';
-import ImageSetting from '../../assets/image/navbar-setting.png';
-import ImageLogout from '../../assets/image/navbar-logout.png';
+import ImageSetting from '../../assets/image/setting.png';
+import ImageLogout from '../../assets/image/logout-black.png';
 import ImageUserInfo from '../../assets/image/navbar-userinfo.png';
 import ImagePassword from '../../assets/image/navbar-password.png';
 import ImageXButton from '../../assets/image/navbar-xButton.svg';
@@ -382,9 +382,6 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                         <div className = {styles.ImageLogoWrap}>
                             <img className = {styles.ImageLogo} src={ImageLogo} alt={"Logo"}/>
                         </div>
-                        <div className = {styles.MainTitle}>
-                            ESG Data Platform
-                        </div>
                     </div>
                 <div className = {styles.NavBarItem}>
                     <div className = {styles.search}>
@@ -415,7 +412,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                                             <img src={ImageUserInfo} alt={"UserInfo"} className={styles.ImageUserInfo}/>
                                             <div className = {styles.userInfoText}>개인정보 관리</div>
                                         </div>
-                                        <div>{userInfoArrow}</div>
+                                        <div style={{color: "white"}}>{userInfoArrow}</div>
                                     </div>
                                     {userInfoCollapsed &&
                                     <div className = {styles.userInfoContents}>
@@ -446,7 +443,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                                             <img src={ImagePassword} alt={"Password"} className={styles.ImagePassword}/>
                                             <div className = {styles.passwordText}>비밀번호 관리</div>
                                         </div>
-                                        <div>{passwordArrow}</div>
+                                        <div style={{color: "white"}}>{passwordArrow}</div>
                                     </div>
                                     {passwordCollapsed && 
                                     <div className = {styles.passwordContents}>
