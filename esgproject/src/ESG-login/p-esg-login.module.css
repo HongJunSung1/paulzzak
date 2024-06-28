@@ -26,6 +26,7 @@
     background-color: rgb(24, 24, 131);
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
+    overflow:hidden;
 }
 
 .LoginLeftTop{
@@ -52,7 +53,9 @@
 .LoginPicture{
     width: 100%;
     object-fit: cover;
-    margin-top: 50px;
+    position: relative;
+    bottom: 31px;
+    border-bottom-left-radius: 30px;
 }
 
 .LoginLeftBottom{

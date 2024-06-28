@@ -2,9 +2,9 @@ import React, { useState, useRef}  from 'react';
 import styles from './p-esg-login.module.css';
 import { useNavigate  } from 'react-router-dom';
 
-import OurLogo from '../assets/image/belly.png';
 import EYLogo from '../assets/image/EYLogo.svg';
 import LoginPicture from '../assets/image/LoginPicture.jpg';
+// import LoginPicture from '../assets/image/loginPicture_2.png';
 import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import MessageBoxYesNo from '../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
@@ -327,17 +327,7 @@ const LoginPage = () => {
             <div className = {styles.LoginContainer}>
                 <div className = {styles.LoginWrap}>
                     <div className = {styles.LoginLeft}>
-                        <div className = {styles.LoginLeftTop}>
-                            <div className = {styles.OurLogo}>
-                                <img className = {styles.OurLogo} src={OurLogo} alt={"OurLogo"}/>
-                            </div>
-                            <div className = {styles.OurName}>뽈록앤뽈록</div>
-                        </div>
-                        <div>
-                            <img className = {styles.LoginPicture} src={LoginPicture} alt={"LoginPicture"}/>
-                        </div>
-                        <div className = {styles.LoginLeftBottom}>ESG Data Platform</div>
-                        
+                        <img className = {styles.LoginPicture} src={LoginPicture} alt={"LoginPicture"}/>                        
                     </div>
                     <div className = {styles.LoginRight}>
                         <div className = {styles.LoginRightWrap}>
