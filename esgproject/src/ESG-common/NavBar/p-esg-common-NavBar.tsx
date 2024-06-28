@@ -6,10 +6,10 @@ import SHA256 from 'crypto-js/sha256';
 import ImageLogo from '../../assets/image/logo.png';
 import ImageSetting from '../../assets/image/setting.png';
 import ImageLogout from '../../assets/image/logout-black.png';
-import ImageUserInfo from '../../assets/image/navbar-userinfo.png';
-import ImagePassword from '../../assets/image/navbar-password.png';
-import ImageXButton from '../../assets/image/navbar-xButton.svg';
-import ImageCheckButton from '../../assets/image/navbar-checkButton.svg';
+import ImageUserInfo from '../../assets/image/navbar-userinfo-white.png';
+import ImagePassword from '../../assets/image/navbar-password-white.png';
+import ImageXButton from '../../assets/image/condition/xButton-white.svg';
+import ImageCheckButton from '../../assets/image/condition/check.svg';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 
 import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
