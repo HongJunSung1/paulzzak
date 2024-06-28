@@ -130,7 +130,8 @@ const LoginPage = () => {
             cookie.save('userInfo', result[0][0], {
                 path : '/',
                 expires,
-                secure : true
+                secure : true,
+                domain: 'esgplatform.co.kr',
                 // httpOnly : true
             });
             // sessionStorage.setItem('userInfo',JSON.stringify(result[0][0]));
