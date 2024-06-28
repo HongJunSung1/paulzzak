@@ -11,7 +11,6 @@ import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 
 import { SP_Request } from '../hooks/sp-request.tsx';
 import SHA256 from 'crypto-js/sha256';
-import cookie from 'react-cookies';
 import emailjs from '@emailjs/browser';
 
 // 메시지 박스

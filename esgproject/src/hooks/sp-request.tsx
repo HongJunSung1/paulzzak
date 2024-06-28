@@ -2,11 +2,16 @@ import axios from "axios";
 import cookie from 'react-cookies';
 
 export const SP_Request = async (SpName : string, sendData : any) => {
-    const apiUrl = "http://localhost:9090/spRequest";
-    // const apiUrl = "http://43.203.127.56:9090/ESGbbollock/spRequest";
+    // const apiUrl = "http://localhost:9090/spRequest";
+    const apiUrl = "http://43.203.127.56:9090/ESGbbollock/spRequest";
+
+    const userInfoStr = sessionStorage.getItem('userInfo');
+    let userInfo : any;
+    if(userInfoStr){
+        userInfo = JSON.parse(userInfoStr);
+    }
     
-    
-    const userCD = cookie.load('userInfo') ? cookie.load('userInfo').UserCD : "";
+    const userCD = userInfo?.UserCD;
 
 
     try {

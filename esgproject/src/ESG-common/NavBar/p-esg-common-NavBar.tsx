@@ -19,7 +19,6 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import { useNavigate  } from 'react-router-dom';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
-import cookie from 'react-cookies';
 
 // 메시지 박스
 let message : any     = [];
@@ -28,28 +27,18 @@ let messageType : string = ""; // 한 화면에서 YesNo 메세지박스를 2개
 
 // 화면 이동 URL
 let displayUrl : string = "";
-
-interface MenuInfo {
-    id: string;
-    menuName: string;
-    url: string;
-  }
-  
-  interface MenuInfoContextProps {
-    menuInfo: MenuInfo | null;
-  }
   
 // const data = cookie.load('menuList') || [];
-const sessionStr = sessionStorage.getItem('menuList');
-let data : any;
-if(sessionStr) {
-    data = JSON.parse(sessionStr);
-}
 
 
 const Navbar = ({strOpenUrl, isDataChanged}) => {
-    const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
 
+    const sessionStr = sessionStorage.getItem('menuList');
+    let data : any;
+    if(sessionStr) {
+        data = JSON.parse(sessionStr);
+    }
+    
     // 로딩뷰
     const [loading,setLoading] = useState(false);
 
@@ -75,10 +64,10 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const passwordArrow = passwordCollapsed ? <HiChevronUp /> : <HiChevronDown />;
     
     // ID 정보
-    const sessionStr = sessionStorage.getItem('userInfo');
+    const userInfoStr = sessionStorage.getItem('userInfo');
     let userInfo : any;
-    if(sessionStr){
-        userInfo = JSON.parse(sessionStr);
+    if(userInfoStr){
+        userInfo = JSON.parse(userInfoStr);
     }
 
     let UserID = userInfo?.UserID;
@@ -167,10 +156,8 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
     const searchHandler = async (e) =>{
         setSearchText(e.target.value);
-
         if(searchText !== "" && e.currentTarget.value.trim() !== ""){
             const result = await SP_Request("S_ESG_FormSearch_Query",[{ FormName : e.currentTarget.value, DataSet : "DataSet1"}]);
-            
             if(result[0].length > 0){
                 setResultData(result[0]);
                 setIsOpen(true);
