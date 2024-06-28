@@ -25,8 +25,11 @@ const SideBar = ({ items, strOpenUrl}) => {
     if(sessionStr){
       data = JSON.parse(sessionStr);
     }
-    setTotMenuData(data);
-    setSelectedMenu(data.find(item => item.id === '1').LMenuName)
+    
+    if(data){
+      setTotMenuData(data);
+      setSelectedMenu(data.find(item => item.id === '1').LMenuName);
+    }
   }, []);
 
    useEffect(() => {

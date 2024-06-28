@@ -104,7 +104,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
 
     useEffect(() => {
-        const isLogin = cookie.load('userInfo') !== null;
+        const isLogin = cookie.load('userInfo');
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }
