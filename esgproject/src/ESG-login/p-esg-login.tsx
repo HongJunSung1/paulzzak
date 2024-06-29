@@ -2,8 +2,9 @@ import React, { useState, useRef}  from 'react';
 import styles from './p-esg-login.module.css';
 import { useNavigate  } from 'react-router-dom';
 
-import EYLogo from '../assets/image/EYLogo.svg';
-import LoginPicture from '../assets/image/LoginPicture.jpg';
+import EGLogo from '../assets/image/EGlogo.png';
+import LoginPicture from '../assets/image/LoginPicture_3.jpg'
+// import LoginPicture from '../assets/image/LoginPicture.jpg';
 // import LoginPicture from '../assets/image/loginPicture_2.png';
 import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import MessageBoxYesNo from '../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
@@ -332,7 +333,7 @@ const LoginPage = () => {
                     <div className = {styles.LoginRight}>
                         <div className = {styles.LoginRightWrap}>
                             <div className={styles.EYLogoWrap}>
-                                <img className = {styles.EYLogo} src={EYLogo} alt={"EYLogo"}></img>
+                                <img className = {styles.EYLogo} src={EGLogo} alt={"EYLogo"}></img>
                             </div>
                             {!userInfoCheck && 
                             <div>

@@ -31,8 +31,8 @@ const SideBarItem = ({ item, strOpenUrl}) => {
                     style={{ fontWeight: item.pmenuId==="ROOT"? "600": "100",
                               height: item.pmenuId==="ROOT"? "35px": "15px",
                               lineHeight: item.pmenuId==="ROOT"? "35px": "15px",
-                              paddingLeft: "10px",
-                              paddingRight: "10px",
+                              paddingLeft: "15px",
+                              paddingRight: "15px",
                               marginBottom: "0px",
                               marginTop: "0px",
                               cursor: "pointer",
@@ -63,7 +63,7 @@ const SideBarItem = ({ item, strOpenUrl}) => {
           <div className = {styles.menuName} 
               style={{ fontWeight: item.pmenuId==="ROOT"? "bold": "100",
                         marginTop: item.pmenuId==="ROOT"? "15px": "5px",
-                        paddingLeft: "10px",
+                        paddingLeft: "15px",
                         cursor: "pointer",
                         color: "rgb(199, 192, 192)"
                     }}

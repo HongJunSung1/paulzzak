@@ -4,7 +4,7 @@
     background-color: white;
     color: black;
     font-weight: bold;
-    padding-left: 5px;
+    padding-left: 10px;
     font-size: 25px;
     line-height:48px;
     display: flex;
@@ -57,9 +57,10 @@
 
 .ImageLogo{
     padding-right: 15px;
-    width: 30px;
+    width: 130px;
     object-fit: cover;
     box-sizing: content-box;
+    margin:0px 4px;
 }
 
 .ImageContainer{

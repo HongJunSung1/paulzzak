@@ -16,6 +16,7 @@
     justify-content: space-between;
     cursor:pointer;
     line-height:23px;
+    margin: 5px;
 }
 
 .SideBarName{

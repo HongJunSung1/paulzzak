@@ -3,7 +3,7 @@
     height: 100vh;
     /* 설정 */
     position: relative;
-    background-color: rgb(219, 219, 228);
+    background-color: rgb(237, 238, 239);
 }
 
  
@@ -18,12 +18,13 @@
   border: 2px solid white;
   display: flex;
   background-color: white;
+  box-shadow: 5px 4px 20px #0000000d;
 }
 
 
 .LoginLeft{
     width: 55%;
-    background-color: rgb(24, 24, 131);
+    background-color: black;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
     overflow:hidden;
@@ -51,11 +52,13 @@
 }
 
 .LoginPicture{
-    width: 100%;
+    /* width: 100%;
     object-fit: cover;
     position: relative;
     bottom: 31px;
-    border-bottom-left-radius: 30px;
+    border-bottom-left-radius: 30px; */
+    height: 100%;
+    opacity: 0.9;
 }
 
 .LoginLeftBottom{
@@ -80,13 +83,13 @@
 
 .EYLogoWrap{
     position: relative;
-    left: 42%;
+    left: 35%;
 }
 
 .EYLogo{
-    width: 86px;
-    height: 100px;
-
+    width: 130px;
+    height: 130px;
+    opacity: 1.2;
 }   
 
 .LoginInputWrap{
@@ -103,13 +106,14 @@
 
 .LoginInput{
     width: 322px;
-    height: 40px;
+    height: 50px;
     vertical-align: middle;
     border-radius: 5px;
     border: 1px solid #dedede;
     
     padding: 1px 10px;
     margin-bottom: 10px;
+    font-family: "SpoqaHanSansNeo-Medium" !important;
 }
 
 .LoginInputWrap input:focus, .LoginInputWrapChange input:focus{
@@ -123,7 +127,7 @@ input::placeholder  {
 
 .LoginBtn{
     width: 322px;
-    background-color:rgb(24, 24, 131);
+    background-color:rgb(20, 36, 77);
     height: 60px;
     border-radius: 5px;
     border: none;
@@ -149,9 +153,9 @@ input::placeholder  {
 
 .copyright{
     color: rgb(206, 206, 206);
-    font-size: 14px;
-    padding-top: 80px;
-    padding-left: 80px;
+    font-size: 12px;
+    padding-top: 65px;
+    text-align: center;
 }
 
 .copyrightSub{
