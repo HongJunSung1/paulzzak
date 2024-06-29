@@ -345,7 +345,7 @@ const LoginPage = () => {
                                     {isPassWord && <div className = {styles.initPassword} onClick={initPasswordMsg}>비밀번호 초기화</div>}
                                 </div>
                                 <div className={styles.copyright}>
-                                    Copyright © 2024.Bblock. All rights reserved
+                                    Copyright © 2024.ESG Platform. All rights reserved
                                 </div>
                             </div>
                             }
@@ -360,7 +360,7 @@ const LoginPage = () => {
                                     <button className = {styles.LoginBtn} onClick={passwordChange}>비밀번호 변경</button>
                                 </div>
                                 <div className={styles.copyrightSub}>
-                                    Copyright © 2024.Bblock. All rights reserved
+                                    Copyright © 2024.ESG Platform. All rights reserved
                                 </div>
                             </div>
                             }

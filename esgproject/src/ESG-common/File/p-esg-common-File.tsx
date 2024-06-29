@@ -110,7 +110,7 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                 // 화면 주소 추가
                 formData.append('openUrl', openUrl ?  openUrl.substr(1) : '');
                 try {
-                    const response = await fetch('http://localhost:9090/uploadFiles', {
+                    const response = await fetch('http://43.203.127.56:9090/ESGbbollock/uploadFiles', {
                         method: 'POST',
                         body: formData,
                     });

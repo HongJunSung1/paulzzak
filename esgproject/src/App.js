@@ -71,7 +71,6 @@ function App() {
   }, [strOpenUrl]);
 
 
-
   return (      
     <div className="App" style={{backgroundColor:"#faf9f8"}}>
         {isLoginPage && 
