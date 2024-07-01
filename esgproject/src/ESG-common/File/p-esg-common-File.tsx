@@ -111,6 +111,7 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                 formData.append('openUrl', openUrl ?  openUrl.substr(1) : '');
                 try {
                     const response = await fetch('http://43.203.127.56:9090/ESGbbollock/uploadFiles', {
+                    // const response = await fetch('http://localhost:9090/uploadFiles', {
                         method: 'POST',
                         body: formData,
                     });
@@ -179,7 +180,8 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                     formData.append('fileName', result[0][0].uuidFileName);
                     formData.append('filePath', result[0][0].filePath);
 
-                    const fetchPath = "http://localhost:9090/download/";
+                    // const fetchPath = "http://localhost:9090/download/";
+                    const fetchPath = "http://43.203.127.56:9090/ESGbbollock/download/"
                     const response = await fetch(fetchPath, {
                         method: 'POST',
                         body: formData,
@@ -233,7 +235,8 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                 formData.append('filePath', spResult[0][0].filePath);
 
             }
-            const response = await fetch('http://localhost:9090/deleteFile', {
+            // const response = await fetch('http://localhost:9090/deleteFile', {
+            const response = await fetch('http://43.203.127.56:9090/ESGbbollock/deleteFile', {
                 method: 'POST',
                 body: formData,
             });
