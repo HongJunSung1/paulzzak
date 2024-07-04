@@ -154,8 +154,10 @@ input::placeholder  {
 .copyright{
     color: rgb(206, 206, 206);
     font-size: 12px;
-    padding-top: 65px;
+    /* padding-top: 20px; */
+    position: relative;
     text-align: center;
+    bottom: -30px;
 }
 
 .copyrightSub{

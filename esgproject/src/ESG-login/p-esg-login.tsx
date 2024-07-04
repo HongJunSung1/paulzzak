@@ -331,7 +331,7 @@ const LoginPage = () => {
                         <img className = {styles.LoginPicture} src={LoginPicture} alt={"LoginPicture"}/>                        
                     </div>
                     <div className = {styles.LoginRight}>
-                        <div className = {styles.LoginRightWrap}>
+                        <div className = {styles.LoginRightWrap} style={{top: userInfoCheck ? '7%' : ''}}>
                             <div className={styles.EYLogoWrap}>
                                 <img className = {styles.EYLogo} src={EGLogo} alt={"EYLogo"}></img>
                             </div>
@@ -359,7 +359,7 @@ const LoginPage = () => {
                                     <div className={styles.loginAlert}>{errMsg}</div>
                                     <button className = {styles.LoginBtn} onClick={passwordChange}>비밀번호 변경</button>
                                 </div>
-                                <div className={styles.copyrightSub}>
+                                <div className={styles.copyrightSub} style={{paddingLeft:"57px"}}>
                                     Copyright © 2024.ESG Platform. All rights reserved
                                 </div>
                             </div>
