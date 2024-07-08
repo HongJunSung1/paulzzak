@@ -10,6 +10,7 @@ import DatePick from '../../../ESG-common/DatePicker/p-esg-common-datePicker.tsx
 import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import Splitter from "../../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 import './p-esg-env-scope3.module.css';
 
@@ -41,6 +42,7 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
+    const [grid2Data, setGrid2Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -55,6 +57,7 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
     
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
+    const grid2Ref : any = useRef(null);
 
     // 툴바 
     const toolbar = [  
@@ -76,6 +79,8 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
      const columns1 = [
         {name : "Scope3CD"             , header: "내부코드"                                  , width:  70, hidden: true},
         {name : "Year"                 , header: "연도"                                      , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "BizUnitName"          , header: "사업부문"            , width: 150 , renderer: {type: "searchbox", options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
+        {name : "BizUnitCD"            , header: "사업부문 코드"        , width: 100 , hidden : true},
         {name : "PurItemService"       , header: "1.  구매한 제품\n및 서비스"                , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "CapitalGoods"         , header: "2.  자본재"                                , width: 100, editor: 'text', renderer : {type: 'number'}},
         {name : "ExceptFuelEnergy"     , header: "3.  Scope 1,2에 포함되지\n않는 연료&에너지", width: 150, editor: 'text', renderer : {type: 'number'}},
@@ -96,6 +101,28 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
         {name : "Total"                , header: "소계"                                      , width: 120, renderer : {type: 'sum', options:{sumAr : ["PurItemService", "CapitalGoods", "ExceptFuelEnergy", "UpLogistics", "WorkWasted", "BusinessTrip", "Commute", "UpLeaseProperties", "DownLogistics", "SoldItemManufacturing", "SoldItemUse", "SoldItemWasted", "DownLeaseProperties", "Franchise", "Investment", "OtherUpEmission", "OtherDownEmission"]}}},
     ];
 
+    const columns2 = [
+        {name : "BizUnitName"          , header: "사업부문"                                 , width: 150 },
+        {name : "PurItemService"       , header: "1.  구매한 제품\n및 서비스"                , width: 100, renderer : {type: 'number'}},
+        {name : "CapitalGoods"         , header: "2.  자본재"                               , width: 100, renderer : {type: 'number'}},
+        {name : "ExceptFuelEnergy"     , header: "3.  Scope 1,2에 포함되지\n않는 연료&에너지", width: 150, renderer : {type: 'number'}},
+        {name : "UpLogistics"          , header: "4.  업스트림\n운송 및 물류"                , width: 100, renderer : {type: 'number'}},
+        {name : "WorkWasted"           , header: "5.  작업 중\n발생한 폐기물"                , width: 100, renderer : {type: 'number'}},
+        {name : "BusinessTrip"         , header: "6.  출장"                                  , width: 100, renderer : {type: 'number'}},
+        {name : "Commute"              , header: "7.  직원 출퇴근"                           , width: 100, renderer : {type: 'number'}},
+        {name : "UpLeaseProperties"    , header: "8.  업스트림\n임대(차) 자산"               , width: 100, renderer : {type: 'number'}},
+        {name : "DownLogistics"        , header: "9.  다운스트림\n운송 및 물류"              , width: 100, renderer : {type: 'number'}},
+        {name : "SoldItemManufacturing", header: "10. 판매된\n제품의 가공"                   , width: 100, renderer : {type: 'number'}},
+        {name : "SoldItemUse"          , header: "11. 판매된\n제품의 사용"                   , width: 100, renderer : {type: 'number'}},
+        {name : "SoldItemWasted"       , header: "12. 판매된\n제품의 폐기"                   , width: 100, renderer : {type: 'number'}},
+        {name : "DownLeaseProperties"  , header: "13. 다운스트림\n임대(차) 자산"             , width: 100, renderer : {type: 'number'}},
+        {name : "Franchise"            , header: "14. 프랜차이즈"                            , width: 100, renderer : {type: 'number'}},
+        {name : "Investment"           , header: "15. 투자"                                  , width: 100, renderer : {type: 'number'}},
+        {name : "OtherUpEmission"      , header: "16. 기타 업스트림\n배출량"                 , width: 120, renderer : {type: 'number'}},
+        {name : "OtherDownEmission"    , header: "17. 기타 다운스트림\n배출량"               , width: 120, renderer : {type: 'number'}},
+        {name : "Total"                , header: "소계"                                      , width: 120, renderer : {type: 'sum', options:{sumAr : ["PurItemService", "CapitalGoods", "ExceptFuelEnergy", "UpLogistics", "WorkWasted", "BusinessTrip", "Commute", "UpLeaseProperties", "DownLogistics", "SoldItemManufacturing", "SoldItemUse", "SoldItemWasted", "DownLeaseProperties", "Franchise", "Investment", "OtherUpEmission", "OtherDownEmission"]}}},
+    ];
+
 
     // 툴바 이벤트
     const toolbarEvent = async (clickID) =>{
@@ -103,6 +130,7 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
             // 신규
             case 0 :
                 setGrid1Data([]);
+                setGrid2Data([]);
 
                 // 수정된 내역 초기화
                 setGrid1Changes({DataSet : '', grid: []});                
@@ -125,10 +153,12 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
+                            setGrid2Data(result[1]);
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             // 조회 결과 초기화
                             setGrid1Data([]);
+                            setGrid2Data([]);
 
                             message  = [];
                             message.push({text: "조회 결과가 없습니다."})
@@ -271,6 +301,7 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
         if (openTabs.find(item => item.url === '/PEsgEnvScope3') === undefined) {
             setYear('');
             setGrid1Data([]);
+            setGrid2Data([]);
         }
     }, [openTabs]);
 
@@ -286,7 +317,10 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "Scope3" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                <Splitter SplitType={"vertical"} FirstSize={50} SecondSize={50}>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "Scope3" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid2Ref} gridId="DataSet2" title = "사업부문별 합계" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                </Splitter>
             </DynamicArea>
         </div>
     )
