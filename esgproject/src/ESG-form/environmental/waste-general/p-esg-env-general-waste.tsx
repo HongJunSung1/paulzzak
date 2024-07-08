@@ -11,6 +11,7 @@ import SearchBox from '../../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx'
 import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import Splitter from "../../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 
 type gridAr = {
@@ -42,6 +43,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
+    const [grid2Data, setGrid2Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -55,6 +57,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
 
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
+    const grid2Ref : any = useRef(null);
 
     // 툴바 
     const toolbar = [  
@@ -87,6 +90,8 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
     const columns1 = [
         {name : "GeneralWasteCD"      , header: "내부코드"             , width: 100, hidden: true},
         {name : "Year"                , header: "연도"                 , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "CompanyCD"           , header: "회사코드"             , width: 100, hidden: true},
+        {name : "CompanyName"         , header: "회사명"               , width: 170, renderer: {type: 'searchbox', options: {searchCode: 6, CodeColName :"CompanyCD"}}},
         {name : "BizUnitCD"           , header: "사업부문코드"         , width: 100, hidden: true},
         {name : "BizUnitName"         , header: "사업부문"             , width: 170, renderer: {type: 'searchbox', options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
         {name : "RecyclingPreProc"    , header: "재활용을\n위한 전처리", width: 150, editor: 'text', renderer: {type: 'number'}},
@@ -98,7 +103,26 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
         {name : "TotalEnergy"         , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["EnergyRecover", "EnergyNonRecover"]}}},
         {name : "Etc"                 , header: "기타"                 , width: 150, editor: 'text', renderer: {type: 'number'}},
         {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}},
-        {name : "RecyclePortion"      , header: "재활용률"             , width: 150, renderer : {type: 'percent', options:{sumAr: ["RecyclingPreProc", "Recycling"], divideAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}}
+        {name : "RecyclePortion"      , header: "재활용률"             , width: 150, renderer : {type: 'percent', options:{sumAr: ["RecyclingPreProc", "Recycling"], divideAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}},
+        {name : "Confirm1"            , header: "1차 승인"             , width: 80 , renderer : {type: 'checkbox'}},
+        {name : "Confirm2"            , header: "2차 승인"             , width: 80 , renderer : {type: 'checkbox'}},
+        {name : "Confirm3"            , header: "3차 승인"             , width: 80 , renderer : {type: 'checkbox'}}
+    ]
+
+    const columns2 = [
+        {name : "Year"                , header: "연도"                 , width: 100},
+        {name : "CompanyName"         , header: "회사명"               , width: 170},
+        {name : "BizUnitName"         , header: "사업부문"             , width: 170},
+        {name : "RecyclingPreProc"    , header: "재활용을\n위한 전처리", width: 150, renderer: {type: 'number'}},
+        {name : "Recycling"           , header: "재활용"               , width: 150, renderer: {type: 'number'}},
+        {name : "TotalRecycle"        , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["RecyclingPreProc", "Recycling"]}}},
+        {name : "Bury"                , header: "매립"                 , width: 150, renderer: {type: 'number'}},
+        {name : "EnergyRecover"       , header: "에너지회수"           , width: 150, renderer: {type: 'number'}},
+        {name : "EnergyNonRecover"    , header: "에너지비회수"         , width: 150, renderer: {type: 'number'}},
+        {name : "TotalEnergy"         , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["EnergyRecover", "EnergyNonRecover"]}}},
+        {name : "Etc"                 , header: "기타"                 , width: 150, renderer: {type: 'number'}},
+        {name : "Total"               , header: "소계"                 , width: 150, renderer : {type: 'sum'    , options:{sumAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}},
+        {name : "RecyclePortion"      , header: "재활용률"             , width: 150, renderer : {type: 'percent', options:{sumAr: ["RecyclingPreProc", "Recycling"], divideAr: ["RecyclingPreProc", "Recycling", "Bury", "EnergyRecover", "EnergyNonRecover", "Etc"]}}},
     ]
 
 
@@ -108,6 +132,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
             // 신규
             case 0 :
                 setGrid1Data([]);
+                setGrid2Data([]);
                 setGrid1Changes({DataSet : '', grid: []})
                 break;
 
@@ -129,10 +154,12 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
                         if(result[0].length > 0){
                             // 결과값이 있을 경우 그리드에 뿌려주기
                             setGrid1Data(result[0]);
+                            setGrid2Data(result[1]);
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             // 조회 결과 초기화
                             setGrid1Data([]);
+                            setGrid2Data([]);
 
                             message  = [];
                             message.push({text: "조회 결과가 없습니다."})
@@ -274,6 +301,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
             setYear('');
             setBizUnitCD(0);
             setGrid1Data([]);
+            setGrid2Data([]);
             setGrid1Changes({DataSet : '', grid: []})
         }
     }, [openTabs]);
@@ -290,7 +318,10 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Grid ref={grid1Ref} gridId="DataSet1" title = "일반 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                <Splitter SplitType={"vertical"} FirstSize={50} SecondSize={50}>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "일반 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid2Ref} gridId="DataSet2" title = "연도별·회사별 합계" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                </Splitter>
             </DynamicArea>
         </div>
     )
