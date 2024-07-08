@@ -228,7 +228,9 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
 
 
         onChange(newValue) {
-            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue);
+            if(newValue !== 0){
+                this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue);
+            }
         }
 
         gridChange(newValue){
