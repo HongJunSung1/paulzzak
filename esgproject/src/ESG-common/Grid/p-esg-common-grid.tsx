@@ -109,6 +109,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
     const clickRowOneAppend = () => {
         if(gridRef.current){
             gridRef.current.getInstance().appendRow();
+            gridRef.current.getInstance().refreshLayout();
         }
     }
 
@@ -311,7 +312,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
           this.grid = props.grid;
           this.rowKey = props.rowKey;
           this.columnInfo = props.columnInfo;
-          const formattedValue = this.formatValue(props.value?.replace(',', ''));
+          let formattedValue = this.formatValue(props.value?.replace(',', ''));
           el.innerText = formattedValue;
           this.el = el;
         }

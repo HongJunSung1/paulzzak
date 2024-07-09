@@ -1,0 +1,97 @@
+.MainWrap{
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 95px);
+    display: flex;
+    justify-content: space-between;
+}
+
+.MainWrap div{
+    overflow: hidden;
+}
+
+
+.LeftWrap{
+    position: relative;
+    left: 0;
+    width:50%;
+}
+
+.RightWrap{
+    position: relative;
+    right: 0;
+    width:50%;
+}
+
+.LeftTop{
+    position: relative;
+    top: 0;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.LeftBottom{
+    position: relative;
+    bottom: 0;
+    height: 50%;
+    background-color: white;
+    border: 0.1px solid #eee;
+    border-radius: 10px;
+    margin-top : 5px;
+    margin-right: 5px;
+}
+
+.LeftTopChart1{
+    position: relative;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    border: 0.1px solid #eee;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-right : 2.5px;
+    margin-bottom: 5px;
+}
+
+.LeftTopChart2{
+    position: relative;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    border: 0.1px solid #eee;
+    border-radius: 10px;
+    margin-left : 2.5px;
+    margin-right : 5px;
+    margin-bottom: 5px;
+}
+
+.RightTop{
+    position: relative;
+    padding:5px;
+    top: 0;
+    height: 50%;
+    background-color: white;
+    border: 0.1px solid #eee;
+    border-radius: 10px;
+    margin-bottom : 5px;
+}
+
+.RightBottom{
+    position: relative;
+    bottom: 0;
+    height: 50%;
+    background-color: white;
+    border: 0.1px solid #eee;
+    border-radius: 10px;
+    margin-top : 5px;
+}
+
+.BoardName{
+    font-size: 19px;
+    font-weight: bold;
+    margin: 4px 0px 4px 0px;
+}

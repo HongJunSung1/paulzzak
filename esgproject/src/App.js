@@ -75,7 +75,7 @@ function App() {
     <div className="App" style={{backgroundColor:"#faf9f8"}}>
         {isLoginPage && 
           <Routes>
-            <Route path="/" exact element={<Login/>}></Route>
+            <Route path="/" exact element={<Login strOpenUrl={setStrOpenUrl}/>}></Route>
           </Routes>
         }
         {!isLoginPage && 

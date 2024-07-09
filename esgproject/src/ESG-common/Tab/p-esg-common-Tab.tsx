@@ -98,7 +98,7 @@
             if(menuInfo === null && initialMenuInfo){
                 setActiveTab(initialMenuInfo.id);
                 // navigate(initialMenuInfo.url);
-                strOpenUrl(initialMenuInfo.url);
+                strOpenUrl("/"+initialMenuInfo.url);
             }
         }, [menuInfo, strOpenUrl, initialMenuInfo]);
         
@@ -107,13 +107,17 @@
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
             const filterData = data.filter((item => item.url === tab.url.replace('/', '')));
             setMenuInfo(filterData[0]);
-            strOpenUrl(tab.url);
+            if(tab.url === "main"){
+                strOpenUrl("/"+tab.url);
+            }else{
+                strOpenUrl(tab.url);
+            }
         };
 
 
 
         const closeTab = (tab) => {
-            if (tab.url !== "main"){
+            if (tab.url !== "/main"){
                 let order : number = 0;
                 let newTabData : any[] = [];
                 let originTabData : any[] = [];

@@ -18,7 +18,7 @@ import emailjs from '@emailjs/browser';
 let message : any     = [];
 let title   : string  = "";
 
-const LoginPage = () => {
+const LoginPage = ({strOpenUrl}) => {
 
     // 쿠키 삭제
     // cookie.remove('userInfo', {path : '/'});
@@ -153,6 +153,7 @@ const LoginPage = () => {
                     //     secure : true   
                     // });
                     setTimeout(()=>{
+                        strOpenUrl("/main");
                         setLoading(false);// 로딩창 종료
                         navigate("/main");// 메인 화면 이동
                     },500)

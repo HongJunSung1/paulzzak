@@ -1,0 +1,100 @@
+import React, { useRef, useEffect, useState} from 'react';
+import styles from './p-esg-common-chart.module.css'
+
+import { BarChart, AreaChart, LineChart, LineAreaChart, ColumnChart, ColumnLineChart, BulletChart, BubbleChart, RadarChart, PieChart, RadialBarChart, GaugeChart} from '@toast-ui/react-chart';
+import '@toast-ui/chart/dist/toastui-chart.min.css';
+
+const ChartComp = (settings : any) => {
+    
+    const chartRef = useRef<any>(null);
+    const [isShow,setIsShow] = useState(false);
+
+
+    useEffect(()=>{
+        setIsShow(false);
+        setTimeout(()=>{
+            setIsShow(true);
+        },100)
+    },[settings.options])
+
+    if(settings.ChartType === "BarChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <BarChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "AreaChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <AreaChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "LineChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <LineChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "LineAreaChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <LineAreaChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "ColumnChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <ColumnChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "ColumnLineChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <ColumnLineChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "BulletChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <BulletChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "BubbleChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <BubbleChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "RadarChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <RadarChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "PieChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <PieChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "RadialBarChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <RadialBarChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else if (settings.ChartType === "GaugeChart"){
+        return (
+            <div className={styles.ChartWrap} style={{width:settings.options.chart.width, height:settings.options.chart.height, overflow:'hidden'}}>
+                {isShow && <GaugeChart ref={chartRef} data={settings.data} options={settings.options}/>}
+            </div>
+        )
+    }else{
+        return(
+            <></>
+        )
+    }
+    
+}
+
+export default ChartComp;

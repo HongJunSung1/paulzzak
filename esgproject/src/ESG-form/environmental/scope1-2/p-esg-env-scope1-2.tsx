@@ -47,12 +47,12 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
     const [grid2Data, setGrid2Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
-    let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    let grid1Changes : gridAr = { DataSet : '', grid: []};
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         if(gridId === 'DataSet1'){
-            setGrid1Changes(changes);
+            grid1Changes = changes;
         }
     };
     
@@ -104,6 +104,8 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
             case 0 :
                 setGrid1Data([]);
                 setGrid2Data([]);
+
+                grid1Changes = {DataSet : '', grid: []};    
                 break;
 
             // 조회
@@ -132,6 +134,8 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
                             title   = "조회 오류";
                             setGrid1Data([]);
                             setGrid2Data([]);
+
+                            grid1Changes = {DataSet : '', grid: []};  
                         }
                     } catch (error) {
                         // SP 호출 시 에러 처리 로직
@@ -160,6 +164,8 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
                 combinedData.push(grid1Changes);
+
+                console.log(combinedData);
 
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length === 0){
@@ -196,7 +202,8 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
                         grid1Ref.current.setRowData(result[0]);
 
                         // 시트 변경 내역 초기화
-                        setGrid1Changes({ DataSet : '', grid: []});
+                        grid1Changes = { DataSet : '', grid: []};
+                        console.log(grid1Changes);
 
                         const gridAllData = grid1Ref.current.getAllData();
                         setGrid1Data(gridAllData);
