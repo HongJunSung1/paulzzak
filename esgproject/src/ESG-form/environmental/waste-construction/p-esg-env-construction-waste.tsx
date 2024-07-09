@@ -473,7 +473,7 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
                     <DatePick name={"연도"}   value={year}  onChange={setYear} width={200} type={"year"} isGrid={false}/>    
-                    <SearchBox name={"부서명"} value={bizUnitCD} onChange={setBizUnitCD} searchCode={7} width={200} isGrid={false}/>   
+                    <SearchBox name={"사업부문명"} value={bizUnitCD} onChange={setBizUnitCD} searchCode={7} width={200} isGrid={false}/>   
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
