@@ -10,7 +10,7 @@ const Split = ({children, SplitType, FirstSize, SecondSize}) => {
     const secondContent = contentsArray[1]; // 스플리터 안 두번째 요소
 
     return (
-    <Splitter style={{height: "100%"}} className="mb-5" layout={SplitType}>
+    <Splitter style={{height: "100%", width: "100%"}} className="mb-5" layout={SplitType}>
         <SplitterPanel className="flex align-items-center justify-content-center" size={FirstSize}>
             {firstContent}
         </SplitterPanel>

@@ -150,7 +150,8 @@ th{
 }
 
 .tableWrap{
-    position: absolute;
+    /* position: absolute; */
+    position: fixed;
     z-index: 50;
     border-spacing: 0px;
     border-collapse: separate;

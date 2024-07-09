@@ -54,6 +54,8 @@ const DatePick = (settings : any) => {
                                     + (date.getDate().toString().length === 1 ? "0" + date.getDate().toString() : date.getDate().toString());
                 settings.onChange(dateData);
             }
+        } else{
+            settings.onChange('');
         }
     };
 
@@ -93,6 +95,9 @@ const DatePick = (settings : any) => {
                         popperPlacement='bottom-start'
                         yearItemNumber={8}
                         calendarClassName={styles.calenderWrapper}
+                        popperProps={{
+                            strategy: 'fixed'
+                        }}
                     />
                     <div className={styles.calendarImgWrap} onClick={dateOpen}>
                         <div className={settings.isGrid ? styles.calendarImgGrid : styles.calendarImg}/>
@@ -121,6 +126,9 @@ const DatePick = (settings : any) => {
                         selected={selectedDate}
                         onChange={(date) =>changeDate(date)}
                         popperPlacement='bottom-start'
+                        popperProps={{
+                            strategy: 'fixed'
+                        }}
                         // calendarClassName={styles.calenderWrapper}
                     />
                     <div className={styles.calendarImgWrap} onClick={dateOpen}>
@@ -152,6 +160,9 @@ const DatePick = (settings : any) => {
                         onChange={(date) =>changeDate(date)}
                         popperPlacement='bottom-start'
                         // calendarClassName={styles.calenderWrapper}
+                        popperProps={{
+                            strategy: 'fixed'
+                        }}
                     />
                     <div className={styles.calendarImgWrap} onClick={dateOpen}>
                         <div className={styles.calendarImg}/>

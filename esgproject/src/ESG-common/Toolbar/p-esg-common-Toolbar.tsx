@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-Toolbar.module.css';
-import New from '../../assets/image/toolbar/new.svg';
+import New from '../../assets/image/toolbar/refresh.svg';
 import Query from '../../assets/image/toolbar/query.svg';
 import Save from '../../assets/image/toolbar/save.svg';
 import Cut from '../../assets/image/toolbar/cut.svg';

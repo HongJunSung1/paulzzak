@@ -282,38 +282,41 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                         <input type="file" multiple={true} ref={fileInput} onChange ={handleChange} style={{display: "none"}}/>
                     </div>
                 </div>
-                <div className={styles.FileTableContainer}>
-                    <table>
-                        <thead className={styles.FileTableHead}>
-                            <tr>
-                                <th>파일코드</th>
-                                <th>파일명</th>
-                                <th>확장자</th>
-                                <th>크기</th>
-                                <th>다운로드</th>
-                                <th>삭제</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {fileOpen &&
-                                fileUpload.map((item, index) => (
-                                        <tr key={index}>
-                                            <td className={styles.FileCD}>{item.FileCD}</td>
-                                            <td className={styles.FileName}>{item.name}</td>
-                                            <td className={styles.FileSource}>{item.name.substr(item.name.lastIndexOf('.') + 1, )}</td>
-                                            <td className={styles.FileVolume}>{getFileSize(item.size)}</td>
-                                                <td className={styles.FileDownload}>
-                                                    {item.FileCD && <button className={styles.DownloadBtn} onClick={() => handleDownload(item.FileCD)}>다운로드</button>}                                                
-                                                    {!item.FileCD && <div></div>}
+                <div className={styles.FileTableParentContainer}>
+
+                    <div className={styles.FileTableContainer}>
+                        <table>
+                            <thead className={styles.FileTableHead}>
+                                <tr>
+                                    <th>파일코드</th>
+                                    <th>파일명</th>
+                                    <th>확장자</th>
+                                    <th>크기</th>
+                                    <th>다운로드</th>
+                                    <th>삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {fileOpen &&
+                                    fileUpload.map((item, index) => (
+                                            <tr key={index}>
+                                                <td className={styles.FileCD}>{item.FileCD}</td>
+                                                <td className={styles.FileName}>{item.name}</td>
+                                                <td className={styles.FileSource}>{item.name.substr(item.name.lastIndexOf('.') + 1, )}</td>
+                                                <td className={styles.FileVolume}>{getFileSize(item.size)}</td>
+                                                    <td className={styles.FileDownload}>
+                                                        {item.FileCD && <button className={styles.DownloadBtn} onClick={() => handleDownload(item.FileCD)}>다운로드</button>}                                                
+                                                        {!item.FileCD && <div></div>}
+                                                    </td>
+                                                <td className={styles.FileDelete}>
+                                                    <button className={styles.DeleteBtn} onClick={() => deleteTempFile(index, item)}>삭제</button>
                                                 </td>
-                                            <td className={styles.FileDelete}>
-                                                <button className={styles.DeleteBtn} onClick={() => deleteTempFile(index, item)}>삭제</button>
-                                            </td>
-                                        </tr>
-                                    ))
-                            }
-                        </tbody>
-                    </table>
+                                            </tr>
+                                        ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </>

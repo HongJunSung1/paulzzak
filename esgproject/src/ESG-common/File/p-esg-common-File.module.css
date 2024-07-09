@@ -1,19 +1,37 @@
 .WholeContainer {
     padding: 2px 2px;
     overflow: auto;
-    height: calc(100% - 5px);
+    height: 100%;
 }
 
+.FileTableParentContainer{
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 28px); 
+}   
+
 .FileTableContainer{
-    height: calc(100% - 20px);
+    height: calc(100% - 28px);
+    /* overflow: auto;  */
+    flex: 1; /* 나머지 공간을 차지하게 설정 */
+    overflow-y: auto;
+}
+
+.FileTableHead{
+    position:sticky;
+    top: 0;
+    border-top: 1px solid rgb(226, 213, 217);
+    border-bottom: 1px solid rgb(190, 171, 177);
+    border-collapse: collapse;
+    background: white;
 }
 
 .InputContainer{
-    height: 30px;
+    height: 24px;
     /* border-bottom: solid 1px #e5e7eb; */
     display: flex;
-    margin: 5px 0px;
-    float: right;
+    margin: 2px 0px;
+    /* float: right; */
 }
 
 .InputWrap{
@@ -22,9 +40,8 @@
     cursor: pointer;
     background: inherit;
     padding: 2px 15px; 
-    width: 120px;
+    width: 112px;
     display: flex;
-    margin-right: 5px;
 }
 
 .FileButton{
@@ -43,10 +60,12 @@
 
 
 .InputFileImg {
-    width: 22px;
-    height: 22px;
-    line-height: calc(100% - 20px);
+    width: 18px;
+    height: 18px;
+    line-height: calc(100% - 18px);
 }
+
+
 
 table{
     border-collapse: collapse;
@@ -54,8 +73,6 @@ table{
 }
 
 th {
-    border-top: 1px solid rgb(226, 213, 217);
-    border-bottom: 1px solid rgb(190, 171, 177);
     padding: 4px 0px;
 }
 

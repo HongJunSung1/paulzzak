@@ -1,5 +1,4 @@
 import axios from "axios";
-import cookie from 'react-cookies';
 
 export const SP_Request = async (SpName : string, sendData : any) => {
     // const apiUrl = "http://localhost:9090/spRequest";
