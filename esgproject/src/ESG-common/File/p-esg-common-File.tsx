@@ -7,16 +7,17 @@ import MessageBoxYesNo from '../../ESG-common/MessageBox/p-esg-common-MessageBox
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
 type CustomFileProps = {
-    openUrl: any;
-    source : any[];
-    fileCD : any;
+    openUrl    : any;
+    source     : any[];
+    fileCD     : any;
+    fileTitle  : any;
   };
 
 // 메시지 박스
 let message : any     = [];
 let title   : string  = "";
 
-const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
+const File = forwardRef(({openUrl, source, fileCD, fileTitle} : CustomFileProps, ref) => {
     
     // 메세지박스
     const [messageOpen, setMessageOpen] = useState(false)
@@ -280,6 +281,9 @@ const File = forwardRef(({openUrl, source, fileCD} : CustomFileProps, ref) => {
                         <img src={inputFileImg} alt="inputFileImg" className={styles.InputFileImg}/>
                         <button className={styles.FileButton}>파일첨부</button>
                         <input type="file" multiple={true} ref={fileInput} onChange ={handleChange} style={{display: "none"}}/>
+                    </div>
+                    <div className={styles.fileTitle}>
+                        {fileTitle}
                     </div>
                 </div>
                 <div className={styles.FileTableParentContainer}>

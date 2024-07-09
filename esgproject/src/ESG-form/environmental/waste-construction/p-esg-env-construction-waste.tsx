@@ -12,6 +12,7 @@ import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx'
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Splitter from "../../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
+import File from '../../../ESG-common/File/p-esg-common-File.tsx';
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 
 type gridAr = {
@@ -29,6 +30,10 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
+// 우클릭 조회 시 받는 내부코드 값
+let ConstructionWasteCD = 0
+let ConstructionWasteTitle = ""; // 파일첨부 제목
+
 const ConstructionWaste = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -44,6 +49,7 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
+    const [fileData , setFileData]  = useState([]);
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -59,6 +65,94 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
     const grid1Ref : any = useRef(null);
     const grid2Ref : any = useRef(null);
 
+    // 삭제 시 받는 FileCD 값
+    const [fileCD, setFileCD] = useState(0);
+
+    // 파일 첨부 
+    const fileRef : any = useRef(null);
+    let [fileAr] = useState<gridAr>({DataSet: '', grid: []});
+
+    // (파일첨부) 동적으로 화면 높이 구하기
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [containerHeight, setContainerHeight] = useState<number>(0);
+
+
+    // 우클릭 시 조회
+    const rightClick1 = (event: React.MouseEvent) => {
+        event.preventDefault();
+        setTimeout(async () => {
+            setFileData([]);
+            ConstructionWasteCD    =  0;
+            ConstructionWasteTitle = '';
+            if(grid1Ref.current.rightClick() !== null){
+                ConstructionWasteCD = grid1Ref.current.rightClick().ConstructionWasteCD;
+                ConstructionWasteTitle = grid1Ref.current.rightClick().BizUnitName;
+            }
+            // 조회 조건 담기
+            const conditionAr : any[] = [{ConstructionWasteCD : ConstructionWasteCD, DataSet : "FileSet1"}]
+
+            if(ConstructionWasteCD > 0){
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request("S_ESG_Env_ConstructionWaste_File_Query", conditionAr);
+                    if(result[0].length > 0){
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        setFileData(result[0]);
+                    } else{
+                        // 결과값이 없을 경우 처리 로직
+                        setLoading(false);
+                        let errMsg : any[] = [];
+                        errMsg.push({text: "데이터가 없습니다."});
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "조회 내역 없음";
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
+            } else {
+                setFileData([]);
+            }
+        }, 100)
+    }
+
+    // 저장된 파일 삭제 로직 : file 공통에서 서버 테이블의 file 데이터를 삭제했을 때 fileCD 값을 주어 fileCD 변화를 감지, deleteFile 함수를 실행시킨다.
+    useEffect(()=> {
+        if(fileCD > 0){
+            deleteFile(fileCD);
+        }
+    }, [fileCD]);
+
+
+    const deleteFile = async (fileCD) => {
+        setLoading(true);
+        setTimeout(async () => {
+            try{
+                const result = await SP_Request("S_ESG_Env_ConstructionWaste_File_Cut", [{FileCD: fileCD, ConstructionWasteCD : ConstructionWasteCD, DataSet: "FileSet1"}]);
+                if(result){
+                    let errMsg : any[] = [];
+                    errMsg.push({text: "삭제 완료 되었습니다."});
+                    setMessageOpen(true);
+                    message = errMsg;
+                    title   = "삭제 완료";
+                    
+                    // fileCD 값 초기화
+                    setFileCD(0);
+                }
+            } catch(error){
+                // SP 호출 시 에러 처리 로직
+                console.log(error);
+            }
+        }, 100)
+        // 로딩뷰 감추기
+        setLoading(false);
+    }
+        
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
@@ -133,7 +227,10 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
             case 0 :
                 setGrid1Data([]);
                 setGrid2Data([]);
+                setFileData([]);
                 setGrid1Changes({DataSet : '', grid: []})
+                ConstructionWasteCD    =  0;
+                ConstructionWasteTitle = '';
                 break;
 
             // 조회
@@ -144,6 +241,11 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                         bizUnitCD : bizUnitCD,
                         DataSet  : 'DataSet1'
                     })
+
+                    // 파일 데이터 초기화
+                    setFileData([]);
+                    ConstructionWasteCD    =  0;
+                    ConstructionWasteTitle = '';
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -191,6 +293,18 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
+                const fileSaveResult = await fileRef.current.handleSave();
+                if(fileSaveResult !== null && fileSaveResult !== undefined){
+                    for(let i=0;i<fileSaveResult.length;i++){
+                        fileSaveResult[i].ConstructionWasteCD = ConstructionWasteCD;
+                    }
+                    fileAr.DataSet = 'FileSet1';
+                    fileAr.grid = fileSaveResult;
+                    combinedData.push(fileAr);
+                } else{
+                    ConstructionWasteCD = 0;
+                }
+
                 combinedData.push(grid1Changes);
 
                 // 저장할 데이터 없을 시 종료
@@ -213,7 +327,7 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: '시트 : 건설 폐기물 발생량 : '  + result[i][j].Message})
+                                    errMsg.push({text: result[i][j].Message})
                                 }
                             }
                         }
@@ -229,7 +343,8 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                         
                         // 시트 값 입력
                         grid1Ref.current.setRowData(result[0]);
-                        
+                        setFileData(result[1]);
+
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
 
@@ -263,10 +378,27 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                     // SP 결과 값 담기
                     const result = await SP_Request(toolbar[clickID].spName, checkedData);
                     if(result){
+                        let errMsg : any[] = [];
+
+                        // SP 호출 결과 체크로직 처리
+                        for(let i in result){
+                            for(let j in result[i]){
+                                if(result[i][j].Status > 0){
+                                    errMsg.push({text: result[i][j].Message})
+                                }
+                            }
+                        }
+                        if(errMsg.length > 0){
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "저장 에러";
+                            setLoading(false);
+                            return;
+                        }   
+
                         // SP 결과 값이 있을 때 로직
                         grid1Ref.current.removeRows(result[0]);
 
-                        let errMsg : any[] = [];
                         errMsg.push({text: "삭제 완료하였습니다."})
                         setMessageOpen(true);
                         message = errMsg;
@@ -292,7 +424,13 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
 
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
-        ;
+        const grid1Inst = grid1Ref.current.getInstance();
+        const grid2Inst = grid2Ref.current.getInstance();
+        if(ref === grid1Inst){
+            grid2Ref.current.blur();
+        }else if (ref === grid2Inst){
+            grid1Ref.current.blur();
+        }
     }
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
@@ -303,8 +441,29 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
             setGrid1Data([]);
             setGrid2Data([]);
             setGrid1Changes({DataSet : '', grid: []})
-        }
+        } 
     }, [openTabs]);
+
+    // 파일 첨부 화면 높이 0 방지
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgEnvConstructionWaste') !== undefined) {
+          setTimeout(() => {
+            if (containerRef.current) {
+              setContainerHeight(containerRef.current.clientHeight);
+              for (let i = 0; i < 1000; i++) {
+                setTimeout(() => {
+                  if (containerRef.current) {
+                    setContainerHeight(containerRef.current.clientHeight);
+                  }
+                  if (containerHeight > 0) {
+                    return;
+                  }
+                }, 1000 * i);
+              }
+            }
+          }, 100);
+        }
+      }, [openTabs, containerHeight]);
 
     return (
         <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgEnvConstructionWaste' ? "flex" : "none", flexDirection:"column"}}>
@@ -318,8 +477,18 @@ const ConstructionWaste = ({strOpenUrl, openTabs}) => {
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
-                <Splitter SplitType={"vertical"} FirstSize={50} SecondSize={50}>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "건설 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                <Splitter SplitType={"vertical"} FirstSize={70} SecondSize={30}>
+                    <div style={{width: "100%", height: "100%"}} ref={containerRef} >
+                        {strOpenUrl === '/PEsgEnvConstructionWaste' &&
+                        <Splitter SplitType={"horizontal"} FirstSize={60} SecondSize={40}>
+                            <div onContextMenu={rightClick1} style={{height: "100%"}} >
+                                <Grid ref={grid1Ref} gridId="DataSet1" title = "건설 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            </div>
+                            <div style={{height: containerHeight + "px"}}>
+                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={ConstructionWasteTitle}/>
+                            </div>
+                        </Splitter>}
+                    </div>
                     <Grid ref={grid2Ref} gridId="DataSet2" title = "연도별·회사별 합계" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
                 </Splitter>
             </DynamicArea>

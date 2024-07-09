@@ -32,6 +32,8 @@
     display: flex;
     margin: 2px 0px;
     /* float: right; */
+    display: flex;
+
 }
 
 .InputWrap{
@@ -42,6 +44,13 @@
     padding: 2px 15px; 
     width: 112px;
     display: flex;
+}
+
+.fileTitle{
+    padding-left: 10px;
+    font-size: 14px;
+    line-height: 25px;
+    font-weight:700;
 }
 
 .FileButton{

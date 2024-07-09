@@ -6,12 +6,12 @@ import Toolbar from "../../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
 import FixedArea from "../../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
 import FixedWrap from "../../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
-import Splitter from "../../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import DatePick from '../../../ESG-common/DatePicker/p-esg-common-datePicker.tsx'
 import SearchBox from '../../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import Loading from '../../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
+import Splitter from "../../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import File from '../../../ESG-common/File/p-esg-common-File.tsx';
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 
@@ -32,6 +32,7 @@ let title   : string  = "";
 
 // 우클릭 조회 시 받는 내부코드 값
 let GeneralWasteCD = 0
+let GeneralWasteTitle = ""; // 파일첨부 제목
 
 const GeneralWaste = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
@@ -81,9 +82,11 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
         event.preventDefault();
         setTimeout(async () => {
             setFileData([]);
-            GeneralWasteCD = 0;
+            GeneralWasteCD    =  0;
+            GeneralWasteTitle = '';
             if(grid1Ref.current.rightClick() !== null){
                 GeneralWasteCD = grid1Ref.current.rightClick().GeneralWasteCD;
+                GeneralWasteTitle = grid1Ref.current.rightClick().BizUnitName;
             }
             // 조회 조건 담기
             const conditionAr : any[] = [{GeneralWasteCD : GeneralWasteCD, DataSet : "FileSet1"}]
@@ -226,7 +229,8 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
                 setGrid2Data([]);
                 setFileData([]);
                 setGrid1Changes({DataSet : '', grid: []})
-                GeneralWasteCD = 0;
+                GeneralWasteCD    = 0;
+                GeneralWasteTitle = '';
                 break;
 
             // 조회
@@ -240,8 +244,8 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
 
                     // 파일 데이터 초기화
                     setFileData([]);
-                    GeneralWasteCD = 0;
-
+                    GeneralWasteCD    = 0;
+                    GeneralWasteTitle = '';
                     // 로딩 뷰 보이기
                     setLoading(true);
                     try {
@@ -374,11 +378,12 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
                     const result = await SP_Request(toolbar[clickID].spName, checkedData);
                     if(result){
                         let errMsg : any[] = [];
+
                         // SP 호출 결과 체크로직 처리
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: '시트 : 일반 폐기물 발생량 : '  + result[i][j].Message})
+                                    errMsg.push({text: result[i][j].Message})
                                 }
                             }
                         }
@@ -434,13 +439,29 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
             setGrid1Data([]);
             setGrid2Data([]);
             setGrid1Changes({DataSet : '', grid: []})
-        } else{
-            if (containerRef.current) {
-                setContainerHeight(containerRef.current.clientHeight);
-            }
-        }
+        } 
     }, [openTabs]);
 
+    // 파일 첨부 화면 높이 0 방지
+    useEffect(() => {
+        if (openTabs.find(item => item.url === '/PEsgEnvGeneralWaste') !== undefined) {
+          setTimeout(() => {
+            if (containerRef.current) {
+              setContainerHeight(containerRef.current.clientHeight);
+              for (let i = 0; i < 1000; i++) {
+                setTimeout(() => {
+                  if (containerRef.current) {
+                    setContainerHeight(containerRef.current.clientHeight);
+                  }
+                  if (containerHeight > 0) {
+                    return;
+                  }
+                }, 1000 * i);
+              }
+            }
+          }, 100);
+        }
+      }, [openTabs, containerHeight]);
     return (
         <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgEnvGeneralWaste' ? "flex" : "none", flexDirection:"column"}}>
             <Loading loading={loading}/>
@@ -449,7 +470,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
                     <DatePick name={"연도"}   value={year}  onChange={setYear} width={200} type={"year"} isGrid={false}/>    
-                    <SearchBox name={"부서명"} value={bizUnitCD} onChange={setBizUnitCD} searchCode={7} width={200} isGrid={false}/>   
+                    <SearchBox name={"사업부문명"} value={bizUnitCD} onChange={setBizUnitCD} searchCode={7} width={200} isGrid={false}/>   
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>
@@ -461,7 +482,7 @@ const GeneralWaste = ({strOpenUrl, openTabs}) => {
                                 <Grid ref={grid1Ref} gridId="DataSet1" title = "일반 폐기물 발생량" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                             </div>
                             <div style={{height: containerHeight + "px"}}>
-                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD}/>
+                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={GeneralWasteTitle}/>
                             </div>
                         </Splitter>}
                     </div>
