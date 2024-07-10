@@ -1,4 +1,4 @@
-import React, { useState, useRef}  from 'react';
+import React, { useState, useRef, useEffect}  from 'react';
 import styles from './p-esg-login.module.css';
 import { useNavigate  } from 'react-router-dom';
 
@@ -25,9 +25,9 @@ const LoginPage = ({strOpenUrl}) => {
     // cookie.remove('menuList', {path : '/'});
     // cookie.remove('LmenuList', {path : '/'});
 
-    sessionStorage.removeItem('userInfo');
-    sessionStorage.removeItem('menuList');
-    sessionStorage.removeItem('LmenuList');
+    // sessionStorage.removeItem('userInfo');
+    // sessionStorage.removeItem('menuList');
+    // sessionStorage.removeItem('LmenuList');
 
 
     const navigate = useNavigate();
@@ -63,6 +63,13 @@ const LoginPage = ({strOpenUrl}) => {
     const passwordChangeInputRef = useRef<HTMLInputElement>(null);
     const idInputRef = useRef<HTMLInputElement>(null);
     const idChangeInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(()=>{
+        const userInfo = sessionStorage.getItem('userInfo');
+        if(userInfo !== null){
+            navigate('/main');
+        }
+    },[navigate])
 
     const inputID = event => {
         setUserID(event.target.value);

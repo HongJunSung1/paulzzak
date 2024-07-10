@@ -120,6 +120,10 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     // 로그아웃 예 클릭 시 
     const messageYes = () => {
         if(messageType === "isLogOut"){
+            // 세션 정보 삭제
+            sessionStorage.removeItem('userInfo');
+            sessionStorage.removeItem('menuList');
+            sessionStorage.removeItem('LmenuList');
             // 로그인 화면으로 이동
             navigate("/");
         } else if(messageType === "moveUrl"){
