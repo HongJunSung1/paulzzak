@@ -11,6 +11,7 @@ const SearchBox = (settings : any) => {
     const [isOpen, setIsOpen] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
     const InputRef = useRef<HTMLInputElement>(null);
+    const [position, setPosition] = useState({ top: 0, left: 0 });
 
     // useEffect(() => {
     //     setText(settings.value || '');
@@ -61,7 +62,13 @@ const SearchBox = (settings : any) => {
     const ClickHandler = async () =>{
         const resultData = await SP_Request("S_ESG_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
         setResult(resultData[0]);
-        
+        const Rect = InputRef.current?.getBoundingClientRect();
+        if(Rect){
+            setPosition({top:Rect.top, left:Rect.left});
+        }
+            
+
+
         if(isOpen){
             setIsOpen(false);
         }else{
@@ -122,7 +129,7 @@ const SearchBox = (settings : any) => {
                     <div className={settings.isGrid ? styles.SearchGridImg : styles.SearchImg} onClick={ClickHandler} />
                 </div>
                 {isOpen && result.length > 0 && (
-                    <div className={styles.tableWrap}>
+                    <div className={styles.tableWrap} style={{top : position.top + 30, left : position.left}}>
                         <table style={{width: result[0].TotSize+'px'}}>
                             <tbody>
                                     <tr>

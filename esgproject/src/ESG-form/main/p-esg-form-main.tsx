@@ -152,14 +152,14 @@ const Main = ({strOpenUrl}) => {
               <div className={styles.LeftWrap}>
                 <div className={styles.LeftTop}>
                   <div className={styles.LeftTopChart1} ref={leftTopChart1Ref}>
-                    <Chart options={GaugeOptions} data={GaugeData1} ChartType ={"GaugeChart"}/>
+                    {strOpenUrl === '/main' && <Chart options={GaugeOptions} data={GaugeData1} ChartType ={"GaugeChart"}/>}
                   </div>
                   <div className={styles.LeftTopChart2} ref={leftTopChart2Ref}>
-                    <Chart options={GaugeOptions} data={GaugeData2} ChartType ={"GaugeChart"}/>
+                    {strOpenUrl === '/main' && <Chart options={GaugeOptions} data={GaugeData2} ChartType ={"GaugeChart"}/>}
                   </div>
                 </div>
                 <div className={styles.LeftBottom} ref={leftBottomRef}>
-                  <Chart options={BarOptions} data={BarData} ChartType ={"BarChart"}/>
+                  {strOpenUrl === '/main' && <Chart options={BarOptions} data={BarData} ChartType ={"BarChart"}/>}
                 </div>
               </div>
               <div className={styles.RightWrap}>
@@ -208,7 +208,7 @@ const Main = ({strOpenUrl}) => {
                   </table>
                 </div>
                 <div className={styles.RightBottom} ref={rightBottomRef}>
-                  <Chart options={AreaOptions} data={AreaData} ChartType ={"AreaChart"}/>
+                  {strOpenUrl === '/main' && <Chart options={AreaOptions} data={AreaData} ChartType ={"AreaChart"} strOpenUrl={strOpenUrl}/>}
                 </div>
               </div>
             </div>
