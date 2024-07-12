@@ -339,6 +339,96 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
         }
     }
 
+    // // 4. 숫자 유효성 검사
+    // class NumberCheck {
+    //     el: HTMLInputElement;
+    //     grid: any;
+    //     rowKey: any;
+    //     columnName: any;
+      
+    //     constructor(props) {
+    //       const el = document.createElement('input');
+    //       el.type = 'text';
+      
+    //       el.style.width = '100%';
+    //       el.style.textAlign = 'right';
+    //       el.style.height = '28px';
+    //       el.style.paddingRight = '5px';
+    //       el.style.border = 'none'; 
+    //       el.tabIndex = -1;
+    //       el.style.fontFamily = 'SpoqaHanSansNeo-Regular';
+    //       el.style.setProperty('fontFamily', 'SpoqaHanSansNeo-Regular', 'important');
+      
+    //       this.el = el;
+    //       this.grid = props.grid;
+    //       this.rowKey = props.rowKey;
+    //       this.columnName = props.columnInfo.name;
+      
+    //       this.render(props);
+      
+    //       // 이벤트 리스너 추가
+    //       this.el.addEventListener('blur', this.onBlur.bind(this));
+    //       this.el.addEventListener('focus', this.onFocus.bind(this));
+    //       this.el.addEventListener('click', this.onClick.bind(this));
+    //       this.el.addEventListener('keydown', this.onKeydown.bind(this));
+    //     }
+      
+    //     getElement() {
+    //         return this.el;
+    //     }
+        
+    //     render(props) {
+    //         this.el.disabled = props.columnInfo.renderer.options?.disabled || false;
+    //         this.el.style.color = props.columnInfo.renderer.options?.disabled == true ? "black" : "black";
+
+    //         let value = '0';
+        
+    //         if (props.value !== null) {
+    //           value = parseFloat(props.value).toFixed(5);
+    //         }
+        
+    //         this.el.value = this.formatNumber(value);
+    //     }
+        
+    //     formatNumber(value: string): string {
+    //         const parts = value.split('.');
+    //         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    //         // 소수점 이하가 모두 0이면 정수만 표시
+    //         if (parts[1] && parseFloat(parts[1]) === 0) {
+    //             return parts[0];
+    //         }
+
+    //         return parts.join('.');
+    //     }
+
+    //     onClick() {
+    //         this.el.focus();
+    //         this.el.setSelectionRange(0, this.el.value.length);
+    //     }
+
+    //     onKeydown(e) {
+    //         if(e.key === "Enter"){
+    //             this.el.blur();
+    //         }
+    //     }
+
+    //     onFocus() {
+    //         const value = parseFloat(this.el.value.replace(/,/g, ''));
+    //         this.el.value = isNaN(value) ? '0' : value.toString();
+    //     }
+        
+    //     onBlur() {
+    //         let value = parseFloat(this.el.value);
+    //         if (isNaN(value)) {
+    //           value = 0;
+    //         }
+    //         this.el.value = this.formatNumber(value.toFixed(5));
+    //         this.grid.dispatch('setValue', this.rowKey, this.columnName, value.toFixed(5));
+    //     }
+
+    // }
+
 
     // 5. 날짜박스
     class DateBox {
@@ -530,7 +620,10 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
             };
         }else if(column.renderer && column.renderer.type === 'number'){
             column.renderer = {
-                type: NumberCheck
+                type: NumberCheck,
+                // options: {
+                //     disabled: column.disabled || false
+                // }
             }
         }else if(column.renderer && column.renderer.type === 'datebox'){
             column.renderer = {
