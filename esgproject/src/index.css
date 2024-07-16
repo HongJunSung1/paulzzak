@@ -9,6 +9,12 @@
   src: url("./assets/font/SpoqaHanSansNeo-Regular.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "SpoqaHanSansNeo-Bold";
+  font-weight: normal;
+  src: url("./assets/font/SpoqaHanSansNeo-Bold.ttf") format("truetype");
+}
+
 body{
   font-family: "SpoqaHanSansNeo-Medium";
   margin: 0;

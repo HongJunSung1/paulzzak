@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const SP_Request = async (SpName : string, sendData : any) => {
+export const SP_Request = async (SpName : string, sendData : any, strUrl? : any) => {
     // const apiUrl = "http://localhost:9090/spRequest";
     const apiUrl = "http://43.203.127.56:9090/ESGbbollock/spRequest";
 
@@ -11,10 +11,10 @@ export const SP_Request = async (SpName : string, sendData : any) => {
     }
     
     const userCD = userInfo?.UserCD;
-
+    const OpenUrl = strUrl !== "" ? strUrl : "";
 
     try {
-        const response = await axios.post(apiUrl, [{SpName : SpName, sendData : sendData, userInfo : { UserCD : userCD}}]);
+        const response = await axios.post(apiUrl, [{SpName : SpName, sendData : sendData, userInfo : { UserCD : userCD , OpenUrl : OpenUrl}}]);
         return response.data;
     } catch (error) {
         return [{ errMsg: error.message }];

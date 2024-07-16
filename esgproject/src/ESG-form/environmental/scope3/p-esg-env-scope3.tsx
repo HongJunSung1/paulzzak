@@ -12,6 +12,7 @@ import Grid from '../../../ESG-common/Grid/p-esg-common-grid.tsx';
 import MessageBox from '../../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Splitter from "../../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import File from '../../../ESG-common/File/p-esg-common-File.tsx';
+import Button from '../../../ESG-common/Button/p-esg-common-Button.tsx';
 import { SP_Request } from '../../../hooks/sp-request.tsx';
 
 type gridAr = {
@@ -408,9 +409,61 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
       
     }
 
+    // 선택행 알림 전송
+    const sendAlarm = async () =>{
+        // 체크행 가져오기
+        const alarmList = grid1Ref.current.getCheckedRows();
+
+        alarmList.grid.forEach(item => {
+            item.SheetNum  = "1"; // 시트 순번 지정
+            item.TableKey1 = item.Scope3CD; // 공통 키값1(마스터) 추가 없을 경우 0
+            item.TableKey2 = 0;             // 공통 키값2(디테일) 추가 없을 경우 0
+            delete item.Scope3CD; // 기존 키값 삭제
+        });
+
+        // 체크행 있을 경우 알림 전송
+        if(alarmList.grid.length > 0){
+            const result = await SP_Request("S_ESG_SendAlarm", [alarmList], strOpenUrl);
+
+            if(result){
+                let errMsg : any[] = [];
+                // SP 호출 결과 값 처리
+                for(let i in result){
+                    for(let j in result[i]){
+                        if(result[i][j].Status > 0){
+                            errMsg.push({text: "시트: Scope 1 - 2 " + result[i][j].Message})
+                        }
+                    }
+                }
+                if(errMsg.length > 0){
+                    setMessageOpen(true);
+                    message = errMsg;
+                    title   = "저장 에러";
+                    setLoading(false);
+                    return;
+                }   
+
+                errMsg  = [];
+                errMsg.push({text: "알림 전송 완료하였습니다."})
+                setMessageOpen(true);
+                message = errMsg;
+                title   = "저장 완료";
+            } else{
+                // SP 호출 결과 없을 경우 처리 로직
+                console.log("저장 에러");
+            }
+        }
+    }
+
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
-        ;
+        const grid1Inst = grid1Ref.current.getInstance();
+        const grid2Inst = grid2Ref.current.getInstance();
+        if(ref === grid1Inst){
+            grid2Ref.current.blur();
+        }else if (ref === grid2Inst){
+            grid1Ref.current.blur();
+        }
     }
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
@@ -453,6 +506,7 @@ const Scope3 = ({strOpenUrl, openTabs}) => {
             <FixedArea name={"조회 조건"}>
                 <FixedWrap>
                     <DatePick name={"연도"}   value={year}  onChange={setYear} width={200} type={"year"} isGrid={false}/>    
+                    <Button name={"알림 전송"} clickEvent={sendAlarm}/> 
                 </FixedWrap>
             </FixedArea>  
             <DynamicArea>

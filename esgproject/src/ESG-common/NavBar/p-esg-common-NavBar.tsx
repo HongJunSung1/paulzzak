@@ -6,9 +6,12 @@ import SHA256 from 'crypto-js/sha256';
 import ImageLogo from '../../assets/image/EGlogo1_2.png';
 import ImageSetting from '../../assets/image/setting.png';
 import ImageLogout from '../../assets/image/logout-black.png';
+import ImageAlarm from '../../assets/image/alarm.png';
 import ImageUserInfo from '../../assets/image/navbar-userinfo-white.png';
 import ImagePassword from '../../assets/image/navbar-password-white.png';
 import ImageXButton from '../../assets/image/condition/xButton-white.svg';
+import ImageCheck from '../../assets/image/alarmcheck.png';
+import ImageLink from '../../assets/image/alarmlink.png';
 import ImageCheckButton from '../../assets/image/condition/check.svg';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 
@@ -57,9 +60,11 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const searchRef = useRef<any>(null);
     const { setMenuInfo } = useMenuInfo();
     const [settingCollapsed, setCollapsed] = useState(false);
+    const [alarmCollapsed,setAlarmCollapsed] = useState(false);
     const [userInfoCollapsed, setUserInfoCollapsed] = useState(false);
     const [passwordCollapsed, setPasswordCollapsed] = useState(false);
     const settingRef = useRef<HTMLDivElement>(null);
+    const alarmRef = useRef<HTMLDivElement>(null);
     const userInfoArrow = userInfoCollapsed ? <HiChevronUp /> : <HiChevronDown />;
     const passwordArrow = passwordCollapsed ? <HiChevronUp /> : <HiChevronDown />;
     
@@ -91,13 +96,16 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const [newPassword     , setNewPassword]      = useState('')
     const [newPasswordCheck, setNewPasswordCheck] = useState('')
 
+    //알림 내역
+    const [alarmList,setAlarmList] = useState<any>([]);
+
 
     useEffect(() => {
         const isLogin = userInfo !== undefined;
         if (!isLogin) {
             navigate("/"); // 기본 주소로 리다이렉트
         }
-    }, [navigate]); 
+    }, [navigate, userInfo]); 
 
     const goMain = () =>{
         const filterData = data.filter((item => item.menuId === 'main'));
@@ -106,6 +114,39 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
             strOpenUrl("/main");
         },100)
     }
+
+    const intervalRef = useRef<number | null>(null); // interval ID를 저장할 ref
+    const timeoutRef = useRef<number | null>(null); // timeout ID를 저장할 ref
+
+    // 로그인 되어 있는 상태일 경우 1초 뒤 30초 단위 알림 조회
+    useEffect(() => {
+        if (userInfo !== undefined && intervalRef.current === null) {
+            // 1초 후에 interval을 설정
+            timeoutRef.current = window.setTimeout(() => {
+                intervalRef.current = window.setInterval(async () => {
+                    const result = await SP_Request("S_ESG_Alarm_Query", []);
+
+                    if (result.length > 0) {
+                        setAlarmList(result);
+                        // console.log("알림 내역 호출 : " + new Date())
+                    }
+                }, 10000);
+            }, 1000);
+
+            // 컴포넌트가 언마운트될 때 interval과 timeout을 정리
+            return () => {
+                if (timeoutRef.current !== null) {
+                    window.clearTimeout(timeoutRef.current);
+                    timeoutRef.current = null;
+                }
+                if (intervalRef.current !== null) {
+                    window.clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+            };
+        }
+    }, [userInfo, alarmList]);
+    
 
     // 로그아웃 버튼 클릭 시
     const LogOutClick = () => {
@@ -156,6 +197,36 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const isPassword = () => {
         //비밀번호 관리 클릭
         setPasswordCollapsed(prevValue => !prevValue);
+    }
+
+    // 알림 클릭 시
+    const alarmClick = () => {
+        setAlarmCollapsed(true);
+    }
+
+    // 알림 이동 클릭 시
+    const alarmLinkBtn = async (OpenUrl : string, CfmLev : string) => {
+
+        const result = await SP_Request("S_ESG_AlarmCheck",[{ OpenUrl : OpenUrl.replace('/','') , CfmLev : CfmLev , DataSet : "DataSet1"}]);
+
+        setAlarmList(result);
+
+        // 탭 추가
+        const filterData = data.filter((item => item.menuId === OpenUrl.replace('/','')));
+        setMenuInfo(filterData[0]);
+
+        // 화면 변경
+        strOpenUrl(OpenUrl);
+
+        // 알림 창 닫기
+        setAlarmCollapsed(false);
+    }
+
+    // 알림 확인 클릭 시
+    const alarmCheckBtn = async (OpenUrl : string , CfmLev : string) => {
+        const result = await SP_Request("S_ESG_AlarmCheck",[{ OpenUrl : OpenUrl.replace('/','') , CfmLev : CfmLev , DataSet : "DataSet1"}]);
+
+        setAlarmList(result);
     }
 
     const searchHandler = async (e) =>{
@@ -219,7 +290,20 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
         return () => {
           document.removeEventListener('mousedown', handleClickOutside);
         };
-      }, [settingRef]);
+    }, [settingRef]);
+
+    useEffect(() => {
+        const handleClickOutside = (event : MouseEvent) => {
+          if (alarmRef.current && !alarmRef.current.contains(event.target as Node)) {
+            setAlarmCollapsed(false);
+          }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [alarmRef]);
 
 
     // 유저 정보 변경
@@ -386,9 +470,36 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                     </div>
                     <div className = {styles.ImageContainer}>
                         <div className = {styles.ImageWrap}>
+                            <img className = {styles.ImageComponent} src={ImageAlarm} alt={"Logout"} onClick={alarmClick}/>
+                            {alarmList.length > 0 && alarmList[0].length > 0 && <div className={styles.alarmCnt} onClick={alarmClick}>{alarmList[0].length}</div>}
                             <img className = {styles.ImageComponent} src={ImageSetting} alt={"Setting"} onClick={isSetting}/>
                             <img className = {styles.ImageComponent} src={ImageLogout} alt={"Logout"} onClick={LogOutClick}/>
                         </div>
+                        {/* 알림창 */}
+                        {alarmCollapsed && alarmList.length > 0 && alarmList[0].length > 0 &&
+                            <div className={styles.alarmWrap} ref={alarmRef}>
+                                <div className={styles.alarmText}>알림</div>
+                                <div className={styles.alarmAllCheck}>전체 지우기</div>
+                                <div className={styles.alarmContentWrap}>
+                                {alarmList[0].map((Item, index) => (
+                                    <div className={styles.alarmContent} key={index}>
+                                        <div className={styles.Text1}>{Item.LMenuName}</div>
+                                        <div className={styles.Text2}>화면명 : {Item.FormName}</div>
+                                        <div className={styles.Text3}>{Item.CfmLev}차 승인건이 {Item.Cnt}건 등록되었습니다.</div>
+                                        <div className={styles.alarmbtnWrap}>
+                                            <div className={styles.alarmBtn} onClick={() => alarmLinkBtn(Item.OpenUrl, Item.CfmLev)}>
+                                                <img className = {styles.alarmImage} src={ImageLink} alt={"alarmlink"} />&nbsp;이동
+                                            </div>
+                                            <div className={styles.alarmBtn} onClick={() => alarmCheckBtn(Item.OpenUrl, Item.CfmLev)}>
+                                                <img className = {styles.alarmImage} src={ImageCheck} alt={"alarmcheck"} />&nbsp;확인
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                </div>
+                            </div>
+                        }
+                        {/* 개인정보 변경창 */}
                         {settingCollapsed && 
                         <div className = {styles.settingWrap} ref={settingRef}>
                             <div className = {styles.settingTitle}>
