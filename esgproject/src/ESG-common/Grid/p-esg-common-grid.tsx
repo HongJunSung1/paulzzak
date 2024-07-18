@@ -35,12 +35,35 @@ type gridAr = {
 };
 
 const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, gridId, addRowBtn, onClick}: CustomGridProps, ref) => {
-
+    
     
     const gridRef = useRef<Grid | null>(null);
     const [isInitialized, setIsInitialized] = useState(false);
     const [isClickRowAppend, setCollapsed] = useState(false);
     const [appendRowText, setAppendRowText] = useState(false);
+
+    // 스크롤 위치 구하기
+    const [scrollPosition, setScrollPosition] = useState({ scrollLeft: 0, scrollTop: 0 });
+
+    // 스크롤 위치 저장 및 복원 함수 추가
+    function saveScrollPosition(grid) {
+        const container = grid?.el?.querySelector('.tui-grid-rside-area .tui-grid-body-area');
+        if (!container) {
+            return { scrollLeft: 0, scrollTop: 0 };
+        }
+        const scrollLeft = container.scrollLeft;
+        const scrollTop = container.scrollTop;
+        return { scrollLeft, scrollTop };
+    }
+    
+    function restoreScrollPosition(grid, { scrollLeft, scrollTop }) {
+        const container = grid?.el?.querySelector('.tui-grid-rside-area .tui-grid-body-area');
+        if (container) {
+            container.scrollLeft = scrollLeft;
+            container.scrollTop = scrollTop;
+        }
+    }
+
 
     // 우클릭 조회 담기 용
     let rightClickValue : any = []     
@@ -48,6 +71,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
 
     // 엔터키 방지용
     let keyDownCellValue : any = [];
+
 
     useEffect(() => {
         // setIsInitialized(false);
@@ -811,7 +835,16 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
             grid    : gridAr
         })
 
+        // 데이터 변경 후 스크롤 위치를 복원
+        const savedPosition = saveScrollPosition(gridRef.current?.getInstance()); // 스크롤 위치 저장
+        setScrollPosition(savedPosition);
+
         onChange(gridId, gridArChange);
+
+        // 데이터를 갱신한 후 스크롤 위치를 복원
+        setTimeout(() => {
+            restoreScrollPosition(gridRef.current?.getInstance(), savedPosition);
+        }, 0);
     })
 
     // 우클릭 조회
@@ -901,8 +934,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                         contextMenu={null as any} // 우클릭 조회 없애기    
                         // header={{height: 40}}
                         header={headerOptions}
-                        columnOptions={{resizable:true}}
-
+                        columnOptions={{resizable:true}}                        
                 />
                 }
             </div>
