@@ -22,6 +22,7 @@ import SearchBoxReg from './ESG-form/admin/p-esg-form-admin-searchbox.tsx';
 import CompanyReg from './ESG-form/setting/p-esg-company-reg.tsx';
 import TableReg from './ESG-form/admin/p-esg-form-admin-table.tsx';
 import BizUnitForm from './ESG-form/admin/p-esg-bizunit-form.tsx';
+import AlarmList from './ESG-form/environmental/alarm/p-esg-alarmlist.tsx';
 
 // 화면 : Environmental
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
@@ -114,6 +115,7 @@ function App() {
                   <TableReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <BizUnitForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <TotalWaste        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <AlarmList         strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>
             </MenuInfoProvider>

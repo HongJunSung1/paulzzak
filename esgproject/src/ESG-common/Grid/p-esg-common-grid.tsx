@@ -291,6 +291,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
             el.style.borderRadius = '4px';
             el.style.cursor = 'pointer';
             el.style.transition = 'background-color 0.3s ease';
+            el.style.fontFamily = 'SpoqaHanSansNeo-Regular';
             el.tabIndex = -1;
       
             this.el = el;
@@ -784,6 +785,11 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
         // 그리드 인스턴스 가져오기
         getInstance : () => {
             return gridRef.current?.getInstance();
+        },
+
+        // 로우키 값으로 데이터 가져오기
+        getRowData : (rowKey) => {
+            return gridRef.current?.getInstance().getRow(rowKey);
         }
 
 
