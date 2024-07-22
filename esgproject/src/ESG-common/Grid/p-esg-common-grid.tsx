@@ -8,6 +8,7 @@ import Grid from '@toast-ui/react-grid';
 import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
 import DatePick from '../DatePicker/p-esg-common-datePicker.tsx';
 import { createRoot } from 'react-dom/client';
+// import 'tui-pagination/dist/tui-pagination.css'; //페이징처리 css
 
 type CustomGridProps = {
     title: string;
@@ -134,6 +135,8 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
         if(gridRef.current){
             gridRef.current.getInstance().appendRow();
             gridRef.current.getInstance().refreshLayout();
+
+            // gridRef.current.getInstance().prependRow({}); // 시트 맨 앞에 행 추가하기
         }
     }
 
@@ -941,6 +944,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                         // header={{height: 40}}
                         header={headerOptions}
                         columnOptions={{resizable:true}}                        
+                        // pageOptions={{useClient: true, perPage: 3}} // 페이징처리
                 />
                 }
             </div>
