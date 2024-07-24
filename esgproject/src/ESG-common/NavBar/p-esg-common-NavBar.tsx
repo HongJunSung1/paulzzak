@@ -230,7 +230,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
 
     const searchHandler = async (e) =>{
-        setSearchText(e.target.value);
+        setSearchText(e.target.value);  
         if(searchText !== "" && e.currentTarget.value.trim() !== ""){
             const result = await SP_Request("S_ESG_FormSearch_Query",[{ FormName : e.currentTarget.value, DataSet : "DataSet1"}]);
             if(result[0].length > 0){
@@ -479,12 +479,13 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                         {alarmCollapsed && alarmList.length > 0 && alarmList[0].length > 0 &&
                             <div className={styles.alarmWrap} ref={alarmRef}>
                                 <div className={styles.alarmText}>알림</div>
-                                <div className={styles.alarmAllCheck}>전체 지우기</div>
+                                {/* <div className={styles.alarmAllCheck}>전체 지우기</div> */}
                                 <div className={styles.alarmContentWrap}>
                                 {alarmList[0].map((Item, index) => (
                                     <div className={styles.alarmContent} key={index}>
                                         <div className={styles.Text1}>{Item.LMenuName}</div>
                                         <div className={styles.Text2}>화면명 : {Item.FormName}</div>
+                                        <div className={styles.Text2}>{Item.CompanyName} / {Item.BizUnitName}</div>
                                         <div className={styles.Text3}>{Item.CfmLev}차 승인건이 {Item.Cnt}건 등록되었습니다.</div>
                                         <div className={styles.alarmbtnWrap}>
                                             <div className={styles.alarmBtn} onClick={() => alarmLinkBtn(Item.OpenUrl, Item.CfmLev)}>

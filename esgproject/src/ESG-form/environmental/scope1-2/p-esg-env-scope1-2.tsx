@@ -321,7 +321,6 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
                         // 시트 변경 내역 초기화
                         setGrid1Changes({DataSet : '', grid: []});
 
-
                         errMsg  = [];
                         errMsg.push({text: "저장 완료하였습니다."})
                         setMessageOpen(true);

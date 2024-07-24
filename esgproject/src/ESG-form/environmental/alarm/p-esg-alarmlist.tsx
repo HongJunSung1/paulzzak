@@ -96,6 +96,8 @@ const AlarmList = ({strOpenUrl, openTabs, setOpenUrl}) => {
         {name : "FormUrl"       , header: "화면url"             , width: 100 ,hidden : true},
         {name : "LMenuName"     , header: "대메뉴"              , width: 200 },
         {name : "FormName"      , header: "화면명"              , width: 200 },
+        {name : "CompanyName"   , header: "회사"                , width: 200 },
+        {name : "BizUnitName"   , header: "사업부문"            , width: 200 },
         {name : "CfmLev"        , header: "승인 차수"           , width: 80 },
         {name : "ReqUserName"   , header: "알림 전송자"         , width: 120 },
         {name : "ReqDateTime"   , header: "알림 전송일시"       , width: 150 },
