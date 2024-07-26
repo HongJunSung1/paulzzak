@@ -10,8 +10,8 @@ import ImageAlarm from '../../assets/image/alarm.png';
 import ImageUserInfo from '../../assets/image/navbar-userinfo-white.png';
 import ImagePassword from '../../assets/image/navbar-password-white.png';
 import ImageXButton from '../../assets/image/condition/xButton-white.svg';
-import ImageCheck from '../../assets/image/alarmcheck.png';
-import ImageLink from '../../assets/image/alarmlink.png';
+import ImageCheck from '../../assets/image/alarmcheck_white.png';
+import ImageLink from '../../assets/image/alarmlink_white.png';
 import ImageCheckButton from '../../assets/image/condition/check.svg';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 
@@ -484,9 +484,9 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                                 {alarmList[0].map((Item, index) => (
                                     <div className={styles.alarmContent} key={index}>
                                         <div className={styles.Text1}>{Item.LMenuName}</div>
-                                        <div className={styles.Text2}>화면명 : {Item.FormName}</div>
-                                        <div className={styles.Text2}>{Item.CompanyName} / {Item.BizUnitName}</div>
-                                        <div className={styles.Text3}>{Item.CfmLev}차 승인건이 {Item.Cnt}건 등록되었습니다.</div>
+                                        <div className={styles.Text2}>· 화면명　 : {Item.FormName}</div>
+                                        <div className={styles.Text2}>· 사업부문 : {Item.BizUnitName}</div>
+                                        <div className={styles.Text3}>{Item.CfmLev}차 승인 건이 {Item.Cnt}건 등록되었습니다.</div>
                                         <div className={styles.alarmbtnWrap}>
                                             <div className={styles.alarmBtn} onClick={() => alarmLinkBtn(Item.OpenUrl, Item.CfmLev)}>
                                                 <img className = {styles.alarmImage} src={ImageLink} alt={"alarmlink"} />&nbsp;이동

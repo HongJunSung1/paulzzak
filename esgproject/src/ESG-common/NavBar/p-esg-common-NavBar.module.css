@@ -276,6 +276,7 @@
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   background-color: #848484;
+  
 }
 
 
@@ -284,12 +285,14 @@
     z-index: 100;
     color: black;
     font-size: 12px;
-    background-color: rgb(235,238,247);
+    /* background-color: rgb(235,238,247); */
+    background-color: rgb(31, 60, 126);
     box-shadow: 2px 2px 5px 2px #e3cccc;
     border-radius: 10px;
     right : 10px;
     width: 350px;
     height: 400px;
+    padding: 0 3px;
 }
 
 .alarmWrap > div{
@@ -298,10 +301,10 @@
 
 .alarmContentWrap{
     margin: auto;
-    margin-top: 55px;
+    margin-top: 50px;
     height: 80%;
     overflow-y: auto;
-    width: 95%;
+    width: 100%;
 }
 
 .alarmContent:nth-child(1){
@@ -312,72 +315,96 @@
 {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   border-radius: 10px;
-  background-color: #F5F5F5;
+  background-color: #F5F5F5;  
 }
 
 .alarmContentWrap::-webkit-scrollbar
 {
   width: 12px;
-  background-color: #F5F5F5;
+  /* background-color: #F5F5F5; */
+  margin-right: 10px;
 }
 
 .alarmContentWrap::-webkit-scrollbar-thumb
 {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  background-color: rgb(170, 170, 170);
+  background-color: rgb(47,125,237);
 }
 
 .alarmText{
-    font-size: 23px;
-    padding: 15px 0px 20px 27px;
+    font-size: 16px;
+    padding: 15px 0px 0px 15px;
     position:fixed;
     font-family: "SpoqaHanSansNeo-Bold" !important;
+    color: white;
 }
 
 .alarmbtnWrap{
+    width: 95%;
     display: flex;
     justify-content: space-between;
+    margin: 0 auto;
     flex-direction: row;
+    padding-bottom: 10px;
 }
 
 .alarmContent{
-    margin: 10px 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
+    margin: 10px 15px;
+    /* background-color: #ffffff; */
+    background-color:rgb(20, 76, 151);
+    border-radius: 5px;
+    border: solid 0.1px rgb(8, 89, 229);
+}
+
+.alarmContent:hover{
+    background-color: rgb(67, 67, 192);
+    border: solid 0.1px rgb(43, 73, 112);
 }
 
 .Text1{
-    font-size: 17px;
+    font-size: 16px;
     padding: 10px 10px 3px 10px;
     font-family: "SpoqaHanSansNeo-Bold" !important;
 }
 .Text2{
-    font-size: 15px;
+    font-size: 12px;
     padding: 3px 10px;
-    font-family: "SpoqaHanSansNeo-Medium" !important;
+    font-family: "SpoqaHanSansNeo-Regular" !important;
 }
 .Text3{
-    font-size: 13px;
+    font-size: 12px;
     padding: 10px 10px 20px 10px;
     font-family: "SpoqaHanSansNeo-Regular" !important;
 }
 
+.Text1, .Text2, .Text3{
+    color: white;
+    /* color:rgb(185,198, 210); */
+}
 
 .alarmBtn{
-    border-top: 0.1px solid plum;
+    /* border-top: 0.1px solid plum; */
     cursor: pointer;
-    color:rgb(53,0,255);
+    /* color:rgb(53,0,255); */
+    color: white;
     width:50%;
     height: 30px;
     text-align: center;
     line-height: 30px;
     font-size: 15px;
     font-family: "SpoqaHanSansNeo-Bold" !important;
+    background-color: rgb(0, 105, 255);
+    border-radius: 5px;
 }
 
 .alarmBtn:nth-child(1){
-    border-right: 0.1px solid plum;
+    /* border-right: 0.1px solid plum; */
+    margin-right: 10px;
+}
+
+.alarmBtn:hover{
+    background-color: rgb(47,125,237);
 }
 
 .alarmImage{
