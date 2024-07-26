@@ -205,9 +205,9 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
 
     // 알림 이동 클릭 시
-    const alarmLinkBtn = async (OpenUrl : string, CfmLev : string) => {
+    const alarmLinkBtn = async (OpenUrl : string, CfmLev : string, IsCfm : string) => {
 
-        const result = await SP_Request("S_ESG_AlarmCheck",[{ OpenUrl : OpenUrl.replace('/','') , CfmLev : CfmLev , DataSet : "DataSet1"}]);
+        const result = await SP_Request("S_ESG_AlarmCheck",[{ OpenUrl : OpenUrl.replace('/','') , CfmLev : CfmLev , IsCfm : IsCfm, DataSet : "DataSet1"}]);
 
         setAlarmList(result);
 
@@ -223,8 +223,8 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
 
     // 알림 확인 클릭 시
-    const alarmCheckBtn = async (OpenUrl : string , CfmLev : string) => {
-        const result = await SP_Request("S_ESG_AlarmCheck",[{ OpenUrl : OpenUrl.replace('/','') , CfmLev : CfmLev , DataSet : "DataSet1"}]);
+    const alarmCheckBtn = async (OpenUrl : string , CfmLev : string, IsCfm : string) => {
+        const result = await SP_Request("S_ESG_AlarmCheck",[{ OpenUrl : OpenUrl.replace('/','') , CfmLev : CfmLev , IsCfm : IsCfm, DataSet : "DataSet1"}]);
 
         setAlarmList(result);
     }
@@ -486,12 +486,13 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                                         <div className={styles.Text1}>{Item.LMenuName}</div>
                                         <div className={styles.Text2}>화면명 : {Item.FormName}</div>
                                         <div className={styles.Text2}>{Item.CompanyName} / {Item.BizUnitName}</div>
-                                        <div className={styles.Text3}>{Item.CfmLev}차 승인건이 {Item.Cnt}건 등록되었습니다.</div>
+                                        {Item.IsCfm === '0' && <div className={styles.Text3}>{Item.CfmLev}차 승인건이 {Item.Cnt}건 등록되었습니다.</div>}
+                                        {Item.IsCfm === '1' && <div className={styles.Text3}>{Item.CfmLev - 1}차 승인건이 {Item.Cnt}건 승인되었습니다.</div>}
                                         <div className={styles.alarmbtnWrap}>
-                                            <div className={styles.alarmBtn} onClick={() => alarmLinkBtn(Item.OpenUrl, Item.CfmLev)}>
+                                            <div className={styles.alarmBtn} onClick={() => alarmLinkBtn(Item.OpenUrl, Item.CfmLev, Item.IsCfm)}>
                                                 <img className = {styles.alarmImage} src={ImageLink} alt={"alarmlink"} />&nbsp;이동
                                             </div>
-                                            <div className={styles.alarmBtn} onClick={() => alarmCheckBtn(Item.OpenUrl, Item.CfmLev)}>
+                                            <div className={styles.alarmBtn} onClick={() => alarmCheckBtn(Item.OpenUrl, Item.CfmLev, Item.IsCfm)}>
                                                 <img className = {styles.alarmImage} src={ImageCheck} alt={"alarmcheck"} />&nbsp;확인
                                             </div>
                                         </div>
