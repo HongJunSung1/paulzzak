@@ -244,6 +244,7 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
 
                             grid1Changes = {DataSet : '', grid: []};  
                         }
+                        setGrid1Changes({DataSet : '', grid: []})
                     } catch (error) {
                         // SP 호출 시 에러 처리 로직
                         console.log(error);
@@ -294,7 +295,7 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
                 }
 
                 try {
-                    const result = await SP_Request(toolbar[clickID].spName, combinedData);
+                    const result = await SP_Request(toolbar[clickID].spName, combinedData, strOpenUrl);
                     
                     if(result){
                         let errMsg : any[] = [];
@@ -456,6 +457,7 @@ const Scope1to2 = ({strOpenUrl, openTabs}) => {
             setCondition1('');
             setGrid1Data([]);
             setGrid2Data([]);
+            setGrid1Changes({DataSet : '', grid: []})
         }
     }, [openTabs]);
 
