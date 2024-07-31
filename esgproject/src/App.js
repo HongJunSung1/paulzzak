@@ -32,6 +32,10 @@ import DesignatedWaste from './ESG-form/environmental/waste-designated/p-esg-env
 import ConstructionWaste from './ESG-form/environmental/waste-construction/p-esg-env-construction-waste.tsx';
 import TotalWaste from './ESG-form/environmental/waste-total/p-esg-env-total-waste.tsx';
 
+// 화면 : Social
+import DirectEmployment from './ESG-form/social/direct-employment/p-esg-soc-direct-employment.tsx';
+import InDirectEmployment from './ESG-form/social/indirect-empolyment/p-esg-soc-indirect-employment.tsx';
+
 // 테스트 화면
 import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
 
@@ -98,24 +102,26 @@ function App() {
                       <Route path="/PEsgUserForm" element={<UserForm/>}></Route> */}
                     {/* 실제 데이터 작성 구간 */}
                   {/* </Routes> */}
-                  <Main              strOpenUrl={strOpenUrl} openTabs={openTabs} />
-                  <UserInfo          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <FormReg           strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <Menu              strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <UserForm          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <Environmental     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <FileTest          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <SearchBoxReg      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <CompanyReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
-                  <Scope3            strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
-                  <Scope1to2         strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
-                  <GeneralWaste      strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
-                  <DesignatedWaste   strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
-                  <ConstructionWaste strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
-                  <TableReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <BizUnitForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <TotalWaste        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <AlarmList         strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
+                  <Main                strOpenUrl={strOpenUrl} openTabs={openTabs} />
+                  <UserInfo            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <FormReg             strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <Menu                strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <UserForm            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <Environmental       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <FileTest            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <SearchBoxReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <CompanyReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <Scope3              strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <Scope1to2           strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <GeneralWaste        strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <DesignatedWaste     strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <ConstructionWaste   strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
+                  <TableReg            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <BizUnitForm         strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <TotalWaste          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <DirectEmployment    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <InDirectEmployment  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>
             </MenuInfoProvider>
