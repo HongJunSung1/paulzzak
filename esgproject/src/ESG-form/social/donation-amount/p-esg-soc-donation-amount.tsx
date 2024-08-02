@@ -179,9 +179,9 @@ const DonationAmount = ({strOpenUrl, openTabs}) => {
         {name : "Donation"          , header: "자선 기부"         , width: 80 , editor:'text', renderer : {type: 'number'}},
         {name : "Investment"        , header: "지역사회 투자"     , width: 80 , editor:'text', renderer : {type: 'number'}},
         {name : "ComInitiative"     , header: "상업적 이니셔티브" , width: 110 , editor:'text', renderer : {type: 'number'}},
-        {name : "CompSum"           , header: "합계"              , width: 80 , renderer : {type: 'sum', options:{sumAr : ["DayWorkMale", "DayWorkFemale"]}}},
+        {name : "CompSum"           , header: "합계"              , width: 80 , renderer : {type: 'sum', options:{sumAr : ["Donation", "Investment", "ComInitiative"]}}},
         {name : "EmpDonation"       , header: "임직원 기부금"     , width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "TotSum"            , header: "소계"              , width: 80 , renderer : {type: 'sum', options:{sumAr : ["DispatchedMale", "DispatchedFemale"]}}},
+        {name : "TotSum"            , header: "소계"              , width: 80 , renderer : {type: 'sum', options:{sumAr : ["Donation", "Investment", "ComInitiative","EmpDonation"]}}},
         {name : "Confirm1"          , header: "1차 승인"          , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm2"          , header: "2차 승인"          , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm3"          , header: "3차 승인"          , width: 80 , renderer : {type: 'checkbox'}}

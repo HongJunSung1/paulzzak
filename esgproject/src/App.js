@@ -34,7 +34,7 @@ import TotalWaste from './ESG-form/environmental/waste-total/p-esg-env-total-was
 
 // 화면 : Social
 import DirectEmployment from './ESG-form/social/direct-employment/p-esg-soc-direct-employment.tsx';
-import InDirectEmployment from './ESG-form/social/indirect-empolyment/p-esg-soc-indirect-employment.tsx';
+import InDirectEmployment from './ESG-form/social/indirect-employment/p-esg-soc-indirect-employment.tsx';
 import DonationAmount from './ESG-form/social/donation-amount/p-esg-soc-donation-amount.tsx';
 import VolunteerEmployment from './ESG-form/social/volunteer-employment/p-esg-soc-volunteer-employment.tsx';
 

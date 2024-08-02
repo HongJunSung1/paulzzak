@@ -172,8 +172,8 @@ const VolunteerEmployment = ({strOpenUrl, openTabs}) => {
         {name : "BizUnitCD"         , header: "사업부문 코드"       , width: 100, hidden : true},
         {name : "TotVol"            , header: "총 봉사활동 시간"    , width: 110 , editor:'text', renderer : {type: 'number'}},
         {name : "VolPaticipant"     , header: "봉사활동 참여인원"   , width: 110 , editor:'text', renderer : {type: 'number'}},
-        {name : "1PerVolTime"       , header: "1인당 봉사활동 시간" , width: 120 , renderer : {type: 'percent', options:{sumAr : ["VolPaticipant"], divideAr: ["TotVol"]}}},
-        {name : "VolRate"           , header: "봉사활동 참여율"     , width: 110 , renderer : {type: 'percent', options:{sumAr : ["VolPaticipant"], divideAr: ["TotVol"]}}},
+        {name : "PerVolTime"        , header: "1인당 봉사활동 시간" , width: 120 , renderer : {type: 'divide', options:{sumAr : ["TotVol"], divideAr: ["VolPaticipant"]}}},
+        {name : "VolRate"           , header: "봉사활동 참여율"     , width: 110 },
         {name : "Confirm1"          , header: "1차 승인"            , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm2"          , header: "2차 승인"            , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm3"          , header: "3차 승인"            , width: 80 , renderer : {type: 'checkbox'}}
