@@ -1,4 +1,4 @@
-// 지역별
+// 직급별
 import React, { useRef, useState, useEffect}  from 'react'
 
 //공통 소스
@@ -21,8 +21,8 @@ type gridAr = {
 };
 
 type condition = {  
-    RegionEmpYear : string;
-    DataSet       : string;
+    PositionEmpYear : string;
+    DataSet         : string;
 }  
 
 // 메시지 박스
@@ -30,10 +30,10 @@ let message : any     = [];
 let title   : string  = "";
 
 // 우클릭 조회 시 받는 내부코드 값
-let RegionEmpCD = 0
-let RegionEmpTitle = ""; // 파일첨부 제목
+let PositionEmpCD = 0
+let PositionEmpTitle = ""; // 파일첨부 제목
 
-const RegionEmployment = ({strOpenUrl, openTabs}) => {
+const PositionEmployment = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
 
@@ -42,7 +42,7 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
     const messageClose = () => {setMessageOpen(false)};
 
     // 조회조건 값
-    const [RegionEmpYear , setCondition1] = useState('');
+    const [PositionEmpYear , setCondition1] = useState('');
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -77,21 +77,21 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
         event.preventDefault();
         setTimeout(async () => {
             setFileData([]);
-            RegionEmpCD    =  0;
-            RegionEmpTitle = '';
+            PositionEmpCD    =  0;
+            PositionEmpTitle = '';
             if(grid1Ref.current.rightClick() !== null){
-                RegionEmpCD = grid1Ref.current.rightClick().RegionEmpCD;
-                RegionEmpTitle = grid1Ref.current.rightClick().Year;
+                PositionEmpCD = grid1Ref.current.rightClick().PositionEmpCD;
+                PositionEmpTitle = grid1Ref.current.rightClick().Year;
             }
             // 조회 조건 담기
-            const conditionAr : any[] = [{RegionEmpCD : RegionEmpCD, DataSet : "FileSet1"}]
+            const conditionAr : any[] = [{PositionEmpCD : PositionEmpCD, DataSet : "FileSet1"}]
 
-            if(RegionEmpCD > 0){
+            if(PositionEmpCD > 0){
                 // 로딩 뷰 보이기
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_Soc_Region_Emp_File_Query", conditionAr);
+                    const result = await SP_Request("S_ESG_Soc_Position_Emp_File_Query", conditionAr);
                     if(result[0].length > 0){
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setFileData(result[0]);
@@ -127,7 +127,7 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
         setLoading(true);
         setTimeout(async () => {
             try{
-                const result = await SP_Request("S_ESG_Soc_Region_Emp_File_Cut", [{FileCD: fileCD, RegionEmpCD : RegionEmpCD, DataSet: "FileSet1"}]);
+                const result = await SP_Request("S_ESG_Soc_Position_Emp_File_Cut", [{FileCD: fileCD, PositionEmpCD : PositionEmpCD, DataSet: "FileSet1"}]);
                 if(result){
                     let errMsg : any[] = [];
                     errMsg.push({text: "삭제 완료 되었습니다."});
@@ -150,18 +150,33 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Soc_Region_Emp_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Soc_Region_Emp_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Soc_Region_Emp_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Soc_Position_Emp_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Soc_Position_Emp_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Soc_Position_Emp_Cut"}
      ]
 
     // 헤더 정보
     const complexColumns =[
         {
-            header: '국내',
-            name: 'DomesticEmp',
-            childNames: ['DomesticHQ', 'DomesticLocal', 'DomesticTotal']
-        }
+            header: '임원',
+            name: 'ExecutiveEmp',
+            childNames: ['ExecutiveMale', 'ExecutiveFemale', 'ExecutiveTotal']
+        },
+        {
+            header: '관리직',
+            name: 'ManagerEmp',
+            childNames: ['ManagerMale', 'ManagerFemale', 'ManagerTotal']
+        },
+        {
+            header: '중간 관리직',
+            name: 'MiddleManagerEmp',
+            childNames: ['MiddleManagerMale', 'MiddleManagerFemale', 'MiddleManagerTotal']
+        },
+        {
+            header: '사원급',
+            name: 'GeneralEmp',
+            childNames: ['GeneralEmpMale', 'GeneralEmpFemale', 'GeneralEmpTotal']
+        },
     ]
 
     const headerOptions = {
@@ -170,20 +185,28 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
     };
 
     const columns1 = [
-        {name : "RegionEmpCD"       , header: "지역별코드"    , width: 80 , hidden : true},
-        {name : "Year"              , header: "연도"          , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
-        {name : "CompanyName"       , header: "회사명"        , width: 150, renderer: {type: "searchbox", options: {searchCode: 6, CodeColName :"CompanyCD"}}},
-        {name : "CompanyCD"         , header: "회사 코드"     , width: 100, hidden : true},
-        {name : "BizUnit"           , header: "사업부문"      , width: 150, renderer: {type: "searchbox", options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
-        {name : "BizUnitCD"         , header: "사업부문 코드" , width: 100, hidden : true},
-        {name : "TotalCnt"          , header: "총 인원"       , width: 80 , renderer : {type: 'sum', options: {sumAr : ["DomesticHQ", "DomesticLocal", "Abroad"]}}},
-        {name : "DomesticHQ"        , header: "본사"          , width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "DomesticLocal"     , header: "지역 사업소"   , width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "DomesticTotal"     , header: "합계"          , width: 80 , renderer : {type: 'sum', options: {sumAr : ["DomesticHQ", "DomesticLocal"]}}},
-        {name : "Abroad"            , header: "해외"          , width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "Confirm1"          , header: "1차 승인"      , width: 80 , renderer : {type: 'checkbox'}},
-        {name : "Confirm2"          , header: "2차 승인"      , width: 80 , renderer : {type: 'checkbox'}},
-        {name : "Confirm3"          , header: "3차 승인"      , width: 80 , renderer : {type: 'checkbox'}}
+        {name : "PositionEmpCD"      , header: "직급별코드"    , width: 80 , hidden : true},
+        {name : "Year"               , header: "연도"          , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "CompanyName"        , header: "회사명"        , width: 150, renderer: {type: "searchbox", options: {searchCode: 6, CodeColName :"CompanyCD"}}},
+        {name : "CompanyCD"          , header: "회사 코드"     , width: 100, hidden : true},
+        {name : "BizUnit"            , header: "사업부문"      , width: 150, renderer: {type: "searchbox", options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
+        {name : "BizUnitCD"          , header: "사업부문 코드" , width: 100, hidden : true},
+        {name : "TotalCnt"           , header: "총 인원"       , width: 80 , renderer : {type: 'sum', options: {sumAr : ["ExecutiveMale", "ExecutiveFemale", "ManagerMale", "ManagerFemale", "MiddleManagerMale", "MiddleManagerFemale", "GeneralEmpMale", "GeneralEmpFemale"]}}},
+        {name : "ExecutiveMale"      , header: "남성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "ExecutiveFemale"    , header: "여성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "ExecutiveTotal"     , header: "합계"          , width: 80 , renderer : {type: 'sum', options: {sumAr : ["ExecutiveMale", "ExecutiveFemale"]}}},
+        {name : "ManagerMale"        , header: "남성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "ManagerFemale"      , header: "여성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "ManagerTotal"       , header: "합계"          , width: 80 , renderer : {type: 'sum', options: {sumAr : ["ManagerMale", "ManagerFemale"]}}},
+        {name : "MiddleManagerMale"  , header: "남성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "MiddleManagerFemale", header: "여성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "MiddleManagerTotal" , header: "합계"          , width: 80 , renderer : {type: 'sum', options: {sumAr : ["MiddleManagerMale", "MiddleManagerFemale"]}}},
+        {name : "GeneralEmpMale"     , header: "남성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "GeneralEmpFemale"   , header: "여성"          , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "GeneralEmpTotal"    , header: "합계"          , width: 80 , renderer : {type: 'sum', options: {sumAr : ["GeneralEmpMale", "GeneralEmpFemale"]}}},
+        {name : "Confirm1"           , header: "1차 승인"      , width: 80 , renderer : {type: 'checkbox'}},
+        {name : "Confirm2"           , header: "2차 승인"      , width: 80 , renderer : {type: 'checkbox'}},
+        {name : "Confirm3"           , header: "3차 승인"      , width: 80 , renderer : {type: 'checkbox'}}
     ]
 
 
@@ -194,8 +217,8 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
             case 0 :
                 setGrid1Data([]);
                 setFileData([]);
-                RegionEmpCD    =  0;
-                RegionEmpTitle = '';
+                PositionEmpCD    =  0;
+                PositionEmpTitle = '';
 
                 grid1Changes = {DataSet : '', grid: []};    
                 break;
@@ -204,14 +227,14 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        RegionEmpYear : RegionEmpYear,
+                        PositionEmpYear : PositionEmpYear,
                         DataSet  : 'DataSet1'
                     })
 
                     // 파일 데이터 초기화
                     setFileData([]);
-                    RegionEmpCD    =  0;
-                    RegionEmpTitle = '';
+                    PositionEmpCD    =  0;
+                    PositionEmpTitle = '';
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -261,13 +284,13 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
                 const fileSaveResult = await fileRef.current.handleSave();
                 if(fileSaveResult !== null && fileSaveResult !== undefined){
                     for(let i=0;i<fileSaveResult.length;i++){
-                        fileSaveResult[i].RegionEmpCD = RegionEmpCD;
+                        fileSaveResult[i].PositionEmpCD = PositionEmpCD;
                     }
                     fileAr.DataSet = 'FileSet1';
                     fileAr.grid = fileSaveResult;
                     combinedData.push(fileAr);
                 } else{
-                    RegionEmpCD = 0;
+                    PositionEmpCD = 0;
                 }
                 
                 combinedData.push(grid1Changes);
@@ -291,7 +314,7 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: "지역별 " + result[i][j].Message})
+                                    errMsg.push({text: "직군별 " + result[i][j].Message})
                                 }
                             }
                         }
@@ -387,9 +410,9 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
 
         alarmList.grid.forEach(item => {
             item.SheetNum  = "1"; // 시트 순번 지정
-            item.TableKey1 = item.RegionEmpCD; // 공통 키값1(마스터) 추가 없을 경우 0
+            item.TableKey1 = item.PositionEmpCD; // 공통 키값1(마스터) 추가 없을 경우 0
             item.TableKey2 = 0;             // 공통 키값2(디테일) 추가 없을 경우 0
-            delete item.RegionEmpCD; // 기존 키값 삭제
+            delete item.PositionEmpCD; // 기존 키값 삭제
         });
 
         // 체크행 있을 경우 알림 전송
@@ -402,7 +425,7 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
                 for(let i in result){
                     for(let j in result[i]){
                         if(result[i][j].Status > 0){
-                            errMsg.push({text: "시트: 지역별 " + result[i][j].Message})
+                            errMsg.push({text: "시트: 직급별 " + result[i][j].Message})
                         }
                     }
                 }
@@ -433,7 +456,7 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgSocRegionEmployment') === undefined) {
+        if (openTabs.find(item => item.url === '/PEsgSocPositionEmployment') === undefined) {
             setCondition1('');
             setGrid1Data([]);
             setFileData([]);
@@ -443,7 +466,7 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
 
     // 파일 첨부 화면 높이 0 방지
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgSocRegionEmployment') !== undefined) {
+        if (openTabs.find(item => item.url === '/PEsgSocPositionEmployment') !== undefined) {
           setTimeout(() => {
             if (containerRef.current) {
               setContainerHeight(containerRef.current.clientHeight);
@@ -464,25 +487,25 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
 
       return (
         <>
-        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgSocRegionEmployment' ? "flex" : "none", flexDirection:"column"}}>
+        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgSocPositionEmployment' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <DatePick name={"연도"}   value={RegionEmpYear}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>
+                        <DatePick name={"연도"}   value={PositionEmpYear}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>
                         <Button name={"알림 전송"} clickEvent={sendAlarm}/>    
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
                     <Splitter SplitType={"vertical"} FirstSize={70} SecondSize={30}>
                         <div onContextMenu={rightClick1} style={{height: "100%"}} >
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "지역별" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "직급별" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </div>
-                        {strOpenUrl === '/PEsgSocRegionEmployment' &&
+                        {strOpenUrl === '/PEsgSocPositionEmployment' &&
                         <div style={{width: "100%", height: "100%"}} ref={containerRef} >
                             <div style={{height: containerHeight + "px"}}>
-                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={RegionEmpTitle}/>
+                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={PositionEmpTitle}/>
                             </div>
                         </div>}
                     </Splitter>
@@ -492,4 +515,4 @@ const RegionEmployment = ({strOpenUrl, openTabs}) => {
     )
 }
 
-export default RegionEmployment;
+export default PositionEmployment;

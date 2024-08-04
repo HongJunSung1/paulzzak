@@ -286,7 +286,7 @@ const AgeEmployment = ({strOpenUrl, openTabs}) => {
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: "직접 고용 " + result[i][j].Message})
+                                    errMsg.push({text: "연령별 " + result[i][j].Message})
                                 }
                             }
                         }
@@ -472,7 +472,7 @@ const AgeEmployment = ({strOpenUrl, openTabs}) => {
                 <DynamicArea>
                     <Splitter SplitType={"vertical"} FirstSize={70} SecondSize={30}>
                         <div onContextMenu={rightClick1} style={{height: "100%"}} >
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "직접고용" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "연령별" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </div>
                         {strOpenUrl === '/PEsgSocAgeEmployment' &&
                         <div style={{width: "100%", height: "100%"}} ref={containerRef} >
