@@ -36,6 +36,7 @@ import TotalWaste from './ESG-form/environmental/waste-total/p-esg-env-total-was
 import DirectEmployment from './ESG-form/social/direct-employment/p-esg-soc-direct-employment.tsx';
 import InDirectEmployment from './ESG-form/social/indirect-employment/p-esg-soc-indirect-employment.tsx';
 import AgeEmployment from './ESG-form/social/age-employment/p-esg-soc-age-employment.tsx';
+import RegionEmployment from './ESG-form/social/region-employment/p-esg-soc-region-employment.tsx';
 import DonationAmount from './ESG-form/social/donation-amount/p-esg-soc-donation-amount.tsx';
 import VolunteerEmployment from './ESG-form/social/volunteer-employment/p-esg-soc-volunteer-employment.tsx';
 
@@ -125,6 +126,7 @@ function App() {
                   <DirectEmployment    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <InDirectEmployment  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AgeEmployment       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <RegionEmployment    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <DonationAmount      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <VolunteerEmployment strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
