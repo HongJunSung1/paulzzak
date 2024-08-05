@@ -42,6 +42,9 @@ import JobEmployment from './ESG-form/social/job-employment/p-esg-soc-job-employ
 import DonationAmount from './ESG-form/social/donation-amount/p-esg-soc-donation-amount.tsx';
 import VolunteerEmployment from './ESG-form/social/volunteer-employment/p-esg-soc-volunteer-employment.tsx';
 
+// 화면 : Settings
+import CountryReg from './ESG-form/settings/country-reg/p-esg-set-country-reg.tsx';
+
 // 테스트 화면
 import FileTest from './ESG-form/file-test/p-esg-form-file-test.tsx';
 
@@ -133,6 +136,7 @@ function App() {
                   <JobEmployment       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <DonationAmount      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <VolunteerEmployment strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <CountryReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>
