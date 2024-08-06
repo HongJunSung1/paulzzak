@@ -41,6 +41,10 @@ import PositionEmployment from './ESG-form/social/position-employment/p-esg-soc-
 import JobEmployment from './ESG-form/social/job-employment/p-esg-soc-job-employment.tsx';
 import DonationAmount from './ESG-form/social/donation-amount/p-esg-soc-donation-amount.tsx';
 import VolunteerEmployment from './ESG-form/social/volunteer-employment/p-esg-soc-volunteer-employment.tsx';
+import WorkYear from './ESG-form/social/avg-workyear/p-esg-soc-avg-workyear.tsx';
+import WonderWoman from './ESG-form/social/so-hot-wonderwoman/p-esg-soc-so-hot-wonderwoman.tsx';
+import SocialWeakness from './ESG-form/social/social-weakness/p-esg-soc-social-weakness.tsx';
+
 
 // 화면 : Settings
 import CountryReg from './ESG-form/settings/country-reg/p-esg-set-country-reg.tsx';
@@ -137,6 +141,9 @@ function App() {
                   <DonationAmount      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <VolunteerEmployment strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <CountryReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <WorkYear            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <WonderWoman         strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <SocialWeakness      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>
