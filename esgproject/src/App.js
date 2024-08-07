@@ -36,6 +36,7 @@ import TotalWaste from './ESG-form/environmental/waste-total/p-esg-env-total-was
 import DirectEmployment from './ESG-form/social/direct-employment/p-esg-soc-direct-employment.tsx';
 import InDirectEmployment from './ESG-form/social/indirect-employment/p-esg-soc-indirect-employment.tsx';
 import AgeEmployment from './ESG-form/social/age-employment/p-esg-soc-age-employment.tsx';
+import CountryEmployment from './ESG-form/social/country-employment/p-esg-soc-country-employment.tsx';
 import RegionEmployment from './ESG-form/social/region-employment/p-esg-soc-region-employment.tsx';
 import PositionEmployment from './ESG-form/social/position-employment/p-esg-soc-position-employment.tsx';
 import JobEmployment from './ESG-form/social/job-employment/p-esg-soc-job-employment.tsx';
@@ -135,6 +136,7 @@ function App() {
                   <DirectEmployment    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <InDirectEmployment  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AgeEmployment       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <CountryEmployment   strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <RegionEmployment    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PositionEmployment  strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <JobEmployment       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
