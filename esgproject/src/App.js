@@ -45,7 +45,7 @@ import VolunteerEmployment from './ESG-form/social/volunteer-employment/p-esg-so
 import WorkYear from './ESG-form/social/avg-workyear/p-esg-soc-avg-workyear.tsx';
 import WonderWoman from './ESG-form/social/so-hot-wonderwoman/p-esg-soc-so-hot-wonderwoman.tsx';
 import SocialWeakness from './ESG-form/social/social-weakness/p-esg-soc-social-weakness.tsx';
-
+import HiredEmployment from './ESG-form/social/hired-employment/p-esg-soc-hired-employment.tsx';
 
 // 화면 : Settings
 import CountryReg from './ESG-form/settings/country-reg/p-esg-set-country-reg.tsx';
@@ -146,6 +146,7 @@ function App() {
                   <WorkYear            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <WonderWoman         strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <SocialWeakness      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <HiredEmployment     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>
