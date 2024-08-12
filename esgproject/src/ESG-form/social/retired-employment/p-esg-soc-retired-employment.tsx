@@ -1,4 +1,4 @@
-// 신규 채용 및 내부 충원
+// 이직 및 퇴직
 import React, { useRef, useState, useEffect}  from 'react'
 
 //공통 소스
@@ -21,7 +21,7 @@ type gridAr = {
 };
 
 type condition = {  
-    HiredEmpYear : string;
+    RetiredEmpYear : string;
     DataSet       : string;
 }  
 
@@ -30,10 +30,10 @@ let message : any     = [];
 let title   : string  = "";
 
 // 우클릭 조회 시 받는 내부코드 값
-let HiredEmpCD = 0
-let HiredEmpTitle = ""; // 파일첨부 제목
+let RetiredEmpCD = 0
+let RetiredEmpTitle = ""; // 파일첨부 제목
 
-const HiredEmployment = ({strOpenUrl, openTabs}) => {
+const RetiredEmployment = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
 
@@ -42,7 +42,7 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
     const messageClose = () => {setMessageOpen(false)};
 
     // 조회조건 값
-    const [HiredEmpYear , setCondition1] = useState('');
+    const [RetiredEmpYear , setCondition1] = useState('');
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -77,21 +77,21 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
         event.preventDefault();
         setTimeout(async () => {
             setFileData([]);
-            HiredEmpCD    =  0;
-            HiredEmpTitle = '';
+            RetiredEmpCD    =  0;
+            RetiredEmpTitle = '';
             if(grid1Ref.current.rightClick() !== null){
-                HiredEmpCD = grid1Ref.current.rightClick().HiredEmpCD;
-                HiredEmpTitle = grid1Ref.current.rightClick().Year;
+                RetiredEmpCD = grid1Ref.current.rightClick().RetiredEmpCD;
+                RetiredEmpTitle = grid1Ref.current.rightClick().Year;
             }
             // 조회 조건 담기
-            const conditionAr : any[] = [{HiredEmpCD : HiredEmpCD, DataSet : "FileSet1"}]
+            const conditionAr : any[] = [{RetiredEmpCD : RetiredEmpCD, DataSet : "FileSet1"}]
 
-            if(HiredEmpCD > 0){
+            if(RetiredEmpCD > 0){
                 // 로딩 뷰 보이기
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_Soc_Hired_Emp_File_Query", conditionAr);
+                    const result = await SP_Request("S_ESG_Soc_Retired_Emp_File_Query", conditionAr);
                     if(result[0].length > 0){
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setFileData(result[0]);
@@ -127,7 +127,7 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
         setLoading(true);
         setTimeout(async () => {
             try{
-                const result = await SP_Request("S_ESG_Soc_Hired_Emp_File_Cut", [{FileCD: fileCD, HiredEmpCD : HiredEmpCD, DataSet: "FileSet1"}]);
+                const result = await SP_Request("S_ESG_Soc_Retired_Emp_File_Cut", [{FileCD: fileCD, RetiredEmpCD : RetiredEmpCD, DataSet: "FileSet1"}]);
                 if(result){
                     let errMsg : any[] = [];
                     errMsg.push({text: "삭제 완료 되었습니다."});
@@ -150,17 +150,22 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Soc_Hired_Emp_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Soc_Hired_Emp_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Soc_Hired_Emp_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Soc_Retired_Emp_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Soc_Retired_Emp_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Soc_Retired_Emp_Cut"}
      ]
 
     // 헤더 정보
     const complexColumns =[
         {
-            header: '고용형태',
-            name: 'HiredType',
-            childNames: ['FullTimeNew', 'FullTimeExperience', 'NonRegular']
+            header: '자발적 이직',
+            name: 'VoluntaryTurnOver',
+            childNames: ['VoluntaryTotal', 'Redundancy', 'Retirement']
+        },
+        {
+            header: '비자발적 이직',
+            name: 'InVoluntaryTurnOver',
+            childNames: ['InVoluntaryTotal', 'RegularRetirement', 'Dismissal', 'Resignation']
         },
         {
             header: '성별',
@@ -172,11 +177,15 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
             name: 'Age',
             childNames: ['UnderThirties', 'Thirties', 'Fourties', 'Fifties', 'OverSixties']
         },
-
         {
             header: '지역별',
             name: 'Location',
             childNames: ['HeadWorker', 'LocalWorker']
+        },
+        {
+            header: '이직률',
+            name: 'TurnOverRate',
+            childNames: ['TurnOverRateTotal', 'InVoluntaryRatio', 'VoluntaryRatio']
         },
     ]
 
@@ -186,17 +195,24 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
     };
 
     const columns1 = [
-        {name : "HiredEmpCD"        , header: "채용코드"                      , width: 80 , hidden : true},
-        {name : "Year"              , header: "연도"                          , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
-        {name : "CompanyName"       , header: "회사명"                        , width: 150, renderer: {type: "searchbox", options: {searchCode: 6, CodeColName :"CompanyCD"}}},
-        {name : "CompanyCD"         , header: "회사 코드"                     , width: 100, hidden : true},
-        {name : "BizUnit"           , header: "사업부문"                      , width: 150, renderer: {type: "searchbox", options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
-        {name : "BizUnitCD"         , header: "사업부문 코드"                 , width: 100, hidden : true},
-       
-        {name : "TotalCnt"          , header: "총 인원"                       , width: 80 , renderer : {type: 'sum', options: {sumAr : ["FullTimeNew", "FullTimeExperience", "NonRegular"]}}},        
-        {name : "FullTimeNew"       , header: "정규직(신입)"                  , width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "FullTimeExperience", header: "정규직(경력)"                  , width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "NonRegular"        , header: "비정규직"                      , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "RetiredEmpCD"       , header: "이직코드"                      , width: 80 , hidden : true},
+        {name : "Year"               , header: "연도"                          , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
+        {name : "CompanyName"        , header: "회사명"                        , width: 150, renderer: {type: "searchbox", options: {searchCode: 6, CodeColName :"CompanyCD"}}},
+        {name : "CompanyCD"          , header: "회사 코드"                     , width: 100, hidden : true},
+        {name : "BizUnit"            , header: "사업부문"                      , width: 150, renderer: {type: "searchbox", options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
+        {name : "BizUnitCD"          , header: "사업부문 코드"                 , width: 100, hidden : true},
+        
+        {name : "TotalCnt"           , header: "총 인원"                       , width: 80 , renderer : {type: 'sum', options: {sumAr : ["Redundancy", "Retirement", "RegularRetirement", "Dismissal", "Resignation"]}}},        
+         
+        {name : "VoluntaryTotal"     , header: "총 인원"                       , width: 80 , renderer : {type: 'sum', options: {sumAr : ["Redundancy", "Retirement"]}}},        
+        {name : "Redundancy"         , header: "희망퇴직"                      , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "Retirement"         , header: "자발적퇴직"                    , width: 80 , editor:'text', renderer : {type: 'number'}},
+        
+        {name : "InVoluntaryTotal"   , header: "총 인원"                      , width: 80 , renderer : {type: 'sum', options: {sumAr : ["RegularRetirement", "Dismissal", "Resignation"]}}},        
+        {name : "RegularRetirement"  , header: "정년퇴직"                     , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "Dismissal"          , header: "징계해고"                     , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "Resignation"        , header: "권고사직"                     , width: 80 , editor:'text', renderer : {type: 'number'}},
+        
         
         {name : "Male"              , header: "남성"                          , width: 80 , editor:'text', renderer : {type: 'number'}},
         {name : "Female"            , header: "여성"                          , width: 80 , editor:'text', renderer : {type: 'number'}},
@@ -210,8 +226,9 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
         {name : "HeadWorker"        , header: "본사(서울)\n근로자"            , width: 80 , editor:'text', renderer : {type: 'number'}},
         {name : "LocalWorker"       , header: "지역 사업소 근로자"            , width: 80 , editor:'text', renderer : {type: 'number'}},
         
-        {name : "InnerHiredWorker"  , header: "내부 후보자에 의해 충원된 인원", width: 80 , editor:'text', renderer : {type: 'number'}},
-        {name : "HireCostAvg"       , header: "평균 채용\n비용"               , width: 80 , editor:'text', renderer : {type: 'number'}},
+        {name : "TurnOverRateTotal" , header: "소계"                          , width: 80 , renderer : {type: 'number'}},
+        {name : "InVoluntaryRatio"  , header: "비자발적\n이직률"              , width: 80 , renderer : {type: 'number'}},
+        {name : "VoluntaryRatio"    , header: "자발적 이직률(퇴직률)"         , width: 80 , renderer : {type: 'number'}},
 
         {name : "Confirm1"          , header: "1차 승인"                      , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm2"          , header: "2차 승인"                      , width: 80 , renderer : {type: 'checkbox'}},
@@ -226,8 +243,8 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
             case 0 :
                 setGrid1Data([]);
                 setFileData([]);
-                HiredEmpCD    =  0;
-                HiredEmpTitle = '';
+                RetiredEmpCD    =  0;
+                RetiredEmpTitle = '';
 
                 grid1Changes = {DataSet : '', grid: []};    
                 break;
@@ -236,14 +253,14 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        HiredEmpYear : HiredEmpYear,
+                        RetiredEmpYear : RetiredEmpYear,
                         DataSet  : 'DataSet1'
                     })
 
                     // 파일 데이터 초기화
                     setFileData([]);
-                    HiredEmpCD    =  0;
-                    HiredEmpTitle = '';
+                    RetiredEmpCD    =  0;
+                    RetiredEmpTitle = '';
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -293,13 +310,13 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
                 const fileSaveResult = await fileRef.current.handleSave();
                 if(fileSaveResult !== null && fileSaveResult !== undefined){
                     for(let i=0;i<fileSaveResult.length;i++){
-                        fileSaveResult[i].HiredEmpCD = HiredEmpCD;
+                        fileSaveResult[i].RetiredEmpCD = RetiredEmpCD;
                     }
                     fileAr.DataSet = 'FileSet1';
                     fileAr.grid = fileSaveResult;
                     combinedData.push(fileAr);
                 } else{
-                    HiredEmpCD = 0;
+                    RetiredEmpCD = 0;
                 }
                 
                 combinedData.push(grid1Changes);
@@ -323,7 +340,7 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: "신규 채용 및 내부 충원 " + result[i][j].Message})
+                                    errMsg.push({text: "이직 및 퇴직 " + result[i][j].Message})
                                 }
                             }
                         }
@@ -419,9 +436,9 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
 
         alarmList.grid.forEach(item => {
             item.SheetNum  = "1"; // 시트 순번 지정
-            item.TableKey1 = item.HiredEmpCD; // 공통 키값1(마스터) 추가 없을 경우 0
+            item.TableKey1 = item.RetiredEmpCD; // 공통 키값1(마스터) 추가 없을 경우 0
             item.TableKey2 = 0;             // 공통 키값2(디테일) 추가 없을 경우 0
-            delete item.HiredEmpCD; // 기존 키값 삭제
+            delete item.RetiredEmpCD; // 기존 키값 삭제
         });
 
         // 체크행 있을 경우 알림 전송
@@ -434,7 +451,7 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
                 for(let i in result){
                     for(let j in result[i]){
                         if(result[i][j].Status > 0){
-                            errMsg.push({text: "시트: 신규 채용 및 내부 충원 " + result[i][j].Message})
+                            errMsg.push({text: "시트: 이직 및 퇴직 " + result[i][j].Message})
                         }
                     }
                 }
@@ -465,7 +482,7 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgSocHiredEmployment') === undefined) {
+        if (openTabs.find(item => item.url === '/PEsgSocRetiredEmployment') === undefined) {
             setCondition1('');
             setGrid1Data([]);
             setFileData([]);
@@ -475,7 +492,7 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
 
     // 파일 첨부 화면 높이 0 방지
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgSocHiredEmployment') !== undefined) {
+        if (openTabs.find(item => item.url === '/PEsgSocRetiredEmployment') !== undefined) {
           setTimeout(() => {
             if (containerRef.current) {
               setContainerHeight(containerRef.current.clientHeight);
@@ -496,25 +513,25 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
 
       return (
         <>
-        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgSocHiredEmployment' ? "flex" : "none", flexDirection:"column"}}>
+        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgSocRetiredEmployment' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <DatePick name={"연도"}   value={HiredEmpYear}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>
+                        <DatePick name={"연도"}   value={RetiredEmpYear}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>
                         <Button name={"알림 전송"} clickEvent={sendAlarm}/>    
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
                     <Splitter SplitType={"vertical"} FirstSize={70} SecondSize={30}>
                         <div onContextMenu={rightClick1} style={{height: "100%"}} >
-                            <Grid ref={grid1Ref} gridId="DataSet1" title = "신규 채용 및 내부 충원" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "이직 및 퇴직" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </div>
-                        {strOpenUrl === '/PEsgSocHiredEmployment' &&
+                        {strOpenUrl === '/PEsgSocRetiredEmployment' &&
                         <div style={{width: "100%", height: "100%"}} ref={containerRef} >
                             <div style={{height: containerHeight + "px"}}>
-                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={HiredEmpTitle}/>
+                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={RetiredEmpTitle}/>
                             </div>
                         </div>}
                     </Splitter>
@@ -524,4 +541,4 @@ const HiredEmployment = ({strOpenUrl, openTabs}) => {
     )
 }
 
-export default HiredEmployment;
+export default RetiredEmployment;
