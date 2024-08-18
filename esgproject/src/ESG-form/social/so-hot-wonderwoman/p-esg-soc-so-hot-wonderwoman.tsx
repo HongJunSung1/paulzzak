@@ -30,8 +30,8 @@ let message : any     = [];
 let title   : string  = "";
 
 // 우클릭 조회 시 받는 내부코드 값
-let DonationCD = 0
-let DonationTitle = ""; // 파일첨부 제목
+let SohotCD = 0
+let SohotTitle = ""; // 파일첨부 제목
 
 const WonderWoman = ({strOpenUrl, openTabs}) => {
     // 로딩뷰
@@ -42,7 +42,7 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
     const messageClose = () => {setMessageOpen(false)};
 
     // 조회조건 값
-    const [DonationYear , setCondition1] = useState('');
+    const [SohotYear , setCondition1] = useState('');
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -77,21 +77,21 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
         event.preventDefault();
         setTimeout(async () => {
             setFileData([]);
-            DonationCD    =  0;
-            DonationTitle = '';
+            SohotCD    =  0;
+            SohotTitle = '';
             if(grid1Ref.current.rightClick() !== null){
-                DonationCD = grid1Ref.current.rightClick().DonationCD;
-                DonationTitle = grid1Ref.current.rightClick().Year;
+                SohotCD = grid1Ref.current.rightClick().SohotCD;
+                SohotTitle = grid1Ref.current.rightClick().Year;
             }
             // 조회 조건 담기
-            const conditionAr : any[] = [{DonationCD : DonationCD, DataSet : "FileSet1"}]
+            const conditionAr : any[] = [{SohotCD : SohotCD, DataSet : "FileSet1"}]
 
-            if(DonationCD > 0){
+            if(SohotCD > 0){
                 // 로딩 뷰 보이기
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_Soc_Donation_File_Query", conditionAr);
+                    const result = await SP_Request("S_ESG_Soc_Sohot_File_Query", conditionAr);
                     if(result[0].length > 0){
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setFileData(result[0]);
@@ -127,7 +127,7 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
         setLoading(true);
         setTimeout(async () => {
             try{
-                const result = await SP_Request("S_ESG_Soc_Donation_File_Cut", [{FileCD: fileCD, DonationCD : DonationCD, DataSet: "FileSet1"}]);
+                const result = await SP_Request("S_ESG_Soc_Sohot_File_Cut", [{FileCD: fileCD, SohotCD : SohotCD, DataSet: "FileSet1"}]);
                 if(result){
                     let errMsg : any[] = [];
                     errMsg.push({text: "삭제 완료 되었습니다."});
@@ -150,9 +150,9 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Soc_donation_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Soc_donation_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Soc_donation_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Soc_Sohot_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Soc_Sohot_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Soc_Sohot_Cut"}
      ]
 
     // 헤더 정보
@@ -164,16 +164,16 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
     };
 
     const columns1 = [
-        {name : "DonationCD"        , header: "여성인재코드"                        , width: 80 , hidden : true},
+        {name : "SohotCD"           , header: "여성인재코드"                        , width: 80 , hidden : true},
         {name : "Year"              , header: "연도"                                , width: 100, renderer: {type: "datebox", options:{dateType:"year"}}},
         {name : "CompanyName"       , header: "회사명"                              , width: 150, renderer: {type: "searchbox", options: {searchCode: 6, CodeColName :"CompanyCD"}}},
         {name : "CompanyCD"         , header: "회사 코드"                           , width: 100, hidden : true},
         {name : "BizUnit"           , header: "사업부문"                            , width: 150, renderer: {type: "searchbox", options: {searchCode: 7, CodeColName :"BizUnitCD"}}},
         {name : "BizUnitCD"         , header: "사업부문 코드"                       , width: 100, hidden : true},
-        {name : "Donation"          , header: "STEM 직군의\n여성 직원 수"            , width: 150 , editor:'text', renderer : {type: 'number'}},
-        {name : "Investment"        , header: "STEM 직군의\n여성 직원 비율 (%)"      , width: 150 , editor:'text', renderer : {type: 'number'}},
-        {name : "ComInitiative"     , header: "수익 창출 직군의\n여성 직원 수"       , width: 150 , editor:'text', renderer : {type: 'number'}},
-        {name : "CompSum"           , header: "수익 창출 직군의\n여성 직원 비율 (%)" , width: 150 , editor:'text', renderer : {type: 'number'}},
+        {name : "STEMWomanCnt"      , header: "STEM 직군의\n여성 직원 수"            , width: 150 , editor:'text', renderer : {type: 'number'}},
+        {name : "STEMWomanRate"     , header: "STEM 직군의\n여성 직원 비율 (%)"      , width: 150 , editor:'text', renderer : {type: 'number'}},
+        {name : "EarnWomanCnt"      , header: "수익 창출 직군의\n여성 직원 수"       , width: 150 , editor:'text', renderer : {type: 'number'}},
+        {name : "EarnWomanRate"     , header: "수익 창출 직군의\n여성 직원 비율 (%)" , width: 150 , editor:'text', renderer : {type: 'number'}},
         {name : "Confirm1"          , header: "1차 승인"                           , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm2"          , header: "2차 승인"                           , width: 80 , renderer : {type: 'checkbox'}},
         {name : "Confirm3"          , header: "3차 승인"                           , width: 80 , renderer : {type: 'checkbox'}}
@@ -187,8 +187,8 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
             case 0 :
                 setGrid1Data([]);
                 setFileData([]);
-                DonationCD    =  0;
-                DonationTitle = '';
+                SohotCD    =  0;
+                SohotTitle = '';
 
                 grid1Changes = {DataSet : '', grid: []};    
                 break;
@@ -197,14 +197,14 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        DonationYear : DonationYear,
+                        DonationYear : SohotYear,
                         DataSet  : 'DataSet1'
                     })
 
                     // 파일 데이터 초기화
                     setFileData([]);
-                    DonationCD    =  0;
-                    DonationTitle = '';
+                    SohotCD    =  0;
+                    SohotTitle = '';
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -254,13 +254,13 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
                 const fileSaveResult = await fileRef.current.handleSave();
                 if(fileSaveResult !== null && fileSaveResult !== undefined){
                     for(let i=0;i<fileSaveResult.length;i++){
-                        fileSaveResult[i].DonationCD = DonationCD;
+                        fileSaveResult[i].SohotCD = SohotCD;
                     }
                     fileAr.DataSet = 'FileSet1';
                     fileAr.grid = fileSaveResult;
                     combinedData.push(fileAr);
                 } else{
-                    DonationCD = 0;
+                    SohotCD = 0;
                 }
                 
                 combinedData.push(grid1Changes);
@@ -463,7 +463,7 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <DatePick name={"연도"}   value={DonationYear}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>
+                        <DatePick name={"연도"}   value={SohotYear}  onChange={setCondition1} width={200} type={"year"} isGrid={false}/>
                         <Button name={"알림 전송"} clickEvent={sendAlarm}/>    
                     </FixedWrap>
                 </FixedArea>  
@@ -475,7 +475,7 @@ const WonderWoman = ({strOpenUrl, openTabs}) => {
                         {strOpenUrl === '/PEsgSocSoHotWonderWoman' &&
                         <div style={{width: "100%", height: "100%"}} ref={containerRef} >
                             <div style={{height: containerHeight + "px"}}>
-                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={DonationTitle}/>
+                                <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={SohotTitle}/>
                             </div>
                         </div>}
                     </Splitter>

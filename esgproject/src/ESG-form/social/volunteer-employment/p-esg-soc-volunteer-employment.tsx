@@ -1,4 +1,4 @@
-// 고용 형태(간접고용)
+// 임직원 봉사활동
 import React, { useRef, useState, useEffect}  from 'react'
 
 //공통 소스
