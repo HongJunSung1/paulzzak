@@ -11,6 +11,7 @@ const SearchBox = (settings : any) => {
     const [isOpen, setIsOpen] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
     const InputRef = useRef<HTMLInputElement>(null);
+    const ResultRef = useRef<HTMLDivElement>(null);
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
     // useEffect(() => {
@@ -37,9 +38,23 @@ const SearchBox = (settings : any) => {
                         settings.onChange(0);
                     }
                 }
-
+                const Rect = InputRef.current?.getBoundingClientRect();
+                if(Rect){
+                    setPosition({top:Rect.top, left:Rect.left});
+                }
+                
+                // 전체 사이즈
+                const totHeight = window.innerHeight;
+                
                 setTimeout(()=>{
                     setIsOpen(true);
+                    const Top = Rect?.top || 0;
+                    const OffsetHeight = ResultRef.current?.offsetHeight || 0;
+                    if(Top + OffsetHeight >= totHeight){
+                        if(Rect){
+                            setPosition({top:Rect.top - OffsetHeight - 35, left:Rect.left});
+                        }
+                    }
                 },100)
             }
         }
@@ -67,12 +82,24 @@ const SearchBox = (settings : any) => {
             setPosition({top:Rect.top, left:Rect.left});
         }
             
+        // 전체 사이즈
+        const totHeight = window.innerHeight;
 
-
+        
         if(isOpen){
             setIsOpen(false);
         }else{
-            setIsOpen(true);    
+            setIsOpen(true);
+
+            setTimeout(()=>{
+                const Top = Rect?.top || 0;
+                const OffsetHeight = ResultRef.current?.offsetHeight || 0;
+                if(Top + OffsetHeight >= totHeight){
+                    if(Rect){
+                        setPosition({top:Rect.top - OffsetHeight - 35, left:Rect.left});
+                    }
+                }    
+            },0)
         }
     }
 
@@ -129,7 +156,7 @@ const SearchBox = (settings : any) => {
                     <div className={settings.isGrid ? styles.SearchGridImg : styles.SearchImg} onClick={ClickHandler} />
                 </div>
                 {isOpen && result.length > 0 && (
-                    <div className={styles.tableWrap} style={{top : position.top + 30, left : position.left}}>
+                    <div className={styles.tableWrap} style={{top : position.top + 30, left : position.left}} ref={ResultRef}>
                         <table style={{width: result[0].TotSize+'px'}}>
                             <tbody>
                                     <tr>
