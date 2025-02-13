@@ -8,8 +8,8 @@ export const SP_Request = async (SpName : string, sendData : any, strUrl? : any)
     // const apiUrl = "http://43.203.127.56:9090/ESGbbollock/spRequest";
 
     // 폴짝 서버 돌리기
-    const apiUrl = process.env.REACT_APP_API_URL + "/spRequest" || "http://localhost:8080/spRequest";
-
+    const apiUrl = "http://localhost:8080/spRequest";
+    console.log(apiUrl);
     // console.log("✅ SP_Request 실행됨!");
     // console.log("🌍 API URL:", apiUrl);
     // console.log("📦 보낼 데이터:", sendData);
