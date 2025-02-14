@@ -11,7 +11,7 @@ export const SP_Request = async (SpName : string, sendData : any, strUrl? : any)
     // const apiUrl = "http://localhost:8080/spRequest";
 
     // 폴짝 서버 돌리기(서버)
-    const apiUrl = "https://paulzzak-backend.onrender.com";
+    const apiUrl = "https://paulzzak-backend.onrender.com/spRequest";
 
     // console.log("✅ SP_Request 실행됨!");
     // console.log("🌍 API URL:", apiUrl);
