@@ -28,6 +28,7 @@ const SideBar = ({ items, strOpenUrl}) => {
     
     if(data){
       setTotMenuData(data);
+      console.log(setTotMenuData(data));
       setSelectedMenu(data.find(item => item.id === '1').LMenuName);
     }
   }, []);
