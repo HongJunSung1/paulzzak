@@ -40,7 +40,7 @@ export const SP_Request = async (SpName : string, sendData : any, strUrl? : any)
         {
             withCredentials: true, // ✅ 개별 요청에서 추가
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json; charset=UTF-8",
             }
         }
     );
