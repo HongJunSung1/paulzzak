@@ -362,7 +362,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
                     <div onContextMenu={rightClick1} style={{height:"100%"}}>
                         <Grid ref={grid1Ref} gridId="DataSet1" title = "사용자 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                     </div>
-                    <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD}/>
+                    <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle={"파일첨부"}/>
                 </Splitter>
         </DynamicArea>
     </>

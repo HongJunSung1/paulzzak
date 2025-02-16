@@ -111,7 +111,7 @@ const File = forwardRef(({openUrl, source, fileCD, fileTitle} : CustomFileProps,
                 // 화면 주소 추가
                 formData.append('openUrl', openUrl ?  openUrl.substr(1) : '');
                 try {
-                    const response = await fetch('http://43.203.127.56:9090/ESGbbollock/uploadFiles', {
+                    const response = await fetch('https://paulzzak-backend.onrender.com/uploadFiles', {
                     // const response = await fetch('http://localhost:9090/uploadFiles', {
                         method: 'POST',
                         body: formData,
@@ -182,7 +182,7 @@ const File = forwardRef(({openUrl, source, fileCD, fileTitle} : CustomFileProps,
                     formData.append('filePath', result[0][0].filePath);
 
                     // const fetchPath = "http://localhost:9090/download/";
-                    const fetchPath = "http://43.203.127.56:9090/ESGbbollock/download/"
+                    const fetchPath = "https://paulzzak-backend.onrender.com/download/"
                     const response = await fetch(fetchPath, {
                         method: 'POST',
                         body: formData,
@@ -237,7 +237,7 @@ const File = forwardRef(({openUrl, source, fileCD, fileTitle} : CustomFileProps,
 
             }
             // const response = await fetch('http://localhost:9090/deleteFile', {
-            const response = await fetch('http://43.203.127.56:9090/ESGbbollock/deleteFile', {
+            const response = await fetch('https://paulzzak-backend.onrender.com/deleteFile', {
                 method: 'POST',
                 body: formData,
             });
