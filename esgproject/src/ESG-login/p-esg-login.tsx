@@ -2,10 +2,8 @@ import React, { useState, useRef, useEffect}  from 'react';
 import styles from './p-esg-login.module.css';
 import { useNavigate  } from 'react-router-dom';
 
-import EGLogo from '../assets/image/EGlogo.png';
-import LoginPicture from '../assets/image/LoginPicture_3.jpg'
-// import LoginPicture from '../assets/image/LoginPicture.jpg';
-// import LoginPicture from '../assets/image/loginPicture_2.png';
+import PaulZZakLogo from '../assets/image/PaulZZaklogo.png';
+import LoginPicture from '../assets/image/LoginPicture_4.jpg'
 import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import MessageBoxYesNo from '../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
@@ -340,8 +338,8 @@ const LoginPage = ({strOpenUrl}) => {
                     </div>
                     <div className = {styles.LoginRight}>
                         <div className = {styles.LoginRightWrap} style={{top: userInfoCheck ? '7%' : ''}}>
-                            <div className={styles.EYLogoWrap}>
-                                <img className = {styles.EYLogo} src={EGLogo} alt={"EYLogo"}></img>
+                            <div className={styles.LogoWrap}>
+                                <img className = {styles.Logo} src={PaulZZakLogo} alt={"EYLogo"}></img>
                             </div>
                             {!userInfoCheck && 
                             <div>
@@ -353,7 +351,7 @@ const LoginPage = ({strOpenUrl}) => {
                                     {isPassWord && <div className = {styles.initPassword} onClick={initPasswordMsg}>비밀번호 초기화</div>}
                                 </div>
                                 <div className={styles.copyright}>
-                                    Copyright © 2024.ESG Platform. All rights reserved
+                                    Copyright © 2025.PaulZZak Platform. All rights reserved
                                 </div>
                             </div>
                             }
@@ -368,7 +366,7 @@ const LoginPage = ({strOpenUrl}) => {
                                     <button className = {styles.LoginBtn} onClick={passwordChange}>비밀번호 변경</button>
                                 </div>
                                 <div className={styles.copyrightSub} style={{paddingLeft:"57px"}}>
-                                    Copyright © 2024.ESG Platform. All rights reserved
+                                    Copyright © 2025.PaulZZak Platform. All rights reserved
                                 </div>
                             </div>
                             }

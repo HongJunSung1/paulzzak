@@ -3,7 +3,7 @@ import styles from './p-esg-common-NavBar.module.css'
 import '../../global.d.ts';
 import SHA256 from 'crypto-js/sha256';
 
-import ImageLogo from '../../assets/image/EGlogo1_2.png';
+import ImageLogo from '../../assets/image/PaulZZakLogoSmall.png';
 import ImageSetting from '../../assets/image/setting.png';
 import ImageLogout from '../../assets/image/logout-black.png';
 import ImageAlarm from '../../assets/image/alarm.png';

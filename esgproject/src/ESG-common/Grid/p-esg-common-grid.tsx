@@ -988,9 +988,9 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                             {/* <button onClick={clickRowOneAppend} className={styles.GridSimpleBtn}>+</button> */}
                             <button onClick={clickRowOneAppend} className={styles.GridBtn}>행 추가</button>
                         </div>
-                        {/* <div>
-                            <button onClick={clickRowAppend} className={styles.GridBtn}>행 추가</button>
-                        </div> */}
+                        <div>
+                            <button onClick={clickRowAppend} className={styles.GridManyBtn}>다중 행 추가</button>
+                        </div>
                     </div>}
                     {isClickRowAppend &&   
                         <div className={styles.AppendRowWrap}>

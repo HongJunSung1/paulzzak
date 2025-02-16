@@ -148,70 +148,7 @@ const Main = ({strOpenUrl}) => {
 
     return(
         <div style={{ top: 0 ,height:"100%", display : strOpenUrl === '/main' ? "flex" : "none", flexDirection:"column"}}>
-            <div className={styles.MainWrap}>
-              <div className={styles.LeftWrap}>
-                <div className={styles.LeftTop}>
-                  <div className={styles.LeftTopChart1} ref={leftTopChart1Ref}>
-                    {strOpenUrl === '/main' && <Chart options={GaugeOptions} data={GaugeData1} ChartType ={"GaugeChart"}/>}
-                  </div>
-                  <div className={styles.LeftTopChart2} ref={leftTopChart2Ref}>
-                    {strOpenUrl === '/main' && <Chart options={GaugeOptions} data={GaugeData2} ChartType ={"GaugeChart"}/>}
-                  </div>
-                </div>
-                <div className={styles.LeftBottom} ref={leftBottomRef}>
-                  {strOpenUrl === '/main' && <Chart options={BarOptions} data={BarData} ChartType ={"BarChart"}/>}
-                </div>
-              </div>
-              <div className={styles.RightWrap}>
-                <div className={styles.RightTop}>
-                <div className={styles.BoardName}>※ 공지사항</div>
-                  <table>
-                    <colgroup>
-    	                <col width="60%" />
-                      <col width="20%" />
-                      <col width="20%" />
-                    </colgroup>
-                    <thead>
-                      <tr>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>공지사항 1</td>
-                        <td>신은규</td>
-                        <td>2024.07.04</td>
-                      </tr>
-                      <tr>
-                        <td>공지사항 2</td>
-                        <td>홍준성</td>
-                        <td>2024.06.14</td>
-                      </tr>
-                      <tr>
-                        <td>테스트1</td>
-                        <td>test</td>
-                        <td>2024.05.04</td>
-                      </tr>
-                      <tr>
-                        <td>테스트2</td>
-                        <td>test</td>
-                        <td>2024.05.02</td>
-                      </tr>
-                      <tr>
-                        <td>테스트3</td>
-                        <td>test</td>
-                        <td>2024.05.01</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className={styles.RightBottom} ref={rightBottomRef}>
-                  {strOpenUrl === '/main' && <Chart options={AreaOptions} data={AreaData} ChartType ={"AreaChart"} strOpenUrl={strOpenUrl}/>}
-                </div>
-              </div>
-            </div>
+          뭐 넣을지 고민 중
         </div>
     )
 }

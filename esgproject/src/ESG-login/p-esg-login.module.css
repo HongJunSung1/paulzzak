@@ -57,8 +57,8 @@
     position: relative;
     bottom: 31px;
     border-bottom-left-radius: 30px; */
-    height: 100%;
-    opacity: 0.9;
+    height: 127%;
+    /* opacity: 0.9; */
 }
 
 .LoginLeftBottom{
@@ -81,14 +81,15 @@
     top: 18%;
 }
 
-.EYLogoWrap{
+.LogoWrap{
     position: relative;
-    left: 35%;
+    text-align: center;
+    /* left: 35%; */
 }
 
-.EYLogo{
-    width: 130px;
-    height: 130px;
+.Logo{
+    width: 200px;
+    /* height: 130px; */
     opacity: 1.2;
 }   
 

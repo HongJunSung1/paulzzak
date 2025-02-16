@@ -6,7 +6,7 @@
     display: flex;
 }
 
-.GridBtn, .GridSimpleBtn{
+.GridBtn, .GridSimpleBtn, .GridManyBtn{
     font-size: 12px;
     display: inline-block;
     border-radius: 3px;
@@ -29,7 +29,11 @@
     width: 60px;
 }
 
-.GridBtn:hover{
+.GridManyBtn{
+    width: 80px;
+}
+
+.GridBtn:hover, .GridManyBtn:hover{
     background-color: #e6e3e3;
 }
 
