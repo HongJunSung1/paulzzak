@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState, forwardRef, useImperativeHandle,} from 'react'
 import '../../global.d.ts';
-import styles from './p-esg-common-grid.module.css';
 
 import 'tui-grid/dist/tui-grid.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
@@ -9,6 +8,7 @@ import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
 import DatePick from '../DatePicker/p-esg-common-datePicker.tsx';
 import { createRoot } from 'react-dom/client';
 // import 'tui-pagination/dist/tui-pagination.css'; //페이징처리 css
+import styles from './p-esg-common-grid.module.css';   //그리드 수정 위해 css파일을 더 아래에 둠
 
 type CustomGridProps = {
     title: string;
@@ -42,6 +42,36 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
     const [isInitialized, setIsInitialized] = useState(false);
     const [isClickRowAppend, setCollapsed] = useState(false);
     const [appendRowText, setAppendRowText] = useState(false);
+    const gridWrapperRef = useRef<HTMLDivElement>(null); // ✅ 최상위 DOM 요소를 위한 ref 추가
+
+    // ✅ Grid가 렌더링될 때 refreshLayout() 실행 (에러 방지)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (gridRef.current && gridRef.current.getInstance()) {
+                setIsInitialized(true);
+                gridRef.current.getInstance().refreshLayout();
+            }
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // 그리드 편집 시 테두리 제거
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .tui-grid-cell-content input[type='text'],
+            .tui-grid-cell-content input[type='password'] {
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
+            }
+        `;
+
+        
+        document.head.appendChild(style);
+    }, []);
+
 
     // 스크롤 위치 구하기
     const [scrollPosition, setScrollPosition] = useState({ scrollLeft: 0, scrollTop: 0 });
@@ -87,36 +117,94 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
     }, []);
 
     // 탭 이동시 입력 시작 막기
+    // useEffect(() => {
+    //     const handleKeyDown = (event) => {
+    //         if (event.key === 'Tab') {
+    //             event.preventDefault();
+    //             event.stopPropagation();
+                
+    //             let rowKey  : any = gridRef.current?.getInstance().getFocusedCell().rowKey;
+    //             const colName : any = gridRef.current?.getInstance().getFocusedCell().columnName;
+    //             const rowCnt  : any = gridRef.current?.getInstance().getRowCount();
+
+    //             const showCol = columns.filter(item => item.hidden !== true)
+    //             const currentColumnIndex : any = showCol.findIndex(column => column.name === colName);;
+    //             const nextColumnIndex    : any = (currentColumnIndex + 1) % showCol.length;
+
+    //             if(rowKey !== null){
+    //                 if(nextColumnIndex === 0){
+    //                     rowKey += 1
+    //                     if(rowKey >= rowCnt){
+    //                         rowKey = 0
+    //                     }
+    //                 }
+    //                 gridRef.current?.getInstance().focusAt(rowKey, nextColumnIndex);
+    //             }
+    //         }
+    //     };
+    
+    //     document.addEventListener('keydown', handleKeyDown, true);
+    
+    //     return () => {
+    //       document.removeEventListener('keydown', handleKeyDown, true);
+    //     };
+    // }, [columns]);
+
+
+
+    // ✅ Tab 키를 눌렀을 때 정상적으로 다음 셀로 이동하는 이벤트 핸들러
     useEffect(() => {
         const handleKeyDown = (event) => {
+            if (!gridRef.current || !gridRef.current.getInstance()) return;
+
+            const gridInstance = gridRef.current.getInstance();
+            const focusedCell = gridInstance.getFocusedCell();
+
+            if (!focusedCell || focusedCell.rowKey === null || focusedCell.columnName === null) return;
+
+            let rowKey  : any = gridRef.current?.getInstance().getFocusedCell().rowKey;
+            const colName = focusedCell.columnName;
+            const rowCnt = gridInstance.getRowCount() ?? 0;
+
             if (event.key === 'Tab') {
                 event.preventDefault();
                 event.stopPropagation();
-                
-                let rowKey  : any = gridRef.current?.getInstance().getFocusedCell().rowKey;
-                const colName : any = gridRef.current?.getInstance().getFocusedCell().columnName;
-                const rowCnt  : any = gridRef.current?.getInstance().getRowCount();
 
-                const showCol = columns.filter(item => item.hidden !== true)
-                const currentColumnIndex : any = showCol.findIndex(column => column.name === colName);;
-                const nextColumnIndex    : any = (currentColumnIndex + 1) % showCol.length;
+                const showCol = columns.filter(item => !item.hidden);
+                let currentColumnIndex = showCol.findIndex(column => column.name === colName);
+                let nextColumnIndex = (currentColumnIndex + 1) % showCol.length;
+                let nextColumnName = showCol[nextColumnIndex]?.name;
 
-                if(rowKey !== null){
-                    if(nextColumnIndex === 0){
-                        rowKey += 1
-                        if(rowKey >= rowCnt){
-                            rowKey = 0
+                if (rowKey !== null) {
+                    rowKey = Number(rowKey);
+
+                    if (nextColumnIndex === 0) {
+                        rowKey += 1;
+                        if (rowKey >= rowCnt) {
+                            rowKey = 0;
                         }
                     }
-                    gridRef.current?.getInstance().focusAt(rowKey, nextColumnIndex);
+
+                    // ✅ 기존 편집 종료 후 focus 이동
+                    gridInstance.finishEditing();
+
+                    setTimeout(() => {
+                        gridInstance.focusAt(rowKey, nextColumnIndex);
+                    }, 50);
+    
+                    setTimeout(() => {
+                        if (nextColumnName) {
+                            gridInstance.startEditing(rowKey, nextColumnName);
+                        }
+                    }, 100); // ✅ focusAt() 후 안전하게 startEditing() 실행
                 }
             }
         };
-    
+
         document.addEventListener('keydown', handleKeyDown, true);
-    
+
         return () => {
-          document.removeEventListener('keydown', handleKeyDown, true);
+            document.removeEventListener('keydown', handleKeyDown, true);
         };
     }, [columns]);
 
@@ -1005,7 +1093,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                 <div className = {styles.GridTitle}>{title}</div>
                 <div className = {styles.ExportBtn} onClick={ExportExcel}/>
             </div>
-            <div className={styles.GridWrap}>  
+            <div  ref={gridWrapperRef} className={styles.GridWrap}>  
                 {!isInitialized&&<div></div>}
                 {isInitialized &&        
                 <Grid   ref = {gridRef}
