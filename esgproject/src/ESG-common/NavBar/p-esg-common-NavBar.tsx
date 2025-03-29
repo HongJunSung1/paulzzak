@@ -76,8 +76,8 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
 
     let UserID = userInfo?.UserID;
-    let UserEmail = userInfo?.Email;
-    let UserTelNo = "";
+    let UserName = userInfo?.UserName;
+    let UserTelNo = userInfo?.TelNo;
 
     // 전화번호(정규식 사용)
     if(userInfo?.TelNo.length === 11){
@@ -91,7 +91,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     // 유저정보 변경 시 사용할 input
     const [userPassword    , setUserPassword]    = useState('')
     const [userPhoneNumber , setUserPhoneNumber] = useState('')
-    const [userEmail       , setUserEmail]       = useState('')
+    const [userName        , setUserName]        = useState('')
 
     // 비밀번호 변경 시 사용할 input
     const [currentPassword , setCurrentPassword]  = useState('')
@@ -183,7 +183,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
         setPasswordCollapsed(false);
         setUserPassword('');
         setUserPhoneNumber('');
-        setUserEmail('');
+        setUserName('');
         setCurrentPassword('');
         setNewPassword('');
         setNewPasswordCheck('');
@@ -234,7 +234,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const searchHandler = async (e) =>{
         setSearchText(e.target.value);  
         if(searchText !== "" && e.currentTarget.value.trim() !== ""){
-            const result = await SP_Request("S_ESG_FormSearch_Query",[{ FormName : e.currentTarget.value, DataSet : "DataSet1"}]);
+            const result = await SP_Request("S_Form_Search_Query",[{ FormName : e.currentTarget.value, DataSet : "DataSet1"}]);
             if(result[0].length > 0){
                 setResultData(result[0]);
                 setIsOpen(true);
@@ -333,7 +333,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
         setLoading(true);
         try {
-            const result = await SP_Request("S_ESG_UserInfo_Reg", [{DataSet : 'DataSet1', UserID: UserID, PassWord: currentPW, ChgEmail: userEmail, ChgTelNo: userPhoneNumber}]);
+            const result = await SP_Request("S_User_Info_Update", [{DataSet : 'DataSet1', UserID: UserID, PassWord: currentPW, ChgTelNo: userPhoneNumber}]);
             
             if(result){
                 let errMsg : any[] = [];
@@ -368,7 +368,6 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     const userInfoCancel = () => {
         setUserPassword('');
         setUserPhoneNumber('');
-        setUserEmail('');
         setUserInfoCollapsed(false);
     }
     
@@ -383,9 +382,9 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
 
     // 유저 정보 : 이메일
-    const userEmailChange = (e) => {
-        setUserEmail(e.target.value);
-    }
+    // const userEmailChange = (e) => {
+    //     setUserEmail(e.target.value);
+    // }
 
     // 비밀번호 변경
     const passwordChange = async () => {
@@ -395,7 +394,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
 
         setLoading(true);
         try {
-            const result = await SP_Request("S_ESG_Password_Change_Reg", [{DataSet : 'DataSet1', UserID: UserID, PassWord: currentPW, ChgPassWord: newPW, ChgPassWordCheck: newPWCheck}]);
+            const result = await SP_Request("S_Password_Change_Reg", [{DataSet : 'DataSet1', UserID: UserID, PassWord: currentPW, ChgPassWord: newPW, ChgPassWordCheck: newPWCheck}]);
             
             if(result){
                 let errMsg : any[] = [];
@@ -507,9 +506,9 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                         {settingCollapsed && 
                         <div className = {styles.settingWrap} ref={settingRef}>
                             <div className = {styles.settingTitle}>
-                                <div className = {styles.ID}>{UserID}</div>
+                                <div className = {styles.ID}>{UserName}</div>
+                                <div className = {styles.Email}>{UserID}</div>
                                 <div className = {styles.TelNo}>{UserTelNo}</div>
-                                <div className = {styles.Email}>{UserEmail}</div>
                             </div>
                             <div className = {styles.settingContents}>
                                 <div className={styles.userInfoManageWrap}>
@@ -528,9 +527,9 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                                         <div className={styles.inputHeight}>
                                             <input type="text" placeholder="핸드폰 번호" className={styles.InputContents} onChange={userPhoneNumberChange} value={userPhoneNumber}/>
                                         </div> 
-                                        <div className={styles.inputHeight}>
+                                        {/* <div className={styles.inputHeight}>
                                             <input type="text" placeholder="이메일" className={styles.InputContents} onChange={userEmailChange} value={userEmail}/>
-                                        </div>    
+                                        </div>     */}
                                         <div className={styles.inputCheck}>
                                             <div className={styles.OkWrap} onClick={userInfoChange}>
                                                 <div className={styles.inputOk}>확인</div>

@@ -79,7 +79,7 @@ const Menu = ({strOpenUrl,openTabs}) => {
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_Menu_Sub_Query", [{LMenuCD: LMenuCD, DataSet : 'DataSet1'}]);
+                    const result = await SP_Request("S_Menu_Sub_Query", [{LMenuCD: LMenuCD, DataSet : 'DataSet1'}]);
                     if(result.length > 0){
                         setGrid2Data([]);
                         setGrid3Data([]);
@@ -115,7 +115,7 @@ const Menu = ({strOpenUrl,openTabs}) => {
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_Menu_Sub_Sub_Query", [{MMenuCD: MMenuCD, DataSet : 'DataSet2'}]);
+                    const result = await SP_Request("S_Menu_Sub_Sub_Query", [{MMenuCD: MMenuCD, DataSet : 'DataSet2'}]);
                     if(result.length > 0){
                         setGrid3Data([]);
                         // 결과값이 있을 경우 그리드에 뿌려주기
@@ -138,9 +138,9 @@ const Menu = ({strOpenUrl,openTabs}) => {
 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Menu_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Menu_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Menu_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_Menu_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_Menu_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Menu_Cut"}
      ]
 
     // 헤더 정보
@@ -353,6 +353,24 @@ const Menu = ({strOpenUrl,openTabs}) => {
                         const result = await SP_Request(toolbar[clickID].spName, checkedData);
                         
                         if(result){
+
+                            let errMsgDel : any[] = [];
+                            // SP 호출 결과 값 처리
+                            for(let i in result){
+                                for(let j in result[i]){
+                                    if(result[i][j].Status > 0){
+                                        errMsgDel.push({text: "[시트: 메뉴 정보] " + result[i][j].Message})
+                                    }
+                                }
+                            }
+                            if(errMsgDel.length > 0){
+                                setMessageOpen(true);
+                                message = errMsgDel;
+                                title   = "저장 에러";
+                                setLoading(false);
+                                return;
+                            }   
+
                             // SP 결과 값이 있을 때 로직
                             grid1Ref.current.removeRows(result[0]);
                             grid2Ref.current.removeRows(result[1]);

@@ -63,9 +63,9 @@ const FormReg = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Form_Admin_FormReg_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Form_Admin_FormReg_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Form_Admin_FormReg_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_Admin_FormReg_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_Admin_FormReg_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Admin_FormReg_Cut"}
      ]
 
     // 헤더 정보
@@ -156,6 +156,22 @@ const FormReg = ({strOpenUrl, openTabs}) => {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
                     
                     if(result){
+                        let errMsg : any[] = [];
+                        // SP 호출 결과 값 처리
+                        for(let i in result){
+                            for(let j in result[i]){
+                                if(result[i][j].Status > 0){
+                                    errMsg.push({text: "시트: 화면 정보 " + result[i][j].Message})
+                                }
+                            }
+                        }
+                        if(errMsg.length > 0){
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "저장 에러";
+                            setLoading(false);
+                            return;
+                        }   
                         // SP 호출 결과 값 처리
                         grid1Ref.current.setRowData(result[0]);
                         message  = [];

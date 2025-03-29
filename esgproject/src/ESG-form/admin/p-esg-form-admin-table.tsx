@@ -73,8 +73,8 @@ const TableReg = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Table_Info_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Table_Info_Save"}
+      , {id: 1, title:"조회", image:"query", spName:"S_Table_Info_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_Table_Info_Save"}
      ]
 
     // 헤더 정보
@@ -265,7 +265,7 @@ const TableReg = ({strOpenUrl, openTabs}) => {
                 setLoading(true);
                 try {
                     // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_ESG_Table_Info_SubQuery", [condition2Ar]);
+                    const result = await SP_Request("S_Table_Info_SubQuery", [condition2Ar]);
                     if(result.length > 0){
                         // 결과값이 있을 경우 그리드에 뿌려주기
                         setGrid2Data(result[0]);

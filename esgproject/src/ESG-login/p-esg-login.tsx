@@ -124,7 +124,7 @@ const LoginPage = ({strOpenUrl}) => {
         const checkPW = SHA256('1234').toString();
 
         try {
-            result = await SP_Request("S_ESG_LoginCheck", [{userID, cryptoPW, checkPW, DataSet: 'DataSet'}]);
+            result = await SP_Request("S_Login_Check", [{userID, cryptoPW, checkPW, DataSet: 'DataSet'}]);
         } catch (error) {
             console.log(error);
         }
@@ -143,7 +143,7 @@ const LoginPage = ({strOpenUrl}) => {
             // console.log(cookie.load('userid'));
 
             try{
-                const menuResult = await SP_Request("S_ESG_MenuList",[{ UserCD : result[0][0].UserCD , DataSet : 'DataSet'}]);
+                const menuResult = await SP_Request("S_Menu_List",[{ UserCD : result[0][0].UserCD , DataSet : 'DataSet'}]);
                 if(menuResult !== null && menuResult.length > 0){
                     sessionStorage.setItem('menuList',JSON.stringify(menuResult[0]));
                     sessionStorage.setItem('LmenuList',JSON.stringify(menuResult[1]));
@@ -197,7 +197,7 @@ const LoginPage = ({strOpenUrl}) => {
                 case "901" : 
                     setUserPW("");
                     setLoading(false);// 로딩창 종료
-                    setPassword(true);// 비밀번호 초기화 화면 생성
+                    // setPassword(true);// 비밀번호 초기화 화면 생성  >> 이건 그냥 비밀번호 까먹었을 경우 초기화하는 걸로 변경
                     setErrMsg(result[0][0].Message);
                     if (passwordInputRef.current) {
                         passwordInputRef.current.focus(); // 비밀번호 입력 필드에 포커스
@@ -229,7 +229,7 @@ const LoginPage = ({strOpenUrl}) => {
         const newPW = Math.random().toString(36).substring(2, 11);
         const cryptoPW = SHA256(newPW).toString();
         try {
-            result = await SP_Request("S_ESG_LoginPasswordInit", [{userID, cryptoPW, DataSet: 'DataSet'}]);
+            result = await SP_Request("S_Admin_Password_Init", [{userID, cryptoPW, DataSet: 'DataSet'}]);
             if(result){
                 setInfo(true);
 
@@ -274,7 +274,7 @@ const LoginPage = ({strOpenUrl}) => {
         }
 
         try {
-            result = await SP_Request("S_ESG_LoginPasswordChange", [{userID, cryptoPWOrigin, cryptoPW, DataSet: 'DataSet'}])
+            result = await SP_Request("S_Login_PasswordChange", [{userID, cryptoPWOrigin, cryptoPW, DataSet: 'DataSet'}])
 
             if(result !== null && result[0][0].Status === "0"){
                 let errMsg : any[] = [];

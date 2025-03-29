@@ -29,7 +29,7 @@ const SearchBox = (settings : any) => {
         setResult([]);
         if(e.key === 'Enter'){
             if(text !== "" && e.currentTarget.value.trim() !== ""){
-                const resultData = await SP_Request("S_ESG_SearchBox_Input_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
+                const resultData = await SP_Request("S_SearchBox_Input_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
                 if(resultData.length > 0){
                     setResult(resultData[0]);
                 }else{
@@ -75,7 +75,7 @@ const SearchBox = (settings : any) => {
     }
     
     const ClickHandler = async () =>{
-        const resultData = await SP_Request("S_ESG_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
+        const resultData = await SP_Request("S_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
         setResult(resultData[0]);
         const Rect = InputRef.current?.getBoundingClientRect();
         if(Rect){

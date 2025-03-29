@@ -10,7 +10,6 @@ import FixedArea from "../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
 import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
-import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import Button from "../../ESG-common/Button/p-esg-common-Button.tsx";
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
@@ -26,9 +25,7 @@ type gridAr = {
 type condition = {
     UserName     : string;
     UserID       : string;
-    EMail        : string;
-    CompanyCD    : number;
-    DepartmentCD : number;
+    TelNo        : string;
     DataSet      : string;
 }  
 
@@ -48,11 +45,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
     // 조회조건 값
     const [UserName          , setCondition1]  = useState('')
     const [UserID            , setCondition2]  = useState('')
-    const [EMail             , setCondition3]  = useState('')
-    const [CompanyName   ]                     = useState('')
-    const [searchCompanyCD   , setConditions1] = useState(0)
-    const [DepartmentName]                     = useState('')
-    const [searchDepartmentCD, setConditions2] = useState(0)
+    const [TelNo             , setCondition3]  = useState('')
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -97,7 +90,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
             const initPW = SHA256('1234').toString();
             checkedData[0].grid[0].initPW = initPW;
 
-            const result = await SP_Request("S_ESG_Admin_Password_Init", checkedData);
+            const result = await SP_Request("S_Admin_Password_Init", checkedData);
             
             if(result){
                 setLoading(false);
@@ -126,9 +119,9 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_Admin_UserInfo_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_Admin_UserInfo_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_Admin_UserInfo_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_Admin_UserInfo_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_Admin_UserInfo_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Admin_UserInfo_Cut"}
      ]
 
     // 헤더 정보
@@ -144,16 +137,8 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
         {name : "UserCD"         , header: "유저코드", width:  70, hidden: true},
         {name : "UserID"         , header: "아이디"  , width: 100, editor: 'text'},
         {name : "UserName"       , header: "이름"    , width: 100, editor: 'text'},
-        {name : "EmpNo"          , header: "사번"    , width: 100, editor: 'text'},
         {name : "TelNo"          , header: "전화번호", width: 160, editor: 'text'},
-        {name : "Email"          , header: "이메일"  , width: 200, editor: 'text'},
-        {name : "CompanyCD"      , header: "회사코드", width: 100, hidden: true},
-        {name : "CompanyName"    , header: "회사명"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 6, CodeColName :"CompanyCD"}}},
-        {name : "DepartmentCD"   , header: "부서코드", width: 100, hidden: true},
-        {name : "DepartmentName" , header: "부서명"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 7, CodeColName :"DepartmentCD"}}},
-        {name : "FirstCheck"     , header: "1차승인" , width: 100, renderer: { type: 'checkbox' }},
-        {name : "SecondCheck"    , header: "2차승인" , width: 100, renderer: { type: 'checkbox' }},
-        {name : "ThirdCheck"     , header: "3차승인" , width: 100, renderer: { type: 'checkbox' }}
+        {name : "RegDateTime"    , header: "등록일"  , width: 160},
     ];
 
     // 툴바 이벤트
@@ -171,9 +156,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
                     const conditionAr : condition = ({
                         UserName    : UserName,
                         UserID      : UserID,
-                        EMail       : EMail,
-                        CompanyCD   : searchCompanyCD,
-                        DepartmentCD: searchDepartmentCD,
+                        TelNo       : TelNo,
                         DataSet     : 'DataSet1'
                     })
 
@@ -294,7 +277,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
                     let checkedData : any[] = [];
 
                     checkedData.push(grid1Ref.current.getCheckedRows());
-                    console.log(toolbar[clickID].spName);
+                    // console.log(toolbar[clickID].spName);
                     setLoading(true);
                     try {
                         // SP 결과 값 담기
@@ -354,13 +337,9 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"계정 조회 조건"}>
                     <FixedWrap>
-                        <TextBox name={"이름"}   value={UserName} onChange={setCondition1}/>    
-                        <TextBox name={"아이디"} value={UserID}   onChange={setCondition2}/>   
-                        <TextBox name={"이메일"} value={EMail}    onChange={setCondition3} width={300}/>    
-                    </FixedWrap>
-                    <FixedWrap>
-                        <SearchBox name={"회사명"} value={CompanyName}    onChange={setConditions1} searchCode={6} width={200} isGrid={false}/>   
-                        <SearchBox name={"부서명"} value={DepartmentName} onChange={setConditions2} searchCode={7} width={200} isGrid={false}/> 
+                        <TextBox name={"이름"}     value={UserName} onChange={setCondition1}/>    
+                        <TextBox name={"아이디"}   value={UserID}   onChange={setCondition2}/>   
+                        <TextBox name={"전화번호"} value={TelNo}    onChange={setCondition3} />    
                         <Button name={"계정 초기화"} clickEvent={clickEvent}></Button>
                     </FixedWrap>
                 </FixedArea>  

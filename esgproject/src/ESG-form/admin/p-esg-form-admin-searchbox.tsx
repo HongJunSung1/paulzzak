@@ -60,9 +60,9 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_ESG_SearchBox_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_ESG_SearchBox_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_ESG_SearchBox_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_SearchBox_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_SearchBox_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_SearchBox_Cut"}
      ]
 
     // 헤더 정보
