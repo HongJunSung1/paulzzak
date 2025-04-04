@@ -10,7 +10,7 @@ import Loading from './ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Tab     from './ESG-common/Tab/p-esg-common-Tab.tsx';
 import {MenuInfoProvider} from './hooks/use-menu-info.tsx';
 
-// 화면 영역
+// 화면 영역 : Admin
 import Login from './ESG-login/p-esg-login.tsx';
 import Main from './ESG-form/main/p-esg-form-main.tsx';
 import Environmental from './ESG-form/test/p-esg-form-test.tsx';
@@ -23,6 +23,8 @@ import CompanyReg from './ESG-form/setting/p-esg-company-reg.tsx';
 import TableReg from './ESG-form/admin/p-esg-form-admin-table.tsx';
 import BizUnitForm from './ESG-form/admin/p-esg-bizunit-form.tsx';
 import AlarmList from './ESG-form/environmental/alarm/p-esg-alarmlist.tsx';
+import UserGroupReg from './ESG-form/admin/p-pz-user-group-form-reg.tsx';
+import UserGroupForm from './ESG-form/admin/p-pz-user-group-form.tsx';
 
 // 화면 : Environmental
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
@@ -148,7 +150,9 @@ function App() {
                   <WonderWoman         strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <SocialWeakness      strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <HiredEmployment     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <RetiredEmployment     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <RetiredEmployment   strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <UserGroupReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <UserGroupForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>
