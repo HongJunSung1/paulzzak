@@ -1,11 +1,11 @@
-// 화면 등록
+// 선수정보등록
 
 import React, { useEffect, useRef, useState }  from 'react'
-import '../../global.d.ts';
+
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
-import FixedArea from "../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
+import FixedArea from '../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx';
 import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
@@ -21,8 +21,8 @@ type gridAr = {
 };
 
 type condition = {
-    FormName   : string;
-    FormUrl    : string;
+    UserName   : string;
+    Position   : string;
     DataSet    : string;
 }  
 
@@ -30,7 +30,7 @@ type condition = {
 let message : any    = [];
 let title   : string = "";
 
-const FormReg = ({strOpenUrl, openTabs}) => {
+const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -40,8 +40,8 @@ const FormReg = ({strOpenUrl, openTabs}) => {
     const messageClose = () => {setMessageOpen(false)};
     
     // 조회조건 값
-    const [FormName, setCondition1] = useState('');
-    const [FormUrl  , setCondition2] = useState('');
+    const [UserName, setCondition1] = useState('');
+    const [Position, setCondition2] = useState('');
 
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
@@ -53,7 +53,6 @@ const FormReg = ({strOpenUrl, openTabs}) => {
     const handleGridChange = (gridId: string, changes: gridAr) => {
         if (gridId === 'DataSet1') {
             setGrid1Changes(changes);
-            
         } 
     };
     
@@ -63,10 +62,11 @@ const FormReg = ({strOpenUrl, openTabs}) => {
     // 툴바 
     const toolbar = [  
         {id: 0, title:"신규", image:"new"  , spName:""}
-      , {id: 1, title:"조회", image:"query", spName:"S_Admin_FormReg_Query"}
-      , {id: 2, title:"저장", image:"save" , spName:"S_Admin_FormReg_Save"}
-      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Admin_FormReg_Cut"}
+      , {id: 1, title:"조회", image:"query", spName:"S_PZ_Stats_PlayerInfo_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_PZ_Stats_PlayerInfo_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_PZ_Stats_PlayerInfo_Cut"}
      ]
+
 
     // 헤더 정보
     const complexColumns =[]
@@ -78,9 +78,14 @@ const FormReg = ({strOpenUrl, openTabs}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "FormCD"    , header: "화면코드", width:  70},
-        {name : "FormName"  , header: "화면명"  , width: 300, editor: 'text', disabled:false},
-        {name : "FormUrl"   , header: "화면URL" , width: 300, editor: 'text', disabled:false},
+        {name : "UserCD"            , header: "유저코드"    , width:  70, hidden: true},
+        {name : "UserDetailCD"      , header: "유저상세코드", width:  70, hidden: true},
+        {name : "UserName"          , header: "회원명"      , width: 150, disabled:false},
+        {name : "BackNumber"        , header: "등번호"      , width: 80 , editor: 'text', disabled:false},
+        {name : "PositionFirstCD"   , header: "포지션1코드" , width: 70 , disabled:true, hidden: true},
+        {name : "PositionFirstName" , header: "포지션1"     , width: 150, renderer : {type: 'searchbox', options: {searchCode: 8, CodeColName: "PositionFirstCD"}}},
+        {name : "PositionSecondCD"  , header: "포지션2코드" , width: 70 , disabled:true, hidden: true},
+        {name : "PositionSecondName", header: "포지션2"     , width: 150, renderer : {type: 'searchbox', options: {searchCode: 8, CodeColName: "PositionSecondCD"}}},
     ];
 
     // 툴바 이벤트
@@ -96,9 +101,9 @@ const FormReg = ({strOpenUrl, openTabs}) => {
             case 1 : 
                     // 조회 조건 담기
                     const conditionAr : condition = ({
-                        FormName : FormName,
-                        FormUrl  : FormUrl,
-                        DataSet  : 'DataSet1'
+                        UserName  : UserName,
+                        Position  : Position,
+                        DataSet   : 'DataSet1'
                     })
 
                     // 로딩 뷰 보이기
@@ -124,10 +129,8 @@ const FormReg = ({strOpenUrl, openTabs}) => {
                     }
                     // 로딩뷰 감추기
                     setLoading(false);
-
-
                 break;
-            
+
             // 저장
             case 2 :
                 setLoading(true); 
@@ -141,7 +144,7 @@ const FormReg = ({strOpenUrl, openTabs}) => {
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 
                 combinedData.push(grid1Changes);
-
+                
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length === 0){
                     message  = [];
@@ -161,7 +164,7 @@ const FormReg = ({strOpenUrl, openTabs}) => {
                         for(let i in result){
                             for(let j in result[i]){
                                 if(result[i][j].Status > 0){
-                                    errMsg.push({text: "시트: 화면 정보 " + result[i][j].Message})
+                                    errMsg.push({text: "시트: 선수 정보 " + result[i][j].Message})
                                 }
                             }
                         }
@@ -192,9 +195,8 @@ const FormReg = ({strOpenUrl, openTabs}) => {
                     console.log(error);
                 }
                 setLoading(false);
-
                 break;
-
+                
             // 삭제
             case 3 :
                     setLoading(true);
@@ -241,17 +243,15 @@ const FormReg = ({strOpenUrl, openTabs}) => {
 
                 break;
         }
-      
     }
-
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
         ;
-    }
 
+    }
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgFormAdminFormReg') === undefined) {
+        if (openTabs.find(item => item.url === '/PPzPlayerInfoReg') === undefined) {
             setCondition1('');
             setCondition2('');
             setGrid1Data([]);
@@ -259,27 +259,24 @@ const FormReg = ({strOpenUrl, openTabs}) => {
         }
     }, [openTabs]);
 
-    // console.log(openTabs.find(item => item.url === '/PEsgFormAdminFormReg'));
-
-    // if(strOpenUrl === '/PEsgFormAdminFormReg')
     return (
         <>
-        <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PEsgFormAdminFormReg' ? "flex" : "none", flexDirection:"column"}}>
+            <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PPzPlayerInfoReg' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <TextBox name={"화면명"}  value={FormName} onChange={setCondition1} width={300}/>    
-                        <TextBox name={"화면 URL"} value={FormUrl} onChange={setCondition2} width={300}/>
+                        <TextBox name={"회원명"}  value={UserName} onChange={setCondition1} width={300}/>    
+                        <TextBox name={"포지션"}  value={Position} onChange={setCondition2} width={300}/>
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "화면 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "회원 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
                 </DynamicArea>
             </div>
         </>
     )
 }
 
-export default FormReg;
+export default PlayerInfoReg;

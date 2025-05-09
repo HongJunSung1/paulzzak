@@ -64,29 +64,31 @@
 
 .SearchItem {
     padding: 6px 4px;
-    background-color: #fff5f5;
+    background-color: #f0f0f0;
     font-size: 12px;
-    border-bottom: solid 1px #d2deee;
-    border-left: 1px solid #d2deee;
-    border-right: 1px solid #d2deee;
+    /* border-bottom: solid 1px #aeaeae; */
+    /* border-left: 1px solid #dadada; */
+    /* border-right: 1px solid #dadada; */
     text-overflow: ellipsis;
-    box-shadow: 2px 2px 5px #d2deee;
+    /* box-shadow: 2px 2px 2px #d2deee; */
     white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
-    text-align: left;
+    /* text-align: left; */
+    text-align:center;
 }
 
 .SearchItemNum{
     padding: 6px 4px;
-    background-color: #adadad;
+    background-color: #6b6c6d;
     color:white;
     font-size: 12px;
-    border-bottom: solid 1px #ffffff;
-    border-left: 1px solid #ffffff;
-    border-right: 1px solid #ffffff;
+    /* border-bottom: solid 1px #aeaeae; */
+    /* border-left: 1px solid #dadada; */
+    /* border-right: 1px solid #dadada; */
     text-overflow: ellipsis;
     text-align: center;
-    box-shadow: 2px 2px 5px #adadad;
-    font-weight: bold;
+    border: none;
+    /* box-shadow: 2px 2px 2px #adadad; */
+    /* font-weight: bold; */
 }
 
 .tableTr {
@@ -155,11 +157,25 @@ th{
     z-index: 50;
     border-spacing: 0px;
     border-collapse: separate;
-    overflow: auto;
+    /* overflow: auto; */
     max-height: 400px !important;
-    top:20;
-    left:20;
+    border-radius: 0.3rem;
+    /* top:20;
+    left:20; */
+    /* ✅ 추가 */
+    background-color: #6b6c6d;      /* 삼각형 색과 일치해야 보임 */
+    border: 1px solid #ccc;          /* (선택) 윤곽선이 있으면 더 자연스러움 */
 }
+
+.tableWrap::before {
+    content: '';
+    position: absolute;
+    top: -10px; /* 삼각형 높이 */
+    left: 20px; /* 왼쪽 여백 (조절 가능) */
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #6b6c6d transparent;
+  }
 
 .tableWrap::-webkit-scrollbar-track
 {

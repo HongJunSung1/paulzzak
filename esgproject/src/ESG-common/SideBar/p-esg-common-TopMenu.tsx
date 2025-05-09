@@ -51,7 +51,7 @@ const TopMenuWrap = styled.div`
     left: 256px;
     width: 200px;
     height: auto;
-    z-index: 50;
+    z-index: 999;
     position: fixed;
     background-color: rgb(255, 245, 245);
     display: flex;

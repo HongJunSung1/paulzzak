@@ -26,6 +26,12 @@ import AlarmList from './ESG-form/environmental/alarm/p-esg-alarmlist.tsx';
 import UserGroupReg from './ESG-form/admin/p-pz-user-group-form-reg.tsx';
 import UserGroupForm from './ESG-form/admin/p-pz-user-group-form.tsx';
 
+// 화면 : Stats
+import GameRecordReg from './Form/stats/p-pz-stats-game-record-reg.tsx';
+import TeamReg from './Form/team/p-pz-team-reg.tsx';
+import PlayerInfoReg from './Form/player/p-pz-player-info-reg.tsx';
+import GameRecordSummary from './Form/stats/p-pz-stats-game-record-summary.tsx';
+
 // 화면 : Environmental
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
 import Scope3 from './ESG-form/environmental/scope3/p-esg-env-scope3.tsx';
@@ -70,6 +76,8 @@ function App() {
   };  
 
   const [strOpenUrl,setStrOpenUrl] = useState('/main');
+  const [jumpRowData, setJumpRowData] = useState(null); // 점프용 로직 추가
+
   const [openTabs,setOpenTabs] = useState([]);
 
   const location = useLocation();
@@ -153,6 +161,10 @@ function App() {
                   <RetiredEmployment   strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <UserGroupReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <UserGroupForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <GameRecordReg       strOpenUrl={strOpenUrl} openTabs={openTabs} jumpRowData={jumpRowData} setJumpRowData={setJumpRowData}/>
+                  <TeamReg             strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <PlayerInfoReg       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <GameRecordSummary   strOpenUrl={strOpenUrl} setStrOpenUrl={setStrOpenUrl} openTabs={openTabs} setJumpRowData={setJumpRowData}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
             </Container>

@@ -5,6 +5,7 @@ import New from '../../assets/image/toolbar/refresh.svg';
 import Query from '../../assets/image/toolbar/query.svg';
 import Save from '../../assets/image/toolbar/save.svg';
 import Cut from '../../assets/image/toolbar/cut.svg';
+import Jump from '../../assets/image/toolbar/jump.png'
 
 const ToolbarItem = ({item,clickID}) => {
 
@@ -22,6 +23,8 @@ const ToolbarItem = ({item,clickID}) => {
         image = Save;
     } else if(item.image === "cut"){
         image = Cut;
+    } else if(item.image ==="jump"){
+        image = Jump;
     }
 
     return(

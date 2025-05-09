@@ -1,0 +1,132 @@
+
+
+.Container{
+    height: calc(100vh - 90px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 3fr 17fr 17fr;
+    gap: 5px;
+    grid-template-areas: 'a a a' 
+                         'b b c' 
+                         'd d c'
+                         'e e c';   
+  }
+
+.ToolbarArea{
+    grid-area: a;
+    margin: 5px 0px;
+    padding: 5px 0px;
+    border-bottom: 1px solid red;
+}
+
+.OverallArea{
+    grid-area: b;
+}
+
+.RunningScoreArea{
+    grid-area: c;
+    text-align: center;
+    height: calc(100vh - 250px); /* 툴바, Overall, A/B Area 높이 제외한 값 */
+    overflow-y: auto; /* 세로 스크롤만 생기도록 */
+    justify-content: flex-end;    
+}
+
+.RunningScoreTitle{
+    background: #f2f2f2;
+    border: 1px solid rgb(226, 213, 217);
+    font-size: 14px;
+    padding: 5px 0px;
+    font-weight:bold;
+    position:sticky;
+    top: 0;
+}
+
+.TeamAArea{
+    grid-area: d;
+}
+
+.TeamBArea{
+    grid-area: e;
+}
+
+.ScoreContainer{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    text-align:center;
+}
+
+
+.QuarterTableHead{
+    position:sticky;
+    top: 30px;
+    border-top: 1px solid rgb(226, 213, 217);
+    border-bottom: 1px solid rgb(190, 171, 177);
+    border-left: 1px solid rgb(226, 213, 217);
+    border-right: 1px solid rgb(226, 213, 217);
+    border-collapse: collapse;
+    background: #f2f2f2;
+}
+
+.InputCell {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2px;
+    text-align: center;
+    border: none;
+    
+  }
+
+input:focus {outline:none;}
+
+
+.QuarterTable th,
+.QuarterTable td,
+.QuarterTable tr {
+  border: 1px solid #ccc;
+  padding: 4px;
+  height: calc((100vh - 120px) / 42); /* 헤더 + 마진 고려, 42는 40행 + 2행(header) */
+  overflow: hidden;
+}
+
+
+.TeamSummaryWrapper {
+    width: 70%;
+    overflow-x: auto;
+  }
+  
+  .TeamSummaryTable {
+    width: 900px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid rgb(226, 213, 217);
+  }
+  .TeamSummaryTable thead,
+  .TeamSummaryTable th,
+  .TeamSummaryTable td {
+    border: 1px solid rgb(226, 213, 217);
+  }
+
+  .TeamSummaryTable thead{
+    background-color: #f8f2f2;
+  }
+
+  .TeamSummaryTable td {
+    padding: 6px 0;
+  }
+
+
+  .TeamSummaryTable input {
+    width: 100%;
+    box-sizing: border-box;
+    
+    border: none;
+    text-align: center;
+  }
+
+/* 고유번호 키 */
+.KeyIndex{
+  font-size: 12px;
+  border:none;
+  text-align: right;
+  color: rgb(184, 184, 184);
+}

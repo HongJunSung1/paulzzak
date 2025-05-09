@@ -347,7 +347,7 @@ const FileTest = ({strOpenUrl, openTabs}) => {
     useEffect(() => {
         if (openTabs.find(item => item.url === '/PEsgFormFileTest') === undefined) {
             setGrid1Data([]);
-            setFileData([]);
+            setFileData([]);            
         }
     }, [openTabs]);
 

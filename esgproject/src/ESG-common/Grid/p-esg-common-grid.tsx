@@ -313,7 +313,9 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
         columnInfo: any;
         root: any;
         codeColName : any;  
-    
+        InfoCol1    : any;
+
+
         constructor(props) {
             const el = document.createElement('div');
             this.el = el;
@@ -321,6 +323,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
             this.rowKey = props.rowKey;
             this.columnInfo = props.columnInfo;
             this.root = createRoot(this.el); // createRoot 사용
+            
             this.render(props);
         }
     
@@ -330,29 +333,56 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
     
         render(props) {
             const value = props.value;
-
             this.root.render(
                 <SearchBox
                     value={value}
                     onChange={(value) => this.onChange(value)}
                     searchCode={this.columnInfo.renderer.options?.searchCode || 0}
-                    onGridChange={(value) => this.gridChange(value)}
+                    onGridChange={(value) => {
+                        this.gridChange(value);
+                        this.onChange(value); // ✅ gridChange 안에서 호출
+                    }}
                     isGrid={true}
                 />
             );
         }
 
 
+        // onChange(newValue) {
+        //     if(newValue !== 0){
+        //         // this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName);
+        //         this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue.code);
+        //     }
+        // }
+
         onChange(newValue) {
-            if(newValue !== 0){
-                this.grid.dispatch('setValue', this.rowKey, this.columnInfo.renderer.options?.CodeColName, newValue);
+            if (newValue !== 0 && typeof newValue === 'object') {
+                const options = this.columnInfo.renderer.options || {};
+        
+                // 코드 컬럼 처리
+                const codeCol = options.CodeColName;
+                if (codeCol && newValue.code !== undefined) {
+                    this.grid.dispatch('setValue', this.rowKey, codeCol, newValue.code);
+                }
+
+                // ✅ InfoCol1~3 처리
+                ['InfoCol1', 'InfoCol2', 'InfoCol3'].forEach((key) => {
+                    const colName = options[key]; // 예: "BackNumber"
+                    const colValue = newValue.extra?.[key]; // 예: "14"
+                    if (colName && colValue !== undefined) {
+                      this.grid.dispatch('setValue', this.rowKey, colName, colValue);
+                    }
+                });
+                
+                // Display값도 그리드에 설정
+                this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, newValue.display);
             }
         }
-
         gridChange(newValue){
-            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, newValue);
+            this.grid.dispatch('setValue', this.rowKey, this.columnInfo.name, newValue.display);
         }
     }
+
 
     // 3. 버튼
     class Button {
@@ -792,7 +822,10 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                 type: SearchBoxRenderer,
                 options: {
                   searchCode: column.renderer.options.searchCode || 0,
-                  CodeColName : column.renderer.options.CodeColName || ""
+                  CodeColName : column.renderer.options.CodeColName || "",
+                  InfoCol1: column.renderer.options.InfoCol1 || "" ,
+                  InfoCol2: column.renderer.options.InfoCol2 || "" ,
+                  InfoCol3: column.renderer.options.InfoCol3 || "" 
                 }
             };
         }else if(column.renderer && column.renderer.type === 'button'){
@@ -1108,7 +1141,7 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                         contextMenu={null as any} // 우클릭 조회 없애기    
                         // header={{height: 40}}
                         header={headerOptions}
-                        columnOptions={{resizable:true}}                        
+                        columnOptions={{resizable:true}}                    
                         // pageOptions={{useClient: true, perPage: 3}} // 페이징처리
                 />
                 }

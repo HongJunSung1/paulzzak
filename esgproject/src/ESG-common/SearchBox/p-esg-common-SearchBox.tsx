@@ -17,6 +17,13 @@ const SearchBox = (settings : any) => {
     // useEffect(() => {
     //     setText(settings.value || '');
     // }, [settings.value]);
+    
+    // 텍스트 초기화
+    useEffect(() => {
+        if (settings.resetTrigger) {
+          setText(''); // 텍스트 초기화
+        }
+      }, [settings.resetTrigger]);    
 
     const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (settings.onChange) {
@@ -25,11 +32,12 @@ const SearchBox = (settings : any) => {
         setText(e.target.value);
     };
 
+
     const onkeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) =>{
         setResult([]);
         if(e.key === 'Enter'){
             if(text !== "" && e.currentTarget.value.trim() !== ""){
-                const resultData = await SP_Request("S_SearchBox_Input_Query",[{SearchCode : settings.searchCode , Text : e.currentTarget.value, DataSet : "DataSet1"}]);
+                const resultData = await SP_Request("S_SearchBox_Input_Query",[{SearchCode : settings.searchCode, JoinCode : settings.joinCode, JoinColumn : settings.joinColumn, ColumnCode : settings.columnCode, Text : e.currentTarget.value, DataSet : "DataSet1"}]);
                 if(resultData.length > 0){
                     setResult(resultData[0]);
                 }else{
@@ -60,22 +68,44 @@ const SearchBox = (settings : any) => {
         }
     }
 
-    const searchClick = (value, valueCode) => {
+    // const searchClick = (value, valueCode) => {
+    //     setText(value);
+
+    //     if (settings.onChange) {
+    //         settings.onChange(valueCode);
+    //     }
+
+    //     if(settings.onGridChange){
+    //         settings.onGridChange(value);
+    //     }
+        
+    //     setIsOpen(false);
+    // }
+    
+    const searchClick = (value, valueCode, extraInfo = {}) => {
+
+        const payload = {
+            display: value,
+            code: valueCode,
+            extra: extraInfo  // ✅ InfoCol1, InfoCol2, InfoCol3 포함
+        };
+
         setText(value);
 
-        if (settings.onChange) {
-            settings.onChange(valueCode);
-        }
 
-        if(settings.onGridChange){
-            settings.onGridChange(value);
+        if (settings.onChange) {
+            settings.onChange(payload);
         }
-        
-        setIsOpen(false);
-    }
     
+        if (settings.onGridChange) {
+            settings.onGridChange(payload);
+        }
+    
+        setIsOpen(false);
+    };
+
     const ClickHandler = async () =>{
-        const resultData = await SP_Request("S_SearchBox_All_Query",[{SearchCode : settings.searchCode , DataSet : "DataSet1"}]);
+        const resultData = await SP_Request("S_SearchBox_All_Query",[{SearchCode : settings.searchCode, JoinCode : settings.joinCode, JoinColumn : settings.joinColumn, ColumnCode : settings.columnCode, DataSet : "DataSet1"}]);
         setResult(resultData[0]);
         const Rect = InputRef.current?.getBoundingClientRect();
         if(Rect){
@@ -127,8 +157,7 @@ const SearchBox = (settings : any) => {
       const focusInput = () => {
         InputRef.current?.focus();
       }
-
-
+     
 
       return (
         <>
@@ -145,6 +174,7 @@ const SearchBox = (settings : any) => {
                         onChange={changeText}
                         onKeyUp={onkeyUp}
                         onClick={focusInput}
+                        {...(settings.id ? { id: settings.id } : {})}
                     />
                     {settings.name && (
                         <button
@@ -156,11 +186,11 @@ const SearchBox = (settings : any) => {
                     <div className={settings.isGrid ? styles.SearchGridImg : styles.SearchImg} onClick={ClickHandler} />
                 </div>
                 {isOpen && result.length > 0 && (
-                    <div className={styles.tableWrap} style={{top : position.top + 30, left : position.left}} ref={ResultRef}>
+                    <div className={styles.tableWrap} style={{top : position.top + 30, left : position.left - 5, position: 'fixed'}} ref={ResultRef}>
                         <table style={{width: result[0].TotSize+'px'}}>
                             <tbody>
                                     <tr>
-                                        <th className={styles.SearchItemNum} style={{width:"25px"}}>no.</th>
+                                        <th className={styles.SearchItemNum} style={{width:"25px"}}>No</th>
                                         <th className={styles.SearchItemNum}>{result[0]?.ColNameKr ? result[0].ColNameKr : ""}</th>
                                         {result[0].InfoCol1 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol1NameKr}</th>}
                                         {result[0].InfoCol2 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol2NameKr}</th>}
@@ -171,12 +201,18 @@ const SearchBox = (settings : any) => {
                                         <td 
                                             className={styles.SearchItemNum}
                                         >
-                                            {index + 1}.
+                                            {index + 1}
                                         </td>
                                         <td
                                             className={styles.SearchItem}
                                             style={{ width: Item.ColWidth ? Item.ColWidth+'px' : "auto" }}
-                                            onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                            // onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                            onClick={() =>
+                                                searchClick(Item.Value, Item.ValueCode, {
+                                                    InfoCol1: Item.InfoCol1,
+                                                    InfoCol2: Item.InfoCol2,
+                                                    InfoCol3: Item.InfoCol3
+                                            })}
                                         >
                                             {Item.Value}
                                         </td>
@@ -184,7 +220,13 @@ const SearchBox = (settings : any) => {
                                             <td
                                                 className={styles.SearchItem}
                                                 style={{ width: Item.InfoCol1Width }}
-                                                onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                                // onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                                onClick={() =>
+                                                    searchClick(Item.Value, Item.ValueCode, {
+                                                        InfoCol1: Item.InfoCol1,
+                                                        InfoCol2: Item.InfoCol2,
+                                                        InfoCol3: Item.InfoCol3
+                                                })}
                                             >
                                                 {Item.InfoCol1}
                                             </td>
@@ -193,7 +235,13 @@ const SearchBox = (settings : any) => {
                                             <td
                                                 className={styles.SearchItem}
                                                 style={{ width: Item.InfoCol2Width }}
-                                                onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                                // onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                                onClick={() =>
+                                                    searchClick(Item.Value, Item.ValueCode, {
+                                                        InfoCol1: Item.InfoCol1,
+                                                        InfoCol2: Item.InfoCol2,
+                                                        InfoCol3: Item.InfoCol3
+                                                })}
                                             >
                                                 {Item.InfoCol2}
                                             </td>
@@ -202,7 +250,13 @@ const SearchBox = (settings : any) => {
                                             <td
                                                 className={styles.SearchItem}
                                                 style={{ width: Item.InfoCol3Width }}
-                                                onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                                // onClick={() => searchClick(Item.Value, Item.ValueCode)}
+                                                onClick={() =>
+                                                    searchClick(Item.Value, Item.ValueCode, {
+                                                        InfoCol1: Item.InfoCol1,
+                                                        InfoCol2: Item.InfoCol2,
+                                                        InfoCol3: Item.InfoCol3
+                                                })}
                                             >
                                                 {Item.InfoCol3}
                                             </td>

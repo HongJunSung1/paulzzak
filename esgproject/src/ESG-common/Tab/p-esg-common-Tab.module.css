@@ -27,6 +27,13 @@
     border-top: solid 3px rgb(66, 64, 64);
 }
 
+.Tab[data-active="true"] {
+    background-color: white;
+    border-top: 3px solid black;
+    border-bottom: none;
+    font-weight: bold;
+  }
+
 .BtnClose{
     margin : 0px 7.5px;
     width: 15px;

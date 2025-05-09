@@ -16,6 +16,8 @@
         menuInfo: MenuInfo | null;
     }
 
+
+
     // // 초기 페이지 데이터 설정(현재 main)
     // const initialMenuInfo: MenuInfo = {
     //     id: '4',
@@ -45,6 +47,7 @@
         const [initialMenuInfo,setInitialMenuInfo] = useState<MenuInfo | null>(null);
 
         const { menuInfo } = useMenuInfo() as MenuInfoContextProps;
+        
         const { setMenuInfo } = useMenuInfo();
         const [activeTab, setActiveTab] = useState<string | null>(null);
         const [tabData, setTabData] = useState<MenuInfo[]>([]);
@@ -72,36 +75,61 @@
             openTabs(tabData);
         },[tabData, openTabs])
 
+        // useEffect(() => {
+        //     if (menuInfo && menuInfo.id && menuInfo.url !== "") {
+
+        //         const newTab = {
+        //             id: menuInfo.id,
+        //             menuName: menuInfo.menuName,
+        //             url: "/" + menuInfo.url
+        //         };
+
+        //         setTabData(prevTabData => {
+        //             if (prevTabData.some(tab => tab.id === newTab.id)) {
+        //             return prevTabData;
+        //             } else {
+        //             return [...prevTabData, newTab];
+        //             }
+        //         });
+        //         setActiveTab(menuInfo.id);
+        //         //   navigate(menuInfo.url);
+            
+        //     }
+
+        //     // 새로고침 시 맨 처음 화면으로 이동시키기
+        //     if(menuInfo === null && initialMenuInfo){
+        //         setActiveTab(initialMenuInfo.id);
+        //         // navigate(initialMenuInfo.url);
+        //         strOpenUrl("/"+initialMenuInfo.url);
+        //     }
+        // }, [menuInfo, strOpenUrl, initialMenuInfo]);
         useEffect(() => {
             if (menuInfo && menuInfo.id && menuInfo.url !== "") {
-
-                const newTab = {
-                    id: menuInfo.id,
-                    menuName: menuInfo.menuName,
-                    url: "/" + menuInfo.url
-                };
-
-                setTabData(prevTabData => {
-                    if (prevTabData.some(tab => tab.id === newTab.id)) {
-                    return prevTabData;
-                    } else {
-                    return [...prevTabData, newTab];
-                    }
-                });
-            
-                setActiveTab(menuInfo.id);
-                //   navigate(menuInfo.url);
-            
+              // 1. 타입 강제 변환 + 슬래시 제거 후 추가
+              const newTab = {
+                id: String(menuInfo.id), // 👈 항상 string으로 변환
+                menuName: menuInfo.menuName,
+                url: "/" + menuInfo.url.replace(/^\//, '') // 👈 중복 슬래시 방지
+              };
+          
+              setTabData(prevTabData => {
+                const isDuplicate = prevTabData.some(
+                  tab => tab.id === newTab.id || tab.url === newTab.url
+                );
+          
+                if (isDuplicate) return prevTabData;
+                return [...prevTabData, newTab];
+              });
+          
+              setActiveTab(String(menuInfo.id));
             }
-
-            // 새로고침 시 맨 처음 화면으로 이동시키기
-            if(menuInfo === null && initialMenuInfo){
-                setActiveTab(initialMenuInfo.id);
-                // navigate(initialMenuInfo.url);
-                strOpenUrl("/"+initialMenuInfo.url);
+          
+            if (menuInfo === null && initialMenuInfo) {
+              setActiveTab(initialMenuInfo.id);
+              strOpenUrl("/" + initialMenuInfo.url);
             }
-        }, [menuInfo, strOpenUrl, initialMenuInfo]);
-        
+          }, [menuInfo, strOpenUrl, initialMenuInfo]);
+          
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
