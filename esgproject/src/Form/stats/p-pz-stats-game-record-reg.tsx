@@ -493,13 +493,13 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
                 const key = document.getElementById('key') as HTMLInputElement;
                 // console.log(key)
-                // if (key) {
-                //     key.value = jumpRowData[0].grid[0].GameCD;
-                // }
+                if (jumpRowData && jumpRowData.length > 0 && jumpRowData[0].grid.length > 0) {
+                    setKey(jumpRowData[0].grid[0].GameCD);
+                } 
             
 
                 const saveConditionAr : condition =({
-                    GameCD   : Key ? Key : 0,
+                    GameCD   : Key,
                     Date     : Date    ,
                     SeasonCD : SeasonCD,
                     TeamACD  : TeamACD,
