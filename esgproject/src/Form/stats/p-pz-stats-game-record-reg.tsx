@@ -560,7 +560,11 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                         errMsg.push({text: "시트: Team B " + result[i][j].Message})
                                     }
                                     if( i === '2'){
-                                        errMsg.push({text: "시트: Overall " + result[i][j].Message})
+                                        if(result[i][j].Status == 99){
+                                            errMsg.push({text: result[i][j].Message})
+                                        }else {
+                                            errMsg.push({text: "시트: Overall " + result[i][j].Message})
+                                        }
                                     }
                                     if( i === '3'){
                                         errMsg.push({text: result[i][j].Message})
