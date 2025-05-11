@@ -23,6 +23,7 @@ import { useNavigate  } from 'react-router-dom';
 import { SP_Request } from '../../hooks/sp-request.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
 
+
 // 메시지 박스
 let message : any     = [];
 let title   : string  = "";
@@ -78,7 +79,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     let UserID = userInfo?.UserID;
     let UserName = userInfo?.UserName;
     let UserTelNo = userInfo?.TelNo;
-
+    let userImageSrc; //프로필 이미지
     // 전화번호(정규식 사용)
     if(userInfo?.TelNo.length === 11){
         UserTelNo = userInfo?.TelNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
@@ -86,6 +87,14 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
         UserTelNo = userInfo?.TelNo.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
     } else{
         UserTelNo = "";
+    }
+
+    // 프로필 이미지 설정
+    try {
+        userImageSrc = require(`../../assets/profile/${UserID}.png`);
+      } catch (e) {
+        // fallback 이미지 설정 (예: 기본 프로필)
+        userImageSrc = require(`../../assets/profile/default.png`);
     }
 
     // 유저정보 변경 시 사용할 input
@@ -507,6 +516,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                         <div className = {styles.settingWrap} ref={settingRef}>
                             <div className = {styles.settingTitle}>
                                 <div className = {styles.ID}>{UserName}</div>
+                                <img className = {styles.Profile} src={userImageSrc} alt={"UserProfile"}/>
                                 <div className = {styles.Email}>{UserID}</div>
                                 <div className = {styles.TelNo}>{UserTelNo}</div>
                             </div>

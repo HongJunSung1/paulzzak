@@ -14,8 +14,6 @@ import Button from "../../ESG-common/Button/p-esg-common-Button.tsx";
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
-import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
-import File from '../../ESG-common/File/p-esg-common-File.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -35,8 +33,6 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
-// 우클릭 조회 시 받는 내부코드 값
-let UserCD = 0
 
 const UserInfo = ({strOpenUrl, openTabs}) => {
 
@@ -52,13 +48,9 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
     const [UserID            , setCondition2]  = useState('')
     const [TelNo             , setCondition3]  = useState('')
 
-    // 우클릭 조회 시트명 변경
-    const [RightClickUserName, setRightClickUserName] = useState('');
-    const [isRightClick, setIsRightClick] = useState(false);
-
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
-    const [fileData, setFileData] = useState([]);
+
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
@@ -72,92 +64,6 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
     
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
-
-    // 삭제 시 받는 FileCD 값
-    const [fileCD, setFileCD] = useState(0);
-
-    // 파일 첨부 
-    const fileRef : any = useRef(null);
-    let [fileAr] = useState<gridAr>({DataSet: '', grid: []});
-
-    // 우클릭 시 조회
-    const rightClick1 = (event: React.MouseEvent) => {
-        event.preventDefault();
-        setTimeout(async () => {
-            setFileData([]);
-            UserCD = 0;
-            setRightClickUserName('');
-            if(grid1Ref.current.rightClick() !== null){
-                UserCD = grid1Ref.current.rightClick().UserCD;
-                setRightClickUserName(grid1Ref.current.rightClick().UserName);
-                setIsRightClick(true);
-            }
-            // 조회 조건 담기
-            const conditionAr : any[] = [{UserCD : UserCD, DataSet : "DataSet1"}]
-
-            if(UserCD > 0){
-                // 로딩 뷰 보이기
-                setLoading(true);
-                try {
-                    // 조회 SP 호출 후 결과 값 담기
-                    const result = await SP_Request("S_Admin_UserInfo_Sub_File_Query", conditionAr);
-                    if(result.length > 0){
-                        // 결과값이 있을 경우 그리드에 뿌려주기
-                        setFileData(result[0]);
-                    } else{
-                        // 결과값이 없을 경우 처리 로직
-                        setLoading(false);
-                        let errMsg : any[] = [];
-                        errMsg.push({text: "데이터가 없습니다."});
-                        setMessageOpen(true);
-                        message = errMsg;
-                        title   = "조회 내역 없음";
-                    }
-                } catch (error) {
-                    // SP 호출 시 에러 처리 로직
-                    console.log(error);
-                }
-                // 로딩뷰 감추기
-                setLoading(false);
-            } else {
-                setFileData([]);
-            }
-        }, 100)
-    }
-
-    // 저장된 파일 삭제 로직 : file 공통에서 서버 테이블의 file 데이터를 삭제했을 때 fileCD 값을 주어 fileCD 변화를 감지, deleteFile 함수를 실행시킨다.
-    useEffect(()=> {
-        if(fileCD > 0){
-            deleteFile(fileCD);
-        }
-    }, [fileCD]);
-
-
-    const deleteFile = async (fileCD) => {
-        setLoading(true);
-        setTimeout(async () => {
-            try{
-                const result = await SP_Request("S_Admin_UserInfo_Sub_File_Cut", [{FileCD: fileCD, UserCD : UserCD, DataSet: "DataSet1"}]);
-                console.log(result)
-                if(result){
-                    let errMsg : any[] = [];
-                    errMsg.push({text: "삭제 완료 되었습니다."});
-                    setMessageOpen(true);
-                    message = errMsg;
-                    title   = "삭제 완료";
-                    
-                    // fileCD 값 초기화
-                    setFileCD(0);
-
-                }
-            } catch(error){
-                // SP 호출 시 에러 처리 로직
-                console.log(error);
-            }
-        }, 100)
-        // 로딩뷰 감추기
-        setLoading(false);
-    }
 
     // 클릭 이벤트
     const clickEvent = async () => {
@@ -245,10 +151,6 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
             case 0 :
                 grid1Ref.current.clear();
                 setGrid1Data([]);
-                setFileCD(0);
-                setFileData([]);
-                setRightClickUserName('');
-                setIsRightClick(false);
                 break;
 
             // 조회
@@ -260,9 +162,6 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
                         TelNo       : TelNo,
                         DataSet     : 'DataSet1'
                     })
-                    //우클릭 조회 초기화
-                    setFileData([]);
-                    setRightClickUserName('');
 
                     // 로딩 뷰 보이기
                     setLoading(true);
@@ -304,27 +203,6 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
 
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
-                if(!isRightClick){
-                    if(RightClickUserName == ''){
-                        message  = [];
-                        message.push({text: "계정 우클릭 후 저장해주세요."});
-                        setMessageOpen(true);
-                        title   = "저장 오류";
-                        setLoading(false);
-                        return;
-                    }
-                }
-
-                const fileSaveResult = await fileRef.current.handleSave();
-                if(fileSaveResult !== null && fileSaveResult !== undefined){
-                    for(let i=0;i<fileSaveResult.length;i++){
-                        fileSaveResult[i].UserCD = UserCD;
-                    }
-                    fileAr.DataSet = 'DataSet2';
-                    fileAr.grid = fileSaveResult;
-                    combinedData.push(fileAr);
-                }
-
                 combinedData.push(grid1Changes)
 
                 // 신규 등록일 경우 비밀번호 지정해서 저장
@@ -370,22 +248,6 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
 
                         // SP 호출 결과 값 처리
                         grid1Ref.current.setRowData(result[0]);
-
-
-                        // 파일 저장 건이 있다면 결과 값 담기
-                        if(fileSaveResult !== null){
-                            try{
-                                const conditionAr : any[] = [{UserCD : UserCD, DataSet : "DataSet1"}]
-                                const result = await SP_Request("S_Admin_UserInfo_Sub_File_Query", conditionAr);
-                                if(result.length > 0){
-                                    // 결과값이 있을 경우 그리드에 뿌려주기
-                                    setFileData(result[0]);
-                                } 
-                            } catch (error) {
-                                // SP 호출 시 에러 처리 로직
-                                console.log(error);
-                            }                        
-                        }
 
                         //시트 변경 내역 초기화
                         setGrid1Changes({ DataSet : '', grid: []});
@@ -466,10 +328,6 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
             setCondition3('');
             setGrid1Data([]);
             setGrid1Changes({DataSet : '', grid: []});
-            setFileCD(0);
-            setFileData([]);
-            setRightClickUserName('');
-            setIsRightClick(false);
         }
     }, [openTabs]);
 
@@ -489,12 +347,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                <Splitter SplitType={"horizontal"} FirstSize={60} SecondSize={40}>
-                    <div onContextMenu={rightClick1} style={{height:"100%"}}>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "계정 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
-                    </div>
-                    <File openUrl={strOpenUrl} ref={fileRef} source={fileData} fileCD = {setFileCD} fileTitle= {RightClickUserName}/>
-                </Splitter>
+                    <Grid ref={grid1Ref} gridId="DataSet1" title = "계정 정보" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                 </DynamicArea>
             </div>
         </>
