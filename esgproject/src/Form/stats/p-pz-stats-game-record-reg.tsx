@@ -401,7 +401,11 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                 setSeasonCD(0);
                 setTeamACD(0);
                 setTeamBCD(0);
+                setSeasonName('');
+                setTeamAName('');
+                setTeamBName('');
                 setDate('');
+                
                 break;
 
             // 조회
@@ -554,16 +558,16 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                 if(result[i][j].Status > 0){
 
                                     if(i === '0'){
-                                        errMsg.push({text: "시트: Team A " + result[i][j].Message})
+                                        errMsg.push({text: "[시트: Team A] " + result[i][j].Message})
                                     }
                                     if( i === '1'){
-                                        errMsg.push({text: "시트: Team B " + result[i][j].Message})
+                                        errMsg.push({text: "[시트: Team B] " + result[i][j].Message})
                                     }
                                     if( i === '2'){
                                         if(result[i][j].Status == 99){
                                             errMsg.push({text: result[i][j].Message})
                                         }else {
-                                            errMsg.push({text: "시트: Overall " + result[i][j].Message})
+                                            errMsg.push({text: "[시트: Overall] " + result[i][j].Message})
                                         }
                                     }
                                     if( i === '3'){
@@ -974,8 +978,9 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                             <TextBox name={"B팀"} value={TeamBName} onChange={setTeamBName} width={150} readOnly={true}/>
                         </>
                         ) : (
-                        <>
+                        <>  {Date !== '' &&
                             <SearchBox name={"시즌명"} value={SeasonCD} isRequire={"true"} onChange={(val) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
+                            }
                             {SeasonCD > 0 && Date !== '' && (
                             <div style={{display:"flex", marginLeft: "5px"}}>
                                 <SearchBox name={"A팀"} id="A-SearchBox" value={TeamACD} isRequire={"true"} onChange={(val) => setTeamACD(val.code)} width={200} searchCode={7} isGrid={false} joinCode={6} joinColumn={"SeasonCD"} columnCode={SeasonCD} resetTrigger={resetTrigger}/>

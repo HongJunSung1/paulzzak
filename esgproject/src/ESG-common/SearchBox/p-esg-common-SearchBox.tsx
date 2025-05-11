@@ -186,7 +186,7 @@ const SearchBox = (settings : any) => {
                     <div className={settings.isGrid ? styles.SearchGridImg : styles.SearchImg} onClick={ClickHandler} />
                 </div>
                 {isOpen && result.length > 0 && (
-                    <div className={styles.tableWrap} style={{top : position.top + 30, left : position.left - 5, position: 'fixed'}} ref={ResultRef}>
+                    <div className={styles.tableWrap} style={{top : position.top + 32, left : position.left - 5, position: 'fixed'}} ref={ResultRef}>
                         <table style={{width: result[0].TotSize+'px'}}>
                             <tbody>
                                     <tr>
