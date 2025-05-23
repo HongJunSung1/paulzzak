@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState} from 'react';
+import '@toast-ui/chart/dist/toastui-chart.min.css';
 import styles from './p-esg-common-chart.module.css'
 
 import { BarChart, AreaChart, LineChart, LineAreaChart, ColumnChart, ColumnLineChart, BulletChart, BubbleChart, RadarChart, PieChart, RadialBarChart, GaugeChart} from '@toast-ui/react-chart';
-import '@toast-ui/chart/dist/toastui-chart.min.css';
 
 const ChartComp = (settings : any) => {
     
@@ -18,6 +18,7 @@ const ChartComp = (settings : any) => {
             },100)
         }
     },[settings.options])
+
 
     if(settings.ChartType === "BarChart" ){
         return (
@@ -86,6 +87,7 @@ const ChartComp = (settings : any) => {
             </div>
         )
     }else if (settings.ChartType === "GaugeChart"){
+
         return (
             <div className={styles.ChartWrap} style={{width: isShow ? settings.options.chart.width : 0 , height: isShow ? settings.options.chart.height : 0, overflow:'hidden'}}>
                 {isShow && <GaugeChart ref={chartRef} data={settings.data} options={settings.options}/>}

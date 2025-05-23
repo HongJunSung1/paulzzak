@@ -145,7 +145,7 @@
 
 
         const closeTab = (tab) => {
-            if (tab.url !== "/main"){
+            if (tab.url !== "main"){
                 let order : number = 0;
                 let newTabData : any[] = [];
                 let originTabData : any[] = [];
@@ -195,7 +195,9 @@
                                     {tab.menuName}
                                 </div>
                                 {/* <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button> */}
-                                <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button>
+                                {tab.id === "11" ? <div style={{marginRight: "16px"}}></div> :
+                                    <button className={styles.BtnClose} onClick={() => closeTab(tab)}></button>
+                                }
                             </div>
                         ))}
                     </div>

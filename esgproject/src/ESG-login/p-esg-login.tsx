@@ -158,9 +158,10 @@ const LoginPage = ({strOpenUrl}) => {
                     //     secure : true   
                     // });
                     setTimeout(()=>{
-                        strOpenUrl("/main");
+                        strOpenUrl("main");
                         setLoading(false);// 로딩창 종료
-                        navigate("/main");// 메인 화면 이동
+                        // navigate("main");// 메인 화면 이동
+                        window.history.pushState({}, "", "/"); // ✅ 주소만 "/"로 되돌림 (리로드 안 함)
                     },500)
                 }else{
                     setLoading(false);// 로딩창 종료

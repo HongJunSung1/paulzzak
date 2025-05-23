@@ -95,3 +95,348 @@
     font-weight: bold;
     margin: 4px 0px 4px 0px;
 }
+
+
+/* 프로필이미지 */
+.Profile{
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+
+
+
+.mainDashboard {
+    width: 100%;
+    height: 100%;
+    padding-top: 0.5% ;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1%;
+  }
+
+
+
+  .topSummary {
+    display: grid;
+    grid-template-columns: 45% 54.5%; /* 회원 동향 기준에 맞춰 조정 */
+    gap: 0.5%;
+    height: 35%;
+  }
+
+  .topAttend {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* 비율 적용됨 */
+    gap: 1%;
+    width: 100%;
+  }
+  
+  .attendBox {
+    width: 100%;
+    height: 100%;
+  }
+  
+.averageTop {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: 35% 64%; */
+  gap: 1%;
+  height: 100%;
+}
+
+.topRecordWrap {
+  background-color: #1e2a78 !important;
+  color: white;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr); /* 5등분 고정 */
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  padding-bottom: 5px;
+  overflow: hidden; /* 1등 배경 넘침 방지 */
+  
+}
+/* 공통 행 */
+.playerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Anton', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 12px;
+}
+/* 1등 전용 */
+.firstPlayerRow {
+  background: linear-gradient(to right, #d4af37, #f2d16b);
+  color: #000;
+}
+
+/* 2~5등 */
+.normalPlayerRow {
+  background-color: #20276e;
+  color: #fff;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  position: relative;
+}
+
+/* 선 스타일 추가 */
+
+.normalPlayerRow::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  /* background: linear-gradient(to right, #d4af37, #f2d16b); */
+  background: linear-gradient(to right, #0651ca, #004179); /* 파란 계열 그라데이션 */
+}
+
+.normalPlayerRow::before {
+  top: 0;
+}
+.normalPlayerRow::after {
+  bottom: 0;
+}
+
+/* 텍스트 칸 */
+.rank {
+  width: 1.5rem;
+  text-align: left;
+  font-family: 'Anton', sans-serif;
+  font-weight: 500;
+}
+
+.name {
+  flex: 1;
+  text-align: left;
+  padding-left: 0.5rem;
+  font-weight: 600;
+}
+
+.score {
+  width: 3.5rem;
+  text-align: right;
+  font-family: 'Anton', sans-serif;
+  font-weight: 500;
+}
+.topRecordTitle{
+  padding: 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  
+}
+.topWrap {
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  height: 100%;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.topPlayer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  height: 100%;
+  font-family: 'Anton', sans-serif;
+  border-top: linear-gradient(to right, #d4af37, #f2d16b);
+  border-bottom: linear-gradient(to right, #d4af37, #f2d16b);
+}
+
+/* 1위만 강조 */
+.firstPlayer {
+  background: linear-gradient(to right, #d4af37, #f2d16b);
+  color: #000;
+  font-weight: 700;
+}
+
+/* 왼쪽(순위 + 이름) */
+.playerLeft {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* 오른쪽(기록 수치) */
+.playerRight {
+  min-width: 3rem;
+  text-align: right;
+}
+
+.rankNumber{
+  padding-right:5px;
+}
+
+
+  .rankPlayer{
+    font-size: 1.2rem;
+    font-family: 'Anton', sans-serif;
+  }
+  
+  .middleSummary {
+    display: grid;
+    grid-template-columns: 45% 54.5%; /* 위와 동일한 너비 비율로 맞춤 */
+    gap: 0.5%;
+    height: 62%;
+  }
+  
+  .leftCharts {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1%; */
+    height: 100%;
+  }
+  
+  .leftCharts .cardGroupRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1%;
+    height: 50%;
+  }
+  
+  .card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 0.65rem;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .cardShort {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    height: 49%;
+  }
+
+  .privateRecord{
+    margin-bottom: 1%;
+    height: 100%;
+    background-color: #1e2a78;
+    color: white;
+  }
+
+  .privateRecordContents{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 5개를 동일 비율로 */
+    gap: 1%;
+    margin-top: 5px;
+  }
+
+
+  .privateRecordContentsDetail{
+    display: flex;
+    flex-direction: column; 
+    height: 100%;
+    width: 100%;
+    align-items: center; 
+    justify-content: center;
+  }
+
+  .privateRecordContentsDetailMatch{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+  }
+
+  .privateRecordHeader{
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: -10px;
+  }
+
+  .privateRecordHeaderRight{
+    font-family: 'Anton', sans-serif;
+    padding-right: 6px;
+  }
+
+  .privateRecordContentsTitle{
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+  }
+
+  .privateRecordContentsSubTitle{
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+    margin-top: -5px;
+  }
+
+  .privateMainRecord{
+    font-size: 5.0rem;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    /* margin-bottom: -22px; */
+    font-family: 'Anton', sans-serif;
+    line-height: 1;
+  }
+
+  .privateMainRecordMatch{
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin-top: 5px;
+    font-family: 'Anton', sans-serif;
+  }
+
+  .privateAddRecord{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 23px 0 29px 0;
+  }
+
+  .privateSubRecord{
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+  }
+
+
+  
+  @media (max-width: 768px) {
+    .topSummary,
+    .topSummary > div,
+    .middleSummary,
+    .leftCharts,
+    .leftCharts .cardGroupRow {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      height: auto;
+      width: auto;
+      flex-direction: column;
+    }
+  }
+  

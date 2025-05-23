@@ -8,10 +8,10 @@ export const SP_Request = async (SpName : string, sendData : any, strUrl? : any)
     // const apiUrl = "http://43.203.127.56:9090/ESGbbollock/spRequest";
 
     // 폴짝 서버 돌리기(로컬)
-    // const apiUrl = "http://localhost:8080/spRequest";
+    const apiUrl = "http://localhost:8080/spRequest";
 
     // 폴짝 서버 돌리기(서버)
-    const apiUrl = "https://paulzzak-backend.onrender.com/spRequest";
+    // const apiUrl = "https://paulzzak-backend.onrender.com/spRequest";
 
     // console.log("✅ SP_Request 실행됨!");
     // console.log("🌍 API URL:", apiUrl);

@@ -81,8 +81,8 @@ function App() {
   const [openTabs,setOpenTabs] = useState([]);
 
   const location = useLocation();
-  const isLoginPage = location.pathname === '/';
-
+  // const isLoginPage = location.pathname === '/';
+  const isLoginPage = location.pathname === '/' && !sessionStorage.getItem('userInfo');
   const [isLoading,setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -96,7 +96,6 @@ function App() {
         setIsLoading(false);
       }, 500); // 원하는 로딩 시간 설정
     };
-
     handleComplete();
   }, [strOpenUrl]);
 

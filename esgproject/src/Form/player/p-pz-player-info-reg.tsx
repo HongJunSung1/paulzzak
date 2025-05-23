@@ -86,6 +86,9 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
         {name : "PositionFirstName" , header: "포지션1"     , width: 150, renderer : {type: 'searchbox', options: {searchCode: 8, CodeColName: "PositionFirstCD"}}},
         {name : "PositionSecondCD"  , header: "포지션2코드" , width: 70 , disabled:true, hidden: true},
         {name : "PositionSecondName", header: "포지션2"     , width: 150, renderer : {type: 'searchbox', options: {searchCode: 8, CodeColName: "PositionSecondCD"}}},
+        {name : "RegDateTime"       , header: "등록일"      , width: 168, renderer:  {type: "datebox", options:{dateType:"day"}}},
+        {name : "IsSleep"           , header: "휴면회원"    , width: 70 , renderer:  {type: 'checkbox' }},
+        {name : "IsOut"             , header: "탈퇴여부"    , width: 70 , renderer:  {type: 'checkbox' }},
     ];
 
     // 툴바 이벤트
@@ -247,7 +250,6 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
         ;
-
     }
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
