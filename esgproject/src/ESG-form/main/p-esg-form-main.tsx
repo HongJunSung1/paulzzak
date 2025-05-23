@@ -895,13 +895,12 @@ const toolbarEvent = async (clickID) =>{
                   </div>
                 </div>
               </div>
-              <div style={{marginTop : '-4px'}}>
-              <DynamicArea>
-                <div style={{height:"100%", width: "100%"}}>
-                    <Grid ref={grid1Ref} gridId="DataSet1" title = "선수별 평균 기록" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
-                </div>
-              </DynamicArea>
-
+              <div style={{marginTop : '-4px', height: '100%'}}>
+                <DynamicArea>
+                  <div style={{height:"100%", width: "100%"}}>
+                      <Grid ref={grid1Ref} gridId="DataSet1" title = "선수별 평균 기록" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                  </div>
+                </DynamicArea>
               </div>
             </div>
           </div>
