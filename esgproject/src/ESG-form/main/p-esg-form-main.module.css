@@ -179,20 +179,20 @@
 .normalPlayerRow {
   background-color: #20276e;
   color: #fff;
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
+  /* border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent; */
   position: relative;
 }
 
 /* 선 스타일 추가 */
-
-.normalPlayerRow::after {
+/* 첫 번째는 위선 없이 */
+.normalPlayerRow:not(:first-of-type)::before {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  height: 1.5px;
-  /* background: linear-gradient(to right, #d4af37, #f2d16b); */
+  top: 0;
+  height: 1px;
   background: linear-gradient(to right, #0651ca, #004179); /* 파란 계열 그라데이션 */
 }
 
