@@ -831,6 +831,12 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
     // 요약계산함수
     const updateTeamSummary = () => {
+        const gridInstance = grid1Ref.current?.getInstance?.();
+
+        if (!gridInstance) {
+            // 초기화 전이면 그냥 리턴 (console.log로 디버깅 가능)
+            return;
+        }
         const teamAData = grid1Ref.current?.getInstance().getData() || [];
         const teamBData = grid2Ref.current?.getInstance().getData() || [];
 

@@ -344,13 +344,22 @@ const LoginPage = ({strOpenUrl}) => {
                             </div>
                             {!userInfoCheck && 
                             <div>
-                                <div className={styles.LoginInputWrap}>
+                                <form onSubmit={(e) => { e.preventDefault(); loginCheck(); }}>
+                                    <div className={styles.LoginInputWrap}>
+                                        <input type="text" className = {styles.LoginInput} placeholder="사용자ID" value={userID} onChange={inputID} onKeyDown={(e) => activeEnter(e)} ref={idInputRef}></input>
+                                        <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW} onKeyDown={(e) => activeEnter(e)} ref={passwordInputRef} autoComplete="off"></input>
+                                        <div className={styles.loginAlert}>{errMsg}</div>
+                                        <button type="submit" className={styles.LoginBtn}>로그인</button>
+                                        {isPassWord && <div className={styles.initPassword} onClick={initPasswordMsg}>비밀번호 초기화</div>}
+                                    </div>
+                                </form>                                
+                                {/* <div className={styles.LoginInputWrap}>
                                     <input type="text" className = {styles.LoginInput} placeholder="사용자ID" value={userID} onChange={inputID} onKeyDown={(e) => activeEnter(e)} ref={idInputRef}></input>
                                     <input type="password" className = {styles.LoginInput} placeholder="패스워드" value={userPW} onChange={inputPW} onKeyDown={(e) => activeEnter(e)} ref={passwordInputRef} autoComplete="off"></input>
                                     <div className={styles.loginAlert}>{errMsg}</div>
                                     <button className = {styles.LoginBtn} onClick={loginCheck}>로그인</button>
                                     {isPassWord && <div className = {styles.initPassword} onClick={initPasswordMsg}>비밀번호 초기화</div>}
-                                </div>
+                                </div> */}
                                 <div className={styles.copyright}>
                                     Copyright © 2025.PaulZZak Platform. All rights reserved
                                 </div>
