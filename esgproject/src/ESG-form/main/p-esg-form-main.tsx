@@ -869,7 +869,7 @@ const toolbarEvent = async (clickID) =>{
                   </div>
                 </div>
                 <div className={styles.cardGroupRow}>
-                  <div className={styles.card}>개인별 평균 득점/어시스트 추이
+                  <div className={styles.card}>개인별 득점/어시스트 추이
                     <div ref={LineChartOffenseStats} style={{width: '340px', height: '180px', position: 'relative' }}>
                       {offenseStatsLineChart && offenseStatsLineChart.series.length > 0 && (
                         <Chart
@@ -881,7 +881,7 @@ const toolbarEvent = async (clickID) =>{
                       )}
                     </div>
                   </div>
-                  <div className={styles.card}>개인별 평균 리바/스틸 추이
+                  <div className={styles.card}>개인별 리바/스틸 추이
                     <div ref={LineChartDefenseStats} style={{width: '340px', height: '180px', position: 'relative' }}>
                       {defenseStatsLineChart && defenseStatsLineChart.series.length > 0 && (
                         <Chart

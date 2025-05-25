@@ -495,7 +495,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                 // >> 값을 다 입력해놓고 조회조건 값을 변경하는 것을 방지
                 // >> 일단은 저장용으로 새로 받음
 
-                const key = document.getElementById('key') as HTMLInputElement;
+                // const key = document.getElementById('key') as HTMLInputElement;
                 // console.log(key)
                 if (jumpRowData && jumpRowData.length > 0 && jumpRowData[0].grid.length > 0) {
                     setKey(jumpRowData[0].grid[0].GameCD);
@@ -564,7 +564,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                         errMsg.push({text: "[시트: Team B] " + result[i][j].Message})
                                     }
                                     if( i === '2'){
-                                        if(result[i][j].Status == 99){
+                                        if(result[i][j].Status === 99){
                                             errMsg.push({text: result[i][j].Message})
                                         }else {
                                             errMsg.push({text: "[시트: Overall] " + result[i][j].Message})
