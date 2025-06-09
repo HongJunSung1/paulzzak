@@ -78,8 +78,8 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "UserCD"            , header: "유저코드"    , width:  70, hidden: true},
-        {name : "UserDetailCD"      , header: "유저상세코드", width:  70, hidden: true},
+        {name : "UserCD"            , header: "유저코드"    , width:  70},
+        {name : "UserDetailCD"      , header: "유저상세코드", width:  70},
         {name : "UserName"          , header: "회원명"      , width: 150, disabled:false},
         {name : "BackNumber"        , header: "등번호"      , width: 80 , editor: 'text', disabled:false},
         {name : "PositionFirstCD"   , header: "포지션1코드" , width: 70 , disabled:true, hidden: true},
@@ -87,6 +87,7 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
         {name : "PositionSecondCD"  , header: "포지션2코드" , width: 70 , disabled:true, hidden: true},
         {name : "PositionSecondName", header: "포지션2"     , width: 150, renderer : {type: 'searchbox', options: {searchCode: 8, CodeColName: "PositionSecondCD"}}},
         {name : "RegDateTime"       , header: "등록일"      , width: 168, renderer:  {type: "datebox", options:{dateType:"day"}}},
+        {name : "IsGuest"           , header: "게스트여부"  , width: 70 , renderer:  {type: 'checkbox' }},
         {name : "IsSleep"           , header: "휴면회원"    , width: 70 , renderer:  {type: 'checkbox' }},
         {name : "IsOut"             , header: "탈퇴여부"    , width: 70 , renderer:  {type: 'checkbox' }},
     ];

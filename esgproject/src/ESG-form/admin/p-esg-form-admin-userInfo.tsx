@@ -135,7 +135,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
 
      // 시트 컬럼 값
      const columns1 = [
-        {name : "UserCD"         , header: "유저코드"   , width:  70, hidden: true},
+        {name : "UserCD"         , header: "유저코드"   , width:  70},
         {name : "UserID"         , header: "아이디"     , width: 100, editor: 'text'},
         {name : "UserName"       , header: "이름"       , width: 100, editor: 'text'},
         {name : "TelNo"          , header: "전화번호"   , width: 160, editor: 'text'},
