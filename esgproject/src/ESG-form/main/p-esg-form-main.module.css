@@ -424,17 +424,139 @@
 
 
   
-  @media (max-width: 768px) {
-    .topSummary,
-    .topSummary > div,
-    .middleSummary,
-    .leftCharts,
-    .leftCharts .cardGroupRow {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto;
-      height: auto;
-      width: auto;
-      flex-direction: column;
-    }
+@media (max-width: 768px) {
+.mainDashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.topSummary,
+.middleSummary,
+.leftCharts,
+.cardGroupRow,
+.topAttend,
+.averageTop {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: auto !important;
+  flex-wrap: nowrap;
+}
+
+
+.card, .topRecordWrap {
+  width: 100% !important;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card > div,
+.topRecordWrap > div {
+  width: 100%;
+}
+
+.card div[style*="position: relative"] {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 200px;
+  position: relative;
+}
+
+.privateRecordContentsDetail,
+.privateAddRecord {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.playerRow {
+  display: flex;
+  justify-content: center;
+}
+
+  .privateRecord {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
   }
-  
+
+  .privateRecordHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .privateRecordHeaderRight {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .privateRecordContents {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+
+  .privateRecordContentsDetail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    text-align: center;
+  }
+
+  .privateMainRecord {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .privateRecordContentsTitle,
+  .privateRecordContentsSubTitle {
+    font-size: 12px;
+    text-align: center;
+    word-break: keep-all;
+  }
+
+  .privateAddRecord {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    margin-top: 0px;
+
+    /* ✅ 핵심: 높이 제한 제거 */
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+    .privateRecordContents {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .privateRecord {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .privateSubRecord {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .cardShort {
+    height: auto !important;
+  }
+
+}
