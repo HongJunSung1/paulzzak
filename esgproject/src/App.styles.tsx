@@ -13,6 +13,10 @@ export const DataContainer = styled.div`
     display: flex;
     margin: 10px 10px;
     flex-direction: column;
+
+  @media (max-width: 768px) {
+    width : calc(100vw - 120px);
+  }
 `
 
 export const DataContainerLogin = styled.div`

@@ -425,6 +425,23 @@
 
   
 @media (max-width: 768px) {
+
+  /* .mainDashboard,
+  .topSummary,
+  .middleSummary,
+  .averageTop,
+  .topRecordWrap,
+  .card,
+  .privateRecord,
+  .leftCharts,
+  .cardGroupRow {
+        width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 8px; /* 약간의 좌우*
+  } */
+
+
 .mainDashboard {
   display: flex;
   flex-direction: column;

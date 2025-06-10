@@ -10,6 +10,13 @@ export const SbContainer = styled.div`
   font-size: 14px;
   // background: #f8f7f3;
   background: rgb(31, 60, 126);
+
+  @media (max-width: 768px) {
+    width: 50px;
+    min-width: 10rem;
+    font-size: 12px;
+  }
+
 `
 
 interface IisOpen{
