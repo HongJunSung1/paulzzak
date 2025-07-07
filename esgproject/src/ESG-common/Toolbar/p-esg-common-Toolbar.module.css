@@ -6,7 +6,7 @@
     border-top: none;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* font-size:12px; */
     font-size: 1rem;
     font-weight:700;
