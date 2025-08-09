@@ -16,6 +16,7 @@ import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import DatePick from '../../ESG-common/DatePicker/p-esg-common-datePicker.tsx'
+import Button from "../../ESG-common/Button/p-esg-common-Button.tsx";
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
 
@@ -827,7 +828,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
       
         // 그리고 Overall 점수 재계산
         updateTeamSummary();
-      };
+    };
 
     // 요약계산함수
     const updateTeamSummary = () => {
@@ -857,15 +858,21 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
         if (teamBDom) teamBDom.textContent = teamBScore.toString();
     };
 
-    // 팀점수 포함 다른 데이터 자동 계산
-    useEffect(() => {
-        const interval = setInterval(() => {
-          updateTeamSummaryFromGrid();
-          updateTeamSummary();   //팀 점수
-        }, 200); // 0.5초마다 갱신
+    // // 팀점수 포함 다른 데이터 자동 계산
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //       updateTeamSummaryFromGrid();
+    //       updateTeamSummary();   //팀 점수
+    //     }, 200); // 0.5초마다 갱신
       
-        return () => clearInterval(interval); // 언마운트 시 클리어
-    }, []);
+    //     return () => clearInterval(interval); // 언마운트 시 클리어
+    // }, []);
+    
+    // 점수 등록 클릭 이벤트
+    const clickScoreCalc = async() => {
+        updateTeamSummaryFromGrid();
+        updateTeamSummary();   //팀 점수
+    }
 
     const updateTeamSummaryFromGrid = () => {
         const fieldsToSum = [
@@ -995,7 +1002,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                             )}
                         </>
                         )}
-
+                        <Button name={"점수 계산"} clickEvent={clickScoreCalc}></Button>
                         <span style={{marginLeft: "auto", marginTop:"auto", fontSize: "12px"}} className={styles.KeyIndex}>
                             고유번호: <input id="key" readOnly value={Key} className={styles.KeyIndex} size={5}></input>
                         </span>
