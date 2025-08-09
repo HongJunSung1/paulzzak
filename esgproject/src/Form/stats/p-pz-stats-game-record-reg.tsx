@@ -60,6 +60,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
 
     const [resetTrigger, setResetTrigger] = useState(false); //서치박스 초기화하기
+    const [calcOverall, setCalcOverall] = useState(false); // Overall 자동 계산
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
@@ -130,6 +131,9 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                             // ✅ Scoring 테이블
                             if (result[2]) {
                                 setRunningScoreData(result[2]);
+                                // 요약 스탯 계산
+                                updateTeamSummaryFromGrid();
+                                updateTeamSummary();   //팀 점수
                             }
 
                             if (result[3]){
@@ -143,6 +147,9 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                             setGrid1Data([]);
                             setGrid2Data([]);
                             resetGeneralTable(); 
+                            // 요약 스탯 계산
+                            updateTeamSummaryFromGrid();
+                            updateTeamSummary();   //팀 점수
                             message  = [];
                             message.push({text: "조회 결과가 없습니다."})
                             setMessageOpen(true);
@@ -406,7 +413,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                 setTeamAName('');
                 setTeamBName('');
                 setDate('');
-                
+
                 break;
 
             // 조회
@@ -867,7 +874,8 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
       
     //     return () => clearInterval(interval); // 언마운트 시 클리어
     // }, []);
-    
+
+
     // 점수 등록 클릭 이벤트
     const clickScoreCalc = async() => {
         updateTeamSummaryFromGrid();
@@ -1119,7 +1127,6 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                                                 data-role="running-input"
                                                                 data-team="A"
                                                                 data-quarter={qIdx}  // ✅ 쿼터 식별
-                                                                // onChange={(e) => handleScoreInputChange(e.target.value, 'A', idx, qIdx)}
                                                                 onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
                                                             />
                                                         </td>
@@ -1132,7 +1139,6 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                                                 data-role="running-input"
                                                                 data-team="B"
                                                                 data-quarter={qIdx}
-                                                                // onChange={(e) => handleScoreInputChange(e.target.value, 'B', idx, qIdx)}
                                                                 onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
                                                             />
                                                         </td>
