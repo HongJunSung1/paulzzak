@@ -1141,7 +1141,8 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
                         contextMenu={null as any} // 우클릭 조회 없애기    
                         // header={{height: 40}}
                         header={headerOptions}
-                        columnOptions={{resizable:true}}                    
+                        columnOptions={{   resizable:true               
+                                      }}                    
                         // pageOptions={{useClient: true, perPage: 3}} // 페이징처리
                 />
                 }

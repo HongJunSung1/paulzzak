@@ -32,6 +32,9 @@ import TeamReg from './Form/team/p-pz-team-reg.tsx';
 import PlayerInfoReg from './Form/player/p-pz-player-info-reg.tsx';
 import GameRecordSummary from './Form/stats/p-pz-stats-game-record-summary.tsx';
 
+// 화면 : 선수별 Stat
+import PlayerStatsQuery from './Form/player-stats/p-pz-player-stats-query.tsx';
+
 // 화면 : Environmental
 import Scope1to2 from './ESG-form/environmental/scope1-2/p-esg-env-scope1-2.tsx';
 import Scope3 from './ESG-form/environmental/scope3/p-esg-env-scope3.tsx';
@@ -163,6 +166,7 @@ function App() {
                   <GameRecordReg       strOpenUrl={strOpenUrl} openTabs={openTabs} jumpRowData={jumpRowData} setJumpRowData={setJumpRowData}/>
                   <TeamReg             strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PlayerInfoReg       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <PlayerStatsQuery    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <GameRecordSummary   strOpenUrl={strOpenUrl} setStrOpenUrl={setStrOpenUrl} openTabs={openTabs} setJumpRowData={setJumpRowData}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
                 </DataContainer>
