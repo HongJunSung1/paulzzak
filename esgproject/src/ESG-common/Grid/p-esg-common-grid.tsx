@@ -1097,7 +1097,6 @@ const ToastGrid = forwardRef(({title, source, columns, headerOptions, onChange, 
         onClick(gridRef.current?.getInstance());
     });
     
-
     
     return (
         <div className={styles.GridWrap}>
