@@ -878,9 +878,59 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
     // 점수 등록 클릭 이벤트
     const clickScoreCalc = async() => {
+        // 선수별 개별 스탯 합산 → Overall 입력창 채우기
         updateTeamSummaryFromGrid();
-        updateTeamSummary();   //팀 점수
+
+        // Running Score를 기반으로 선수별 Score 재계산 → 득점 컬럼 반영
+        recalcScoresFromRunning();
+
+        // 팀 점수 총합 갱신
+        updateTeamSummary();
     }
+
+    // Running Score 전체를 스캔해서 A/B 팀 각 선수의 득점을 재계산
+    const recalcScoresFromRunning = () => {
+    const teamKeys: ('A' | 'B')[] = ['A', 'B'];
+
+    teamKeys.forEach((team) => {
+        const gridRef = team === 'A' ? grid1Ref.current : grid2Ref.current;
+        const gridInstance = gridRef?.getInstance();
+        const allRows = gridInstance?.getData() || [];
+
+        const scoreMap: Record<string, number> = {};
+
+        // 4쿼터 모두 훑기
+        for (let q = 0; q < 4; q++) {
+        const quarterInputs = Array.from(
+            document.querySelectorAll<HTMLInputElement>(`input[data-role="running-input"][data-team="${team}"][data-quarter="${q}"]`)
+        );
+
+        let prevIdx = -1;
+        let prevScore = 0;
+
+        quarterInputs.forEach((input, idx) => {
+            const value = input.value.trim();
+            if (!/^\d+$/.test(value)) return;
+
+            const jersey = parseInt(value, 10).toString();
+            const score = idx + 1;
+
+            const gained = prevIdx === -1 ? score : score - prevScore;
+            scoreMap[jersey] = (scoreMap[jersey] || 0) + gained;
+
+            prevIdx = idx;
+            prevScore = score;
+        });
+        }
+
+        // 득점 시트 반영
+        allRows.forEach((row: any) => {
+        const jersey = parseInt(row.BackNumber, 10)?.toString?.() ?? '';
+        const score = scoreMap[jersey] || 0;
+        gridInstance?.setValue(row.rowKey, 'Score', score.toString());
+        });
+    });
+    };
 
     const updateTeamSummaryFromGrid = () => {
         const fieldsToSum = [
@@ -1127,7 +1177,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                                                 data-role="running-input"
                                                                 data-team="A"
                                                                 data-quarter={qIdx}  // ✅ 쿼터 식별
-                                                                onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
+                                                                // onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
                                                             />
                                                         </td>
                                                         <td colSpan={1}>{num}</td>
@@ -1139,7 +1189,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                                                                 data-role="running-input"
                                                                 data-team="B"
                                                                 data-quarter={qIdx}
-                                                                onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
+                                                                // onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
                                                             />
                                                         </td>
                                                     </tr>
