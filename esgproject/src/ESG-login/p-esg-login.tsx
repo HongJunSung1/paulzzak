@@ -3,7 +3,8 @@ import styles from './p-esg-login.module.css';
 import { useNavigate  } from 'react-router-dom';
 
 import PaulZZakLogo from '../assets/image/PaulZZaklogo.png';
-import LoginPicture from '../assets/image/LoginPicture_4.jpg'
+// import LoginPicture from '../assets/image/LoginPicture_4.jpg'
+import LoginPicture from '../assets/image/Login/MVP202501.jpg'
 import Loading from '../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import MessageBoxYesNo from '../ESG-common/MessageBox/p-esg-common-MessageBoxYesNo.tsx';
 import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';

@@ -57,7 +57,9 @@
     position: relative;
     bottom: 31px;
     border-bottom-left-radius: 30px; */
-    height: 127%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
     /* opacity: 0.9; */
 }
 
