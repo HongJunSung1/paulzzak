@@ -256,11 +256,15 @@ const Menu = ({strOpenUrl,openTabs}) => {
 
                 // 저장할 데이터 없을시 종료
                 if(combinedData[0].grid.length + combinedData[1].grid.length + combinedData[2].grid.length === 0){
-                    window.alert('저장할 데이터가 없습니다.');
+                    message  = [];
+                    message.push({text: "저장할 데이터가 없습니다."})
+                    setMessageOpen(true);
+                    title   = "저장 오류";
                     setLoading(false);
                     return;
                 } 
-
+                setLoading(false);
+                
                 // 중분류 우클릭 조회 없이 저장하면 리턴
                 if(grid2Changes.grid.length > 0 && LMenuCD === 0){
                     window.alert('대분류 등록 후 중분류 메뉴 저장 가능합니다.')

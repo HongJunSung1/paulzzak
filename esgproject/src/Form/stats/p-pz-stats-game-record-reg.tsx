@@ -34,6 +34,12 @@ type condition = {
     DataSet      : string;
 }  
 
+type conditionPlayer = {
+    TeamACD      : number;
+    TeamBCD      : number;
+    DataSet      : string;
+}  
+
 // 에러 메세지
 let message : any     = [];
 let title   : string  = "";
@@ -353,7 +359,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
      // 시트 컬럼 값
     const columns1 = [
-        {name : "UserCD"     , header: "회원\n코드" , width:  50, hidden: true},
+        {name : "UserCD"     , header: "회원\n코드" , width:  50, hidden: false},
         {name : "IsGuest"    , header: "용병\n여부" , width:  50, renderer : {type: 'checkbox'}},
         {name : "BackNumber" , header: "등번호"     , width:  20, renderer : {type: 'number'}},
         {name : "UserName"   , header: "선수명"     , width: 100, renderer: {type: 'searchbox', options: {searchCode: 9, CodeColName :"UserCD", InfoCol1: "BackNumber"}}},
@@ -373,7 +379,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
     ];
 
     const columns2 = [
-        {name : "UserCD"     , header: "회원\n코드" , width:  50, hidden: true},
+        {name : "UserCD"     , header: "회원\n코드" , width:  50, hidden: false},
         {name : "IsGuest"    , header: "용병\n여부" , width:  50, renderer : {type: 'checkbox'}},
         {name : "BackNumber" , header: "등번호"     , width:  20, renderer : {type: 'number'}},
         {name : "UserName"   , header: "선수명"     , width: 100, renderer: {type: 'searchbox', options: {searchCode: 9, CodeColName :"UserCD", InfoCol1: "BackNumber"}}},
@@ -663,7 +669,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
                         // SP 결과 값이 있을 때 로직
                         grid1Ref.current.removeRows(result[0]);
-                        grid2Ref.current.removeRows(result[0]);
+                        grid2Ref.current.removeRows(result[1]);
 
                         errMsg.push({text: "삭제 완료하였습니다."})
                         setMessageOpen(true);
@@ -875,6 +881,44 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
     //     return () => clearInterval(interval); // 언마운트 시 클리어
     // }, []);
 
+    // 선수 정보 자동 입력
+    const clickPlayerReg = async () => {
+
+        // 조회 조건 담기
+        const conditionTeamAr : conditionPlayer =({
+            TeamACD  : TeamACD ,
+            TeamBCD  : TeamBCD ,
+            DataSet  : 'DataSet1'
+        })
+
+        // 로딩 뷰 보이기
+        setLoading(true);
+        try {
+            // 조회 SP 호출 후 결과 값 담기
+            const result = await SP_Request("S_PZ_Stat_GameRecordReg_Player_Query", [conditionTeamAr]);
+            
+            if(result[0].length > 0){
+                // 결과값이 있을 경우 그리드에 뿌려주기
+                setGrid1Data(result[0]);
+                setGrid2Data(result[1]);
+            } else{
+                // 결과값이 없을 경우 처리 로직
+                // 조회 결과 초기화
+                setGrid1Data([]);
+                let errMsg : any[] = [];
+                errMsg.push({text: "조회 결과가 없습니다."})
+                setMessageOpen(true);
+                message = errMsg;
+                title   = "조회 오류";
+            }
+        } catch (error) {
+            // SP 호출 시 에러 처리 로직
+            console.log(error);
+        }
+        // 로딩뷰 감추기
+        setLoading(false);
+
+    }
 
     // 점수 등록 클릭 이벤트
     const clickScoreCalc = async() => {
@@ -1061,6 +1105,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                         </>
                         )}
                         <Button name={"점수 계산"} clickEvent={clickScoreCalc}></Button>
+                        <Button name={"선수 자동 입력"} clickEvent={clickPlayerReg}></Button>
                         <span style={{marginLeft: "auto", marginTop:"auto", fontSize: "12px"}} className={styles.KeyIndex}>
                             고유번호: <input id="key" readOnly value={Key} className={styles.KeyIndex} size={5}></input>
                         </span>
