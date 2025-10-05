@@ -30,6 +30,7 @@ import UserGroupForm from './ESG-form/admin/p-pz-user-group-form.tsx';
 import GameRecordReg from './Form/stats/p-pz-stats-game-record-reg.tsx';
 import TeamReg from './Form/team/p-pz-team-reg.tsx';
 import PlayerInfoReg from './Form/player/p-pz-player-info-reg.tsx';
+import PlayerInfoQuery from './Form/player/p-pz-player-info-query.tsx';
 import GameRecordSummary from './Form/stats/p-pz-stats-game-record-summary.tsx';
 
 // 화면 : 선수별 Stat
@@ -166,6 +167,7 @@ function App() {
                   <GameRecordReg       strOpenUrl={strOpenUrl} openTabs={openTabs} jumpRowData={jumpRowData} setJumpRowData={setJumpRowData}/>
                   <TeamReg             strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PlayerInfoReg       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <PlayerInfoQuery     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PlayerStatsQuery    strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <GameRecordSummary   strOpenUrl={strOpenUrl} setStrOpenUrl={setStrOpenUrl} openTabs={openTabs} setJumpRowData={setJumpRowData}/>
                   <AlarmList           strOpenUrl={strOpenUrl} openTabs={openTabs} setOpenUrl={setStrOpenUrl}/>
