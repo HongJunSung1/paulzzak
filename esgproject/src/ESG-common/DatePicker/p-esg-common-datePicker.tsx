@@ -50,9 +50,13 @@ const DatePick = (settings : any) => {
                 const monthData = date.getFullYear().toString() + (((date.getMonth() + 1).toString().length === 1) ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString());
                 settings.onChange(monthData);
             }else{
-                const dateData = date.getFullYear().toString() + ((date.getMonth().toString().length === 1) ? "0" + (date.getMonth() + 1).toString()  : (date.getMonth() + 1).toString() )
-                                    + (date.getDate().toString().length === 1 ? "0" + date.getDate().toString() : date.getDate().toString());
-                settings.onChange(dateData);
+                // const dateData = date.getFullYear().toString() + ((date.getMonth().toString().length === 1) ? "0" + (date.getMonth() + 1).toString()  : (date.getMonth() + 1).toString() )
+                //                     + (date.getDate().toString().length === 1 ? "0" + date.getDate().toString() : date.getDate().toString());
+                // settings.onChange(dateData);
+                const mm = String(date.getMonth() + 1).padStart(2, '0'); // <= 여기!
+                const dd = String(date.getDate()).padStart(2, '0');
+                const yyyymmdd = `${date.getFullYear()}${mm}${dd}`;
+                settings.onChange(yyyymmdd); // (값 타입이 number라면 Number(yyyymmdd))
             }
         } else{
             settings.onChange('');
