@@ -511,17 +511,17 @@ const makeDefenseLineChart = (rawData): {
 
   // 시트 컬럼 값
   const columns1 = [
-    {name : "UserCD"    , header: "유저코드"   , width:  70 , hidden: true},
-    {name : "UserName"  , header: "이름"       , width:  80},
-    {name : "UserID"    , header: "사업부문명" , width:  80 , hidden: true},
-    {name : "MatchCnt"  , header: "경기 수"    , width:  80},
-    {name : "Score"     , header: "득점"       , width:  80},
-    {name : "Assist"    , header: "어시스트"   , width:  80},
-    {name : "Rebound"   , header: "리바운드"   , width:  80},
-    {name : "Block"     , header: "블로킹"     , width:  80},
-    {name : "Steal"     , header: "스틸"       , width:  80},
-    {name : "Foul"      , header: "파울"       , width:  80},
-    {name : "TurnOver"  , header: "턴오버"     , width:  80},
+    {name : "UserCD"    , header: "유저코드"   , width:  70, hidden: true},
+    {name : "UserName"  , header: "이름"       , width:  80, sortable: true},
+    {name : "UserID"    , header: "유저ID"     , width:  80, hidden: true},
+    {name : "MatchCnt"  , header: "경기 수"    , width:  80, sortable: true},
+    {name : "Score"     , header: "득점"       , width:  80, sortable: true},
+    {name : "Assist"    , header: "어시스트"   , width:  80, sortable: true},
+    {name : "Rebound"   , header: "리바운드"   , width:  80, sortable: true},
+    {name : "Block"     , header: "블로킹"     , width:  80, sortable: true},
+    {name : "Steal"     , header: "스틸"       , width:  80, sortable: true},
+    {name : "Foul"      , header: "파울"       , width:  80, sortable: true},
+    {name : "TurnOver"  , header: "턴오버"     , width:  80, sortable: true},
   ];
 
 const toolbarEvent = async (clickID) =>{
