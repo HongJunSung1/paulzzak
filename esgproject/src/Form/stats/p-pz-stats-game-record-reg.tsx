@@ -1,6 +1,6 @@
 // 경기기록작성
 
-import React, { useRef, useState, useEffect}  from 'react'
+import React, { useRef, useMemo, useState, useEffect}  from 'react'
 import '../../global.d.ts';
 import styles from './p-pz-stats-game-record-reg.module.css';
 
@@ -13,7 +13,7 @@ import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
-import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
+import Grid from '../../ESG-common/Grid/p-esg-common-grid-test.tsx';
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import DatePick from '../../ESG-common/DatePicker/p-esg-common-datePicker.tsx'
 import Button from "../../ESG-common/Button/p-esg-common-Button.tsx";
@@ -40,11 +40,18 @@ type conditionPlayer = {
     DataSet      : string;
 }  
 
+type GameRecordRegProps = {
+  strOpenUrl: any;
+  openTabs: any;
+  jumpRowData: any;
+  setJumpRowData: any;
+};
+
 // 에러 메세지
 let message : any     = [];
 let title   : string  = "";
 
-const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
+const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: GameRecordRegProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -333,8 +340,10 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
      ]
 
 
-    // 헤더 정보
-    const complexColumns =[
+
+
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] = [
         {
             header: '2점슛',
             name: 'mergeColumn1',
@@ -350,15 +359,16 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
             name: 'mergeColumn3',
             childNames: ['FTSuccess', 'FTAttempt']
         }
-    ]
+    ];
 
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+        return {
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        }
+    }, []);
 
      // 시트 컬럼 값
-    const columns1 = [
+    const columns1 = useMemo(()=> ([
         {name : "UserCD"     , header: "회원\n코드" , width:  50, hidden: false},
         {name : "IsGuest"    , header: "용병\n여부" , width:  50, renderer : {type: 'checkbox'}},
         {name : "BackNumber" , header: "등번호"     , width:  20, renderer : {type: 'number'}},
@@ -376,9 +386,9 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
         {name : "Block"      , header: "블록"       , width:  60, editor: 'text', renderer : {type: 'number'}, disabled:false},
         {name : "TurnOver"   , header: "턴오버"     , width:  60, editor: 'text', renderer : {type: 'number'}, disabled:false},
         {name : "Foul"       , header: "파울"       , width:  60, editor: 'text', renderer : {type: 'number'}, disabled:false},
-    ];
+    ]), []);
 
-    const columns2 = [
+    const columns2 = useMemo(()=> ([
         {name : "UserCD"     , header: "회원\n코드" , width:  50, hidden: false},
         {name : "IsGuest"    , header: "용병\n여부" , width:  50, renderer : {type: 'checkbox'}},
         {name : "BackNumber" , header: "등번호"     , width:  20, renderer : {type: 'number'}},
@@ -396,10 +406,9 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
         {name : "Block"      , header: "블록"       , width:  60, editor: 'text', renderer : {type: 'number'}, disabled:false},
         {name : "TurnOver"   , header: "턴오버"     , width:  60, editor: 'text', renderer : {type: 'number'}, disabled:false},
         {name : "Foul"       , header: "파울"       , width:  60, editor: 'text', renderer : {type: 'number'}, disabled:false},
-    ];
+    ]), []);
 
-
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -854,12 +863,12 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
         const teamAData = grid1Ref.current?.getInstance().getData() || [];
         const teamBData = grid2Ref.current?.getInstance().getData() || [];
 
-        const teamAScore = teamAData.reduce((sum, row) => {
+        const teamAScore = teamAData.reduce((sum : any, row : any) => {
           const score = parseFloat(row.Score);
           return sum + (isNaN(score) ? 0 : score);
         }, 0);
       
-        const teamBScore = teamBData.reduce((sum, row) => {
+        const teamBScore = teamBData.reduce((sum : any, row : any) => {
           const score = parseFloat(row.Score);
           return sum + (isNaN(score) ? 0 : score);
         }, 0);
@@ -1004,7 +1013,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
           const summary: Record<string, number> = {};
           fieldsToSum.forEach((key) => (summary[key] = 0));
       
-          rows.forEach((row) => {
+          rows.forEach((row : any) => {
             fieldsToSum.forEach((key) => {
               const val = parseInt(row[key] ?? "0");
               if (!isNaN(val)) {
@@ -1052,7 +1061,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PPzStatsGameRecordReg') === undefined) {
+        if (openTabs.find((item : any) => item.url === '/PPzStatsGameRecordReg') === undefined) {
             // setYear('');
             // setBizUnitCD(0);
             setGrid1Data([]);
@@ -1094,12 +1103,12 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}) => {
                         </>
                         ) : (
                         <>  {Date !== '' &&
-                            <SearchBox name={"시즌명"} value={SeasonCD} isRequire={"true"} onChange={(val) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
+                            <SearchBox name={"시즌명"} value={SeasonCD} isRequire={"true"} onChange={(val : any) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
                             }
                             {SeasonCD > 0 && Date !== '' && (
                             <div style={{display:"flex", marginLeft: "5px"}}>
-                                <SearchBox name={"A팀"} id="A-SearchBox" value={TeamACD} isRequire={"true"} onChange={(val) => setTeamACD(val.code)} width={200} searchCode={7} isGrid={false} joinCode={6} joinColumn={"SeasonCD"} columnCode={SeasonCD} resetTrigger={resetTrigger}/>
-                                <SearchBox name={"B팀"} value={TeamBCD} isRequire={"true"} onChange={(val) => setTeamBCD(val.code)} width={200} searchCode={7} isGrid={false} joinCode={6} joinColumn={"SeasonCD"} columnCode={SeasonCD} resetTrigger={resetTrigger}/>
+                                <SearchBox name={"A팀"} id="A-SearchBox" value={TeamACD} isRequire={"true"} onChange={(val : any) => setTeamACD(val.code)} width={200} searchCode={7} isGrid={false} joinCode={6} joinColumn={"SeasonCD"} columnCode={SeasonCD} resetTrigger={resetTrigger}/>
+                                <SearchBox name={"B팀"} value={TeamBCD} isRequire={"true"} onChange={(val : any) => setTeamBCD(val.code)} width={200} searchCode={7} isGrid={false} joinCode={6} joinColumn={"SeasonCD"} columnCode={SeasonCD} resetTrigger={resetTrigger}/>
                             </div>
                             )}
                         </>

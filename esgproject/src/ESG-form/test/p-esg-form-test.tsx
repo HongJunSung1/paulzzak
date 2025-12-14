@@ -1,60 +1,53 @@
-import React, { useRef, useState, useEffect }  from 'react'
-import '../../global.d.ts';
+// 테스트 화면
 
+// 메뉴 등록
+import React, {useMemo, useRef, useState, useEffect }  from 'react'
+import '../../global.d.ts';
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
-import FixedArea from "../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx";
-import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
-import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
-import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
-import Dialogue from '../../ESG-common/Dialogue/p-esg-common-dialogue.tsx';
-import ToastEditor from '../../ESG-common/Editor/p-esg-common-Editor.tsx';
-import EditorViewer from '../../ESG-common/Editor/p-esg-common-Editor-Viewer.tsx';
-import GridTab from '../../ESG-common/GridTab/p-esg-common-GridTab.tsx';
-import GridTabItem from '../../ESG-common/GridTab/p-esg-common-GridTabItem.tsx';
-
+import Grid from '../../ESG-common/Grid/p-esg-common-grid-test.tsx';
+import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import { SP_Request } from '../../hooks/sp-request.tsx';
-
 
 type gridAr = {
     DataSet    : string;
     grid       : any[];
 };
 
-type editAr = {
-    DataSet    : string;
-    grid       : any[];
+// 우클릭 조회 시 받는 내부코드 값
+let LMenuCD = 0
+let MMenuCD = 0
+
+// 에러 메세지
+let message : any     = [];
+let title   : string  = "";
+
+type FormTestProps = {
+  strOpenUrl: any;
+  openTabs: any;
 };
 
-type condition = {
-    condition1 : string;
-    condition2 : string;
-    condition3 : string;
-    DataSet    : string;
-}  
-
-const Environmental = ({strOpenUrl, openTabs}) => {
-
+const TestForm = ({ strOpenUrl, openTabs }: FormTestProps) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
-
-    // 조회조건 값
-    const [condition1, setCondition1] = useState('')
-    const [condition2, setCondition2] = useState('')
-    const [condition3, setCondition3] = useState('')
-
+    
+    // 메세지박스
+    const [messageOpen, setMessageOpen] = useState(false)
+    const messageClose = () => {setMessageOpen(false)};
+    
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
+    const [grid3Data, setGrid3Data] = useState([]);
 
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
     let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
-    let [edit1Changes, setEdit1Changes] = useState<editAr>({ DataSet : '', grid: []});
+    let [grid3Changes, setGrid3Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
@@ -62,130 +55,287 @@ const Environmental = ({strOpenUrl, openTabs}) => {
             setGrid1Changes(changes);
         } else if (gridId === 'DataSet2') {
             setGrid2Changes(changes);
+        } else if (gridId === 'DataSet3') {
+            setGrid3Changes(changes);
         }
     };
 
-    // 에디터 변경 감지
-    const handleEditorChange = (editId : string , changes : editAr) => {
-        if(editId === 'DataSet3'){
-            setEdit1Changes(changes);
-        }
-    }
-    
+
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
-    const grid2Ref : any = useRef(null);
+    const grid2Ref : any = useRef(null);    
+    const grid3Ref : any = useRef(null);    
 
-    // 에디터 Ref
-    const Editor1Ref : any = useRef(null);
 
-    // 에디터 뷰어 값
-    const [EditText,setEditText] = useState('');
+    // ========================================================================================
+    // 우클릭 시 조회
+    // 1. 대분류 우클릭 → 중분류 조회
+    const rightClick1 = (event: React.MouseEvent) => {
+        event.preventDefault();  // 기본 우클릭 메뉴 비활성화
+        setTimeout(async ()=> {
+            LMenuCD = 0
+            grid2Ref.current.clear();
+            grid3Ref.current.clear();
 
-    // 다이얼로그 오픈
-    const [isDlgOpen,setIsDlgOpen] = useState(false);
-    
+            if(grid1Ref.current.rightClick() !== null){
+                LMenuCD = grid1Ref.current.rightClick().LMenuCD
+            }     
 
-    const toolbar = [  
-                       {id: 0, title:"신규", image:"new"  , spName:""}
-                     , {id: 1, title:"조회", image:"query", spName:"S_Test"}
-                     , {id: 2, title:"저장", image:"save" , spName:"S_Save_Test"}
-                     , {id: 3, title:"삭제", image:"cut"  , spName:"S_Cut_Test"}
-                     , {id: 4, title:"다이얼로그 테스트", image:"save"  , spName:""}
-                    ]
-
-    // 헤더 정보
-    const complexColumns =[]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+            if(LMenuCD > 0){
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request("S_Menu_Sub_Query", [{LMenuCD: LMenuCD, DataSet : 'DataSet1'}]);
+                    if(result.length > 0){
+                        setGrid2Data([]);
+                        setGrid3Data([]);
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        setGrid2Data(result[0]);
+                    } else{
+                        setGrid2Data([]);
+                        setGrid3Data([]);
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
+            }
+        }, 100)
     };
 
-    const columns1 = [
-        {name : "id", header: "ID", width: 50},
-        {name : "name", header: "Name", width: 100, editor: 'text'},
-    ];
+    // 2. 중분류 우클릭 → 소분류 조회
+    const rightClick2 = (event: React.MouseEvent) => {
+        event.preventDefault();  // 기본 우클릭 메뉴 비활성화
+        setTimeout(async ()=> {
+            MMenuCD = 0
+            grid3Ref.current.clear();
 
-    const columns2 = [
-        {name : "id", header: "ID", width: 50, editor: 'text', validation: {dataType: 'number'}},
-        {name : "NickName", header: "NickName", width: 100, editor: 'text', align: 'center', },
-        {name : "Searchbox", header: "Searchbox", width: 100, renderer: {type: 'searchbox',options: {searchCode: 2, CodeColName :"SearchboxCD"}}},
-        {name : "SearchboxCD", header: "SearchboxCD", width: 100, },
-        {name : "btnTest", header: "btnTest", width: 100, renderer: {type: 'button',options: {btnName: "button", clickFunc : (rowkey,colName) =>{ console.log(rowkey +"/"+colName)}}}},
-    ];
+            if(grid2Ref.current.rightClick() !== null){
+                MMenuCD = grid2Ref.current.rightClick().MMenuCD
+            }     
+            
+            if(LMenuCD > 0){
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request("S_Menu_Sub_Sub_Query", [{MMenuCD: MMenuCD, DataSet : 'DataSet2'}]);
+                    if(result.length > 0){
+                        setGrid3Data([]);
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        setGrid3Data(result[0]);
+                    } else{
+                        // 결과값이 없을 경우 처리 로직
+                        setGrid3Data([]);
+                    }
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
+            }
+        }, 100)
+    };
 
+
+
+    const toolbar = [  
+        {id: 0, title:"신규", image:"new"  , spName:""}
+      , {id: 1, title:"조회", image:"query", spName:"S_Menu_Query"}
+      , {id: 2, title:"저장", image:"save" , spName:"S_Menu_Save"}
+      , {id: 3, title:"삭제", image:"cut"  , spName:"S_Menu_Cut"}
+     ]
+
+    // 헤더 정보
+    const headerOptions = useMemo(() => {
+      const complexColumns: any[] = [];
+      return {
+        height: 60,
+        complexColumns: complexColumns.length > 0 ? complexColumns : undefined,
+      };
+    }, []);
+
+    const columns1 = useMemo(() => ([
+    {name : "LMenuCD"  , header: "내부코드"   , width:  70, hidden: true },
+    {name : "LMenuName", header: "대메뉴 이름", width: 250, editor: 'text'},
+    {name : "LOrder"   , header: "순서"       , width: 40, editor: 'text'},
+    ]), []);
+    
+    const columns2 = useMemo(() => ([
+        {name : "LMenuCD"  , header: "대분류코드"   , width:  70 },
+        {name : "MMenuCD"  , header: "중분류코드"   , width:  70},
+        {name : "MMenuName", header: "중메뉴 이름"  , width: 250, editor: 'text'},
+        {name : "MOrder"   , header: "순서"        , width:   40, editor: 'text'},
+        {name : "DateTest" , header: "날짜테스트"   , width: 100, renderer: {type: "datebox", options:{dateType:"day"}}},
+        
+    ]), []);
+
+    const columns3 = useMemo(() => ([
+        {name : "SMenuCD"  , header: "소분류코드"   , width:  70, hidden: true},
+        {name : "MMenuCD"  , header: "중분류코드"   , width:  70, hidden: true},
+        {name : "FormCD"   , header: "소분류코드"   , width:  70, hidden: true},
+        {name : "FormName" , header: "소메뉴 이름"  , width: 170, renderer: {type: 'searchbox', options: {searchCode: 1, CodeColName :"FormCD"}}},
+        {name : "FormOrder", header: "순서"         , width:  40, editor: 'text'},
+    ]), []);
+    
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
-
-        switch (clickID){
-
+    const toolbarEvent = async (clickID: any) =>{
+        switch(clickID){
             // 신규
-            case 0 :
-                console.log("시트 초기화");
+            case 0:
+                grid1Ref.current.clear();
+                grid2Ref.current.clear();
+                grid3Ref.current.clear();
+                setGrid1Data([]);
+                setGrid2Data([]);
+                setGrid3Data([]);
+
                 break;
 
             // 조회
-            case 1 : 
-                    // 조회 조건 담기
-                    const conditionAr : condition = ({
-                        condition1 : condition1,
-                        condition2 : condition2,
-                        condition3 : condition3,
-                        DataSet    : 'DataSet1'
-                    })
+            case 1: 
+                // 로딩 뷰 보이기
+                setLoading(true);
+                try {
+                    // 조회 SP 호출 후 결과 값 담기
+                    const result = await SP_Request(toolbar[clickID].spName, []);
+                    
+                    if(result[0].length > 0){
+                        // 결과값이 있을 경우 그리드에 뿌려주기
+                        // 조회 버튼으로는 대메뉴 조회만 나와야 하기 때문에 result[0]만 뿌려줌
+                        setGrid1Data(result[0]);
+                    } else{
+                        // 결과값이 없을 경우 처리 로직
+                        // 조회 결과 초기화
+                        setGrid1Data([]);
+                        setGrid2Data([]);
+                        setGrid3Data([]);
 
-                    // 로딩 뷰 보이기
-                    setLoading(true);
-                    try {
-                        // 조회 SP 호출 후 결과 값 담기
-                        const result = await SP_Request(toolbar[clickID].spName, [conditionAr]);
-                        
-                        if(result){
-                            // 결과값이 있을 경우 그리드에 뿌려주기
-                            setGrid1Data(result[0]);
-                            setGrid2Data(result[1]);
-                        } else{
-                            // 결과값이 없을 경우 처리 로직
-                            window.alert("ㄴ")
-                        }
-                    } catch (error) {
-                        // SP 호출 시 에러 처리 로직
-                        console.log(error);
+                        message  = [];
+                        message.push({text: "조회 결과가 없습니다."})
+                        setMessageOpen(true);
+                        title   = "조회 오류";
+                        setLoading(false);
                     }
-                    // 로딩뷰 감추기
-                    setLoading(false);
+                } catch (error) {
+                    // SP 호출 시 에러 처리 로직
+                    console.log(error);
+                }
+                // 로딩뷰 감추기
+                setLoading(false);
 
+            break;
 
-                break;
-            
             // 저장
             case 2 : 
                 //시트 수정 종료
-                // grid1Ref.current.setEditFinish();
+                grid1Ref.current.setEditFinish();
                 grid2Ref.current.setEditFinish();
+                grid3Ref.current.setEditFinish();
+
                 
                 // 시트 내 변동 값 담기
                 let combinedData : any[] = [];
 
+                //모든 컬럼이 빈값인지 체크
+                grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
+                grid2Changes.grid = grid2Ref.current.setColumCheck(grid2Changes.grid);
+                grid3Changes.grid = grid3Ref.current.setColumCheck(grid3Changes.grid);
+
+                // 중분류에 대분류 내부코드 넣기
+                for(let i = 0; i < grid2Changes.grid.length; i++){
+                    if(grid2Changes.grid[i].LMenuCD === null){
+                        grid2Changes.grid[i].LMenuCD = LMenuCD
+                    }
+                }
+
+                // 소분류에 중분류 내부코드 넣기
+                for(let i = 0; i < grid3Changes.grid.length; i++){
+                    if(grid3Changes.grid[i].MMenuCD === null){
+                        grid3Changes.grid[i].MMenuCD = MMenuCD
+                    }
+                }
+
                 combinedData.push(grid1Changes)
                 combinedData.push(grid2Changes)
-                combinedData.push(edit1Changes)
+                combinedData.push(grid3Changes)
 
+                // 저장할 데이터 없을시 종료
+                if(combinedData[0].grid.length + combinedData[1].grid.length + combinedData[2].grid.length === 0){
+                    message  = [];
+                    message.push({text: "저장할 데이터가 없습니다."})
+                    setMessageOpen(true);
+                    title   = "저장 오류";
+                    setLoading(false);
+                    return;
+                } 
+                setLoading(false);
+                
+                // 중분류 우클릭 조회 없이 저장하면 리턴
+                if(grid2Changes.grid.length > 0 && LMenuCD === 0){
+                    window.alert('대분류 등록 후 중분류 메뉴 저장 가능합니다.')
+                    setLoading(false);
+                    return;
+                }
+
+                // 소분류 우클릭 조회 없이 저장하면 리턴
+                if(grid3Changes.grid.length > 0 && MMenuCD === 0){
+                    window.alert('중분류 등록 후 소분류 메뉴 저장 가능합니다.')
+                    setLoading(false);
+                    return;
+                }     
+
+                // 로딩 뷰 보이기
                 setLoading(true);
                 try {
                     const result = await SP_Request(toolbar[clickID].spName, combinedData);
-                    
+                    let errMsg : any[] = [];
                     if(result){
+                        for(let i in result){
+                            for(let j in result[i]){
+                                if(result[i][j].Status > 0){
+                                    if(i === '0'){
+                                        errMsg.push({text: "시트: 대메뉴 " + result[i][j].Message})
+                                    }
+                                    if( i === '1'){
+                                        errMsg.push({text: "시트: 중메뉴 " + result[i][j].Message})
+                                    }
+                                    if( i === '2'){
+                                        errMsg.push({text: "시트: 소메뉴 " + result[i][j].Message})
+                                    }
+                                }
+                            }
+                        }
+                        if(errMsg.length > 0){
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "저장 에러";
+                            setLoading(false);
+                            return;
+                        }   
                         // SP 호출 결과 값 처리
-                        console.log(result);
+                        grid1Ref.current.setRowData(result[0]);
+                        grid2Ref.current.setRowData(result[1]);
+                        grid3Ref.current.setRowData(result[2]);
 
-                        setEditText(result[2][0].text);
+                        //시트 변경 내역 초기화
+                        setGrid1Changes({ DataSet : '', grid: []});
+                        setGrid2Changes({ DataSet : '', grid: []});
+                        setGrid3Changes({ DataSet : '', grid: []});
 
-
+                        // SP 결과 값이 있을 때 로직
+                        errMsg  = [];
+                        errMsg.push({text: "저장 완료하였습니다."})
+                        setMessageOpen(true);
+                        message = errMsg;
+                        title   = "저장 완료";
                     } else{
                         // SP 호출 결과 없을 경우 처리 로직
-                        window.alert("저장 실패")
+                        console.log("저장 에러");
                     }
                 } catch (error) {
                     // SP 호출 시 에러 처리
@@ -193,30 +343,68 @@ const Environmental = ({strOpenUrl, openTabs}) => {
                 }
                 setLoading(false);
 
-                break;
+            break;
 
             // 삭제
             case 3 :
-                    // 체크한 데이터 담기 
-                    let checkedData : any[] = [];
-
-                    checkedData.push(grid1Ref.current.getCheckedRows());
-                    checkedData.push(grid2Ref.current.getCheckedRows());
-
-                    console.log(checkedData);
-
-                    setLoading(true);
+                // 체크한 데이터 담기 
+                let checkedData : any[] = [];
+                
+                checkedData.push(grid1Ref.current.getCheckedRows());
+                checkedData.push(grid2Ref.current.getCheckedRows());
+                checkedData.push(grid3Ref.current.getCheckedRows());
+                
+                // 삭제할 데이터 없을시 종료
+                if(checkedData[0].grid.length + checkedData[1].grid.length + checkedData[2].grid.length === 0){
+                    window.alert('삭제할 데이터가 없습니다.');
+                    setLoading(false);
+                    return;
+                }
+                
+                setLoading(true);
                     try {
                         // SP 결과 값 담기
                         const result = await SP_Request(toolbar[clickID].spName, checkedData);
                         
                         if(result){
+
+                            let errMsgDel : any[] = [];
+                            // SP 호출 결과 값 처리
+                            for(let i in result){
+                                for(let j in result[i]){
+                                    if(result[i][j].Status > 0){
+                                        errMsgDel.push({text: "[시트: 메뉴 정보] " + result[i][j].Message})
+                                    }
+                                }
+                            }
+                            if(errMsgDel.length > 0){
+                                setMessageOpen(true);
+                                message = errMsgDel;
+                                title   = "저장 에러";
+                                setLoading(false);
+                                return;
+                            }   
+
                             // SP 결과 값이 있을 때 로직
-                            console.log(result);
+                            grid1Ref.current.removeRows(result[0]);
+                            grid2Ref.current.removeRows(result[1]);
+                            grid3Ref.current.removeRows(result[2]);
+
+                            // SP 결과 값이 있을 때 로직
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "삭제 완료하였습니다."})
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "삭제 완료";
                         } else{
                             // SP 결과 값이 없을 때 로직
-                            window.alert("저장 실패")
+                            let errMsg : any[] = [];
+                            errMsg.push({text: "삭제할 데이터가 없습니다."})
+                            setMessageOpen(true);
+                            message = errMsg;
+                            title   = "삭제 실패";
                         }
+
                     } catch (error) {
                         // SP 호출 시 에러 처리
                         console.log(error);
@@ -224,98 +412,61 @@ const Environmental = ({strOpenUrl, openTabs}) => {
                     setLoading(false);
 
                 break;
-
-            // 다이얼로그 
-            case 4 :
-                setIsDlgOpen(true);
-                
-                break;
         }
-      
+    
     }
 
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
-
         const grid1Inst = grid1Ref.current.getInstance();
         const grid2Inst = grid2Ref.current.getInstance();
+        const grid3Inst = grid3Ref.current.getInstance();
 
         if(ref === grid1Inst){
             grid2Ref.current.blur();
+            grid3Ref.current.blur();
         }else if (ref === grid2Inst){
             grid1Ref.current.blur();
+            grid3Ref.current.blur();
+        }else if (ref === grid3Inst){
+            grid1Ref.current.blur();
+            grid2Ref.current.blur();
         }
     }
 
-
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/environmental') === undefined) {
-            setCondition1('');
-            setCondition2('');
-            setCondition3('');
+        if (openTabs.find((item: any) => item.url === '/TestForm') === undefined) {
             setGrid1Data([]);
             setGrid2Data([]);
+            setGrid3Data([]);
         }
-    }, [openTabs]);
+    }, [openTabs]); 
 
 
-
-    // 화면
-    return(
+    return (
         <>
-            <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/environmental' ? "flex" : "none", flexDirection:"column"}}>
+            <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/TestForm' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
-                <Toolbar items={toolbar} clickID={toolbarEvent}/>
-                <FixedArea name={"테스트 이름"}>
-                    <FixedWrap>
-                        <TextBox name={"신은규"} isRequire={"true"} value={condition1} onChange={setCondition1}/>   
-                        <TextBox name={"엉덩이"} value={condition2} onChange={setCondition2}/>    
-                        <TextBox name={"쥐어 뜯을 거"} width={300} value={condition3} onChange={setCondition3}/>    
-                    </FixedWrap>
-                </FixedArea>  
+                <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
+                <Toolbar items={toolbar} clickID={toolbarEvent}/> 
                 <DynamicArea>
-                    <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
-                        <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
-                            <ToastEditor ref={Editor1Ref} editId="DataSet3" onChange={handleEditorChange}/>
-                            {/* <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} columns = {columns1} onChange={handleGridChange} addRowBtn = {true}/> */}
-                            <EditorViewer contents={EditText}/>
+                    <Splitter SplitType={"horizontal"} FirstSize={33} SecondSize={67}>
+                        <div onContextMenu={rightClick1} style={{height:"100%"}}>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "대메뉴" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                        </div>
+                        <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
+                            <div onContextMenu={rightClick2} style={{height:"100%"}}>
+                                <Grid ref={grid2Ref} gridId="DataSet2" title = "중메뉴" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                            </div>
+                            <Grid ref={grid3Ref} gridId="DataSet3" title = "소메뉴" source = {grid3Data} headerOptions={headerOptions} columns = {columns3} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                         </Splitter>
-                        <GridTab>
-                            <GridTabItem name={"제목 테스트"}>
-                                <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
-                            </GridTabItem>
-                            <GridTabItem name={"에디터 화면"}>
-                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
-                            </GridTabItem>
-                        </GridTab>
                     </Splitter>
                 </DynamicArea>
-                <Dialogue DlgName = "다이얼로그 테스트" isOpenDlg={isDlgOpen} setIsOpen={setIsDlgOpen} Dlgwidth={1200} Dlgheight={800}>
-                    <Toolbar items={toolbar} clickID={toolbarEvent}/>
-                    <FixedArea name={"테스트 이름"}>
-                        <FixedWrap>
-                            <TextBox name={"신은규"} isRequire={"true"} value={condition1} onChange={setCondition1}/>   
-                            <TextBox name={"엉덩이"} value={condition2} onChange={setCondition2}/>    
-                            <TextBox name={"쥐어 뜯을 거"} width={300} value={condition3} onChange={setCondition3}/>    
-                        </FixedWrap>
-                    </FixedArea>  
-                    <DynamicArea>
-                        <Splitter SplitType={"horizontal"} FirstSize={50} SecondSize={50}>
-                            <Splitter SplitType={"vertical"} FirstSize={30} SecondSize={70}>
-                                <div>
-                                    테스트 1
-                                </div>
-                                <Grid ref={grid1Ref} gridId="DataSet1" title = "제목" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
-                            </Splitter>
-                            <Grid ref={grid2Ref}  gridId="DataSet2" title = "제목 테스트" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
-                        </Splitter>
-                    </DynamicArea>
-                </Dialogue>
             </div>
         </>
     )
-
+    
 }
 
-export default Environmental;
+export default TestForm;

@@ -13,7 +13,7 @@ import {MenuInfoProvider} from './hooks/use-menu-info.tsx';
 // 화면 영역 : Admin
 import Login from './ESG-login/p-esg-login.tsx';
 import Main from './ESG-form/main/p-esg-form-main.tsx';
-import Environmental from './ESG-form/test/p-esg-form-test.tsx';
+import TestForm from './ESG-form/test/p-esg-form-test.tsx';
 import UserInfo from './ESG-form/admin/p-esg-form-admin-userInfo.tsx';
 import FormReg from './ESG-form/admin/p-esg-form-admin-form-reg.tsx';
 import Menu from './ESG-form/menu/p-esg-form-menu-reg.tsx';
@@ -29,6 +29,7 @@ import UserGroupForm from './ESG-form/admin/p-pz-user-group-form.tsx';
 // 화면 : Stats
 import GameRecordReg from './Form/stats/p-pz-stats-game-record-reg.tsx';
 import TeamReg from './Form/team/p-pz-team-reg.tsx';
+import TeamPointForm from './Form/team/p-pz-team-point-query.tsx';
 import PlayerInfoReg from './Form/player/p-pz-player-info-reg.tsx';
 import PlayerInfoQuery from './Form/player/p-pz-player-info-query.tsx';
 import GameRecordSummary from './Form/stats/p-pz-stats-game-record-summary.tsx';
@@ -135,7 +136,7 @@ function App() {
                   <FormReg             strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <Menu                strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <UserForm            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
-                  <Environmental       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <TestForm            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <FileTest            strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <SearchBoxReg        strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <CompanyReg          strOpenUrl={strOpenUrl} openTabs={openTabs}/> 
@@ -166,6 +167,7 @@ function App() {
                   <UserGroupForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <GameRecordReg       strOpenUrl={strOpenUrl} openTabs={openTabs} jumpRowData={jumpRowData} setJumpRowData={setJumpRowData}/>
                   <TeamReg             strOpenUrl={strOpenUrl} openTabs={openTabs}/>
+                  <TeamPointForm       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PlayerInfoReg       strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PlayerInfoQuery     strOpenUrl={strOpenUrl} openTabs={openTabs}/>
                   <PlayerStatsQuery    strOpenUrl={strOpenUrl} openTabs={openTabs}/>

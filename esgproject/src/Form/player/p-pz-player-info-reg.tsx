@@ -10,7 +10,7 @@ import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
-import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
+import Grid from '../../ESG-common/Grid/p-esg-common-grid-test.tsx';
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 
 import { SP_Request } from '../../hooks/sp-request.tsx';
