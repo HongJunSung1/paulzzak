@@ -1,5 +1,5 @@
 //사용자별 화면 권한
-import React, { useRef, useState, useEffect}  from 'react'
+import React, { useMemo, useRef, useState, useEffect}  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -37,7 +37,12 @@ let title   : string  = "";
 // 우클릭 조회 시 받는 내부코드 값
 let UserCD = 0
 
-const UserForm = ({strOpenUrl, openTabs}) => {
+type FormUserFormProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+
+const UserForm = ({strOpenUrl, openTabs}: FormUserFormProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -77,28 +82,31 @@ const UserForm = ({strOpenUrl, openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[]
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] =[];
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        };
+    }, []);
 
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "UserCD"    , header: "사용자코드"     , width:  70 , hidden: true},
         {name : "UserName"  , header: "사용자명"       , width: 200},
         {name : "UserID"    , header: "사용자 아이디"  , width: 200},
-    ];
+    ]), []);
 
-    const columns2 = [
+    const columns2 = useMemo(() => ([
         {name : "FormCD"    , header: "화면 코드"     , width:  70, hidden: true},
         {name : "IsAuth"    , header: "권한여부"      , width: 70, renderer: { type: 'checkbox' }},
         {name : "FormName"  , header: "화면명"       , width: 400}
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -278,7 +286,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgUserForm') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PEsgUserForm') === undefined) {
             setCondition1('');
             setCondition2('');
             setGrid1Data([]);
@@ -296,7 +304,7 @@ const UserForm = ({strOpenUrl, openTabs}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <SearchBox name={"사용자명"} value={UserName}  onChange={(val) => setConditions1(val.code)} width={200} searchCode={2} isGrid={false}/>
+                        <SearchBox name={"사용자명"} value={UserName}  onChange={(val: any) => setConditions1(val.code)} width={200} searchCode={2} isGrid={false}/>
                         <TextBox   name={"화면명"}   value={FormName}  onChange={setCondition2} width={200}/>    
                     </FixedWrap>
                 </FixedArea>  

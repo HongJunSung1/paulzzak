@@ -1,6 +1,6 @@
 // 서치박스 등록
 
-import React, { useRef, useState, useEffect}  from 'react'
+import React, { useMemo, useRef, useState, useEffect}  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -28,8 +28,12 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
+type FormSearchBoxRegProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
 
-const SearchBoxReg = ({strOpenUrl, openTabs}) => {
+const SearchBoxReg = ({strOpenUrl, openTabs}: FormSearchBoxRegProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -66,16 +70,18 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] =[];
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        };
+    }, []);
 
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "SearchBoxCD"   , header: "서치박스 코드"       , width: 100 },
         {name : "SearchBoxName" , header: "서치박스명"          , width: 200 , editor: 'text' , validation : [{require : true }]},
         {name : "TableName"     , header: "테이블명"            , width: 200 , editor: 'text'},
@@ -92,10 +98,10 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
         {name : "InfoCol3NameKr", header: "컬럼명 3"            , width: 120 , editor: 'text'},
         {name : "InfoCol3"      , header: "컬럼코드 3"          , width: 120 , editor: 'text'},
         {name : "InfoCol3Width" , header: "컬럼 3 넓이"         , width: 120 , editor: 'text'},
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -274,7 +280,7 @@ const SearchBoxReg = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgFormAdminSearchBox') === undefined) {
+        if (openTabs.find((item:any) => item.url === '/PEsgFormAdminSearchBox') === undefined) {
             setCondition1('');
             setGrid1Data([]);
             setGrid1Changes({DataSet : '', grid: []});

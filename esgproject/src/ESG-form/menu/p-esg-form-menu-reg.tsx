@@ -1,5 +1,5 @@
 // 메뉴 등록
-import React, { useRef, useState, useEffect }  from 'react'
+import React, { useMemo, useRef, useState, useEffect }  from 'react'
 import '../../global.d.ts';
 
 //공통 소스
@@ -24,7 +24,11 @@ let MMenuCD = 0
 let message : any     = [];
 let title   : string  = "";
 
-const Menu = ({strOpenUrl,openTabs}) => {
+type FormMenuProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+const Menu = ({strOpenUrl,openTabs}: FormMenuProps) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
     
@@ -144,25 +148,27 @@ const Menu = ({strOpenUrl,openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[]
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns : any[]=[];
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        }
+    }, []);
 
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
-
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "LMenuCD"  , header: "내부코드"   , width:  70, hidden: true },
         {name : "LMenuName", header: "대메뉴 이름", width: 250, editor: 'text'},
         {name : "LOrder"   , header: "순서"       , width: 40, editor: 'text'},
-    ];
+    ]), []);
     
-    const columns2 = [
+    const columns2 = useMemo(() => ([
         {name : "LMenuCD"  , header: "대분류코드"   , width:  70 },
         {name : "MMenuCD"  , header: "중분류코드"   , width:  70},
         {name : "MMenuName", header: "중메뉴 이름"  , width: 250, editor: 'text'},
         {name : "MOrder"   , header: "순서"        , width:   40, editor: 'text'},
-    ];
+    ]), []);
 
     const columns3 = [
         {name : "SMenuCD"  , header: "소분류코드"   , width:  70, hidden: true},
@@ -173,7 +179,7 @@ const Menu = ({strOpenUrl,openTabs}) => {
     ];
     
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch(clickID){
             // 신규
             case 0:
@@ -426,7 +432,7 @@ const Menu = ({strOpenUrl,openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgFormMenuReg') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PEsgFormMenuReg') === undefined) {
             setGrid1Data([]);
             setGrid2Data([]);
             setGrid3Data([]);

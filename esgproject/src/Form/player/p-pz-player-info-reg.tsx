@@ -1,6 +1,6 @@
 // 선수정보등록
 
-import React, { useEffect, useRef, useState }  from 'react'
+import React, { useMemo, useEffect, useRef, useState }  from 'react'
 
 
 //공통 소스
@@ -30,7 +30,12 @@ type condition = {
 let message : any    = [];
 let title   : string = "";
 
-const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
+type FormPlayerInfoRegProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+
+const PlayerInfoReg = ({strOpenUrl, openTabs}: FormPlayerInfoRegProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -69,15 +74,17 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
 
 
     // 헤더 정보
-    const complexColumns =[]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] = [];
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        }
+    }, []);
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "UserCD"            , header: "유저코드"    , width:  70},
         {name : "UserDetailCD"      , header: "유저상세코드", width:  70},
         {name : "UserName"          , header: "회원명"      , width: 150, disabled:false},
@@ -90,10 +97,10 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
         {name : "IsGuest"           , header: "게스트여부"  , width: 70 , renderer:  {type: 'checkbox' }},
         {name : "IsSleep"           , header: "휴면회원"    , width: 70 , renderer:  {type: 'checkbox' }},
         {name : "IsOut"             , header: "탈퇴여부"    , width: 70 , renderer:  {type: 'checkbox' }},
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -254,7 +261,7 @@ const PlayerInfoReg = ({strOpenUrl, openTabs}) => {
     }
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PPzPlayerInfoReg') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PPzPlayerInfoReg') === undefined) {
             setCondition1('');
             setCondition2('');
             setGrid1Data([]);

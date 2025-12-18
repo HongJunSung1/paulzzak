@@ -13,7 +13,7 @@ import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import TextBox from "../../ESG-common/TextBox/p-esg-common-TextBox.tsx";
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
-import Grid from '../../ESG-common/Grid/p-esg-common-grid-test.tsx';
+import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import DatePick from '../../ESG-common/DatePicker/p-esg-common-datePicker.tsx'
 import Button from "../../ESG-common/Button/p-esg-common-Button.tsx";

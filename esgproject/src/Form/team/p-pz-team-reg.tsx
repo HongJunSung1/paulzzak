@@ -1,5 +1,5 @@
 // 시즌 및 팀 등록
-import React, { useRef, useState, useEffect }  from 'react'
+import React, { useMemo, useRef, useState, useEffect }  from 'react'
 import '../../global.d.ts';
 
 //공통 소스
@@ -33,7 +33,12 @@ let TeamCD = 0
 let message : any     = [];
 let title   : string  = "";
 
-const TeamReg = ({strOpenUrl, openTabs}) =>{
+type FormTeamRegProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+
+const TeamReg = ({strOpenUrl, openTabs}: FormTeamRegProps) =>{
     // 로딩뷰
     const [loading,setLoading] = useState(false);
     
@@ -155,38 +160,40 @@ const TeamReg = ({strOpenUrl, openTabs}) =>{
      ]
 
     // 헤더 정보
-    const complexColumns = []
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] = [];
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        };
+    }, []);
 
     // 시트 컬럼 값
-    const columns1 = [
+    const columns1 = useMemo(() => ([
         {name : "SeasonCD"  , header: "내부코드"   , width:  70, hidden: false },
         {name : "DateFr"    , header: "시작일자"   , width: 120, renderer: {type: "datebox", options:{dateType:"day"}}},
         {name : "DateTo"    , header: "종료일자"   , width: 120, renderer: {type: "datebox", options:{dateType:"day"}}},
         {name : "SeasonName", header: "시즌명"     , width: 120, editor: 'text'},
-    ];
+    ]), []);
 
     // 시트 컬럼 값
-    const columns2 = [
+    const columns2 = useMemo(() => ([
         {name : "SeasonCD"  , header: "시즌코드"   , width:  70, hidden: false },
         {name : "TeamCD"    , header: "팀코드"     , width:  70, hidden: false },
         {name : "TeamName"  , header: "팀명"       , width: 250, editor: 'text'},
-    ];
+    ]), []);
 
     // 시트 컬럼 값
-    const columns3 = [
+    const columns3 = useMemo(() => ([
         {name : "TeamCD"    , header: "팀코드"     , width:  70, hidden: false },
         {name : "UserCD"    , header: "사용자코드" , width:  70, hidden: false},
         {name : "BackNumber", header: "등번호"     , width:  20, renderer : {type: 'number'}},
         {name : "UserName"  , header: "선수명"     , width: 100, renderer : {type: 'searchbox', options: {searchCode: 9, CodeColName :"UserCD", InfoCol1: "BackNumber"}}},
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch(clickID){
             // 신규
             case 0:
@@ -456,7 +463,7 @@ const TeamReg = ({strOpenUrl, openTabs}) =>{
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PPzTeamReg') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PPzTeamReg') === undefined) {
             setGrid1Data([]);
             setGrid2Data([]);
             setGrid3Data([]);

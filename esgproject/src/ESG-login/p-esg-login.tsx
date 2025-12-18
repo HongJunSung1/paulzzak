@@ -10,14 +10,18 @@ import MessageBoxYesNo from '../ESG-common/MessageBox/p-esg-common-MessageBoxYes
 import MessageBox from '../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 
 import { SP_Request } from '../hooks/sp-request.tsx';
-import SHA256 from 'crypto-js/sha256';
+import CryptoJS from 'crypto-js';
 import emailjs from '@emailjs/browser';
 
 // 메시지 박스
 let message : any     = [];
 let title   : string  = "";
 
-const LoginPage = ({strOpenUrl}) => {
+type FormLoginPageProps = {
+  strOpenUrl: any;
+};
+
+const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
 
     // 쿠키 삭제
     // cookie.remove('userInfo', {path : '/'});
@@ -70,19 +74,19 @@ const LoginPage = ({strOpenUrl}) => {
         }
     },[navigate])
 
-    const inputID = event => {
+    const inputID = (event: any) => {
         setUserID(event.target.value);
     }
 
-    const inputPW = event => {
+    const inputPW = (event: any) => {
         setUserPW(event.target.value);
     }
 
-    const inputPWCheck = event => {
+    const inputPWCheck = (event: any) => {
         setUserPWCheck(event.target.value);
     }
 
-    const inputOriginPW = event => {
+    const inputOriginPW = (event: any) => {
         setUserPWOrigin(event.target.value);
     }
 
@@ -90,13 +94,13 @@ const LoginPage = ({strOpenUrl}) => {
     // 로그인 SP 결과
     let result : any;
 
-    const activeEnter = (e) => {
+    const activeEnter = (e: any) => {
         if(e.key === "Enter") {
             loginCheck();
         }
     }
 
-    const activeChangeEnter = (e) => {
+    const activeChangeEnter = (e: any) => {
     if(e.key === "Enter") {
         passwordChange();
     }
@@ -121,8 +125,8 @@ const LoginPage = ({strOpenUrl}) => {
     // 로그인 SP 호출
     const goToMain = async () => {
 
-        const cryptoPW = SHA256(userPW).toString();
-        const checkPW = SHA256('1234').toString();
+        const cryptoPW = CryptoJS.SHA256(userPW).toString();
+        const checkPW = CryptoJS.SHA256('1234').toString();
 
         try {
             result = await SP_Request("S_Login_Check", [{userID, cryptoPW, checkPW, DataSet: 'DataSet'}]);
@@ -229,7 +233,7 @@ const LoginPage = ({strOpenUrl}) => {
         setErrMsg('');
         // 비밀번호 변경
         const newPW = Math.random().toString(36).substring(2, 11);
-        const cryptoPW = SHA256(newPW).toString();
+        const cryptoPW = CryptoJS.SHA256(newPW).toString();
         try {
             result = await SP_Request("S_Admin_Password_Init", [{userID, cryptoPW, DataSet: 'DataSet'}]);
             if(result){
@@ -267,8 +271,8 @@ const LoginPage = ({strOpenUrl}) => {
     }
 
     const passwordChange = async () => {
-        const cryptoPWOrigin = SHA256(userPWOrigin).toString();
-        const cryptoPW = SHA256(userPW).toString();
+        const cryptoPWOrigin = CryptoJS.SHA256(userPWOrigin).toString();
+        const cryptoPW = CryptoJS.SHA256(userPW).toString();
 
         if(userPW !== userPWCheck){
             setErrMsg("새 비밀번호가 일치하지 않습니다.");

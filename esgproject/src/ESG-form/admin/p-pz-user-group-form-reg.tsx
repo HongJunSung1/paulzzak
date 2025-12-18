@@ -1,6 +1,6 @@
 // 사용자그룹 등록
 
-import React, { useEffect, useRef, useState }  from 'react'
+import React, { useMemo, useEffect, useRef, useState }  from 'react'
 import '../../global.d.ts';
 
 //공통 소스
@@ -29,7 +29,12 @@ type condition = {
 let message : any    = [];
 let title   : string = "";
 
-const UserGroupReg = ({strOpenUrl, openTabs}) => {
+type FormUserGroupRegProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+
+const UserGroupReg = ({strOpenUrl, openTabs}: FormUserGroupRegProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -67,21 +72,23 @@ const UserGroupReg = ({strOpenUrl, openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] = [];
+        return {
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        }
+    }, []);
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "GroupCD"    , header: "그룹코드", width:  70, hidden: true},
         {name : "GroupName"  , header: "그룹명"  , width: 300, editor: 'text'},
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -247,7 +254,7 @@ const UserGroupReg = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PPzUserGroupFormReg') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PPzUserGroupFormReg') === undefined) {
             setCondition1('');
             setGrid1Data([]);
             setGrid1Changes({DataSet : '', grid: []});

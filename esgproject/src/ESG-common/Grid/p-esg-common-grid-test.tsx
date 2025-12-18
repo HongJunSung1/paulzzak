@@ -760,30 +760,30 @@ const ToastGrid = forwardRef<any, CustomGridProps>(
         }
       
         if (rType === "number") {
-          // ✅ 숫자 입력 가능하게 editor 보장
-          if (!next.editor) next.editor = 'text';
-                
           // ✅ 표시만 숫자 포맷 (데이터는 그대로)
           next.formatter = ({ value }: any) => {
             if (value === null || value === undefined) return '';
             const s = String(value).replace(/,/g, '').trim();
             if (s === '') return '';
             const n = Number(s);
-            if (Number.isNaN(n)) return '';   // ✅ NaN 표시 금지
+            if (Number.isNaN(n)) return '';
             return n.toLocaleString('ko-KR');
           };
         
-          // ✅ renderer 제거 (가장 중요)
+          // ✅ renderer 제거 (formatter로 표시)
           delete (next as any).renderer;
         
-          // (옵션) 오른쪽 정렬
+          // ✅ 오른쪽 정렬
           next.align = next.align ?? 'right';
-          
-          // ✅ editable:false면 editor 제거 + disabled 처리
-          if (next.editable === false || next.readOnly === true || next.disabled === true) {
-            delete (next as any).editor;      // editor가 있으면 편집 가능해지므로 제거
-            next.disabled = true;            // 그리드 셀 편집 자체를 막는 용도
+        
+          // ✅ 화면에서 편집 금지로 준 경우: editor만 제거 (색 안 바뀜)
+          if (next.editable === false || next.readOnly === true) {
+            delete (next as any).editor;
           }
+        
+          // ✅ 가장 중요: 공통에서 editor를 "강제로 추가하지 않는다"
+          // if (!next.editor) next.editor = 'text';  // ❌ 삭제
+        
           return next;
         }
       

@@ -1,5 +1,5 @@
 //선수별 기록 조회
-import React, { useEffect, useRef, useState }  from 'react'
+import React, { useMemo, useEffect, useRef, useState }  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -28,7 +28,12 @@ type condition = {
 let message : any    = [];
 let title   : string = "";
 
-const PlayerStatsQuery = ({strOpenUrl, openTabs}) => {
+type FormPlayerStatsQueryProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+
+const PlayerStatsQuery = ({strOpenUrl, openTabs}: FormPlayerStatsQueryProps) => {
     // 로딩뷰
     const [loading,setLoading] = useState(false);
 
@@ -63,66 +68,68 @@ const PlayerStatsQuery = ({strOpenUrl, openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[
-        {
-            header: '출전경기',
-            name: 'GameAttend',
-            childNames:['GameCount', 'GameRatio']
-        },
-        {
-            header: '2점',
-            name: 'TwoP',
-            childNames:['TwoPSuccess', 'TwoPAttempt', 'TwoPRatio']
-        },
-        {
-            header: '3점',
-            name: 'ThreeP',
-            childNames:['ThreePSuccess', 'ThreePAttempt', 'ThreePRatio']
-        },        
-        {
-            header: '자유투',
-            name: 'FT',
-            childNames:['FTSuccess', 'FTAttempt', 'FTRatio']
-        },        
-        {
-            header: '리바운드',
-            name: 'Rebounds',
-            childNames:['Rebound', 'AVGRebound']
-        },
-        {
-            header: '어시스트',
-            name: 'Assists',
-            childNames:['Assist', 'AVGAssist']
-        },
-        {
-            header: '스틸',
-            name: 'Steals',
-            childNames:['Steal', 'AVGSteal']
-        },
-        {
-            header: '블로킹',
-            name: 'Blocks',
-            childNames:['Block', 'AVGBlock']
-        },
-        {
-            header: '턴오버',
-            name: 'TurnOvers',
-            childNames:['TurnOver', 'AVGTurnOver']
-        },
-        {
-            header: '파울',
-            name: 'Fouls',
-            childNames:['Foul', 'AVGFoul']
-        }
-    ]
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] = [
+            {
+                header: '출전경기',
+                name: 'GameAttend',
+                childNames:['GameCount', 'GameRatio']
+            },
+            {
+                header: '2점',
+                name: 'TwoP',
+                childNames:['TwoPSuccess', 'TwoPAttempt', 'TwoPRatio']
+            },
+            {
+                header: '3점',
+                name: 'ThreeP',
+                childNames:['ThreePSuccess', 'ThreePAttempt', 'ThreePRatio']
+            },        
+            {
+                header: '자유투',
+                name: 'FT',
+                childNames:['FTSuccess', 'FTAttempt', 'FTRatio']
+            },        
+            {
+                header: '리바운드',
+                name: 'Rebounds',
+                childNames:['Rebound', 'AVGRebound']
+            },
+            {
+                header: '어시스트',
+                name: 'Assists',
+                childNames:['Assist', 'AVGAssist']
+            },
+            {
+                header: '스틸',
+                name: 'Steals',
+                childNames:['Steal', 'AVGSteal']
+            },
+            {
+                header: '블로킹',
+                name: 'Blocks',
+                childNames:['Block', 'AVGBlock']
+            },
+            {
+                header: '턴오버',
+                name: 'TurnOvers',
+                childNames:['TurnOver', 'AVGTurnOver']
+            },
+            {
+                header: '파울',
+                name: 'Fouls',
+                childNames:['Foul', 'AVGFoul']
+            }
+        ]
 
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        }
+    }, []);
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "UserCD"        , header: "내부코드"    , width:  70, hidden: true},
         {name : "UserName"      , header: "이름"        , width:  60},
         // renderer을 쓰면 정렬이 이상하게 될 수 있으니까 해보고 이상하게 renderer는 제외시키자
@@ -151,10 +158,10 @@ const PlayerStatsQuery = ({strOpenUrl, openTabs}) => {
         {name : "AVGTurnOver"   , header: "평균"        , width:  55, renderer: {type: "number"}, sortable: true},
         {name : "Foul"          , header: "개수"        , width:  55, renderer: {type: "number"}, sortable: true},
         {name : "AVGFoul"       , header: "평균"        , width:  55, renderer: {type: "number"}, sortable: true},
-     ]  
+     ]), []);
      
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -203,7 +210,7 @@ const PlayerStatsQuery = ({strOpenUrl, openTabs}) => {
     }
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PPzPlayerStatsQuery') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PPzPlayerStatsQuery') === undefined) {
             setSeasonCD(0);
             setUserName('');
             setGrid1Data([]);
@@ -218,7 +225,7 @@ const PlayerStatsQuery = ({strOpenUrl, openTabs}) => {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/>
                 <FixedArea name={"조회 조건"}>
                     <FixedWrap>
-                        <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"false"} onChange={(val) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
+                        <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"false"} onChange={(val: any) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
                         <TextBox   name={"회원명"}  value={UserName} onChange={setUserName} width={200}/>    
                     </FixedWrap>
                 </FixedArea>  

@@ -1,5 +1,5 @@
 //테이블 정보 등록
-import React, { useRef, useState, useEffect}  from 'react'
+import React, { useMemo, useRef, useState, useEffect}  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -36,8 +36,11 @@ let title   : string  = "";
 // 우클릭 조회 시 받는 내부코드 값
 let TableCD = 0
 let SendTableName = "";
-
-const TableReg = ({strOpenUrl, openTabs}) => {
+type FormTableRegProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
+const TableReg = ({strOpenUrl, openTabs}: FormTableRegProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -78,31 +81,33 @@ const TableReg = ({strOpenUrl, openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    
+    const headerOptions = useMemo(() =>{
+        const complexColumns: any[] =[];
+        return {
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        };
+    }, []);
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "TableCD"    , header: "테이블 코드"   , width:  70},
         {name : "TableName"  , header: "테이블명(영)"  , width: 200},
         {name : "TableNameKr", header: "테이블명(한)"  , width: 200, editor : 'text'},
-    ];
+    ]), []);
 
-    const columns2 = [
+    const columns2 = useMemo(() => ([
         {name : "TableCD"   , header: "테이블 코드"   , width:  70, hidden: true},
         {name : "ColCD"     , header: "컬럼 코드"     , width:  70},
         {name : "ColName"   , header: "컬럼명(영)"    , width: 200},
         {name : "ColNameKr" , header: "컬럼명(한)"    , width: 200, editor : 'text'},
         {name : "ColType"   , header: "컬럼 타입"     , width: 120},
         {name : "IsNullable", header: "NULL 허용 여부", width: 100, renderer: { type: 'checkbox' }, disabled : true}
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -299,7 +304,7 @@ const TableReg = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgFormAdminTable') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PEsgFormAdminTable') === undefined) {
             setCondition1('');
             setGrid1Data([]);
             setGrid2Data([]);

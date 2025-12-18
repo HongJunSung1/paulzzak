@@ -1,5 +1,5 @@
 // 경기기록조회
-import React, { useEffect, useRef, useState }  from 'react'
+import React, { useMemo, useEffect, useRef, useState }  from 'react'
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -33,8 +33,14 @@ let message : any    = [];
 let title   : string = "";
 
 
+type FormGameRecordSummaryProps = {
+  strOpenUrl: any;
+  setStrOpenUrl: any;
+  openTabs: any;
+  setJumpRowData: any;
+};
 
-const GameRecordSummary = ({ strOpenUrl, setStrOpenUrl, openTabs, setJumpRowData }) => {
+const GameRecordSummary = ({ strOpenUrl, setStrOpenUrl, openTabs, setJumpRowData }: FormGameRecordSummaryProps) => {
     
     //점프
     const { setMenuInfo } = useMenuInfo();
@@ -75,73 +81,74 @@ const GameRecordSummary = ({ strOpenUrl, setStrOpenUrl, openTabs, setJumpRowData
     ]
 
     // 헤더 정보
-    const complexColumns =[
-        {
-            header: '승/패',
-            name: 'mergeColumn1',
-            childNames: ['TeamAResult', 'TeamBResult']
-        },
-        {
-            header: '점수',
-            name: 'mergeColumn2',
-            childNames: ['TeamAScore', 'TeamBScore']
-        },
-        {
-            header: '2점',
-            name: 'mergeColumn3',
-            childNames: ['TeamA2P', 'TeamB2P']
-        },
-        {
-            header: '3점',
-            name: 'mergeColumn4',
-            childNames: ['TeamA3P', 'TeamB3P']
-        },
-        {
-            header: '자유투',
-            name: 'mergeColumn5',
-            childNames: ['TeamAFT', 'TeamBFT']
-        },
-        {
-            header: '리바운드',
-            name: 'mergeColumn6',
-            childNames: ['TeamARebound', 'TeamBRebound']
-        },
-        {
-            header: '어시스트',
-            name: 'mergeColumn7',
-            childNames: ['TeamAAssist', 'TeamBAssist']
-        },
-        {
-            header: '스틸',
-            name: 'mergeColumn8',
-            childNames: ['TeamASteal', 'TeamBSteal']
-        },
-        {
-            header: '블로킹',
-            name: 'mergeColumn9',
-            childNames: ['TeamABlock', 'TeamBBlock']
-        },
-        {
-            header: '턴오버',
-            name: 'mergeColumn10',
-            childNames: ['TeamATurnOver', 'TeamBTurnOver']
-        },
-        {
-            header: '파울',
-            name: 'mergeColumn11',
-            childNames: ['TeamAFoul', 'TeamBFoul']
-        },
-    ]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    const headerOptions = useMemo(() => {
+        const complexColumns : any[] =[
+            {
+                header: '승/패',
+                name: 'mergeColumn1',
+                childNames: ['TeamAResult', 'TeamBResult']
+            },
+            {
+                header: '점수',
+                name: 'mergeColumn2',
+                childNames: ['TeamAScore', 'TeamBScore']
+            },
+            {
+                header: '2점',
+                name: 'mergeColumn3',
+                childNames: ['TeamA2P', 'TeamB2P']
+            },
+            {
+                header: '3점',
+                name: 'mergeColumn4',
+                childNames: ['TeamA3P', 'TeamB3P']
+            },
+            {
+                header: '자유투',
+                name: 'mergeColumn5',
+                childNames: ['TeamAFT', 'TeamBFT']
+            },
+            {
+                header: '리바운드',
+                name: 'mergeColumn6',
+                childNames: ['TeamARebound', 'TeamBRebound']
+            },
+            {
+                header: '어시스트',
+                name: 'mergeColumn7',
+                childNames: ['TeamAAssist', 'TeamBAssist']
+            },
+            {
+                header: '스틸',
+                name: 'mergeColumn8',
+                childNames: ['TeamASteal', 'TeamBSteal']
+            },
+            {
+                header: '블로킹',
+                name: 'mergeColumn9',
+                childNames: ['TeamABlock', 'TeamBBlock']
+            },
+            {
+                header: '턴오버',
+                name: 'mergeColumn10',
+                childNames: ['TeamATurnOver', 'TeamBTurnOver']
+            },
+            {
+                header: '파울',
+                name: 'mergeColumn11',
+                childNames: ['TeamAFoul', 'TeamBFoul']
+            },
+        ]
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        };
+    }, []);
 
 
     
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "GameCD"            , header: "내부코드"   , width:  70, hidden: true},
         {name : "SeasonCD"          , header: "시즌코드"   , width:  70, hidden: true},
         {name : "GameDate"          , header: "경기날짜"   , width: 168, renderer: {type: "datebox", options:{dateType:"day"}}},
@@ -171,10 +178,10 @@ const GameRecordSummary = ({ strOpenUrl, setStrOpenUrl, openTabs, setJumpRowData
         {name : "TeamBTurnOver"     , header: "B팀"        , width:  50, disabled:false},
         {name : "TeamAFoul"         , header: "A팀"        , width:  50, disabled:false},
         {name : "TeamBFoul"         , header: "B팀"        , width:  50, disabled:false},
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID : any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -304,7 +311,7 @@ const GameRecordSummary = ({ strOpenUrl, setStrOpenUrl, openTabs, setJumpRowData
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PPzStatsGameRecordSummary') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PPzStatsGameRecordSummary') === undefined) {
             setDateFr('');
             setDateTo('');
             setGrid1Data([]);
@@ -325,7 +332,7 @@ const GameRecordSummary = ({ strOpenUrl, setStrOpenUrl, openTabs, setJumpRowData
                         <span style= {{marginTop:"3px", marginRight: "10px", zIndex:"99"}}>
                             <DatePick name={"종료일"}   value={DateTo}   onChange={setDateTo} width={200} type={"day"} isGrid={false}/>    
                         </span>
-                        <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"false"} onChange={(val) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
+                        <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"false"} onChange={(val: any) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>

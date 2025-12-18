@@ -10,7 +10,7 @@ import FixedWrap from "../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx";
 import DynamicArea from "../../ESG-common/DynamicArea/p-esg-common-DynamicArea.tsx";
 import Splitter from "../../ESG-common/Splitter/p-esg-common-Splitter.tsx";
 import Loading from '../../ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
-import Grid from '../../ESG-common/Grid/p-esg-common-grid-test.tsx';
+import Grid from '../../ESG-common/Grid/p-esg-common-grid.tsx';
 import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import MessageBox from '../../ESG-common/MessageBox/p-esg-common-MessageBox.tsx';
 import { SP_Request } from '../../hooks/sp-request.tsx';
@@ -94,14 +94,14 @@ const TeamPointForm = ({strOpenUrl, openTabs}: FormTeamPointProps)=> {
     const columns2 = useMemo(() => ([
         {name : "UserCD"        , header: "내부코드"    , width:  70, hidden: true},
         {name : "UserName"      , header: "이름"        , width:  60},
-        {name : "RankingPoint"  , header: "랭킹점수"    , width:  80, sortable: true},
-        {name : "AttendRatio"   , header: "참석율(%)"   , width: 100, sortable: true},
-        {name : "Score"         , header: "득점"        , width:  80, sortable: true},
-        {name : "Rebound"       , header: "리바운드"    , width:  80, sortable: true},
-        {name : "Assist"        , header: "어시스트"    , width:  80, sortable: true},
-        {name : "Steal"         , header: "스틸"        , width:  80, sortable: true},
-        {name : "Block"         , header: "블로킹"      , width:  80, sortable: true},
-        {name : "TurnOver"      , header: "턴오버"      , width:  80, hidden: true, sortable: true},
+        {name : "RankingPoint"  , header: "랭킹점수"    , width:  80, renderer : {type: 'number'}, sortable: true},
+        {name : "AttendRatio"   , header: "참석율(%)"   , width: 100, renderer : {type: 'number'}, sortable: true},
+        {name : "Score"         , header: "득점"        , width:  80, renderer : {type: 'number'}, sortable: true},
+        {name : "Rebound"       , header: "리바운드"    , width:  80, renderer : {type: 'number'}, sortable: true},
+        {name : "Assist"        , header: "어시스트"    , width:  80, renderer : {type: 'number'}, sortable: true},
+        {name : "Steal"         , header: "스틸"        , width:  80, renderer : {type: 'number'}, sortable: true},
+        {name : "Block"         , header: "블로킹"      , width:  80, renderer : {type: 'number'}, sortable: true},
+        {name : "TurnOver"      , header: "턴오버"      , width:  80, renderer : {type: 'number'}, sortable: true, hidden: true},
     ]), []);
 
 

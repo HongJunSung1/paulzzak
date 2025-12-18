@@ -1,4 +1,4 @@
-import React,{useState, useRef, useEffect} from 'react'
+import React,{useMemo, useState, useRef, useEffect} from 'react'
 import Chart from '../../ESG-common/Chart/p-pz-common-chart.tsx';
 import styles from './p-esg-form-main.module.css';
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -23,8 +23,12 @@ type condition = {
     DataSet    : string;
 }  
 
+type FormMainProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
 
-const Main = ({strOpenUrl, openTabs}) => {
+const Main = ({strOpenUrl, openTabs}: FormMainProps) => {
   // 로딩뷰
   const [loading,setLoading] = useState(false);
 
@@ -269,7 +273,7 @@ const makeAttendanceChart = (attend: number, absent: number) => {
 };
 
 //회원동향(회원 수, 참석자 수, 불참자 수)
-const makeMemberLineChart = (rawData): {
+const makeMemberLineChart = (rawData: any): {
   series: { name: string; data: number[] }[];
   options: ApexOptions;
 } | null => {
@@ -342,7 +346,7 @@ const makeMemberLineChart = (rawData): {
 };
 
 // 개인별 득점, 어시스트 추이 차트
-const makeOffenseLineChart = (rawData): {
+const makeOffenseLineChart = (rawData: any): {
   series: { name: string; data: number[] }[];
   options: ApexOptions;
 } | null => {
@@ -413,7 +417,7 @@ const makeOffenseLineChart = (rawData): {
 };
 
 // 개인별 리바운드, 스틸 추이 차트
-const makeDefenseLineChart = (rawData): {
+const makeDefenseLineChart = (rawData: any): {
   series: { name: string; data: number[] }[];
   options: ApexOptions;
 } | null => {
@@ -502,12 +506,14 @@ const makeDefenseLineChart = (rawData): {
     {id: 0, title:"조회", image:"query", spName:""}
   ]
   // 헤더 정보
-  const complexColumns =[]
-
-  const headerOptions = {
+  
+  const headerOptions = useMemo(() => {
+    const complexColumns: any[] = [];
+    return{
       height: 60,
       complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-  };
+    }
+  }, []);
 
   // 시트 컬럼 값
   const columns1 = [
@@ -524,7 +530,7 @@ const makeDefenseLineChart = (rawData): {
     {name : "TurnOver"  , header: "턴오버"     , width:  80, sortable: true},
   ];
 
-const toolbarEvent = async (clickID) =>{
+const toolbarEvent = async (clickID: any) =>{
   switch(clickID){
     case 0: 
       // 조회 조건 담기
@@ -538,7 +544,7 @@ const toolbarEvent = async (clickID) =>{
 }
 
 
-    const MainQuery = (conditionAr) => {
+    const MainQuery = (conditionAr: any) => {
       setTimeout(async () => {
         // 로딩 뷰 보이기
         setLoading(true);        
@@ -657,7 +663,7 @@ const toolbarEvent = async (clickID) =>{
           <Toolbar items={toolbar} clickID={toolbarEvent}/> 
           <FixedArea name={"조회 조건"}>
             <FixedWrap>
-              <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"false"} onChange={(val) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
+              <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"false"} onChange={(val: any) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
             </FixedWrap>
           </FixedArea>  
           <div className={styles.mainDashboard}>

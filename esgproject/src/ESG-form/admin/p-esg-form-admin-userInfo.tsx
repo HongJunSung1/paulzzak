@@ -1,8 +1,9 @@
 // 계정 관리
 
-import React, { useRef, useState, useEffect}  from 'react'
+import React, { useMemo, useRef, useState, useEffect}  from 'react'
 import '../../global.d.ts';
-import SHA256 from 'crypto-js/sha256';
+import CryptoJS from 'crypto-js';
+
 
 //공통 소스
 import Toolbar from "../../ESG-common/Toolbar/p-esg-common-Toolbar.tsx";
@@ -33,8 +34,12 @@ type condition = {
 let message : any     = [];
 let title   : string  = "";
 
+type FormUserInfoProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
 
-const UserInfo = ({strOpenUrl, openTabs}) => {
+const UserInfo = ({strOpenUrl, openTabs}: FormUserInfoProps) => {
 
     // 로딩뷰
     const [loading,setLoading] = useState(false);
@@ -88,7 +93,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
         setLoading(true);
         try {
             // SP 결과 값 담기
-            const initPW = SHA256('1234').toString();
+            const initPW = CryptoJS.SHA256('1234').toString();
             checkedData[0].grid[0].initPW = initPW;
 
             const result = await SP_Request("S_Admin_Password_Init", checkedData);
@@ -126,15 +131,17 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
      ]
 
     // 헤더 정보
-    const complexColumns =[]
-
-    const headerOptions = {
-        height: 60,
-        complexColumns: complexColumns.length > 0 ? complexColumns : undefined
-    };
+    
+    const headerOptions = useMemo(() => {
+        const complexColumns: any[] =[];
+        return{
+            height: 60,
+            complexColumns: complexColumns.length > 0 ? complexColumns : undefined
+        }
+    }, []);
 
      // 시트 컬럼 값
-     const columns1 = [
+     const columns1 = useMemo(() => ([
         {name : "UserCD"         , header: "유저코드"   , width:  70},
         {name : "UserID"         , header: "아이디"     , width: 100, editor: 'text'},
         {name : "UserName"       , header: "이름"       , width: 100, editor: 'text'},
@@ -142,10 +149,10 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
         {name : "GroupCD"        , header: "그룹코드"   , width:  70, hidden: true},
         {name : "GroupName"      , header: "사용자권한" , width: 170, renderer: {type: 'searchbox', options: {searchCode: 4, CodeColName :"GroupCD"}}},
         {name : "RegDateTime"    , header: "등록일"  , width: 160},
-    ];
+    ]), []);
 
     // 툴바 이벤트
-    const toolbarEvent = async (clickID) =>{
+    const toolbarEvent = async (clickID: any) =>{
         switch (clickID){
             // 신규
             case 0 :
@@ -208,7 +215,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
                 // 신규 등록일 경우 비밀번호 지정해서 저장
                 for(let i = 0; i< combinedData[0].grid.length; i++){
                     if(combinedData[0].grid[i].UserCD == null){
-                        const cryptoPW = SHA256('1234').toString(); // 초기 비밀번호 설정
+                        const cryptoPW = CryptoJS.SHA256('1234').toString(); // 초기 비밀번호 설정
                         combinedData[0].grid[i].UserPW = cryptoPW
                     }
                 }
@@ -322,7 +329,7 @@ const UserInfo = ({strOpenUrl, openTabs}) => {
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {
-        if (openTabs.find(item => item.url === '/PEsgFormAdminUserInfo') === undefined) {
+        if (openTabs.find((item: any) => item.url === '/PEsgFormAdminUserInfo') === undefined) {
             setCondition1('');
             setCondition2('');
             setCondition3('');
