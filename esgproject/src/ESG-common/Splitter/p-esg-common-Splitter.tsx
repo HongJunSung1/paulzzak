@@ -17,11 +17,6 @@ const Split = ({children, SplitType, FirstSize, SecondSize}: FormSplitProps) => 
     const firstContent = contentsArray[0]; //스플리터 안 첫번째 요소
     const secondContent = contentsArray[1]; // 스플리터 안 두번째 요소
 
-    const notifyResize = () => {
-      // ✅ Grid 공통에서 이 이벤트를 받아 refreshLayout 하게 만들기
-      window.dispatchEvent(new Event('splitter:resize'));
-    };    
-
     return (
     <Splitter style={{height: "100%", width: "100%"}} 
               className="mb-5 com-splitter" 
