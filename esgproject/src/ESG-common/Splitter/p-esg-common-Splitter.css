@@ -1,0 +1,20 @@
+.com-splitter {
+  height: 100%;
+  width: 100%;
+}
+/* 가운데 정렬이 Grid에 방해되면 이 줄이 특히 중요 */
+.com-splitter-panel {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.com-panel-fill {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

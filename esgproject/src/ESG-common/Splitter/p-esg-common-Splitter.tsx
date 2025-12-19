@@ -4,19 +4,37 @@ import { Splitter, SplitterPanel } from 'primereact/splitter';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import './p-esg-common-Splitter.css';
 
-const Split = ({children, SplitType, FirstSize, SecondSize}) => {
+type FormSplitProps = {
+  children: any;
+  SplitType: any;
+  FirstSize: any;
+  SecondSize: any;
+};
+
+const Split = ({children, SplitType, FirstSize, SecondSize}: FormSplitProps) => {
     const contentsArray = React.Children.toArray(children);
 
     const firstContent = contentsArray[0]; //스플리터 안 첫번째 요소
     const secondContent = contentsArray[1]; // 스플리터 안 두번째 요소
 
+    const notifyResize = () => {
+      // ✅ Grid 공통에서 이 이벤트를 받아 refreshLayout 하게 만들기
+      window.dispatchEvent(new Event('splitter:resize'));
+    };    
+
     return (
-    <Splitter style={{height: "100%", width: "100%"}} className="mb-5" layout={SplitType} >
-        <SplitterPanel className="flex align-items-center justify-content-center" size={FirstSize}>
-            {firstContent}
+    <Splitter style={{height: "100%", width: "100%"}} 
+              className="mb-5 com-splitter" 
+              layout={SplitType} 
+              onResizeEnd={() => window.dispatchEvent(new Event('resize'))} // Grid가 resize를 감지하도록 트리거
+    > 
+        {/* <SplitterPanel className="flex align-items-center justify-content-center" size={FirstSize}> */}
+        <SplitterPanel className="com-splitter-panel" size={FirstSize}>
+            <div className="com-panel-fill">{firstContent}</div>
         </SplitterPanel>
-        <SplitterPanel className="flex align-items-center justify-content-center" size={SecondSize}>
-            {secondContent}
+        {/* <SplitterPanel className="flex align-items-center justify-content-center" size={SecondSize}> */}
+        <SplitterPanel className="com-splitter-panel" size={SecondSize}>
+            <div className="com-panel-fill">{secondContent}</div>
         </SplitterPanel>
     </Splitter>
     )
