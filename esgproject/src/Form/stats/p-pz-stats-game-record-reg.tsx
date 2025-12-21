@@ -74,6 +74,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
 
     const [resetTrigger, setResetTrigger] = useState(false); //서치박스 초기화하기
     const [calcOverall, setCalcOverall] = useState(false); // Overall 자동 계산
+
     // 조회 시 받는 데이터 값
     const [grid1Data, setGrid1Data] = useState([]);
     const [grid2Data, setGrid2Data] = useState([]);
@@ -154,6 +155,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
                                 setTeamAName(result[3][0].TeamAName);
                                 setTeamBName(result[3][0].TeamBName);
                             }
+                            setCalcOverall(true); // Overall 데이터 처리를 위한 true 선언
                         }else{
                             // 결과값이 없을 경우 처리 로직
                             // 조회 결과 초기화
@@ -186,7 +188,22 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
         }
       }, [jumpRowData]);
 
-
+      // 데이터 점프 후에 실행하는 로직
+      useEffect(() => {
+        if (!calcOverall) return;
+      
+        const inst1 = grid1Ref.current?.getInstance?.();
+        const inst2 = grid2Ref.current?.getInstance?.();
+        if (!inst1 || !inst2) return; // 아직 Grid mount 전
+      
+        // ✅ 다음 페인트 이후로 넘겨서 Grid가 resetData/render 마친 뒤 계산
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            clickScoreCalc();
+            setCalcOverall(false);
+          });
+        });
+      }, [calcOverall, grid1Data, grid2Data]);
 
 
     // xml로 저장하기 적합한 텍스트로 바꿔주기
@@ -328,8 +345,62 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
         });
       };
 
-
+    // 저장로직에서 Overall 합산 자동으로 진행해주는 함수
+    const runScoreCalcBeforeSave = async () => {
+      // 1) Overall 합산(그리드 -> input)
+      updateTeamSummaryFromGrid();
     
+      // 2) Running Score -> 그리드 Score setValue()
+      recalcScoresFromRunning();
+    
+      // 3) setValue 반영 타이밍 보정 (가장 중요)
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => resolve());
+        });
+      });
+    
+      // 4) 팀 점수 갱신(그리드 Score 반영 후)
+      updateTeamSummary();
+    };
+
+    const sanitizeNumericForXml = (rows: any[]) => {
+        const numericFields = [
+            "Score",
+            "_2PSuccess",
+            "_2PAttempt",
+            "_3PSuccess",
+            "_3PAttempt",
+            "FTSuccess",
+            "FTAttempt",
+            "Rebound",
+            "Assist",
+            "Steal",
+            "Block",
+            "TurnOver",
+            "Foul",
+        ];
+
+        return (Array.isArray(rows) ? rows : []).map((row) => {
+            const r = { ...row };
+            numericFields.forEach((k) => {
+            const v = r[k];
+            if (v === null || v === undefined) r[k] = "0";
+            else if (typeof v === "string" && v.trim() === "") r[k] = "0";
+            else if (Number.isNaN(Number(String(v).replace(/,/g, "")))) r[k] = "0";
+            else r[k] = String(v).replace(/,/g, "");
+            });
+            return r;
+        });
+    };
+
+    const getGridRows = (checked: any) => {
+    if (!checked) return [];
+    if (Array.isArray(checked)) return checked;
+    if (Array.isArray(checked.grid)) return checked.grid;
+    return [];
+    };
+
 
     const toolbar = [  
         {id: 0, title:"신규"  , image:"new"  , spName:""}
@@ -543,8 +614,10 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
 
                 // 데이터 저장
                 combinedData.push(saveConditionAr);
-                combinedData.push(grid1Changes)
-                combinedData.push(grid2Changes)
+                combinedData.push(grid1Changes);
+                combinedData.push(grid2Changes);
+                await runScoreCalcBeforeSave(); // Overall 데이터 다시 한 번 계산(혹시 점수계산 버튼 안눌렀을 때 대비해서 한 번 더 자동 계산 진행)
+
 
                 // ✅ 일반 테이블 데이터 추가
                 // 1. 요약테이블
@@ -649,10 +722,19 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
                     DataSet  : 'ConditionSet1'
                 })
 
-                checkedData.push(cutConditionAr);
-                checkedData.push(grid1Ref.current.getCheckedRows());
-                checkedData.push(grid2Ref.current.getCheckedRows());
+                // 데이터를 입력하지 않은 것에 숫자 형태는 0으로 데이터 만들어서 삭제 시켜주기
+                const rawA = grid1Ref.current.getCheckedRows();
+                const rawB = grid2Ref.current.getCheckedRows();
 
+                const teamARows = sanitizeNumericForXml(getGridRows(rawA));
+                const teamBRows = sanitizeNumericForXml(getGridRows(rawB));
+
+                // checkedData.push(cutConditionAr);
+                // checkedData.push(grid1Ref.current.getCheckedRows());
+                // checkedData.push(grid2Ref.current.getCheckedRows());
+                checkedData.push(cutConditionAr);
+                checkedData.push({ DataSet: "DataSet1", grid: teamARows });
+                checkedData.push({ DataSet: "DataSet2", grid: teamBRows });
                 setLoading(true);
                 try {
                     // SP 결과 값 담기
@@ -1045,19 +1127,61 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
 
     // 일반 테이블 초기화
     const resetGeneralTable = () => {
-            // ✅ OVERALL 테이블 초기화
-            const summaryInputs = document.querySelectorAll<HTMLInputElement>('.TeamSummaryTable input');
-            summaryInputs.forEach(input => input.value = '');
+            // // ✅ OVERALL 테이블 초기화
+            // const summaryInputs = document.querySelectorAll<HTMLInputElement>('.TeamSummaryTable input');
+            // summaryInputs.forEach(input => input.value = '');
 
-            const teamAScore = document.getElementById('score-team-a');
-            const teamBScore = document.getElementById('score-team-b');
-            if (teamAScore) teamAScore.textContent = '0';
-            if (teamBScore) teamBScore.textContent = '0';
+            // const teamAScore = document.getElementById('score-team-a');
+            // const teamBScore = document.getElementById('score-team-b');
+            // if (teamAScore) teamAScore.textContent = '0';
+            // if (teamBScore) teamBScore.textContent = '0';
 
-            // ✅ Running Score 초기화 (data-role 기반 선택)
-            const runningInputs = document.querySelectorAll<HTMLInputElement>('input[data-role="running-input"]');
-            runningInputs.forEach(input => input.value = '');
+            // // ✅ Running Score 초기화 (data-role 기반 선택)
+            // const runningInputs = document.querySelectorAll<HTMLInputElement>('input[data-role="running-input"]');
+            // runningInputs.forEach(input => input.value = '');
+        
+        // Overall input 전부 비우기
+        document
+            .querySelectorAll<HTMLInputElement>('.TeamSummaryTable input')
+            .forEach((input) => (input.value = ''));
+
+        resetOverall();
+
+        // Running score input 전부 비우기
+        document
+            .querySelectorAll<HTMLInputElement>('input[data-role="running-input"]')
+            .forEach((input) => (input.value = ''));
     }    
+
+    const resetOverall = () => {
+        const fields = [
+            "_2PSuccess",
+            "_2PAttempt",
+            "_3PSuccess",
+            "_3PAttempt",
+            "FTSuccess",
+            "FTAttempt",
+            "Rebound",
+            "Assist",
+            "Steal",
+            "Block",
+            "TurnOver",
+            "Foul",
+        ];
+
+        (["A", "B"] as const).forEach((team) => {
+            fields.forEach((key) => {
+            const el = document.getElementById(`${key}-${team}`) as HTMLInputElement | null;
+            if (el) el.value = "";
+            });
+        });
+
+        // 득점(텍스트)
+        const a = document.getElementById("score-team-a");
+        const b = document.getElementById("score-team-b");
+        if (a) a.textContent = "0";
+        if (b) b.textContent = "0";
+    };  
 
     // 탭에서 화면이 사라졌을 경우 화면 값 초기화
     useEffect(() => {

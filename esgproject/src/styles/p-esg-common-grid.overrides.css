@@ -1,0 +1,11 @@
+/* 그리드 공통 css가 먼저 먹으면 여기다가 작성 */
+
+/* 체크박스가 그리드에서 자꾸 위쪽으로 보여서 수정한 항목 */
+/* ===================================================== */
+.tui-grid-row-header-checkbox {
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+/* ===================================================== */

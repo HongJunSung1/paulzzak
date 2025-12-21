@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import '../../global.d.ts';
 
-import 'tui-grid/dist/tui-grid.css';
+// import 'tui-grid/dist/tui-grid.css'; 이건 전역(index.js)로 이동
 import 'tui-date-picker/dist/tui-date-picker.css';
 import Grid from '@toast-ui/react-grid';
 import SearchBox from '../SearchBox/p-esg-common-SearchBox.tsx';
@@ -16,6 +16,7 @@ import DatePick from '../DatePicker/p-esg-common-datePicker.tsx';
 import { createRoot } from 'react-dom/client';
 // import 'tui-pagination/dist/tui-pagination.css';
 import styles from './p-esg-common-grid.module.css';
+// import '../../App.css'; // App 전체에 적용될 내용을 추가
 
 type CustomGridProps = {
   title: string;
@@ -287,7 +288,9 @@ const ToastGrid = forwardRef<any, CustomGridProps>(
         el.style.display = 'block';
         el.style.margin = 'auto';
         el.style.position = 'relative';
-        el.style.top = '50%';
+        // el.style.top = '50%';
+        el.style.display = 'block';
+        el.style.margin = '0 auto';
         el.tabIndex = -1;
 
         this.el = el;

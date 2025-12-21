@@ -86,6 +86,8 @@ input:focus {outline:none;}
   padding: 4px;
   height: calc((100vh - 120px) / 42); /* 헤더 + 마진 고려, 42는 40행 + 2행(header) */
   overflow: hidden;
+  font-size: 12px;
+  white-space: pre-wrap !important;
 }
 
 
@@ -104,6 +106,8 @@ input:focus {outline:none;}
   .TeamSummaryTable th,
   .TeamSummaryTable td {
     border: 1px solid rgb(226, 213, 217);
+    font-size: 12px;
+    white-space: pre-wrap !important;
   }
 
   .TeamSummaryTable thead{

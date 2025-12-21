@@ -106,14 +106,19 @@
 }
 
 
-tr {
+/* tr {
     font-size: 12px;
     white-space: pre-wrap !important;
+} */
+
+/* ❌ 전역 tr 제거하고 아래로 교체 */
+.tui-grid-container td,
+.tui-grid-container th {
+  font-size: 12px;
 }
 
+/* 줄바꿈이 필요하면 'tr' 말고 'cell-content' 쪽으로 */
+.tui-grid-container .tui-grid-cell-content {
+  white-space: pre-wrap; /* 정말 필요할 때만 */
+}
 
-/* 그리드 정렬 화살표 위치랑 크기 변경 */
-/* :global(.tui-grid-btn-sorting) {
-  display: none !important;
-  
-} */
