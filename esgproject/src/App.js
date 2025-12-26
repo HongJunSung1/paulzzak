@@ -5,6 +5,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 
 // 공통 영역
 import SideBar from './ESG-common/SideBar/p-esg-common-SideBar.tsx';
+import SideBarHorizontal from './ESG-common/SideBarHorizontal/p-common-SideBarHorizontal.tsx';
 import Navbar from './ESG-common/NavBar/p-esg-common-NavBar.tsx';
 import Loading from './ESG-common/LoadingBar/p-esg-common-LoadingBar.tsx';
 import Tab     from './ESG-common/Tab/p-esg-common-Tab.tsx';
@@ -104,6 +105,18 @@ function App() {
     handleComplete();
   }, [strOpenUrl]);
 
+  // SideBar 가로형, 세로형 제어
+  const COMPACT_MAX = 1366;
+
+  const [isCompact, setIsCompact] = useState(window.innerWidth <= COMPACT_MAX);
+
+  useEffect(() => {
+    const onResize = () => setIsCompact(window.innerWidth <= COMPACT_MAX);
+    window.addEventListener('resize', onResize);
+    onResize();
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
 
   return (      
     <div className="App" style={{backgroundColor:"#faf9f8"}}>
@@ -116,8 +129,9 @@ function App() {
           <>
             <MenuInfoProvider>
             <Navbar strOpenUrl= {setStrOpenUrl}/>
+            {!isLoginPage && isCompact && <SideBarHorizontal strOpenUrl={setStrOpenUrl} />}
             <Container>
-                <SideBar strOpenUrl={setStrOpenUrl}/>  
+                {!isCompact && <SideBar strOpenUrl={setStrOpenUrl} />}
                 <DataContainer>
                 <Loading loading={isLoading}/>
                   <Tab strOpenUrl={setStrOpenUrl} openTabs={setOpenTabs}/>

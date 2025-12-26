@@ -8,8 +8,13 @@ import styles from './p-esg-common-SideBarItem.module.css';
 
 import SideBarImage from '../../assets/image/menu-bar.png';
 
+type SideBarProps = {
+  items: any;
+  strOpenUrl: any;
+};
 
-const SideBar = ({ items, strOpenUrl}) => {
+
+const SideBar = ({items, strOpenUrl}: SideBarProps) => {
 
   const [menuData, setMenuData] = useState<any>([]);
   const [TotMenuData, setTotMenuData] = useState<any>([]);
@@ -28,13 +33,13 @@ const SideBar = ({ items, strOpenUrl}) => {
     
     if(data){
       setTotMenuData(data);
-      setSelectedMenu(data.find(item => item.id === '1').LMenuName);
+      setSelectedMenu(data.find((item : any) => item.id === '1').LMenuName);
     }
   }, []);
 
    useEffect(() => {
     if (selectedMenu) {
-      const filteredData = TotMenuData.filter(item => item.LMenuName === selectedMenu);
+      const filteredData = TotMenuData.filter((item : any) => item.LMenuName === selectedMenu);
       setMenuData(filteredData);
     }
   }, [selectedMenu, TotMenuData]);
@@ -53,15 +58,15 @@ const SideBar = ({ items, strOpenUrl}) => {
     };
   }, [menuRef]);
 
-  const handleUrlChange = (url) => {
+  const handleUrlChange = (url : any) => {
     strOpenUrl('/' + url);
   };
 
 
   if(menuData !== undefined){
-    const nest = (menuData, menuId = "ROOT", link = 'pmenuId') =>
-      menuData.filter(item => item[link] === menuId)
-        .map(item => ({ ...item, childrens: nest(menuData, item.menuId)}));
+    const nest = (menuData : any, menuId = "ROOT", link = 'pmenuId') =>
+      menuData.filter((item : any) => item[link] === menuId)
+        .map((item : any) => ({ ...item, childrens: nest(menuData, item.menuId)}));
     const tree = nest(menuData);
 
     const TopMenuOpen = async () => {
@@ -81,7 +86,7 @@ const SideBar = ({ items, strOpenUrl}) => {
           <div className = {styles.SideBarName}>{selectedMenu}</div>
           <img className={styles.sideBarImage} src={SideBarImage} alt={"sidebarImage"}></img>
         </div>
-        {tree.map((subItem, index) =>
+        {tree.map((subItem : any, index : any) =>
           <SideBarItem item={subItem} key={index} strOpenUrl={handleUrlChange}/>
         )}
       </SbContainer>

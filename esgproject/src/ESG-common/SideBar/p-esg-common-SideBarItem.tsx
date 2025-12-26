@@ -5,10 +5,13 @@ import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 import {SideBarSub} from './p-esg-common-sideBarItem.styles.tsx';
 import { useMenuInfo } from '../../hooks/use-menu-info.tsx';
 
+type SideBarItemProps = {
+  item: any;
+  strOpenUrl: any;
+};
 
 
-
-const SideBarItem = ({ item, strOpenUrl}) => {
+const SideBarItem = ({ item, strOpenUrl}: SideBarItemProps) => {
   // 클릭 할 때마다 화살표 위아래 모양 바꾸기
   const [collapsed, setCollapsed] = useState(false);
   const icon = collapsed ? <HiChevronUp /> : <HiChevronDown />;
@@ -49,7 +52,7 @@ const SideBarItem = ({ item, strOpenUrl}) => {
         </div>
         <div style={{overflow:"hidden", marginBottom: collapsed ? "15px" : "0px"}}>
         <SideBarSub isopen={collapsed}>
-          {item.childrens.map((child) => (
+          {item.childrens.map((child : any) => (
             <SideBarItem key={child.id} item={child} strOpenUrl={strOpenUrl}/>
           ))}
         </SideBarSub>

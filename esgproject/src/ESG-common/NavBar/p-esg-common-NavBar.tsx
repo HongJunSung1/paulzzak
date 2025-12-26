@@ -34,8 +34,12 @@ let displayUrl : string = "";
   
 // const data = cookie.load('menuList') || [];
 
+type NavbarProps = {
+  strOpenUrl: any;
+  isDataChanged: any;
+};
 
-const Navbar = ({strOpenUrl, isDataChanged}) => {
+const Navbar = ({strOpenUrl, isDataChanged} : NavbarProps) => {
 
     const sessionStr = sessionStorage.getItem('menuList');
     let data : any;
@@ -119,7 +123,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }, [navigate, userInfo]); 
 
     const goMain = () =>{
-        const filterData = data.filter((item => item.menuId === 'main'));
+        const filterData = data.filter(((item : any) => item.menuId === 'main'));
         setTimeout(()=>{
             setMenuInfo(filterData[0]);
             strOpenUrl("/main");
@@ -240,7 +244,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     //     setAlarmList(result);
     // }
 
-    const searchHandler = async (e) =>{
+    const searchHandler = async (e : any) =>{
         setSearchText(e.target.value);  
         if(searchText !== "" && e.currentTarget.value.trim() !== ""){
             const result = await SP_Request("S_Form_Search_Query",[{ FormName : e.currentTarget.value, DataSet : "DataSet1"}]);
@@ -272,17 +276,17 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
       }, [searchRef]);
 
     
-    const handleSearch = (formUrl) => {
+    const handleSearch = (formUrl : any) => {
         displayUrl = formUrl;
         clickSearch(formUrl);
     }
 
-    const clickSearch = (formUrl) => {
+    const clickSearch = (formUrl : any) => {
 
         setSearchText('');
         setIsOpen(false);
         
-        const filterData = data.filter((item => item.menuId === formUrl));
+        const filterData = data.filter(((item : any) => item.menuId === formUrl));
         
         setTimeout(()=>{
             setMenuInfo(filterData[0]);
@@ -381,12 +385,12 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
     
     // 유저 정보 : 현재 비밀번호
-    const userPasswordChange = (e) => {
+    const userPasswordChange = (e : any) => {
         setUserPassword(e.target.value);
     }
 
     // 유저 정보 : 핸드폰 번호
-    const userPhoneNumberChange = (e) => {
+    const userPhoneNumberChange = (e : any) => {
         setUserPhoneNumber(e.target.value);
     }
 
@@ -443,17 +447,17 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
     }
 
     // 비밀번호 관리 : 현재 비밀번호
-    const currentPasswordChange = (e) => {
+    const currentPasswordChange = (e : any) => {
         setCurrentPassword(e.target.value);
     }
 
     // 비밀번호 관리 : 새 비밀번호
-    const newPasswordChange = (e) => {
+    const newPasswordChange = (e : any) => {
         setNewPassword(e.target.value);
     }
 
     // 비밀번호 관리 : 새 비밀번호 확인
-    const newPasswordChangeCheck = (e) => {
+    const newPasswordChangeCheck = (e : any) => {
         setNewPasswordCheck(e.target.value);
     }
     
@@ -472,7 +476,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                     <div className = {styles.search}>
                         <input type="text" className={styles.SearchInput} onChange={searchHandler} value={searchText}></input>
                         {isOpen && <div className = {styles.SearchWrap} ref={searchRef}>
-                                {resultData.map((Item, index) => (
+                                {resultData.map((Item : any, index : any) => (
                                     // <div className={styles.SearchItem} key={index} onClick={() => clickSearch(Item.FormUrl)}>{Item.FormName}</div>
                                     <div className={styles.SearchItem} key={index} onClick={() => handleSearch(Item.FormUrl)}>{Item.FormName}</div>
                                 ))}
@@ -491,7 +495,7 @@ const Navbar = ({strOpenUrl, isDataChanged}) => {
                                 <div className={styles.alarmText}>알림</div>
                                 {/* <div className={styles.alarmAllCheck}>전체 지우기</div> */}
                                 <div className={styles.alarmContentWrap}>
-                                {alarmList[0].map((Item, index) => (
+                                {alarmList[0].map((Item : any, index : any) => (
                                     <div className={styles.alarmContent} key={index}>
                                         <div className={styles.Text1}>{Item.LMenuName}</div>
                                         <div className={styles.Text2}>· 화면명　 : {Item.FormName}</div>

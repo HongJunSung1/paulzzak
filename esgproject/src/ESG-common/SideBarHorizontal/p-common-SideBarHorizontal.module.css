@@ -1,0 +1,196 @@
+.wrap {
+  position: relative;   /* ✅ dropdown absolute 기준 */
+  height: 44px;
+  background: rgb(31, 60, 126);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  box-shadow: 0px 1px 3px 1px rgb(236, 235, 235);
+}
+
+.scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.scroller::-webkit-scrollbar {
+  height: 6px;
+}
+.scroller::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  font-weight: 800;
+  position: relative; /* ✅ 밑줄을 pseudo로 */
+}
+
+.btn[data-active="true"] {
+  color: white;
+}
+
+.btn[data-active="true"]::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 2px;             /* 밑줄 위치 */
+  height: 2px;             /* 밑줄 두께 */
+  background: white;
+  border-radius: 2px;
+}
+
+.btn:hover { color: rgb(217, 216, 216);}
+
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 10px 10px 10px;
+
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+.backdropOpen {
+  opacity: 1;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: var(--arrow-left);
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgb(31, 60, 126);
+}
+
+.panel {
+  position: absolute;
+  top: calc(44px + 8px); /* ✅ bar 아래로 8px 띄움 */
+  width: min(420px, calc(100vw - 20px));
+  max-height: calc(100vh - 120px);
+  background: rgb(31, 60, 126);
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.25);
+  color: white;
+  z-index: 2000;
+
+  overflow: visible;                 /* ✅ 삼각형 안 잘리게 (중요) */
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.panelOpen { transform: translateY(0); opacity: 1; }
+
+/* ✅ 내부 스크롤은 body에만 */
+.panelBody {
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+
+.panelTitle {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.closeBtn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  /* background: rgba(255,255,255,0.18); */
+  background: transparent;
+  color: white;
+  font-weight: 700;
+}
+
+.closeBtn:hover{
+  color: rgb(217, 216, 216);
+}
+
+.panelBody {
+  padding: 10px 12px 14px 12px;
+  overflow: auto;
+}
+
+.node {
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.10);
+  margin-bottom: 8px;
+}
+
+
+.nodeWrap {
+  margin-bottom: 8px;
+}
+
+.nodeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.10);
+  cursor: pointer;
+  user-select: none;
+}
+
+.nodeTitle {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.nodeArrow {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.childrenWrap {
+  margin-top: 8px;
+}
+
+.leaf {
+  padding: 5px 5px;
+  border-radius: 5px;
+  /* background: rgba(255,255,255,0.08); */
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+}
+
+.leaf:hover {
+  /* background: rgba(255,255,255,0.16); */
+  color: rgb(217, 216, 216);
+}

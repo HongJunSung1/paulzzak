@@ -6,17 +6,26 @@ export const Container = styled.div`
   flex-direction: row;
 `
 
+// export const DataContainer = styled.div`
+//     width: 100vw;
+//     height: calc(100vh - 68px);
+//     width : calc(100vw - 276px);
+//     display: flex;
+//     margin: 10px 10px;
+//     flex-direction: column;
+
+//   @media (max-width: 768px) {
+//     width : calc(100vw - 120px);
+//   }
+// `
+
 export const DataContainer = styled.div`
-    width: 100vw;
+    flex: 1;
+    min-width: 0;
     height: calc(100vh - 68px);
-    width : calc(100vw - 276px);
     display: flex;
     margin: 10px 10px;
     flex-direction: column;
-
-  @media (max-width: 768px) {
-    width : calc(100vw - 120px);
-  }
 `
 
 export const DataContainerLogin = styled.div`

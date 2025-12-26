@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react'
 // import cookie from 'react-cookies';
 import styled from 'styled-components';
 
-const TopMenu = ({isOpen, selectMenu}) => {
+type TopMenuProps = {
+  isOpen: any;
+  selectMenu: any;
+};
+
+const TopMenu = ({isOpen, selectMenu}: TopMenuProps) => {
 
     // const LMenuList = cookie.load('LmenuList');
     const sessionStr = sessionStorage.getItem('LmenuList');
@@ -18,7 +23,7 @@ const TopMenu = ({isOpen, selectMenu}) => {
         setIsOpen2(isOpen);
     }, [isOpen])
 
-    const LMenuClick = (item) => {
+    const LMenuClick = (item: any) => {
         setIsOpen2(false);
         selectMenu(item.LMenuName);
     }
@@ -36,7 +41,7 @@ const TopMenu = ({isOpen, selectMenu}) => {
                                 // backgroundColor:"#d34e4e",
                                 backgroundColor: "rgb(31, 60, 126)",
                                 color:"white"}}>모듈 선택</div>
-                    {LMenuList.map((item, key)=><TopMenuItems key={key}  onClick={() => LMenuClick(item)}>{item.LMenuName}</TopMenuItems>)}
+                    {LMenuList.map((item : any, key : any)=><TopMenuItems key={key}  onClick={() => LMenuClick(item)}>{item.LMenuName}</TopMenuItems>)}
                 </TopMenuWrap>
             )
         }

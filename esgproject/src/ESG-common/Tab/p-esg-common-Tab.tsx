@@ -40,8 +40,12 @@
     //     initialMenuInfo = JSON.parse(sessionStr2).find(item => item.url === 'main')
     // }
 
+type NavbarProps = {
+  strOpenUrl: any;
+  openTabs: any;
+};
 
-    const Tab = ({strOpenUrl ,openTabs}) => {
+    const Tab = ({strOpenUrl ,openTabs} : NavbarProps) => {
 
         const [data,setData] = useState<any>(null);
         const [initialMenuInfo,setInitialMenuInfo] = useState<MenuInfo | null>(null);
@@ -133,7 +137,7 @@
         const handleTabClick = (tab: MenuInfo) => {
             setActiveTab(tab.id);
             // navigate(tab.url); // URL을 변경하여 해당 경로로 이동합니다.
-            const filterData = data.filter((item => item.url === tab.url.replace('/', '')));
+            const filterData = data.filter(((item : any) => item.url === tab.url.replace('/', '')));
             setMenuInfo(filterData[0]);
             if(tab.url === "main"){
                 strOpenUrl("/"+tab.url);
@@ -144,7 +148,7 @@
 
 
 
-        const closeTab = (tab) => {
+        const closeTab = (tab : any) => {
             if (tab.url !== "main"){
                 let order : number = 0;
                 let newTabData : any[] = [];
