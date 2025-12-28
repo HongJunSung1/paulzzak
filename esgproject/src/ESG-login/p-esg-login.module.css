@@ -217,8 +217,9 @@ input::placeholder  {
 @media (max-width: 768px){
   .LoginWrap{
     aspect-ratio: auto;
-    max-height: none;
+    max-height: 92dvh;  /* 로고/여백 감안해서 더 작게 */
     flex-direction: column;
+    transform: translateY(-12px); /* 아래 로고 공간 확보 (페이지 길이 늘리지 않음) */
   }
   .LoginLeft{
     width: 100%;
@@ -234,7 +235,10 @@ input::placeholder  {
   }
 
   .LoginContainer{
-    padding-bottom: 70px; /* 로고 높이 + 여유 */
+    height: 100dvh;      /* ✅ 모바일 실제 화면 높이 */
+    min-height: 100dvh;
+    overflow: hidden;    /* ✅ 세로 스크롤 차단 */
+    padding-bottom: 0;   /* ✅ (이전 답변에서 넣은 값이면 제거) */
   }
 
   /* 모바일 화면 폴짝 로고 */
