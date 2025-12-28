@@ -1,7 +1,9 @@
+/* 모바일에서 삐져나오는 요소가 있어도 전체 레이아웃이 안 깨지도록 */
+html, body {
+  overflow-x: hidden;
+}
 .Container{
   width: 100vw;
   height: calc(100% - 48px);
   background-color: black;
 }
-
-
