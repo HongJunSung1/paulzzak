@@ -1,6 +1,7 @@
 .DynamicArea{
     background-color : white;
     height: 100%;
+
     padding: 10px;
     overflow-y: auto;
     overflow-x: auto;

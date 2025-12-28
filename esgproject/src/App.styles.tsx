@@ -4,6 +4,7 @@ export const Container = styled.div`
   height: calc(100vh - 48px);
   display: flex;
   flex-direction: row;
+  min-height: 0;
 `
 
 // export const DataContainer = styled.div`
@@ -20,12 +21,14 @@ export const Container = styled.div`
 // `
 
 export const DataContainer = styled.div`
-    flex: 1;
+    flex: 1 1 auto; 
     min-width: 0;
-    height: calc(100vh - 68px);
+    min-height: 0;
+    height: 100%;
     display: flex;
     margin: 10px 10px;
     flex-direction: column;
+    overflow: hidden;
 `
 
 export const DataContainerLogin = styled.div`

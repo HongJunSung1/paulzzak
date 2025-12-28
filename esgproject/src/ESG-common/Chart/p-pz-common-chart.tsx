@@ -2,9 +2,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styles from './p-pz-common-chart.module.css';
 
-const Chart = ({ ChartType, data, options }) => {
+type ChartProps = {
+  ChartType: any;
+  data: any;
+  options: any;
+};
+
+const Chart = ({ ChartType, data, options }: ChartProps) => {
   const chartType = ChartType.toLowerCase().replace('chart', ''); // eg. "donut"
 
+  useEffect(() => {
+    // 컨테이너 리사이즈 후 Apex가 레이아웃 다시 잡게
+    const t = setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
+    return () => clearTimeout(t);
+  }, [options?.chart?.width, options?.chart?.height]);
+  
   // 공통 옵션 병합 (배경 투명)
   const mergedOptions = {
     ...options,
@@ -14,6 +26,9 @@ const Chart = ({ ChartType, data, options }) => {
       type: chartType, // eg. BarChart -> bar
     },
   };
+  
+  const h = mergedOptions.chart?.height;
+  const w = mergedOptions.chart?.width;
 
   // 차트 선택
   switch (ChartType) {
@@ -35,8 +50,8 @@ const Chart = ({ ChartType, data, options }) => {
             type={chartType}
             options={mergedOptions}
             series={data.series}
-            height={mergedOptions.chart.height || '100%'}
-            width={mergedOptions.chart.width || '100%'}
+            height={typeof h === 'number' ? h : undefined}
+            width={typeof w === 'number' ? w : undefined}
           />
         </div>
       );

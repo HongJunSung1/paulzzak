@@ -7,3 +7,11 @@ html, body {
   height: calc(100% - 48px);
   background-color: black;
 }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;   /* ✅ 전체 페이지 스크롤 제거 */
+}
