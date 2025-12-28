@@ -1,11 +1,8 @@
 /* =========================================================
-   0) 공통 변수/리셋(선택)
+   0) 변수
 ========================================================= */
 :root {
-  --gap-xs: 4px;
   --gap-sm: 8px;
-  --gap-md: 12px;
-
   --radius: 8px;
   --border: 1px solid #ccc;
 
@@ -16,23 +13,31 @@
 }
 
 /* =========================================================
-   2) 공통 요소
+   1) 공통(카드/차트)
 ========================================================= */
-.BoardName {
-  font-size: 19px;
-  font-weight: bold;
-  margin: 4px 0;
+.card {
+  background-color: var(--card-bg);
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem;
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
 }
 
-.Profile {
-  width: 75px;
-  height: 75px;
-  object-fit: cover;
-  border-radius: 50%;
+.cardHeader {
+  flex: 0 0 auto;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
-/* 차트 컨테이너(공통) */
-.cardTitle{
+.cardTitle {
   flex: 0 0 auto;
   margin-bottom: 6px;
 }
@@ -41,35 +46,20 @@
   width: 100%;
   position: relative;
 
-  /* ✅ 내용 때문에 커지지 않게 */
   height: 210px;
   min-height: 210px;
   overflow: hidden;
 
-  /* grid/flex에서 줄어들 수 있게 */
   min-width: 0;
 }
 
-/* 작은 차트 (하단 라인차트용) */
 .chartBoxSm {
   height: 180px;
   min-height: 180px;
-  max-height: 180px;   /* ✅ 추가 */
+  max-height: 180px;
 }
 
-/* 중간 차트 (도넛 / 상단 라인차트용) */
-.chartBoxMd {
-  height: 210px;
-  min-height: 210px;
-}
-
-.cardHeader{
-  flex: 0 0 auto;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-/* ✅ 도넛이 카드 안에 딱 맞게 들어가는 핵심 */
+/* ✅ 도넛이 카드 안에 딱 맞게 */
 .donutHost {
   flex: 1 1 auto;
   min-height: 0;
@@ -81,24 +71,23 @@
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;      /* ✅ 밖으로 안 나가게 */
-  padding: 8px;          /* ✅ 잘림 방지 여백 */
+  overflow: hidden;
+  padding: 8px;
   box-sizing: border-box;
 }
 
-/* 도넛 아래 텍스트: 살짝 겹치게(-) 배치 */
-.donutBottomValue{
+/* 도넛 아래 텍스트(카드 폭 230px 이하일 때만 TSX에서 렌더됨) */
+.donutBottomValue {
   position: absolute;
   left: 50%;
-  bottom: 18px;              /* 카드 바닥과 간격 */
+  bottom: 18px;
   transform: translateX(-50%);
   font-weight: 800;
-  font-size: 28px;           /* 필요시 clamp로 */
+  font-size: 28px;
   line-height: 1;
   pointer-events: none;
   font-family: 'SpoqaHanSansNeo-Bold';
 }
-
 
 /* apex 내부가 host를 꽉 채우게(중요) */
 .donutHost :global(.apexcharts-canvas),
@@ -106,59 +95,17 @@
   width: 100% !important;
   height: 100% !important;
 }
-
-
-
-/* 카드(공통) */
-.card {
-  background-color: var(--card-bg);
-  border: var(--border);
-  border-radius: var(--radius);
-  padding: 0.65rem;
-  text-align: left;
-
-
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
+/* 출석률 카드(PC 기본은 기존 inline height 266px 그대로) */
+.attendanceCard {
+  height: auto;
 }
-
-.topSummary .card {
-  height: auto;         /* 100% → auto */
-}
-
-/* 오른쪽 영역은 줄어들 수 있게만 */
-.rightGrid{
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-/* DynamicArea가 div라면 내부 100% 먹게 */
-.rightGrid :global(.DynamicArea){ /* 만약 class명이 다르면 제거하고 아래 TSX style로 처리 */
-  flex: 1;
-  min-height: 0;
-}
-
-.rightGridInner{
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;        /* Grid 내부 스크롤은 Grid가 담당 */
-}
-
-
 /* =========================================================
-   3) Dashboard Layout (현재 TSX 구조)
+   2) Dashboard Layout (현재 TSX 구조)
 ========================================================= */
 .mainDashboard {
   width: 100%;
-  /* height: 100%; */
-  flex: 1 1 auto;   /* 🔥 핵심 */
-  min-height: 0;    /* 🔥 핵심 */
+  flex: 1 1 auto;
+  min-height: 0;
 
   padding-top: 0.5%;
   box-sizing: border-box;
@@ -167,9 +114,8 @@
   flex-direction: column;
   gap: var(--gap-sm);
 
-  min-height: 0;
-  overflow:auto;
-  scrollbar-width:none;  /* 스크롤바 없애기 */
+  overflow: auto;
+  scrollbar-width: none;
 }
 
 /* --- 상단 영역 --- */
@@ -182,7 +128,7 @@
 
 .topAttend {
   display: grid;
-  grid-template-columns: 2fr 3fr; /* 1 : 1.5 동일 */
+  grid-template-columns: 2fr 3fr;
   gap: 8px;
 }
 
@@ -203,7 +149,7 @@
   color: #fff;
 
   display: grid;
-  grid-template-rows: 40px repeat(5, 44px); /* 제목 1줄 + 5줄 고정 */
+  grid-template-rows: 40px repeat(5, 44px);
 
   width: 100%;
   height: auto;
@@ -218,7 +164,6 @@
   font-weight: 500;
 }
 
-/* TOP5 행 */
 .playerRow {
   display: flex;
   align-items: center;
@@ -242,7 +187,6 @@
   position: relative;
 }
 
-/* 구분선 */
 .normalPlayerRow:not(:first-of-type)::before {
   content: '';
   position: absolute;
@@ -277,13 +221,12 @@
 /* --- 중단 영역 --- */
 .middleSummary {
   display: grid;
-  /* grid-template-columns: 45fr 55fr; */
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr); /* ✅ 둘 다 줄어들 수 있게 */
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
   gap: 8px;
   align-items: stretch;
 
   min-height: 0;
-  flex: 1 1 auto;      /* 🔥 중요 */
+  flex: 1 1 auto;
 }
 
 /* 왼쪽(개인기록 + 2개 차트) */
@@ -293,17 +236,16 @@
   gap: 8px;
 }
 
-/* 개인기록 카드: TSX에서 card/cardShort/privateRecord 조합으로 붙음 */
 .cardShort {
   font-size: 0.9rem;
   padding: 0.8rem;
-  height: auto; /* PC에서는 height 강제 금지 */
+  height: auto;
 }
 
 .privateRecord {
   background-color: var(--blue);
   color: #fff;
-  min-height: 220px;     /* 너무 찌그러지지 않게 */
+  min-height: 220px;
 }
 
 /* 아래 2개 차트 */
@@ -388,6 +330,7 @@
   font-family: 'Anton', sans-serif;
 }
 
+/* 오른쪽 그리드 */
 .rightGrid {
   display: flex;
   flex-direction: column;
@@ -395,10 +338,8 @@
   flex: 1 1 auto;
 }
 
-
-
 /* =========================================================
-   4) Responsive - Notebook(PC 좁은 폭)
+   3) Responsive - Notebook(PC 좁은 폭)
 ========================================================= */
 @media (max-width: 1366px) {
   .averageTop {
@@ -408,50 +349,13 @@
 }
 
 /* =========================================================
-   5) Responsive - Mobile (구조 변경)
-   - 중복 선언 제거(특히 privateRecord 3번 선언되던 것 정리)
+   4) Responsive - Mobile (구조 변경)
 ========================================================= */
-
-
 @media (max-width: 768px) {
-  
   .mainDashboard {
     overflow: auto !important;
-    padding-bottom: 12px; /* ✅ 맨 아래 잘림 방지용 여유 */
+    padding-bottom: 12px;
   }
-
-  /* ✅ 오른쪽 그리드 영역도 "늘어날 수 있게" */
-  .rightGrid {
-    flex: 1 1 auto !important; 
-    min-height: 60vh !important;  
-  }
-
-/* 폴짝 참여 현황 차트 박스 */
-.lineChartAttendBox{
-  height: 210px;
-  min-height: 210px;
-  max-height: 210px;
-  width: 100%;
-  overflow: hidden;
-  min-width: 0;
-}
-
-  /* ✅ DynamicArea 내부에 height:100% 같은 게 있으면 같이 0 되는 경우가 있어 강제 해제 */
-  .rightGrid > :first-child {
-    height: auto !important;
-    min-height: 52vh !important;
-  }
-
-  /* ✅ topSummary는 auto여도 되지만, middleSummary는 남은 높이를 가져야 Grid가 안 사라짐 */
-  .middleSummary {
-    display: flex !important;
-    flex-direction: column !important;
-
-    flex: 1 1 auto !important;  /* ⭐ 핵심 */
-    min-height: 0 !important;   /* ⭐ 핵심 */
-    height: auto !important;    /* auto는 OK인데, flex+min-height 0이 같이 있어야 함 */
-  }
-
 
   .topSummary,
   .leftCharts,
@@ -478,13 +382,36 @@
     box-sizing: border-box;
     overflow: hidden;
   }
+  
+  .attendanceCard {
+    height: 350px !important; /* inline height(266px) 덮어쓰기 */
+  }
 
-  /* TSX에 inline style로 position:relative 들어간 차트 wrapper 대응 */
-  .card div[style*="position: relative"] {
-    width: 100% !important;
+  .middleSummary {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
     height: auto !important;
-    min-height: 200px;
-    position: relative;
+  }
+
+  .rightGrid {
+    flex: 1 1 auto !important;
+    min-height: 60vh !important;
+  }
+
+  .rightGrid > :first-child {
+    height: auto !important;
+    min-height: 52vh !important;
+  }
+
+  .lineChartAttendBox {
+    height: 210px;
+    min-height: 210px;
+    max-height: 210px;
+    width: 100%;
+    overflow: hidden;
+    min-width: 0;
   }
 
   .playerRow {
@@ -500,8 +427,6 @@
 
     height: auto !important;
     overflow: visible !important;
-
-    /* 모바일에서는 flex 비율/고정 최소 높이 제거 */
     min-height: 0 !important;
     flex: none !important;
   }

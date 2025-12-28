@@ -823,7 +823,7 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
         <div className={styles.topSummary}>
           <div className={styles.topAttend}>
             <div className={styles.attendBox}>
-              <div className={styles.card} style={{ height: '266px' }} ref={donutCardRef}>
+              <div className={`${styles.card} ${styles.attendanceCard}`} style={{ height: '266px' }} ref={donutCardRef}>
                 <div className={styles.cardHeader}>출석률(%)</div>
 
                 <div className={styles.donutHost} ref={AverageAttend}>
