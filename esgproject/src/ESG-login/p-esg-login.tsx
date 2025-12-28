@@ -389,6 +389,10 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
                     </div>
                     
                 </div>
+                {/* 모바일 하단 고정 로고 */}
+                <div className={styles.MobileFooterLogo}>
+                    <img src={PaulZZakLogo} alt="PaulZZakLogo" />
+                </div>
             </div>
         </>
     )
