@@ -129,8 +129,9 @@
 .LoginBtn{
   width: 100%;
   max-width: 360px;
-  height: 50px;          /* ✅ 버튼과 동일 */
+  height: 50px;
   box-sizing: border-box;
+  border-radius: 6px;
 }
 
 .LoginInput{
@@ -145,14 +146,7 @@
     font-family: "SpoqaHanSansNeo-Medium" !important;
 }
 
-/* ✅ 입력/버튼 고정폭(322px) -> 100% */
-.LoginInput,
-.LoginBtn{
-  width: 100%;
-  max-width: 360px;
-  box-sizing: border-box;
-  border-radius: 6px;
-}
+
 
 .LoginInputWrap input:focus, .LoginInputWrapChange input:focus{
     border-color: #8f8f8f;
@@ -165,7 +159,6 @@ input::placeholder  {
 
 .LoginBtn{
     background-color:rgb(20, 36, 77);
-    border-radius: 5px;
     border: none;
     color: white;
     font-weight: bold;
