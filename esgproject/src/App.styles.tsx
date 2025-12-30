@@ -24,10 +24,12 @@ export const DataContainer = styled.div`
     flex: 1 1 auto; 
     min-width: 0;
     min-height: 0;
-    height: 100%;
+    /* height: 100%; */
     display: flex;
-    margin: 10px 10px;
     flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    /* margin: 10px 10px; */
     overflow: hidden;
 `
 
