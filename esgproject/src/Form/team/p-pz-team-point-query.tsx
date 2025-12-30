@@ -52,6 +52,9 @@ const TeamPointForm = ({strOpenUrl, openTabs}: FormTeamPointProps)=> {
     // 저장 시 넘기는 컬럼 값
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
     let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
+    
+    // 화면이 세로형일 때는 이렇게 하는 게 맞음
+    const dynRef = useRef<HTMLDivElement | null>(null);
 
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
@@ -171,6 +174,40 @@ const TeamPointForm = ({strOpenUrl, openTabs}: FormTeamPointProps)=> {
         }
     }
 
+    // ResizeObserver로 “실제 px 높이” 감지 → Grid 높이 강제
+    useEffect(() => {
+    if (strOpenUrl !== '/PPzTeamPointQuery') return;
+    if (!dynRef.current) return;
+
+    const g1 = () => grid1Ref.current?.getInstance?.();
+    const g2 = () => grid2Ref.current?.getInstance?.();
+
+    const apply = () => {
+        const h = dynRef.current!.clientHeight;     // ✅ 남은 공간(px)
+        if (!h) return;
+
+        // Splitter 비율(33/67)대로 px 계산 + 최소 높이 보장
+        const h1 = Math.max(180, Math.floor(h * 0.33));
+        const h2 = Math.max(240, h - h1);
+
+        // ✅ TUI Grid: 높이를 직접 세팅
+        g1()?.setHeight?.(h1);
+        g2()?.setHeight?.(h2);
+
+        // 레이아웃 갱신
+        g1()?.refreshLayout?.();
+        g2()?.refreshLayout?.();
+    };
+
+    const ro = new ResizeObserver(() => apply());
+    ro.observe(dynRef.current);
+
+    // 최초 1회
+    requestAnimationFrame(apply);
+
+    return () => ro.disconnect();
+    }, [strOpenUrl]);
+
     // 시트 클릭시 나머지 시트 포커스 해제
     const gridClick = (ref : any) => {
         const grid1Inst = grid1Ref.current.getInstance();
@@ -191,6 +228,42 @@ const TeamPointForm = ({strOpenUrl, openTabs}: FormTeamPointProps)=> {
         }
     }, [openTabs]); 
 
+    useEffect(() => {
+    if (strOpenUrl !== '/PPzTeamPointQuery') return;
+
+    const raf = requestAnimationFrame(() => {
+        const g1 = grid1Ref.current?.getInstance?.();
+        const g2 = grid2Ref.current?.getInstance?.();
+        g1?.refreshLayout?.();
+        g2?.refreshLayout?.();
+    });
+
+    const onResize = () => {
+        const g1 = grid1Ref.current?.getInstance?.();
+        const g2 = grid2Ref.current?.getInstance?.();
+        g1?.refreshLayout?.();
+        g2?.refreshLayout?.();
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener('resize', onResize);
+    };
+    }, [strOpenUrl]);
+
+    useEffect(() => {
+    if (strOpenUrl !== '/PPzTeamPointQuery') return;
+
+    const raf = requestAnimationFrame(() => {
+        grid1Ref.current?.getInstance?.()?.refreshLayout?.();
+        grid2Ref.current?.getInstance?.()?.refreshLayout?.();
+    });
+
+    return () => cancelAnimationFrame(raf);
+    }, [strOpenUrl, grid1Data, grid2Data]);
+
+
    return (
         <>
             <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PPzTeamPointQuery' ? "flex" : "none", flexDirection:"column"}}>
@@ -199,17 +272,26 @@ const TeamPointForm = ({strOpenUrl, openTabs}: FormTeamPointProps)=> {
                 <Toolbar items={toolbar} clickID={toolbarEvent}/> 
                 <FixedArea name={"조회조건"}>
                     <FixedWrap>
-                        <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"true"} onChange={(val : any) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
-                        <span style={{marginLeft: "10px", marginTop:"27px", fontSize: "12px"}} className={styles.KeyIndex}>
-                            ※ 랭킹점수 산출 방법 : 출석율(%) x [(득점 x 1.3) x (리바운드 x 1.3) + (어시스트 x 1.2) + (스틸 x 1.1) + (블로킹 x 1.1)]
-                        </span>
+                        <div className={styles.fixedFull}>
+                            <div className={styles.condWrap}>
+                                <SearchBox name={"시즌명"}  value={SeasonCD} isRequire={"true"} onChange={(val : any) => setSeasonCD(val.code)} width={200} searchCode={6} isGrid={false}/>
+                                <span className={styles.rankHint}>
+                                    ※ 랭킹점수 산출 방법 : 출석율(%) x [(득점 x 1.3) x (리바운드 x 1.3) + (어시스트 x 1.2) + (스틸 x 1.1) + (블로킹 x 1.1)]
+                                </span>
+                            </div>
+                            {/* <span style={{marginLeft: "10px", marginTop:"27px", fontSize: "12px"}} className={styles.KeyIndex}>
+                                ※ 랭킹점수 산출 방법 : 출석율(%) x [(득점 x 1.3) x (리바운드 x 1.3) + (어시스트 x 1.2) + (스틸 x 1.1) + (블로킹 x 1.1)]
+                            </span> */}
+                        </div>
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <Splitter SplitType={"vertical"} FirstSize={33} SecondSize={67}>
-                        <Grid ref={grid1Ref} gridId="DataSet1" title = "팀 순위" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
-                        <Grid ref={grid2Ref} gridId="DataSet2" title = "MVP랭킹" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
-                    </Splitter>
+                    <div ref={dynRef} className={styles.dynWrap}>
+                        <Splitter SplitType={"vertical"} FirstSize={33} SecondSize={67}>
+                            <Grid ref={grid1Ref} gridId="DataSet1" title = "팀 순위" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                            <Grid ref={grid2Ref} gridId="DataSet2" title = "MVP랭킹" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {false} onClick={gridClick}/>
+                        </Splitter>
+                    </div>
                 </DynamicArea>
             </div>
         </>

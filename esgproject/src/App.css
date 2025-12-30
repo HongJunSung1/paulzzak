@@ -1,3 +1,7 @@
+html, body, #root {
+  height: 100%;
+}
+
 /* 모바일에서 삐져나오는 요소가 있어도 전체 레이아웃이 안 깨지도록 */
 html, body {
   overflow-x: hidden;
@@ -8,10 +12,9 @@ html, body {
   background-color: black;
 }
 
-html, body, #root {
-  height: 100%;
-}
 
 body {
-  overflow: hidden;   /* ✅ 전체 페이지 스크롤 제거 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
 }

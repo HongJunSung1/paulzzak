@@ -17,7 +17,11 @@
 }
 
 .FixedWrap{
-    float: left;
-    display:flex;
-    width: calc(100vw - 300px);
+  /* float: left;  ❌ 제거 */
+  display: flex;
+  width: 100%;          /* ✅ 기본은 부모 폭 100% */
+  min-width: 0;         /* ✅ 내부 줄바꿈/축소 허용 */
+  gap: 10px;
+  flex-wrap: wrap;      /* ✅ 좁아지면 다음 줄로 */
+  align-items: flex-start;
 }
