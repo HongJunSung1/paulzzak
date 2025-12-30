@@ -1317,79 +1317,81 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
                     </FixedWrap>
                 </FixedArea>  
                 <DynamicArea>
-                    <div style={{height:"100%", width: "100%"}}>
-                        <Splitter SplitType={"horizontal"} FirstSize={67} SecondSize={33}>
-                            <div style={{height:"100%", width: "100%"}}>
-                                <Splitter SplitType={"vertical"} FirstSize={15} SecondSize={85}>
-                                    <div style={{ height: "100%", width: "100%", overflowX: "auto" }} className={styles.TeamSummaryWrapper}>
-                                        <table className={styles.TeamSummaryTable}>
-                                            <thead>
-                                                <tr>
-                                                <th rowSpan={2}>OVERALL</th>
-                                                <th rowSpan={2}>득점</th>
-                                                <th colSpan={2}>2점슛</th>
-                                                <th colSpan={2}>3점슛</th>
-                                                <th colSpan={2}>자유투</th>
-                                                <th rowSpan={2}>리바운드</th>
-                                                <th rowSpan={2}>어시스트</th>
-                                                <th rowSpan={2}>스틸</th>
-                                                <th rowSpan={2}>블록</th>
-                                                <th rowSpan={2}>턴오버</th>
-                                                <th rowSpan={2}>파울</th>
-                                                </tr>
-                                                <tr>
-                                                <th>성공</th><th>시도</th>
-                                                <th>성공</th><th>시도</th>
-                                                <th>성공</th><th>시도</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="summary-A">
-                                                <tr>
-                                                    <td>Team A</td>
-                                                    <td id="score-team-a">0</td>
-                                                    {/* {Array.from({ length: 12 }).map((_, i) => (
-                                                        <td key={i}><input /></td>
-                                                    ))} */}
-                                                    <td><input id="_2PSuccess-A" readOnly/></td>
-                                                    <td><input id="_2PAttempt-A" readOnly/></td>
-                                                    <td><input id="_3PSuccess-A" readOnly/></td>
-                                                    <td><input id="_3PAttempt-A" readOnly/></td>
-                                                    <td><input id="FTSuccess-A" readOnly/></td>
-                                                    <td><input id="FTAttempt-A" readOnly/></td>
-                                                    <td><input id="Rebound-A"   readOnly/></td>
-                                                    <td><input id="Assist-A"    readOnly/></td>
-                                                    <td><input id="Steal-A"     readOnly/></td>
-                                                    <td><input id="Block-A"     readOnly/></td>
-                                                    <td><input id="TurnOver-A"  readOnly/></td>
-                                                    <td><input id="Foul-A"      readOnly/></td>
-                                                </tr>
-                                            </tbody>
-                                            <tbody id="summary-B">
-                                                <tr>
-                                                    <td>Team B</td>
-                                                    <td id="score-team-b">0</td>
-                                                    {/* {Array.from({ length: 12 }).map((_, i) => (
-                                                        <td key={i}><input /></td>
-                                                    ))} */}
-                                                    <td><input id="_2PSuccess-B" readOnly/></td>
-                                                    <td><input id="_2PAttempt-B" readOnly/></td>
-                                                    <td><input id="_3PSuccess-B" readOnly/></td>
-                                                    <td><input id="_3PAttempt-B" readOnly/></td>
-                                                    <td><input id="FTSuccess-B" readOnly/></td>
-                                                    <td><input id="FTAttempt-B" readOnly/></td>
-                                                    <td><input id="Rebound-B"   readOnly/></td>
-                                                    <td><input id="Assist-B"    readOnly/></td>
-                                                    <td><input id="Steal-B"     readOnly/></td>
-                                                    <td><input id="Block-B"     readOnly/></td>
-                                                    <td><input id="TurnOver-B"  readOnly/></td>
-                                                    <td><input id="Foul-B"      readOnly/></td>                                                
-                                                </tr>
-                                            </tbody>
-                                            </table>
-                                    </div>
-                                    <div style={{height:"100%", width: "100%"}}>
-                                        <div style={{height:"100%" , width: "100%"}}>
-                                            <div ref={dynRef} className={styles.dynWrap}>
+                    <div ref={dynRef} className={styles.dynWrap}>
+
+                        <div style={{height:"100%", width: "100%"}}>
+                            <Splitter SplitType={"horizontal"} FirstSize={67} SecondSize={33}>
+                                <div style={{height:"100%", width: "100%"}}>
+                                    <Splitter SplitType={"vertical"} FirstSize={15} SecondSize={85}>
+                                        <div style={{ height: "100%", width: "100%", overflowX: "auto" }} className={styles.TeamSummaryWrapper}>
+                                            <table className={styles.TeamSummaryTable}>
+                                                <thead>
+                                                    <tr>
+                                                    <th rowSpan={2}>OVERALL</th>
+                                                    <th rowSpan={2}>득점</th>
+                                                    <th colSpan={2}>2점슛</th>
+                                                    <th colSpan={2}>3점슛</th>
+                                                    <th colSpan={2}>자유투</th>
+                                                    <th rowSpan={2}>리바운드</th>
+                                                    <th rowSpan={2}>어시스트</th>
+                                                    <th rowSpan={2}>스틸</th>
+                                                    <th rowSpan={2}>블록</th>
+                                                    <th rowSpan={2}>턴오버</th>
+                                                    <th rowSpan={2}>파울</th>
+                                                    </tr>
+                                                    <tr>
+                                                    <th>성공</th><th>시도</th>
+                                                    <th>성공</th><th>시도</th>
+                                                    <th>성공</th><th>시도</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="summary-A">
+                                                    <tr>
+                                                        <td>Team A</td>
+                                                        <td id="score-team-a">0</td>
+                                                        {/* {Array.from({ length: 12 }).map((_, i) => (
+                                                            <td key={i}><input /></td>
+                                                        ))} */}
+                                                        <td><input id="_2PSuccess-A" readOnly/></td>
+                                                        <td><input id="_2PAttempt-A" readOnly/></td>
+                                                        <td><input id="_3PSuccess-A" readOnly/></td>
+                                                        <td><input id="_3PAttempt-A" readOnly/></td>
+                                                        <td><input id="FTSuccess-A" readOnly/></td>
+                                                        <td><input id="FTAttempt-A" readOnly/></td>
+                                                        <td><input id="Rebound-A"   readOnly/></td>
+                                                        <td><input id="Assist-A"    readOnly/></td>
+                                                        <td><input id="Steal-A"     readOnly/></td>
+                                                        <td><input id="Block-A"     readOnly/></td>
+                                                        <td><input id="TurnOver-A"  readOnly/></td>
+                                                        <td><input id="Foul-A"      readOnly/></td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody id="summary-B">
+                                                    <tr>
+                                                        <td>Team B</td>
+                                                        <td id="score-team-b">0</td>
+                                                        {/* {Array.from({ length: 12 }).map((_, i) => (
+                                                            <td key={i}><input /></td>
+                                                        ))} */}
+                                                        <td><input id="_2PSuccess-B" readOnly/></td>
+                                                        <td><input id="_2PAttempt-B" readOnly/></td>
+                                                        <td><input id="_3PSuccess-B" readOnly/></td>
+                                                        <td><input id="_3PAttempt-B" readOnly/></td>
+                                                        <td><input id="FTSuccess-B" readOnly/></td>
+                                                        <td><input id="FTAttempt-B" readOnly/></td>
+                                                        <td><input id="Rebound-B"   readOnly/></td>
+                                                        <td><input id="Assist-B"    readOnly/></td>
+                                                        <td><input id="Steal-B"     readOnly/></td>
+                                                        <td><input id="Block-B"     readOnly/></td>
+                                                        <td><input id="TurnOver-B"  readOnly/></td>
+                                                        <td><input id="Foul-B"      readOnly/></td>                                                
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                        </div>
+                                        <div style={{height:"100%", width: "100%"}}>
+                                            <div style={{height:"100%" , width: "100%"}}>
+                                                
                                                 <Splitter SplitType={"vertical"} FirstSize={50} SecondSize={50}>
                                                     <div style={{height:"100%"}}>
                                                         <Grid ref={grid1Ref} gridId="DataSet1" title = "Team A" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
@@ -1398,60 +1400,61 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
                                                         <Grid ref={grid2Ref} gridId="DataSet2" title = "Team B" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
                                                     </div>
                                                 </Splitter>
+                                              
                                             </div>
                                         </div>
+                                    </Splitter>
+                                </div>
+                                <div className = {styles.RunningScoreArea}>
+                                    <div className = {styles.RunningScoreTitle}>
+                                        Running Score
                                     </div>
-                                </Splitter>
-                            </div>
-                            <div className = {styles.RunningScoreArea}>
-                                <div className = {styles.RunningScoreTitle}>
-                                    Running Score
-                                </div>
-                                <div className = {styles.ScoreContainer}>
-                                    {quarters.map((quarter, qIdx)=> (
-                                        <table key={qIdx} className={styles.QuarterTable}>
-                                            <thead className={styles.QuarterTableHead}>
-                                                <tr>
-                                                    <th colSpan={4}>{quarter}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colSpan={2}>A</th>
-                                                    <th colSpan={2}>B</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {rows.map((num, idx) => (
-                                                    <tr key={idx} className={styles.Scoreboard}>
-                                                        <td colSpan={1}>
-                                                            <input
-                                                                type="text"
-                                                                className={styles.InputCell}
-                                                                data-role="running-input"
-                                                                data-team="A"
-                                                                data-quarter={qIdx}  // ✅ 쿼터 식별
-                                                                // onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
-                                                            />
-                                                        </td>
-                                                        <td colSpan={1}>{num}</td>
-                                                        <td colSpan={1}>{num}</td>
-                                                        <td colSpan={1}>
-                                                            <input
-                                                                type="text"
-                                                                className={styles.InputCell}
-                                                                data-role="running-input"
-                                                                data-team="B"
-                                                                data-quarter={qIdx}
-                                                                // onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
-                                                            />
-                                                        </td>
+                                    <div className = {styles.ScoreContainer}>
+                                        {quarters.map((quarter, qIdx)=> (
+                                            <table key={qIdx} className={styles.QuarterTable}>
+                                                <thead className={styles.QuarterTableHead}>
+                                                    <tr>
+                                                        <th colSpan={4}>{quarter}</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    ))}
+                                                    <tr>
+                                                        <th colSpan={2}>A</th>
+                                                        <th colSpan={2}>B</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {rows.map((num, idx) => (
+                                                        <tr key={idx} className={styles.Scoreboard}>
+                                                            <td colSpan={1}>
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.InputCell}
+                                                                    data-role="running-input"
+                                                                    data-team="A"
+                                                                    data-quarter={qIdx}  // ✅ 쿼터 식별
+                                                                    // onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
+                                                                />
+                                                            </td>
+                                                            <td colSpan={1}>{num}</td>
+                                                            <td colSpan={1}>{num}</td>
+                                                            <td colSpan={1}>
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.InputCell}
+                                                                    data-role="running-input"
+                                                                    data-team="B"
+                                                                    data-quarter={qIdx}
+                                                                    // onInput={(e) => handleScoreInputChange(e.currentTarget.value, 'A', idx, qIdx)}
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </Splitter>
+                            </Splitter>
+                        </div>
                     </div>
                 </DynamicArea>
         </div>
