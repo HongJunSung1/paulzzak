@@ -83,6 +83,12 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
     let [grid1Changes, setGrid1Changes] = useState<gridAr>({ DataSet : '', grid: []});
     let [grid2Changes, setGrid2Changes] = useState<gridAr>({ DataSet : '', grid: []});
 
+    // 화면이 세로형일 때는 이렇게 하는 게 맞음
+    const dynRef = useRef<HTMLDivElement | null>(null);
+    const applyingRef = useRef(false);
+    const rafId = useRef<number | null>(null);
+    const last = useRef({ h: 0, h1: 0, h2: 0 });        
+
     // 저장 시 시트 변화 값 감지
     const handleGridChange = (gridId: string, changes: gridAr) => {
         if (gridId === 'DataSet1') {
@@ -95,6 +101,72 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
     // 삭제 시 넘기는 컬럼 값
     const grid1Ref : any = useRef(null);
     const grid2Ref : any = useRef(null);
+
+
+    // ResizeObserver로 “실제 px 높이” 감지 → Grid 높이 강제
+    useEffect(() => {
+    if (strOpenUrl !== '/PPzStatsGameRecordReg') return;
+    const el = dynRef.current;
+    if (!el) return;
+
+    const getG1 = () => grid1Ref.current?.getInstance?.();
+    const getG2 = () => grid2Ref.current?.getInstance?.();
+
+    const apply = () => {
+        rafId.current = null;
+        if (!el) return;
+
+        const h = el.getBoundingClientRect().height; // clientHeight보다 안정적인 경우 많음
+        if (!h) return;
+
+        // ✅ 1~2px 미세 흔들림은 무시 (빈 데이터일 때 특히 발생)
+        if (Math.abs(h - last.current.h) < 3) return;
+
+        const h1 = Math.max(500, Math.floor(h * 0.5));
+        const h2 = Math.max(500, Math.floor(h - h1));
+
+        // ✅ 이전과 사실상 같으면 아무것도 하지 않음
+        if (Math.abs(h1 - last.current.h1) < 3 && Math.abs(h2 - last.current.h2) < 3) {
+        last.current.h = h;
+        return;
+        }
+
+        applyingRef.current = true;
+        last.current = { h, h1, h2 };
+
+        const g1 = getG1();
+        const g2 = getG2();
+
+        g1?.setHeight?.(h1);
+        g2?.setHeight?.(h2);
+
+        g1?.refreshLayout?.();
+        g2?.refreshLayout?.();
+
+        // ✅ setHeight/refreshLayout로 발생한 ResizeObserver 재호출을 잠깐 무시
+        requestAnimationFrame(() => {
+        applyingRef.current = false;
+        });
+    };
+
+    const schedule = () => {
+        if (applyingRef.current) return;      // ✅ 내가 바꾸는 중엔 무시 (루프 차단)
+        if (rafId.current != null) return;    // ✅ 1프레임 1회
+        rafId.current = requestAnimationFrame(apply);
+    };
+
+    const ro = new ResizeObserver(schedule);
+    ro.observe(el);
+
+    // 최초 1회
+    schedule();
+
+    return () => {
+        ro.disconnect();
+        if (rafId.current != null) cancelAnimationFrame(rafId.current);
+    };
+    }, [strOpenUrl]);
+
 
     // 점프 전달 받은 값
     useEffect(() => {
@@ -1317,14 +1389,16 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
                                     </div>
                                     <div style={{height:"100%", width: "100%"}}>
                                         <div style={{height:"100%" , width: "100%"}}>
-                                            <Splitter SplitType={"vertical"} FirstSize={50} SecondSize={50}>
-                                            <div style={{height:"100%"}}>
-                                                <Grid ref={grid1Ref} gridId="DataSet1" title = "Team A" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                            <div ref={dynRef} className={styles.dynWrap}>
+                                                <Splitter SplitType={"vertical"} FirstSize={50} SecondSize={50}>
+                                                    <div style={{height:"100%"}}>
+                                                        <Grid ref={grid1Ref} gridId="DataSet1" title = "Team A" source = {grid1Data} headerOptions={headerOptions} columns = {columns1} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                                    </div>
+                                                    <div style={{height:"100%", width: "100%"}}>
+                                                        <Grid ref={grid2Ref} gridId="DataSet2" title = "Team B" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
+                                                    </div>
+                                                </Splitter>
                                             </div>
-                                            <div style={{height:"100%", width: "100%"}}>
-                                                <Grid ref={grid2Ref} gridId="DataSet2" title = "Team B" source = {grid2Data} headerOptions={headerOptions} columns = {columns2} onChange={handleGridChange} addRowBtn = {true} onClick={gridClick}/>
-                                            </div>
-                                            </Splitter>
                                         </div>
                                     </div>
                                 </Splitter>
