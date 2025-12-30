@@ -51,6 +51,49 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
 
   const isMain = strOpenUrl === '/main';
 
+  const [viewRev, setViewRev] = useState(0); // main 화면 다시 보일 때마다 +1
+
+  // 화면 다시 들어오면 재랜더링해서 나올 수 있게
+  useEffect(() => {
+    if (!isMain) return;
+
+    // main이 다시 보여지는 타이밍에 2프레임 뒤 레이아웃 복구
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        // ✅ Grid 복구
+        const inst = grid1Ref.current?.getInstance?.();
+        if (inst && rightGridRef.current) {
+          const w = Math.floor(rightGridRef.current.getBoundingClientRect().width);
+          inst.setWidth?.(w);
+          inst.refreshLayout?.();
+        }
+
+        // ✅ ApexCharts 복구
+        try {
+          // @ts-ignore
+          window.ApexCharts?.exec?.('attendanceDonut', 'resize');
+          // @ts-ignore
+          window.ApexCharts?.exec?.('memberLine', 'resize');
+          // @ts-ignore
+          window.ApexCharts?.exec?.('offenseLine', 'resize');
+          // @ts-ignore
+          window.ApexCharts?.exec?.('defenseLine', 'resize');
+        } catch {}
+
+        // ✅ 최후의 수단: remount (차트/그리드 다시 그리게)
+        setDonutMountKey(k => k + 1);
+        setMemberLineMountKey(k => k + 1);
+        setOffenseMountKey(k => k + 1);
+        setDefenseMountKey(k => k + 1);
+        setViewRev(v => v + 1);
+      });
+      return () => cancelAnimationFrame(raf2);
+    });
+
+    return () => cancelAnimationFrame(raf1);
+  }, [isMain]);  
+
+
   // 1. 출석률 도넛차트
   const [attendanceChartData, setAttendanceChartData] = useState<{
     series: number[];
@@ -1058,6 +1101,7 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           <div className={styles.rightGrid} ref={rightGridRef}>
             <DynamicArea>
               <Grid
+                key={`main-grid-${viewRev}`} // 화면 들어올 때 재랜더링할 수 있도록
                 ref={grid1Ref}
                 gridId="DataSet1"
                 title="선수별 평균 기록"
