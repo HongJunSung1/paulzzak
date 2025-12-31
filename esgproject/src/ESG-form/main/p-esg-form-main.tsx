@@ -197,6 +197,46 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   const [topRebound, setTopRebound] = useState<TopRebound[]>([]);
   const [topSteal, setTopSteal] = useState<TopSteal[]>([]);
 
+  // 시트 사이즈
+  const syncGridLayout = () => {
+    const host = rightGridRef.current;
+    const inst = grid1Ref.current?.getInstance?.();
+    if (!host || !inst) return;
+
+    const w = Math.floor(host.getBoundingClientRect().width);
+    const h = Math.floor(host.getBoundingClientRect().height);
+    if (w <= 0 || h <= 0) return;
+
+    const root = inst.el as HTMLElement | undefined;
+    if (root) {
+      // ✅ “작게 시작한 폭” 고착 해제 (핵심)
+      root.style.width = '';
+      root.style.maxWidth = '';
+      // tui-grid 내부 컨테이너들도 같이 풀어줌
+      const c1 = root.querySelector('.tui-grid-container') as HTMLElement | null;
+      const c2 = root.querySelector('.tui-grid-content-area') as HTMLElement | null;
+      const c3 = root.querySelector('.tui-grid-header-area') as HTMLElement | null;
+      [c1, c2, c3].forEach(el => {
+        if (!el) return;
+        el.style.width = '';
+        el.style.maxWidth = '';
+      });
+    }
+
+    // ✅ 폭/레이아웃 갱신
+    inst.setWidth?.(w);
+    inst.refreshLayout?.();
+
+    // ✅ 2프레임 뒤 한 번 더
+    requestAnimationFrame(() => requestAnimationFrame(() => inst.refreshLayout?.()));
+  };
+
+  // ✅ “브레이크포인트 재배치”는 한 번에 안 끝나서 2~3번 더 쏨
+  const syncGridLayoutBurst = () => {
+    syncGridLayout();
+    setTimeout(syncGridLayout, 80);
+    setTimeout(syncGridLayout, 200);
+  };
 
   // ✅ 도넛 카드 폭(230px 기준) 감지 → compact 토글
   useEffect(() => {
@@ -268,24 +308,42 @@ useEffect(() => {
     let raf = 0;
     const ro = new ResizeObserver(() => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const inst = grid1Ref.current?.getInstance?.();
-        if (!inst) return;
-        const w = Math.floor(host.getBoundingClientRect().width);
-        inst.setWidth?.(w);
-        inst.refreshLayout?.();
-      });
+      raf = requestAnimationFrame(syncGridLayout);
     });
 
     ro.observe(host);
+    
+    // ✅ 처음 1회도 강제
+    requestAnimationFrame(() => requestAnimationFrame(syncGridLayoutBurst));
+    
+      return () => {
+        cancelAnimationFrame(raf);
+        ro.disconnect();
+      };
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => syncGridLayoutBurst();
+    window.addEventListener('resize', onResize);
+    // 모바일이면 이것도 효과 큼
+    window.visualViewport?.addEventListener('resize', onResize);
 
     return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
+      window.removeEventListener('resize', onResize);
+      window.visualViewport?.removeEventListener('resize', onResize);
     };
   }, []);
 
+  useEffect(() => {
+    if (!isMain) return;
+    if (grid1Data.length === 0) return;
+    syncGridLayoutBurst();
+  }, [isMain, grid1Data.length]);  
 
+  useEffect(() => {
+    if (!isMain) return;
+    requestAnimationFrame(() => requestAnimationFrame(syncGridLayout));
+  }, [isMain, viewRev]);
 
 
   // 차트 만들기 -------------------------------------------------------
