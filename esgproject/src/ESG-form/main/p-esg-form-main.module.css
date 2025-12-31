@@ -61,6 +61,7 @@
 
 /* ✅ 도넛이 카드 안에 딱 맞게 */
 .donutHost {
+  padding-bottom: 16px;   /* 8~16px 사이로 조절 */
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
@@ -209,6 +210,11 @@
   text-align: left;
   padding-left: 0.5rem;
   font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; /* flex item 말줄임 필수 */
 }
 
 .score {
@@ -216,6 +222,7 @@
   text-align: right;
   font-family: 'Anton', sans-serif;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 /* --- 중단 영역 --- */
@@ -338,6 +345,27 @@
   flex: 1 1 auto;
 }
 
+/* 차트/카드가 들어있는 flex 자식들이 줄어들 수 있게 */
+.topAttend,
+.attendBox,
+.card,
+.chartBox,
+.lineChartAttendBox {
+  min-width: 0;
+}
+
+/* 혹시 오른쪽 TOP5 박스들도 flex 자식이면 같이 */
+.averageTop,
+.topRecordWrap {
+  min-width: 0;
+}
+
+/* ApexCharts 내부가 px 고정폭을 들고 있어도 부모 폭을 따라가게 */
+.lineChartAttendBox :global(.apexcharts-canvas),
+.lineChartAttendBox :global(.apexcharts-svg) {
+  width: 100% !important;
+}
+
 /* =========================================================
    3) Responsive - Notebook(PC 좁은 폭)
 ========================================================= */
@@ -345,6 +373,34 @@
   .averageTop {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--gap-sm);
+  }
+}
+
+/* =========================================================
+   3-1) Responsive - 1450px 이하: 상단 2줄 구성
+   (1줄: 출석률+참여현황 / 2줄: Top5 4개 한 줄)
+========================================================= */
+@media (max-width: 1450px) {
+  /* 상단 전체를 1열로 바꾸고 2행으로 쌓기 */
+  .topSummary {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "attend"
+      "top5";
+  }
+
+  .topAttend {
+    grid-area: attend;
+    /* 기존 2fr 3fr 유지 */
+    grid-template-columns: 2fr 3fr;
+  }
+
+  .averageTop {
+    grid-area: top5;
+
+    /* Top5 4개를 무조건 한 줄로 */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -368,6 +424,7 @@
     height: auto !important;
     flex-wrap: nowrap;
   }
+ 
 
   .topAttend,
   .attendBox,
@@ -384,7 +441,7 @@
   }
   
   .attendanceCard {
-    height: 350px !important; /* inline height(266px) 덮어쓰기 */
+    height: 500px !important; /* inline height(266px) 덮어쓰기 */
   }
 
   .middleSummary {
@@ -406,11 +463,14 @@
   }
 
   .lineChartAttendBox {
-    height: 210px;
-    min-height: 210px;
-    max-height: 210px;
+    /* height: 210px; */
+    /* min-height: 210px; */
+    /* max-height: 210px; */
+    height: auto;
+    min-height: 0;
+    flex: 1 1 auto;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     min-width: 0;
   }
 
@@ -492,5 +552,11 @@
 
   .cardShort {
     height: auto !important;
+  }
+}
+
+@media (max-width: 510px){
+  .attendanceCard{
+    height: 400px !important;  /* 266 -> 276 정도만 */
   }
 }

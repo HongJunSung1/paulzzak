@@ -10,6 +10,7 @@ import FixedArea from '../../ESG-common/FixedArea/p-esg-common-FixedArea.tsx';
 import FixedWrap from '../../ESG-common/FixedArea/p-esg-common-FixedWrap.tsx';
 import SearchBox from '../../ESG-common/SearchBox/p-esg-common-SearchBox.tsx';
 import { ApexOptions } from 'apexcharts';
+import { useApexAutoResize } from '../../hooks/useApexAutoResize.tsx'; //hook 추가
 
 import '../../global.d.ts';
 
@@ -57,10 +58,9 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   useEffect(() => {
     if (!isMain) return;
 
-    // main이 다시 보여지는 타이밍에 2프레임 뒤 레이아웃 복구
     const raf1 = requestAnimationFrame(() => {
       const raf2 = requestAnimationFrame(() => {
-        // ✅ Grid 복구
+        // Grid 복구
         const inst = grid1Ref.current?.getInstance?.();
         if (inst && rightGridRef.current) {
           const w = Math.floor(rightGridRef.current.getBoundingClientRect().width);
@@ -68,7 +68,7 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           inst.refreshLayout?.();
         }
 
-        // ✅ ApexCharts 복구
+        // 차트 복구: 리마트 말고 resize만
         try {
           // @ts-ignore
           window.ApexCharts?.exec?.('attendanceDonut', 'resize');
@@ -80,18 +80,13 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           window.ApexCharts?.exec?.('defenseLine', 'resize');
         } catch {}
 
-        // ✅ 최후의 수단: remount (차트/그리드 다시 그리게)
-        setDonutMountKey(k => k + 1);
-        setMemberLineMountKey(k => k + 1);
-        setOffenseMountKey(k => k + 1);
-        setDefenseMountKey(k => k + 1);
-        setViewRev(v => v + 1);
+        setViewRev(v => v + 1); // 그리드용은 유지
       });
       return () => cancelAnimationFrame(raf2);
     });
 
     return () => cancelAnimationFrame(raf1);
-  }, [isMain]);  
+  }, [isMain]);
 
 
   // 1. 출석률 도넛차트
@@ -144,29 +139,45 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   const LineChartOffenseStats = useRef<HTMLDivElement>(null);
   const LineChartDefenseStats = useRef<HTMLDivElement>(null);
 
-  const [averageAttendSize, setAverageAttendSize] = useState({ width: 0, height: 0 });
-  const [lineChartAttendSize, setLineChartAttendSize] = useState({ width: 0, height: 0 });
-  const [lineChartOffenseStatsSize, setLineChartOffenseStatsSize] = useState({ width: 0, height: 0 });
-  const [lineChartDefenseStatsSize, setLineChartDefenseStatsSize] = useState({ width: 0, height: 0 });
+  // const [averageAttendSize, setAverageAttendSize] = useState({ width: 0, height: 0 });
+  // const [lineChartAttendSize, setLineChartAttendSize] = useState({ width: 0, height: 0 });
+  // const [lineChartOffenseStatsSize, setLineChartOffenseStatsSize] = useState({ width: 0, height: 0 });
+  // const [lineChartDefenseStatsSize, setLineChartDefenseStatsSize] = useState({ width: 0, height: 0 });
+  // ✅ 훅으로 사이즈 + Apex resize 자동 처리
+  const averageAttendSize = useApexAutoResize(AverageAttend as any, 'attendanceDonut', {
+    enabled: isMain,
+    measure: true,
+    debounceMs: 50,  // 드래그 리사이즈 깜빡임 줄이려면 30~80 추천
+  });
+
+  const lineChartAttendSize = useApexAutoResize(LineChartAttend as any, 'memberLine', {
+    enabled: isMain,
+    measure: true,
+    debounceMs: 50,
+  });
+
+  const lineChartOffenseStatsSize = useApexAutoResize(LineChartOffenseStats as any, 'offenseLine', {
+    enabled: isMain,
+    measure: true,
+    debounceMs: 50,
+  });
+
+  const lineChartDefenseStatsSize = useApexAutoResize(LineChartDefenseStats as any, 'defenseLine', {
+    enabled: isMain,
+    measure: true,
+    debounceMs: 50,
+  });
+
+
 
   const [donutMountKey, setDonutMountKey] = useState(0);
-  const donutLastAppliedWidthRef = useRef<number>(0);
   const [donutFont, setDonutFont] = useState({ value: 32, name: 12 });
   const [isDonutCompact, setIsDonutCompact] = useState(false);
 
   const donutCardRef = useRef<HTMLDivElement>(null);
   const rightGridRef = useRef<HTMLDivElement>(null);
 
-  const [memberLineMountKey, setMemberLineMountKey] = useState(0);
-  const lastAppliedWidthRef = useRef<number>(0);
 
-  // ✅ offense
-  const [offenseMountKey, setOffenseMountKey] = useState(0);
-  const offenseLastAppliedWidthRef = useRef<number>(0);
-
-  // ✅ defense
-  const [defenseMountKey, setDefenseMountKey] = useState(0);
-  const defenseLastAppliedWidthRef = useRef<number>(0);
 
   // 개인기록
   const [personalWin, setPersonalWin] = useState(0);
@@ -186,30 +197,6 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   const [topRebound, setTopRebound] = useState<TopRebound[]>([]);
   const [topSteal, setTopSteal] = useState<TopSteal[]>([]);
 
-  // AverageAttend 사이즈 감지
-  useEffect(() => {
-    if (!AverageAttend.current) return;
-
-    let raf = 0;
-    const ro = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const w = Math.round(width);
-        const h = Math.round(height);
-        setAverageAttendSize(prev => {
-          if (Math.abs(prev.width - w) < 2 && Math.abs(prev.height - h) < 2) return prev;
-          return { width: w, height: h };
-        });
-      });
-    });
-
-    ro.observe(AverageAttend.current);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, []);
 
   // ✅ 도넛 카드 폭(230px 기준) 감지 → compact 토글
   useEffect(() => {
@@ -237,60 +224,26 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   }, [isMain]);
 
   // ✅ 도넛: 리사이즈/고착 방지(줄어듦/커짐 모두)
-  useEffect(() => {
-    if (!isMain) return;
+// ✅ 도넛: 사이즈 변화에 맞춰 폰트 계산만 수행 (resize는 useApexAutoResize가 담당)
+useEffect(() => {
+  if (!isMain) return;
 
-    let t: any;
+  const host = AverageAttend.current;
+  if (!host) return;
 
-    const fixDonut = () => {
-      const host = AverageAttend.current;
-      if (!host) return;
+  const hostW = Math.round(host.getBoundingClientRect().width);
+  const hostH = Math.round(host.getBoundingClientRect().height);
+  if (hostW <= 0 || hostH <= 0) return;
 
-      const hostW = Math.round(host.getBoundingClientRect().width);
-      const hostH = Math.round(host.getBoundingClientRect().height);
-      if (hostW <= 0) return;
+  const minSide = Math.min(hostW, hostH);
+  const valueFont = Math.max(16, Math.min(36, Math.floor(minSide * 0.18)));
+  const nameFont = Math.max(10, Math.min(14, Math.floor(minSide * 0.06)));
 
-      const minSide = Math.min(hostW, hostH);
-      const valueFont = Math.max(16, Math.min(36, Math.floor(minSide * 0.18)));
-      const nameFont = Math.max(10, Math.min(14, Math.floor(minSide * 0.06)));
+  setDonutFont(prev =>
+    prev.value === valueFont && prev.name === nameFont ? prev : { value: valueFont, name: nameFont }
+  );
+}, [isMain, averageAttendSize.width, averageAttendSize.height]);
 
-      setDonutFont(prev => (prev.value === valueFont && prev.name === nameFont ? prev : { value: valueFont, name: nameFont }));
-
-      if (Math.abs(hostW - donutLastAppliedWidthRef.current) < 2) return;
-      donutLastAppliedWidthRef.current = hostW;
-
-      // @ts-ignore
-      try {
-        // @ts-ignore
-        window.ApexCharts?.exec?.('attendanceDonut', 'resize');
-      } catch {}
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const canvas = host.querySelector('.apexcharts-canvas') as HTMLElement | null;
-          if (!canvas) return;
-
-          const canvasW = Math.round(canvas.getBoundingClientRect().width);
-          if (Math.abs(canvasW - hostW) > 4) setDonutMountKey(k => k + 1);
-        });
-      });
-    };
-
-    const onResize = () => {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        requestAnimationFrame(() => requestAnimationFrame(fixDonut));
-      }, 200);
-    };
-
-    window.addEventListener('resize', onResize);
-    requestAnimationFrame(() => requestAnimationFrame(fixDonut));
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener('resize', onResize);
-    };
-  }, [isMain]);
 
   // ✅ compact 바뀌면 도넛 옵션 재생성 + remount
   useEffect(() => {
@@ -305,6 +258,8 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
     setDonutMountKey(k => k + 1);
   }, [isDonutCompact]); // eslint-disable-line react-hooks/exhaustive-deps
 
+
+  
   // ✅ 오른쪽 그리드 폭 변하면(줄어듦/커짐) 레이아웃 갱신
   useEffect(() => {
     const host = rightGridRef.current;
@@ -330,219 +285,8 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
     };
   }, []);
 
-  // 폴짝 참여현황 라인차트 리사이즈 트리거
-  useEffect(() => {
-    if (lineChartAttendSize.width <= 0 || lineChartAttendSize.height <= 0) return;
-    try {
-      // @ts-ignore
-      window.ApexCharts?.exec?.('memberLine', 'resize');
-    } catch {}
-  }, [lineChartAttendSize.width, lineChartAttendSize.height]);
 
-  useEffect(() => {
-    if (!isMain) return;
 
-    let t: any;
-
-    const fixMemberLine = () => {
-      const host = LineChartAttend.current;
-      if (!host) return;
-
-      const hostW = Math.round(host.getBoundingClientRect().width);
-      if (hostW <= 0) return;
-
-      if (Math.abs(hostW - lastAppliedWidthRef.current) < 2) return;
-      lastAppliedWidthRef.current = hostW;
-
-      try {
-        // @ts-ignore
-        window.ApexCharts?.exec?.('memberLine', 'resize');
-      } catch {}
-
-      requestAnimationFrame(() => {
-        const canvas = host.querySelector('.apexcharts-canvas') as HTMLElement | null;
-        if (!canvas) return;
-
-        const canvasW = Math.round(canvas.getBoundingClientRect().width);
-        if (canvasW > hostW + 4) setMemberLineMountKey(k => k + 1);
-      });
-    };
-
-    const onResize = () => {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        requestAnimationFrame(() => requestAnimationFrame(fixMemberLine));
-      }, 200);
-    };
-
-    window.addEventListener('resize', onResize);
-    requestAnimationFrame(() => requestAnimationFrame(fixMemberLine));
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener('resize', onResize);
-    };
-  }, [isMain]);
-
-  useEffect(() => {
-    if (!isMain) return;
-    let t: any;
-
-    const fixOffense = () => {
-      const host = LineChartOffenseStats.current;
-      if (!host) return;
-
-      const hostW = Math.round(host.getBoundingClientRect().width);
-      if (hostW <= 0) return;
-
-      if (Math.abs(hostW - offenseLastAppliedWidthRef.current) < 2) return;
-      offenseLastAppliedWidthRef.current = hostW;
-
-      try {
-        // @ts-ignore
-        window.ApexCharts?.exec?.('offenseLine', 'resize');
-      } catch {}
-
-      requestAnimationFrame(() => {
-        const canvas = host.querySelector('.apexcharts-canvas') as HTMLElement | null;
-        if (!canvas) return;
-
-        const canvasW = Math.round(canvas.getBoundingClientRect().width);
-        if (canvasW > hostW + 4) setOffenseMountKey(k => k + 1);
-      });
-    };
-
-    const onResize = () => {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        requestAnimationFrame(() => requestAnimationFrame(fixOffense));
-      }, 200);
-    };
-
-    window.addEventListener('resize', onResize);
-    requestAnimationFrame(() => requestAnimationFrame(fixOffense));
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener('resize', onResize);
-    };
-  }, [isMain]);
-
-  useEffect(() => {
-    if (!isMain) return;
-    let t: any;
-
-    const fixDefense = () => {
-      const host = LineChartDefenseStats.current;
-      if (!host) return;
-
-      const hostW = Math.round(host.getBoundingClientRect().width);
-      if (hostW <= 0) return;
-
-      if (Math.abs(hostW - defenseLastAppliedWidthRef.current) < 2) return;
-      defenseLastAppliedWidthRef.current = hostW;
-
-      try {
-        // @ts-ignore
-        window.ApexCharts?.exec?.('defenseLine', 'resize');
-      } catch {}
-
-      requestAnimationFrame(() => {
-        const canvas = host.querySelector('.apexcharts-canvas') as HTMLElement | null;
-        if (!canvas) return;
-
-        const canvasW = Math.round(canvas.getBoundingClientRect().width);
-        if (canvasW > hostW + 4) setDefenseMountKey(k => k + 1);
-      });
-    };
-
-    const onResize = () => {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        requestAnimationFrame(() => requestAnimationFrame(fixDefense));
-      }, 200);
-    };
-
-    window.addEventListener('resize', onResize);
-    requestAnimationFrame(() => requestAnimationFrame(fixDefense));
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener('resize', onResize);
-    };
-  }, [isMain]);
-
-  useEffect(() => {
-    if (!LineChartAttend.current) return;
-
-    let raf = 0;
-    const ro = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const w = Math.round(width);
-        const h = Math.round(height);
-        setLineChartAttendSize(prev => {
-          if (Math.abs(prev.width - w) < 2 && Math.abs(prev.height - h) < 2) return prev;
-          return { width: w, height: h };
-        });
-      });
-    });
-
-    ro.observe(LineChartAttend.current);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!LineChartOffenseStats.current) return;
-
-    let raf = 0;
-    const ro = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const w = Math.round(width);
-        const h = Math.round(height);
-        setLineChartOffenseStatsSize(prev => {
-          if (Math.abs(prev.width - w) < 2 && Math.abs(prev.height - h) < 2) return prev;
-          return { width: w, height: h };
-        });
-      });
-    });
-
-    ro.observe(LineChartOffenseStats.current);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!LineChartDefenseStats.current) return;
-
-    let raf = 0;
-    const ro = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const w = Math.round(width);
-        const h = Math.round(height);
-        setLineChartDefenseStatsSize(prev => {
-          if (Math.abs(prev.width - w) < 2 && Math.abs(prev.height - h) < 2) return prev;
-          return { width: w, height: h };
-        });
-      });
-    });
-
-    ro.observe(LineChartDefenseStats.current);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, []);
 
   // 차트 만들기 -------------------------------------------------------
   const makeAttendanceChart = (attend: number, absent: number, compact: boolean) => {
@@ -553,6 +297,10 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           id: 'attendanceDonut',
           type: 'donut' as const,
           background: 'transparent',
+          animations: { enabled: false },
+          redrawOnWindowResize: true,
+          redrawOnParentResize: true,
+          parentHeightOffset: 0,
         },
         grid: { padding: { top: 8, bottom: 8, left: 8, right: 8 } },
         labels: ['출석', '불참'],
@@ -564,18 +312,20 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           pie: {
             expandOnClick: false,
             donut: {
-              size: '72%',
+              size: compact ? '68%' : '70%',
               labels: {
                 show: !compact,
                 name: {
                   show: true,
-                  fontSize: '12px',
+                  // fontSize: '12px',
+                  fontSize: `${donutFont.name}px`,
                   offsetY: -6,
                   fontWeight: 300,
                 },
                 value: {
                   show: true,
-                  fontSize: '32px',
+                  // fontSize: '32px',
+                  fontSize: `${donutFont.value}px`,
                   fontWeight: 800,
                   offsetY: 6,
                   formatter: (val: string) => `${val}%`,
@@ -583,7 +333,8 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
                 total: {
                   show: true,
                   label: '',
-                  fontSize: '12px',
+                  // fontSize: '12px',
+                  fontSize: `${donutFont.name}px`,
                   fontWeight: 600,
                   offsetY: 18,
                   formatter: () => `${attend}%`,
@@ -617,11 +368,23 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           background: 'transparent',
           toolbar: { show: false },
           zoom: { enabled: false },
+          animations: { enabled: false },
+          redrawOnWindowResize: true,
+          redrawOnParentResize: true,
+          parentHeightOffset: 0,   //  카드/컨테이너 안에서 높이 계산 안정화
         },
-        grid: { padding: { left: 10, right: 5, top: -10, bottom: 0 } },
+        grid: { padding: { left: 10, right: 10, top: 10, bottom: 22 } },
         xaxis: {
           categories: sliced.map((r: any) => r.GameDate),
-          labels: { rotate: 0, style: { fontSize: '10px', fontWeight: 500 } },
+          tickPlacement: 'between',
+              labels: {
+                        show: true,
+                        rotate: 0,
+                        trim: false,
+                        hideOverlappingLabels: false,
+                        style: { fontSize: '10px', fontWeight: 500 },
+                        offsetY: 0,
+                      },
         },
         yaxis: { min: 0, labels: { style: { fontSize: '10px' } } },
         stroke: { curve: 'smooth', width: 5 },
@@ -652,6 +415,10 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           background: 'transparent',
           toolbar: { show: false },
           zoom: { enabled: false },
+          animations: { enabled: false },
+          redrawOnWindowResize: true,
+          redrawOnParentResize: true,
+          parentHeightOffset: 0,
         },
         grid: { padding: { left: 10, right: 5, top: -10, bottom: 0 } },
         xaxis: {
@@ -664,6 +431,7 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
         tooltip: { shared: true, intersect: false },
         colors: ['#4C78A8', '#3E3E3E'],
         legend: { show: false },
+        
       },
     };
   };
@@ -687,6 +455,10 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
           background: 'transparent',
           toolbar: { show: false },
           zoom: { enabled: false },
+          animations: { enabled: false },
+          redrawOnWindowResize: true,
+          redrawOnParentResize: true,
+          parentHeightOffset: 0,
         },
         grid: { padding: { left: 10, right: 5, top: -10, bottom: 0 } },
         xaxis: {
@@ -891,7 +663,7 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
 
             <div className={styles.attendBox}>
               <div className={styles.card} style={{ height: '266px' }}>
-                폴짝 참여 현황
+                <div className={styles.cardHeader}>폴짝 참여 현황</div>
                 <div className={`${styles.chartBox} ${styles.lineChartAttendBox}`} ref={LineChartAttend}>
                   {memberLineChart &&
                     memberLineChart.series.length > 0 &&
@@ -904,11 +676,19 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
                           ...memberLineChart.options,
                           chart: {
                             ...(memberLineChart.options.chart ?? {}),
+                            width: lineChartAttendSize.width,
+                            height: lineChartAttendSize.height,
+                            animations: { enabled: false },   // ✅ 리사이즈 깜빡임/지연 크게 감소
+                            redrawOnWindowResize: true,
+                            redrawOnParentResize: true,
+                            parentHeightOffset: 0,
                           },
                         }}
-                        key={`memberLine-${memberLineMountKey}-${memberLineChart.series
-                          .map(s => s.data.join(','))
-                          .join('|')}`}
+                        // key={`memberLine-${memberLineMountKey}-${memberLineChart.series
+                        //   .map(s => s.data.join(','))
+                        //   .join('|')}`}
+                        // 리사이징할 때 자꾸 크기가 늘어나기만 하고 줄어들진 않아서 
+                        key={`memberLine-${lineChartAttendSize.width}x${lineChartAttendSize.height}-${memberLineChart.series.map(s => s.data.join(',')).join('|')}`}
                       />
                     )}
                 </div>
@@ -1061,9 +841,10 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
                             height: lineChartOffenseStatsSize.height,
                           },
                         }}
-                        key={`offenseLine-${offenseMountKey}-${offenseStatsLineChart.series
-                          .map(s => s.data.join(','))
-                          .join('|')}`}
+                        key={`offenseLine-${offenseStatsLineChart.series.map(s => s.data.join(',')).join('|')}`}
+                        // key={`offenseLine-${offenseMountKey}-${offenseStatsLineChart.series
+                        //   .map(s => s.data.join(','))
+                        //   .join('|')}`}
                       />
                     )}
                 </div>
@@ -1088,9 +869,10 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
                             height: lineChartDefenseStatsSize.height,
                           },
                         }}
-                        key={`defenseLine-${defenseMountKey}-${defenseStatsLineChart.series
-                          .map(s => s.data.join(','))
-                          .join('|')}`}
+                        key={`defenseLine-${defenseStatsLineChart.series.map(s => s.data.join(',')).join('|')}`}
+                        // key={`defenseLine-${defenseMountKey}-${defenseStatsLineChart.series
+                        //   .map(s => s.data.join(','))
+                        //   .join('|')}`}
                       />
                     )}
                 </div>
