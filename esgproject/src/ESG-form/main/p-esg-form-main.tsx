@@ -177,6 +177,25 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   const donutCardRef = useRef<HTMLDivElement>(null);
   const rightGridRef = useRef<HTMLDivElement>(null);
 
+  const gridRaf1Ref = useRef<number | null>(null);
+  const gridRaf2Ref = useRef<number | null>(null);
+  const gridAliveRef = useRef(true);
+
+  useEffect(() => {
+    gridAliveRef.current = true;
+    return () => {
+      gridAliveRef.current = false;
+      if (gridRaf1Ref.current) cancelAnimationFrame(gridRaf1Ref.current);
+      if (gridRaf2Ref.current) cancelAnimationFrame(gridRaf2Ref.current);
+    };
+  }, []);
+
+  const safeRefresh = (inst: any) => {
+    const el = inst?.el as HTMLElement | undefined;
+    if (!el) return false;
+    if (!el.isConnected) return false;         // ✅ DOM에서 떨어졌으면 금지
+    return true;
+  };  
 
 
   // 개인기록
@@ -198,38 +217,136 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
   const [topSteal, setTopSteal] = useState<TopSteal[]>([]);
 
   // 시트 사이즈
-  const syncGridLayout = () => {
-    const host = rightGridRef.current;
-    const inst = grid1Ref.current?.getInstance?.();
-    if (!host || !inst) return;
+// ✅ raf 관리 (컴포넌트 상단에 2개 ref만 추가되어 있어야 함)
+// const gridRaf1Ref = useRef<number | null>(null);
+// const gridRaf2Ref = useRef<number | null>(null);
 
-    const w = Math.floor(host.getBoundingClientRect().width);
-    const h = Math.floor(host.getBoundingClientRect().height);
-    if (w <= 0 || h <= 0) return;
+const syncGridLayout = () => {
+  if (!isMain) return;
 
-    const root = inst.el as HTMLElement | undefined;
-    if (root) {
-      // ✅ “작게 시작한 폭” 고착 해제 (핵심)
-      root.style.width = '';
-      root.style.maxWidth = '';
-      // tui-grid 내부 컨테이너들도 같이 풀어줌
-      const c1 = root.querySelector('.tui-grid-container') as HTMLElement | null;
-      const c2 = root.querySelector('.tui-grid-content-area') as HTMLElement | null;
-      const c3 = root.querySelector('.tui-grid-header-area') as HTMLElement | null;
-      [c1, c2, c3].forEach(el => {
-        if (!el) return;
-        el.style.width = '';
-        el.style.maxWidth = '';
+  const host = rightGridRef.current;
+  const inst = grid1Ref.current?.getInstance?.();
+  if (!host || !inst) return;
+
+  // ✅ inst.el 체크 (Toast Grid 내부가 el.querySelector를 바로 씀)
+  const root = inst.el as HTMLElement | undefined;
+  if (!root) return;
+  if (!root.isConnected) return; // ✅ DOM에서 떨어진 뒤 호출 방지
+
+  // ✅ 현재 컨테이너 실제 사이즈
+  const rect = host.getBoundingClientRect();
+  const w = Math.floor(rect.width);
+  const h = Math.floor(rect.height);
+
+  /**
+   * ⚠️ 핵심:
+   * - 작은 화면에서 시작하면 초기에는 레이아웃 계산이 덜 된 상태로 w/h가 0이거나,
+   *   grid가 내부적으로 "고정폭"을 들고 있는 경우가 있습니다.
+   * - 이때 바로 return 해버리면 "큰 화면으로 옮겼을 때" 첫 타이밍을 놓치고
+   *   그대로 작은 폭이 유지되는 경우가 있어요.
+   *
+   * 그래서 w/h가 0인 경우에도 "한 번 더" 재시도 스케줄만 걸어둡니다.
+   */
+  const scheduleRetry = () => {
+    if (gridRaf1Ref.current) cancelAnimationFrame(gridRaf1Ref.current);
+    if (gridRaf2Ref.current) cancelAnimationFrame(gridRaf2Ref.current);
+
+    gridRaf1Ref.current = requestAnimationFrame(() => {
+      gridRaf2Ref.current = requestAnimationFrame(() => {
+        // ✅ 재시도 시점에도 안전 체크
+        if (!isMain) return;
+        const inst2 = grid1Ref.current?.getInstance?.();
+        const host2 = rightGridRef.current;
+        if (!inst2 || !host2) return;
+
+        const root2 = inst2.el as HTMLElement | undefined;
+        if (!root2 || !root2.isConnected) return;
+
+        try {
+          inst2.refreshLayout?.();
+        } catch {}
       });
-    }
+    });
+  };
 
-    // ✅ 폭/레이아웃 갱신
+  // ✅ 레이아웃 전(0) 상태면 "return" 하지 말고 재시도 예약
+  if (w <= 0 || h <= 0) {
+    scheduleRetry();
+    return;
+  }
+
+  /**
+   * ===========================
+   * ✅ (기존 로직 1) 폭 고착 해제
+   * ===========================
+   */
+  try {
+    // ✅ “작게 시작한 폭” 고착 해제 (핵심)
+    root.style.width = '';
+    root.style.maxWidth = '';
+
+    // tui-grid 내부 컨테이너들도 같이 풀어줌
+    const c1 = root.querySelector('.tui-grid-container') as HTMLElement | null;
+    const c2 = root.querySelector('.tui-grid-content-area') as HTMLElement | null;
+    const c3 = root.querySelector('.tui-grid-header-area') as HTMLElement | null;
+
+    [c1, c2, c3].forEach(el => {
+      if (!el) return;
+      el.style.width = '';
+      el.style.maxWidth = '';
+    });
+  } catch {
+    // root가 살아있어도 내부 구조 타이밍 문제 있을 수 있어서 방어
+  }
+
+  /**
+   * ===========================
+   * ✅ (기존 로직 2) 폭/레이아웃 갱신
+   * ===========================
+   */
+  try {
     inst.setWidth?.(w);
     inst.refreshLayout?.();
+  } catch {
+    // inst 내부 el이 순간적으로 undefined가 되면 여기서도 터질 수 있어 방어
+    return;
+  }
 
-    // ✅ 2프레임 뒤 한 번 더
-    requestAnimationFrame(() => requestAnimationFrame(() => inst.refreshLayout?.()));
-  };
+  /**
+   * ===========================
+   * ✅ (기존 로직 3) 2프레임 뒤 한 번 더
+   * + 안전 체크 + 취소 처리
+   * ===========================
+   */
+  if (gridRaf1Ref.current) cancelAnimationFrame(gridRaf1Ref.current);
+  if (gridRaf2Ref.current) cancelAnimationFrame(gridRaf2Ref.current);
+
+  gridRaf1Ref.current = requestAnimationFrame(() => {
+    gridRaf2Ref.current = requestAnimationFrame(() => {
+      if (!isMain) return;
+
+      const inst2 = grid1Ref.current?.getInstance?.();
+      if (!inst2) return;
+
+      const root2 = inst2.el as HTMLElement | undefined;
+      if (!root2 || !root2.isConnected) return;
+
+      // ✅ 마지막 순간에 host 폭이 바뀌었을 수도 있어서 다시 폭 동기화 1회 더
+      const host2 = rightGridRef.current;
+      if (!host2) return;
+
+      const w2 = Math.floor(host2.getBoundingClientRect().width);
+      const h2 = Math.floor(host2.getBoundingClientRect().height);
+      if (w2 <= 0 || h2 <= 0) return;
+
+      try {
+        inst2.setWidth?.(w2);
+        inst2.refreshLayout?.();
+      } catch {}
+    });
+  });
+};
+
 
   // ✅ “브레이크포인트 재배치”는 한 번에 안 끝나서 2~3번 더 쏨
   const syncGridLayoutBurst = () => {
@@ -346,8 +463,13 @@ useEffect(() => {
   }, [isMain, viewRev]);
 
 
+
+
   // 차트 만들기 -------------------------------------------------------
   const makeAttendanceChart = (attend: number, absent: number, compact: boolean) => {
+    // 도넛 호스트 높이에 비례해서 중심 보정값 계산
+    const centerFix = Math.max(10, Math.min(0, Math.round((donutFont.value - 28) * 0.25)));
+    const centerfontSize = Math.max(donutFont.value )
     return {
       series: [attend, absent],
       options: {
@@ -377,7 +499,7 @@ useEffect(() => {
                   show: true,
                   // fontSize: '12px',
                   fontSize: `${donutFont.name}px`,
-                  offsetY: -6,
+                  offsetY: -6 + centerFix,
                   fontWeight: 300,
                 },
                 value: {
@@ -385,7 +507,7 @@ useEffect(() => {
                   // fontSize: '32px',
                   fontSize: `${donutFont.value}px`,
                   fontWeight: 800,
-                  offsetY: 6,
+                  offsetY: 6 + centerFix,
                   formatter: (val: string) => `${val}%`,
                 },
                 total: {
@@ -394,7 +516,7 @@ useEffect(() => {
                   // fontSize: '12px',
                   fontSize: `${donutFont.name}px`,
                   fontWeight: 600,
-                  offsetY: 18,
+                  offsetY: 18 + centerFix,
                   formatter: () => `${attend}%`,
                 },
               },
@@ -405,6 +527,30 @@ useEffect(() => {
       },
     };
   };
+
+  useEffect(() => {
+    if (!isMain) return;
+    if (attendanceChartData.series.length <= 0) return;
+
+    const attend = attendanceChartData.series[0] ?? 0;
+    const absent = attendanceChartData.series[1] ?? 0;
+
+    setAttendanceChartData(makeAttendanceChart(attend, absent, isDonutCompact));
+    setDonutMountKey(k => k + 1); // ✅ 확실히 반영되게 remount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMain, donutFont.value, donutFont.name, averageAttendSize]); // 필요하면 averageAttendSize도 추가  
+
+  useEffect(() => {
+    if (attendanceChartData.series.length <= 0) return;
+
+    setAttendanceChartData(prev => {
+      const attend = prev.series[0] ?? 0;
+      const absent = prev.series[1] ?? 0;
+      return makeAttendanceChart(attend, absent, isDonutCompact);
+    });
+
+    setDonutMountKey(k => k + 1);
+  }, [donutFont.value, donutFont.name]); // ✅ 폰트 바뀌면 옵션 재생성  
 
   const makeMemberLineChart = (rawData: any): { series: { name: string; data: number[] }[]; options: ApexOptions } | null => {
     if (!rawData || rawData.length === 0) return null;
