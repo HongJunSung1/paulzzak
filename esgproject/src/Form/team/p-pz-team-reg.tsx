@@ -266,14 +266,14 @@ const TeamReg = ({strOpenUrl, openTabs}: FormTeamRegProps) =>{
 
                 // 중분류에 대분류 내부코드 넣기
                 for(let i = 0; i < grid2Changes.grid.length; i++){
-                    if(grid2Changes.grid[i].SeasonCD === null){
+                    if(grid2Changes.grid[i].SeasonCD === null || grid2Changes.grid[i].SeasonCD === ''){
                         grid2Changes.grid[i].SeasonCD = SeasonCD
                     }
                 }
 
                 // 선수등록에 팀 내부코드 넣기
                 for(let i = 0; i < grid3Changes.grid.length; i++){
-                    if(grid3Changes.grid[i].TeamCD === null){
+                    if(grid3Changes.grid[i].TeamCD === null || grid3Changes.grid[i].TeamCD === ''){
                         grid3Changes.grid[i].TeamCD = TeamCD
                     }
                 }
