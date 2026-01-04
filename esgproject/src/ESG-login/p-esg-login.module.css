@@ -252,60 +252,68 @@ input::placeholder  {
 @media (max-width: 768px){
   .LoginWrap{
     aspect-ratio: auto;
-    max-height: 92dvh;  /* 로고/여백 감안해서 더 작게 */
     flex-direction: column;
-    transform: translateY(-12px); /* 아래 로고 공간 확보 (페이지 길이 늘리지 않음) */
+    transform: none;        /* 기존 translateY(-12px) 제거 */
+    max-height: none;       /* 고정 높이로 눌리는 현상 방지 */
   }
+  
   .LoginLeft{
     width: 100%;
-    height: 35vh;       /* 이미지 영역 높이 */
+    height: 35vh;
   }
+
   .LoginRight{
     width: 100%;
     padding: 20px 0;
   }
 
+
   .LogoWrap{
     display: none;
   }
 
+
+  /* ✅ 모바일: 컨텐츠 늘어나면 스크롤 허용(겹침 방지 핵심) */
   .LoginContainer{
-    height: 100dvh;      /* ✅ 모바일 실제 화면 높이 */
+    height: auto;           /* 기존 100dvh 고정 해제 */
     min-height: 100dvh;
-    overflow: hidden;    /* ✅ 세로 스크롤 차단 */
-    padding-bottom: 0;   /* ✅ (이전 답변에서 넣은 값이면 제거) */
+    overflow-y: auto;       /* ✅ 세로 스크롤 허용 */
+    overflow-x: hidden;
+    padding-bottom: 12px;   /* 하단 여백 */
   }
 
   /* 모바일 화면 폴짝 로고 */
+  /* DB 아래에 자연스럽게 배치 */
   .MobileFooterLogo{
     display: flex;
-    position: fixed;
-    bottom: 12px;        /* 화면 최하단 */
-    left: 0;
+    position: static;       /* ✅ fixed 해제 */
     width: 100%;
     justify-content: center;
-    z-index: 10;
-    pointer-events: none; /* 입력 방해 방지 */
+    margin-top: 10px;
+    padding-bottom: 10px;   /* 홈바/제스처 영역 간격 */
+    z-index: auto;
+    pointer-events: none;
   }
 
   .MobileFooterLogo img{
-    width: 90px;         /* 작게 */
-    opacity: 0.95;       /* 은은하게 */
+    margin-top: 3px;
+    width: 90px;
+    opacity: 0.95;
   }
 
+  /* ✅ DB 안내: fixed 금지(겹침 원인) → 흐름에 포함 */
   .DbTimeNoticeWrap{
     position: static;
-    left: auto;
     transform: none;
-    bottom: auto;
-    margin-top: 10px;
-    padding: 0 16px;       /* 좌우 안전 여백 */
-    z-index: auto;            /* 로고(z=10) 아래/위는 취향인데, 보통 안내가 위에 떠야하면 11로 */
-    pointer-events: auto;  /* 입력 방해 방지 */
+    margin-top: 12px;
+    padding: 0;             /* 필요하면 0 16px로 */
+    width: min(972px, 100%);
+    z-index: auto;
+    pointer-events: auto;
   }
 
   .DbTimeNotice{
-    pointer-events: auto;  /* 안내 클릭 필요 없으면 유지 */
-  }  
+    margin: 0 auto;
+  }
 
 }
