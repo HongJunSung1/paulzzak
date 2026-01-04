@@ -294,18 +294,18 @@ input::placeholder  {
   }
 
   .DbTimeNoticeWrap{
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 62px;          /* MobileFooterLogo(bottom:12px, 로고 크기 고려해서 위로) */
-    margin-top: 0;
+    position: static;
+    left: auto;
+    transform: none;
+    bottom: auto;
+    margin-top: 10px;
     padding: 0 16px;       /* 좌우 안전 여백 */
-    z-index: 9;            /* 로고(z=10) 아래/위는 취향인데, 보통 안내가 위에 떠야하면 11로 */
-    pointer-events: none;  /* 입력 방해 방지 */
+    z-index: auto;            /* 로고(z=10) 아래/위는 취향인데, 보통 안내가 위에 떠야하면 11로 */
+    pointer-events: auto;  /* 입력 방해 방지 */
   }
 
   .DbTimeNotice{
-    pointer-events: none;  /* 안내 클릭 필요 없으면 유지 */
+    pointer-events: auto;  /* 안내 클릭 필요 없으면 유지 */
   }  
 
 }
