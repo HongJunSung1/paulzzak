@@ -505,12 +505,15 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
         : "오늘은 운영시간이 없습니다.";
 
     const nowStr = fmtHHMM(now);
-
+    
     if (!nextPoint) {
         return {
-        title: isOn ? "현재 홈페이지 이용 가능" : "현재 홈페이지 이용 불가",
-        // desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · 현재 시간: (${DOW_KR[dow]}) ${nowStr}`,
-        desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText}`,
+            title: isOn ? "현재 홈페이지 이용 가능" : "현재 홈페이지 이용 불가",
+            // desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · 현재 시간: (${DOW_KR[dow]}) ${nowStr}`,
+            descLines: [
+                `오늘(${DOW_KR[dow]}) 운영시간: ${todayText}`,
+                '',
+            ],
         };
     }
 
@@ -522,19 +525,27 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
     return {
         title: isOn ? "현재 홈페이지 이용 가능" : "현재 홈페이지 이용 불가",
         // desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · ${nextText} · 현재 시간: (${DOW_KR[dow]}) ${nowStr}`,
-        desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · ${nextText}`,
+          descLines: [
+            `오늘(${DOW_KR[dow]}) 운영시간: ${todayText}`,
+            nextText,
+        ],
     };
     }
 
     function DbTimeNotice({ className }: { className?: string }) {
-        const { title, desc } = getDbStatusText();
+    const { title, descLines } = getDbStatusText();
 
-        return (
-            <div className={className}>
-            <div className="dbNoticeTitle">{title}</div>
-            <div className="dbNoticeDesc">{desc}</div>
-            </div>
-        );
+    return (
+        <div className={className}>
+        <div className="dbNoticeTitle">{title}</div>
+        {/* 운영시간이랑 다음시작 시간 한 칸 띄려고 이렇게 함 */}
+        <div className="dbNoticeDesc">
+            {descLines.map((line, i) => (
+            <div key={i}>{line}</div>
+            ))}
+        </div>
+        </div>
+    );
     }
 
 
