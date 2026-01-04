@@ -332,6 +332,212 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
         }
     }
 
+    // ✅ DB ON 구간(요일별 여러 구간 가능) - KST 기준
+    // day: 0(일)~6(토)
+    type DbSegment = { start: string; end: string };
+
+    const DOW_KR = ["일", "월", "화", "수", "목", "금", "토"];
+
+    /**
+     * DB 사용시간 기준
+     * 실제 DB켜지는 시간보다 30분 늦게로 설정함. 켜지는 시간이 기니깐..
+     * [월요일]
+     *  08:30~12:30
+     *  23:00~(화)01:30  => 월요일 스케줄에 "23:00~25:30"처럼 표현 (자정 넘어가는 구간)
+     *
+     * [화~금]
+     *  10:00~18:00
+     *
+     * [토/일]
+     *  08:30~12:30
+     */
+    const DB_ON_SEGMENTS: Record<number, DbSegment[]> = {
+        0: [{ start: "09:00", end: "12:30" }],                          // 일
+        1: [{ start: "09:00", end: "12:30" }, { start: "23:00", end: "25:30" }], // 월 (01:30 = 25:30)
+        2: [{ start: "10:30", end: "18:00" }],                          // 화
+        3: [{ start: "10:30", end: "18:00" }],                          // 수
+        4: [{ start: "10:30", end: "18:00" }],                          // 목
+        5: [{ start: "10:30", end: "18:00" }],                          // 금
+        6: [{ start: "09:00", end: "12:30" }],                          // 토
+    };
+
+    function toMinutesAllowOver24(hhmm: string) {
+        // "25:30" 같이 24시 넘는 표현 허용
+        const [h, m] = hhmm.split(":").map(Number);
+        return h * 60 + m;
+    }
+
+    function nowKstMinutesAndDow() {
+        const now = new Date();
+        const dow = now.getDay(); // 0~6 (로컬이 KST라고 가정. 사용 환경이 한국이니 OK)
+        const nowMin = now.getHours() * 60 + now.getMinutes();
+        return { dow, nowMin, now };
+    }
+
+    function fmtHHMM(date: Date) {
+        const hh = String(date.getHours()).padStart(2, "0");
+        const mm = String(date.getMinutes()).padStart(2, "0");
+        return `${hh}:${mm}`;
+    }
+
+    function addMinutesToDowTime(dow: number, minutes: number) {
+        // minutes가 1440 이상이면 다음날로 넘어감
+        const addDays = Math.floor(minutes / 1440);
+        const mm = minutes % 1440;
+        const ndow = (dow + addDays) % 7;
+        const hh = Math.floor(mm / 60);
+        const m = mm % 60;
+        return { dow: ndow, hhmm: `${String(hh).padStart(2, "0")}:${String(m).padStart(2, "0")}` };
+    }
+
+    function getDbStatusText() {
+        const { dow, nowMin, now } = nowKstMinutesAndDow();
+        const segsToday = DB_ON_SEGMENTS[dow] ?? [];
+
+        // 오늘 세그먼트에 "자정넘김(end>1440)"이 있으면 now가 새벽(0~end-1440)일 때,
+        // 사실상 "어제의 23:00~01:30 구간"에 포함될 수 있음.
+        // => 전날 세그먼트 중 end가 24시 넘는 구간을 가져와서, nowMin을 1440+nowMin으로 비교
+        const prevDow = (dow + 6) % 7;
+        const segsPrev = DB_ON_SEGMENTS[prevDow] ?? [];
+        const prevCarry = segsPrev.filter(s => toMinutesAllowOver24(s.end) > 1440);
+
+        // 1) 현재 ON 여부 체크
+        // - 오늘 세그먼트는 nowMin 그대로 비교
+        const onToday = segsToday.some(s => {
+            const a = toMinutesAllowOver24(s.start);
+            const b = toMinutesAllowOver24(s.end);
+            return nowMin >= a && nowMin <= Math.min(b, 1440); // 오늘 범위는 24:00까지만
+    });
+
+    function formatAbsRange(segStartAbsMin: number, segEndAbsMin: number) {
+        // segStartAbsMin / segEndAbsMin 은 "오늘 0시 기준 abs" (0~2880 범위)
+        // 시작/끝을 각각 실제 요일/시간으로 변환해서 "HH:mm ~ (요일)HH:mm" 형태로 만듦
+        const startBaseDow = dow; // abs는 "오늘"을 기준으로 잡았으므로, 표시도 dow 기준으로 풀면 됨
+
+        const start = addMinutesToDowTime(startBaseDow, segStartAbsMin);
+        const end = addMinutesToDowTime(startBaseDow, segEndAbsMin);
+
+        const startStr = `(${DOW_KR[start.dow]}) ${start.hhmm}`;
+        const endStr = end.dow !== start.dow ? `(${DOW_KR[end.dow]}) ${end.hhmm}` : end.hhmm;
+
+        return `${startStr} ~ ${endStr}`;
+    }    
+
+    // - 전날에서 넘어온 세그먼트는 nowMin+1440으로 비교
+    const onFromPrev = prevCarry.some(s => {
+        const a = toMinutesAllowOver24(s.start); // 예: 23:00 = 1380
+        const b = toMinutesAllowOver24(s.end);   // 예: 25:30 = 1530
+        const x = nowMin + 1440;                 // 오늘 01:00 => 1500 같은 식
+        return x >= a && x <= b;
+    });
+
+    const isOn = onToday || onFromPrev;
+
+    // 2) 다음 전환(ON->OFF / OFF->ON) 찾기
+    // 앞으로 48시간(2일) 정도 훑으면 충분
+    // (월요일만 자정넘김이라 24h만으로도 되지만 안전하게 48h)
+    type Point = { atAbsMin: number; type: "START" | "END"; srcDow: number; hhmm: string; showDow: number; segStartAbsMin: number; segEndAbsMin: number;};
+    const points: Point[] = [];
+
+    for (let d = 0; d < 2; d++) {
+        const cdow = (dow + d) % 7;
+        const base = d * 1440;
+        const segs = DB_ON_SEGMENTS[cdow] ?? [];
+        for (const s of segs) {
+            const st = toMinutesAllowOver24(s.start);
+            const en = toMinutesAllowOver24(s.end);
+
+            const segStartAbsMin = base + st;
+            const segEndAbsMin = base + en;
+
+            // start
+            {
+                const t = base + st;
+                const { dow: showDow, hhmm } = addMinutesToDowTime(cdow, st);
+                      points.push({
+                                    atAbsMin: segStartAbsMin,
+                                    type: "START",
+                                    srcDow: cdow,
+                                    hhmm,
+                                    showDow,
+                                    segStartAbsMin,
+                                    segEndAbsMin,
+                                });
+            }
+            // end (자정 넘기면 cdow+1로 표시될 수 있음)
+            {
+                const t = base + en;
+                const { dow: showDow, hhmm } = addMinutesToDowTime(cdow, en);
+                points.push({
+                    atAbsMin: segEndAbsMin,
+                    type: "END",
+                    srcDow: cdow,
+                    hhmm,
+                    showDow,
+                    segStartAbsMin,
+                    segEndAbsMin,
+                });
+            }
+        }
+    }
+
+    points.sort((a, b) => a.atAbsMin - b.atAbsMin);
+
+    const nowAbs = nowMin; // 현재를 "오늘 0시 기준" abs로 둠
+    // 전날 carry로 ON인 케이스는 nowAbs를 1440+nowMin으로 봐야 다음 END를 제대로 찾음
+    const nowAbsForSearch = onFromPrev ? nowMin + 1440 : nowAbs;
+
+    const nextPoint = points.find(p => p.atAbsMin > nowAbsForSearch);
+
+    // 오늘 운영시간 문자열
+    const todayText = segsToday.length
+        ? segsToday
+            .map(s => {
+            // 25:30 같이 보이면 사용자 혼동 => 표시할 때는 다음날 01:30로 표기
+            const st = toMinutesAllowOver24(s.start);
+            const en = toMinutesAllowOver24(s.end);
+            const stDisp = addMinutesToDowTime(dow, st);
+            const enDisp = addMinutesToDowTime(dow, en);
+            const enStr = enDisp.dow !== dow ? `(${DOW_KR[enDisp.dow]}) ${enDisp.hhmm}` : enDisp.hhmm;
+            return `${stDisp.hhmm} ~ ${enStr}`;
+            })
+            .join(" / ")
+        : "오늘은 운영시간이 없습니다.";
+
+    const nowStr = fmtHHMM(now);
+
+    if (!nextPoint) {
+        return {
+        title: isOn ? "현재 홈페이지 이용 가능" : "현재 홈페이지 이용 불가",
+        // desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · 현재 시간: (${DOW_KR[dow]}) ${nowStr}`,
+        desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText}`,
+        };
+    }
+
+    const nextText =
+        nextPoint.type === "END"
+        ? `다음 종료: (${DOW_KR[nextPoint.showDow]}) ${nextPoint.hhmm}`
+        : `다음 시작: ${formatAbsRange(nextPoint.segStartAbsMin, nextPoint.segEndAbsMin)}`;
+
+    return {
+        title: isOn ? "현재 홈페이지 이용 가능" : "현재 홈페이지 이용 불가",
+        // desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · ${nextText} · 현재 시간: (${DOW_KR[dow]}) ${nowStr}`,
+        desc: `오늘(${DOW_KR[dow]}) 운영시간: ${todayText} · ${nextText}`,
+    };
+    }
+
+    function DbTimeNotice({ className }: { className?: string }) {
+        const { title, desc } = getDbStatusText();
+
+        return (
+            <div className={className}>
+            <div className="dbNoticeTitle">{title}</div>
+            <div className="dbNoticeDesc">{desc}</div>
+            </div>
+        );
+    }
+
+
     return (
         <>
             <Loading loading={loading}/>
@@ -389,6 +595,10 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
                     </div>
                     
                 </div>
+                  {/* DB 실행 시간  */}
+                  <div className={styles.DbTimeNoticeWrap}>
+                    <DbTimeNotice className={styles.DbTimeNotice} />
+                  </div>
                 {/* 모바일 하단 고정 로고 */}
                 <div className={styles.MobileFooterLogo}>
                     <img src={PaulZZakLogo} alt="PaulZZakLogo" />

@@ -5,6 +5,7 @@
   background-color: rgb(237, 238, 239);
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 16px; /* 모바일에서 가장자리 여백 */
@@ -205,6 +206,39 @@ input::placeholder  {
   display: none; /* 기본은 숨김 */
 }
 
+/* ✅ DB 운영시간 안내 영역(PC: 카드 아래, 모바일: 하단 로고 위 고정) */
+.DbTimeNoticeWrap{
+  width: min(972px, 100%);
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.DbTimeNotice{
+  width: 100%;
+  /* border: 1px solid #dedede; */
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  padding: 12px 14px;
+  box-sizing: border-box;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.DbTimeNotice :global(.dbNoticeTitle){
+  font-size: 14px;
+  font-weight: 800;
+  color: #14244d;
+  margin-bottom: 6px;
+}
+
+.DbTimeNotice :global(.dbNoticeDesc){
+  font-size: 12px;
+  color: #666;
+  line-height: 1.35;
+}
+
+
 /* ✅ 아주 작은 모바일(예: 390px 이하)에서 여백 조정 */
 @media (max-width: 420px){
   .LoginRightWrap{
@@ -258,5 +292,20 @@ input::placeholder  {
     width: 90px;         /* 작게 */
     opacity: 0.95;       /* 은은하게 */
   }
+
+  .DbTimeNoticeWrap{
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 62px;          /* MobileFooterLogo(bottom:12px, 로고 크기 고려해서 위로) */
+    margin-top: 0;
+    padding: 0 16px;       /* 좌우 안전 여백 */
+    z-index: 9;            /* 로고(z=10) 아래/위는 취향인데, 보통 안내가 위에 떠야하면 11로 */
+    pointer-events: none;  /* 입력 방해 방지 */
+  }
+
+  .DbTimeNotice{
+    pointer-events: none;  /* 안내 클릭 필요 없으면 유지 */
+  }  
 
 }
