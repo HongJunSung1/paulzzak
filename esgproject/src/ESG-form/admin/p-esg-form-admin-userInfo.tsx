@@ -211,10 +211,9 @@ const UserInfo = ({strOpenUrl, openTabs}: FormUserInfoProps) => {
                 //모든 컬럼이 빈값인지 체크
                 grid1Changes.grid = grid1Ref.current.setColumCheck(grid1Changes.grid);
                 combinedData.push(grid1Changes)
-
                 // 신규 등록일 경우 비밀번호 지정해서 저장
                 for(let i = 0; i< combinedData[0].grid.length; i++){
-                    if(combinedData[0].grid[i].UserCD == null){
+                    if(combinedData[0].grid[i].UserCD == null || combinedData[0].grid[i].UserCD == ''){
                         const cryptoPW = CryptoJS.SHA256('1234').toString(); // 초기 비밀번호 설정
                         combinedData[0].grid[i].UserPW = cryptoPW
                     }
