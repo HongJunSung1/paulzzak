@@ -43,6 +43,7 @@ const Main = ({ strOpenUrl, openTabs }: FormMainProps) => {
 
   // 조회조건 값
   const [SeasonCD, setSeasonCD] = useState(0);
+  const [SeasonName, setSeasonName] = useState(''); // 로그인 시 서치박스 표시용
 
   // 조회 시 받는 데이터 값
   const [grid1Data, setGrid1Data] = useState<any[]>([]);
@@ -480,7 +481,8 @@ useEffect(() => {
         },
         grid: { padding: { top: 8, bottom: 8, left: 8, right: 8 } },
         labels: ['출석', '불참'],
-        colors: ['#1e2a78', '#CFCFCF'],
+        // colors: ['#1e2a78', '#CFCFCF'],
+        colors: ['#87010C', '#CFCFCF'],
         legend: { show: false },
         dataLabels: { enabled: false },
         tooltip: { y: { formatter: (val: number) => `${val}%` } },
@@ -722,6 +724,13 @@ useEffect(() => {
           const row = result[0][0];
           const attend = Number(row.AttendRate) ?? 0;
           const absent = Number(row.AbsentRate) ?? 0;
+          const loginSeason = Number(row.SeasonCD) ?? 0;
+          const loginSeasonName = String(row.SeasonName ?? '');
+          if (loginSeason > 0) {
+            // 화면에도 최신 시즌 세팅
+            setSeasonCD(loginSeason);
+            setSeasonName(loginSeasonName);
+          }
           setAttendanceChartData(makeAttendanceChart(attend, absent, isDonutCompact));
         }
 
@@ -788,7 +797,7 @@ useEffect(() => {
       lineChartOffenseStatsSize.width > 0 &&
       lineChartDefenseStatsSize.width > 0
     ) {
-      const conditionAr: condition = { SeasonCD: 0, DataSet: 'DataSet1' };
+      const conditionAr: condition = { SeasonCD: -1, DataSet: 'DataSet1' };
       MainQuery(conditionAr);
       IsFirstEnter.current = false;
     }
@@ -821,11 +830,30 @@ useEffect(() => {
 
       <FixedArea name={'조회 조건'}>
         <FixedWrap>
-          <SearchBox
+          {/* <SearchBox
             name={'시즌명'}
             value={SeasonCD}
             isRequire={'false'}
             onChange={(val: any) => setSeasonCD(val.code)}
+            width={200}
+            searchCode={6}
+            isGrid={false}
+          /> */}
+          <SearchBox
+            name={'시즌명'}
+            value={SeasonCD}
+            displayValue={SeasonName}   // ✅ 추가
+            isRequire={'false'}
+            onChange={(val: any) => {
+              // 원상복구 SearchBox 기준: payload 또는 0이 올 수 있음
+              if (val === 0) {
+                setSeasonCD(0);
+                setSeasonName('');
+                return;
+              }
+              setSeasonCD(Number(val.code ?? 0));
+              setSeasonName(String(val.display ?? ''));
+            }}
             width={200}
             searchCode={6}
             isGrid={false}

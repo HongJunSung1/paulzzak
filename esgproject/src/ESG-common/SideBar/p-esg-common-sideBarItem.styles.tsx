@@ -9,8 +9,8 @@ export const SbContainer = styled.div`
   min-height: 70vh;
   font-size: 14px;
   // background: #f8f7f3;
-  background: rgb(31, 60, 126);
-
+  //background: rgb(31, 60, 126);
+  background: #87010C;
   @media (max-width: 768px) {
     width: 50px;
     min-width: 10rem;

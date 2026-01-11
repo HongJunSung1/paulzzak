@@ -115,7 +115,8 @@
 .settingWrap{
     color: black;
     font-size: 12px;
-    background-color: rgb(31, 60, 126);
+    /* background-color: rgb(31, 60, 126); */
+    background-color: #87010C;
     width: 350px;
     max-width: calc(100vw - 20px);  /* ✅ 화면 밖으로 나가지 않게 */
     position:absolute;
@@ -132,7 +133,8 @@
     text-align:center;
     margin: 15px 0;
     padding-bottom: 35px;
-    border-bottom: solid 2px rgb(75, 110, 228);
+    /* border-bottom: solid 2px rgb(75, 110, 228); */
+    border-bottom: solid 1px #ff0217;
     color: white;
     display: flex;
     flex-direction: column;
@@ -145,7 +147,8 @@
 }
 
 .userInfoManageWrap, .passwordManageWrap{
-    border-bottom: solid 1px rgb(75, 110, 228);
+    /* border-bottom: solid 1px rgb(75, 110, 228); */
+    border-bottom: solid 1px #ff0217;
     margin-bottom: 15px;
     padding-bottom: 10px;
 }

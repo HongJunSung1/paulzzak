@@ -82,7 +82,7 @@ const SearchBox = (settings : any) => {
     //     setIsOpen(false);
     // }
     
-    const searchClick = (value, valueCode, extraInfo = {}) => {
+    const searchClick = (value : any, valueCode : any, extraInfo = {}) => {
 
         const payload = {
             display: value,
@@ -141,6 +141,15 @@ const SearchBox = (settings : any) => {
         }
     };
 
+    // 로그인 시 메인에서 들어오면 최신 시즌명으로 시즌 서치박스 텍스트 담아주려고 하나 만듦
+    // displayValue가 들어오면 input 텍스트를 강제로 세팅
+    // 조회조건용으로 사용하면 됨
+    useEffect(() => {
+        if (typeof settings.displayValue === 'string') {
+            setText(settings.displayValue);
+        }
+    }, [settings.displayValue]);
+
     useEffect(() => {
         const handleClickOutside = (event : MouseEvent) => {
           if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -196,7 +205,7 @@ const SearchBox = (settings : any) => {
                                         {result[0].InfoCol2 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol2NameKr}</th>}
                                         {result[0].InfoCol3 !== undefined && <th className={styles.SearchItemNum}>{result[0].InfoCol3NameKr}</th>}
                                     </tr>
-                                {result.map((Item, index) => (
+                                {result.map((Item : any, index : any) => (
                                     <tr className={styles.tableTr} key={index}>
                                         <td 
                                             className={styles.SearchItemNum}

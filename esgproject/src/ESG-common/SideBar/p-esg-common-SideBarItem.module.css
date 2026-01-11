@@ -1,6 +1,7 @@
 .menuName:hover{
     /* background-color: #e7dfdf; */
-    color: rgb(75, 110, 228) !important;
+    /* color: rgb(75, 110, 228) !important; */
+    color: #f3df08 !important;
     cursor: pointer;
 }
 
@@ -12,7 +13,8 @@
 .sideBarNameWrap{
     display: flex;
     /* background-color: #d34e4e; */
-    background-color: rgb(31, 60, 126);
+    /* background-color: rgb(31, 60, 126); */
+    background-color: #87010C;
     justify-content: space-between;
     cursor:pointer;
     line-height:23px;
@@ -22,7 +24,8 @@
 .SideBarName{
     height: 45px;
     /* background-color: #d34e4e; */
-    background-color: rgb(31, 60, 126);
+    /* background-color: rgb(31, 60, 126); */
+    background-color: #87010C;
     line-height: 45px;
     padding-left: 10px;
     font-weight: bold;

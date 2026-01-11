@@ -42,7 +42,8 @@ const SideBarItem = ({ item, strOpenUrl}: SideBarItemProps) => {
                               display: "flex",
                               justifyContent: "space-between",
                               // backgroundColor: "rgb(239 238 230)",
-                              backgroundColor: "rgb(31, 60, 126)",
+                              // backgroundColor: "rgb(31, 60, 126)",
+                              backgroundColor: "#87010C",
                               fontSize: "14px",
                               color: "white"
                           }}

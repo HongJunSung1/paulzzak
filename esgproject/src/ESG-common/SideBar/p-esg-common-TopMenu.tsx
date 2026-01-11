@@ -39,7 +39,8 @@ const TopMenu = ({isOpen, selectMenu}: TopMenuProps) => {
                                 fontWeight:"bold",
                                 lineHeight:"44px",
                                 // backgroundColor:"#d34e4e",
-                                backgroundColor: "rgb(31, 60, 126)",
+                                // backgroundColor: "rgb(31, 60, 126)",
+                                backgroundColor: "#87010C",
                                 color:"white"}}>모듈 선택</div>
                     {LMenuList.map((item : any, key : any)=><TopMenuItems key={key}  onClick={() => LMenuClick(item)}>{item.LMenuName}</TopMenuItems>)}
                 </TopMenuWrap>
@@ -79,7 +80,8 @@ const TopMenuItems = styled.div`
     cursor: pointer;
     &:hover {
         // background: rgb(196, 133, 133);
-        background: rgb(75, 110, 228);
+        // background: rgb(75, 110, 228);
+        background: #87010C;
         color: white;
         transition: 0.5s;
         

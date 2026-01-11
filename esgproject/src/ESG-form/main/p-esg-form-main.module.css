@@ -10,6 +10,9 @@
   --blue-dark: #20276e;
 
   --card-bg: #f9f9f9;
+
+  --red: #87010C;
+  --red-dark: #7c010b;
 }
 
 /* =========================================================
@@ -146,7 +149,8 @@
 }
 
 .topRecordWrap {
-  background-color: var(--blue) !important;
+  /* background-color: var(--blue) !important; */
+  background-color: var(--red) !important;
   color: #fff;
 
   display: grid;
@@ -178,12 +182,15 @@
 }
 
 .firstPlayerRow {
-  background: linear-gradient(to right, #d4af37, #f2d16b);
+  /* background: linear-gradient(to right, #d4af37, #f2d16b); */
+  background: linear-gradient(to right, #f4d05a, #cfb25c);
+  /* background: linear-gradient(to right, #87010C, #b00110); */
   color: #000;
 }
 
 .normalPlayerRow {
-  background-color: var(--blue-dark);
+  /* background-color: var(--blue-dark); */
+  background-color: var(--red-dark);
   color: #fff;
   position: relative;
 }
@@ -195,7 +202,8 @@
   right: 0;
   top: 0;
   height: 1px;
-  background: linear-gradient(to right, #0651ca, #004179);
+  /* background: linear-gradient(to right, #0651ca, #004179); */
+  background: linear-gradient(to right, #9e0310, #c40515);
 }
 
 .rank {
@@ -250,7 +258,8 @@
 }
 
 .privateRecord {
-  background-color: var(--blue);
+  /* background-color: var(--blue); */
+  background-color: var(--red);
   color: #fff;
   min-height: 220px;
 }
