@@ -828,6 +828,8 @@ useEffect(() => {
       <Loading loading={loading} />
       <Toolbar items={toolbar} clickID={toolbarEvent} />
 
+
+      <div className={styles.mainDashboard}>
       <FixedArea name={'조회 조건'}>
         <FixedWrap>
           {/* <SearchBox
@@ -860,8 +862,6 @@ useEffect(() => {
           />
         </FixedWrap>
       </FixedArea>
-
-      <div className={styles.mainDashboard}>
         {/* 최상단: 좌측 요약 + 우측 TOP5 */}
         <div className={styles.topSummary}>
           <div className={styles.topAttend}>

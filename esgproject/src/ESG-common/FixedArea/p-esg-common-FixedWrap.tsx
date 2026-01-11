@@ -2,7 +2,11 @@ import React from 'react'
 import '../../global.d.ts';
 import styles from './p-esg-common-FixedArea.module.css'
 
-const FixedWrap= ({children}) => {
+type FixedWrapProps = {
+  children: any;
+};
+
+const FixedWrap= ({children}: FixedWrapProps) => {
 
  
     return (

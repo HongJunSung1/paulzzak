@@ -1,81 +1,86 @@
 .MessageContainer{
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 100vw;
-    height:100vh;
-    z-index: 99;
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100dvh;          /* ✅ 모바일까지 안전 */
+  z-index: 9998;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .MessageWrap{
-    z-index: 1000;
-    width: 40%;
-    height: 35%;
-    background-color: white;
-    border-radius: 10px;
-    text-align: center;
+  z-index: 9999;
+  width: min(520px, 90vw); /* ✅ 화면 작아도 안전 */
+  max-height: min(520px, 80dvh);
+  min-height: 300px;
+  background-color: white;
+  border-radius: 10px;
+  text-align: center;
+
+  display: flex;           /* ✅ 핵심 */
+  flex-direction: column;  /* ✅ 위-중간-아래 */
+  overflow: hidden;        /* ✅ 박스 밖으로 튀는 것 방지 */
 }
 
 .TitleWrap{
-    text-align:center;
-    margin: 20px 0 0 0;
-    font-size: 25px;
-    font-weight: 900;
+  text-align:center;
+  margin: 20px 0 0 0;
+  font-size: 25px;
+  font-weight: 900;
+  padding: 0 16px;
+  flex: 0 0 auto;
 }
 
 .Message{
-    margin: 5px 15px;
-    height: 65%;
-    justify-content : center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
+  margin: 10px 15px;
+  flex: 1 1 auto;          /* ✅ 남는 공간을 차지 */
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 0;           /* ✅ flex 자식 스크롤 필수 */
+}
+
+/* ✅ 버튼 영역을 따로 확보 */
+.Footer{
+  flex: 0 0 auto;
+  padding: 12px 0 18px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;              /* ✅ 버튼 간격 */
 }
 
 .Button{
-    width: 60%;
-    height: 40px;
-    display :inline-block;
-    border: none;
-    cursor: pointer;
-    background-color: rgb(243, 229, 229);
-    border-radius: 5px;
+  width: min(320px, 70%);
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  background-color: rgb(243, 229, 229);
+  border-radius: 5px;
 }
 
 .ButtonYesNo{
-    width: 35%;
-    height: 40px;
-    display: inline-block;
-    border: none;
-    cursor: pointer;
-    background-color: rgb(243, 229, 229);
-    border-radius: 5px;
-    margin: 0 10px;    
+  width: min(200px, 40vw);
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  background-color: rgb(243, 229, 229);
+  border-radius: 5px;
 }
 
 .Button:hover, .ButtonYesNo:hover{
-    background-color: rgb(209, 190, 190);
+  background-color: rgb(209, 190, 190);
 }
 
-.Message::-webkit-scrollbar {
-    width: 10px;  /* 세로축 스크롤바 폭 너비 */
-
-}
-
+/* 스크롤바 */
+.Message::-webkit-scrollbar { width: 10px; }
 .Message::-webkit-scrollbar-thumb {
-    background: #dbdad8; /* 스크롤바 막대 색상 */
-    border-radius: 8px 8px 8px 8px;
+  background: #dbdad8;
+  border-radius: 8px;
 }
-
-.Message::-webkit-scrollbar-thumb:hover {
-	background-color:#a0a0a5;
-}
-
-.Message::-webkit-scrollbar-track {
-	background: #f3f0ec; /* 스크롤바 뒷 배경 색상 */
-}
+.Message::-webkit-scrollbar-thumb:hover { background-color:#a0a0a5; }
+.Message::-webkit-scrollbar-track { background: #f3f0ec; }
