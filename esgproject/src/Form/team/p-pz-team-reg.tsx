@@ -472,7 +472,7 @@ const TeamReg = ({strOpenUrl, openTabs}: FormTeamRegProps) =>{
 
     return (
         <>
-            <div style={{top: 0 ,height:"100%", display : strOpenUrl === '/PPzTeamReg' ? "flex" : "none", flexDirection:"column"}}>
+            <div style={{top: 0 ,height:"100dvh", minHeight: 0, display : strOpenUrl === '/PPzTeamReg' ? "flex" : "none", flexDirection:"column"}}>
                 <Loading loading={loading}/>
                 <MessageBox messageOpen = {messageOpen} messageClose = {messageClose} MessageData = {message} Title={title}/>
                 <Toolbar items={toolbar} clickID={toolbarEvent}/> 

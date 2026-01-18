@@ -1,7 +1,10 @@
 .com-splitter {
   height: 100%;
   width: 100%;
+  min-height: 0;  
+  min-width: 0;   
 }
+
 /* 가운데 정렬이 Grid에 방해되면 이 줄이 특히 중요 */
 .com-splitter-panel {
   min-width: 0;
@@ -17,4 +20,31 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* ✅ 모바일에서는 Splitter 대신 스택 레이아웃 */
+.com-splitter-mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  min-width: 0;
+  gap: 10px;
+}
+
+.com-splitter-mobile-panel {
+  flex: 1 1 0;      /* 두 패널이 남은 높이를 나눠가짐 */
+  min-height: 0;    /* 내부 스크롤 활성화 필수 */
+  overflow: auto;   /* 여기서 스크롤 생김 */
+  /* 자식 Grid가 높이 계산하도록 flex column */
+  display: flex;
+  flex-direction: column;
+
+}
+
+@media (max-width: 768px){
+  .com-splitter-mobile-panel{
+    min-height: 260px;
+  }
 }
