@@ -47,7 +47,7 @@
   },
   "scripts": {
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-scripts start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "build": "set \"CI=false\" && set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -73,4 +73,5 @@
     "@types/crypto-js": "^4.2.2",
     "@types/react-datepicker": "^6.2.0"
   }
+  
 }
