@@ -169,6 +169,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
 
 
     // 점프 전달 받은 값
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (jumpRowData !== null && jumpRowData.length > 0) {
             setTimeout(async () => {
@@ -261,6 +262,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
       }, [jumpRowData]);
 
       // 데이터 점프 후에 실행하는 로직
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => {
         if (!calcOverall) return;
       
@@ -607,9 +609,9 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
 
                         // 무조건 팀 데이터 넘길 때는 TeamA, TeamB로 넘겨야 함(나머지 컬럼도 맞춰야 함)
                         // ✅ Overall 테이블 >> Overall 테이블은 자동 조회되는 영역으로 변경함
-                        // if (result[2]) {
-                        //     setTeamSummaryData(result[2]);
-                        // }
+                        if (result[2]) {
+                            setTeamSummaryData(result[2]);
+                        }
                         
                         // ✅ Scoring 테이블
                         if (result[2]) {
@@ -956,55 +958,55 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
     const quarters = ['1쿼터', '2쿼터', '3쿼터', '4쿼터'];
     const rows = Array.from({ length: 40 }, (_, i) => i + 1);
 
-    const handleScoreInputChange = (
-        _dummy: string,
-        _team: 'A' | 'B',
-        _rowIndex: number,
-        _quarterIndex: number
-      ) => {
-        const teamKeys: ('A' | 'B')[] = ['A', 'B'];
+    // const handleScoreInputChange = (
+    //     _dummy: string,
+    //     _team: 'A' | 'B',
+    //     _rowIndex: number,
+    //     _quarterIndex: number
+    //   ) => {
+    //     const teamKeys: ('A' | 'B')[] = ['A', 'B'];
       
-        teamKeys.forEach((team) => {
-          const gridRef = team === 'A' ? grid1Ref.current : grid2Ref.current;
-          const gridInstance = gridRef?.getInstance();
-          const allRows = gridInstance?.getData() || [];
+    //     teamKeys.forEach((team) => {
+    //       const gridRef = team === 'A' ? grid1Ref.current : grid2Ref.current;
+    //       const gridInstance = gridRef?.getInstance();
+    //       const allRows = gridInstance?.getData() || [];
       
-          const scoreMap: Record<string, number> = {};
+    //       const scoreMap: Record<string, number> = {};
       
-          for (let q = 0; q < 4; q++) {
-            const quarterInputs = Array.from(
-              document.querySelectorAll<HTMLInputElement>(`[data-team="${team}"][data-quarter="${q}"]`)
-            );
+    //       for (let q = 0; q < 4; q++) {
+    //         const quarterInputs = Array.from(
+    //           document.querySelectorAll<HTMLInputElement>(`[data-team="${team}"][data-quarter="${q}"]`)
+    //         );
       
-            let prevIdx = -1;
-            let prevScore = 0;
+    //         let prevIdx = -1;
+    //         let prevScore = 0;
       
-            quarterInputs.forEach((input, idx) => {
-              const value = input.value.trim();
-              if (!/^\d+$/.test(value)) return;
+    //         quarterInputs.forEach((input, idx) => {
+    //           const value = input.value.trim();
+    //           if (!/^\d+$/.test(value)) return;
       
-              const jersey = parseInt(value).toString();
-              const score = idx + 1;
+    //           const jersey = parseInt(value).toString();
+    //           const score = idx + 1;
       
-              const gained = prevIdx === -1 ? score : score - prevScore;
-              scoreMap[jersey] = (scoreMap[jersey] || 0) + gained;
+    //           const gained = prevIdx === -1 ? score : score - prevScore;
+    //           scoreMap[jersey] = (scoreMap[jersey] || 0) + gained;
       
-              prevIdx = idx;
-              prevScore = score;
-            });
-          }
+    //           prevIdx = idx;
+    //           prevScore = score;
+    //         });
+    //       }
       
-          // 득점 시트 반영
-          allRows.forEach((row: any) => {
-            const jersey = parseInt(row.BackNumber).toString();
-            const score = scoreMap[jersey] || 0;
-            gridInstance?.setValue(row.rowKey, 'Score', score.toString());
-          });
-        });
+    //       // 득점 시트 반영
+    //       allRows.forEach((row: any) => {
+    //         const jersey = parseInt(row.BackNumber).toString();
+    //         const score = scoreMap[jersey] || 0;
+    //         gridInstance?.setValue(row.rowKey, 'Score', score.toString());
+    //       });
+    //     });
       
-        // 그리고 Overall 점수 재계산
-        updateTeamSummary();
-    };
+    //     // 그리고 Overall 점수 재계산
+    //     updateTeamSummary();
+    // };
 
     // 요약계산함수
     const updateTeamSummary = () => {
@@ -1278,7 +1280,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
         } 
     }, [openTabs]);
 
-
+    setResetTrigger(v => !v);
 
     return(
         <>
