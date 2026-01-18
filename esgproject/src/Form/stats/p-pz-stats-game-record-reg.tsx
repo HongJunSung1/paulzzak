@@ -1280,7 +1280,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
         } 
     }, [openTabs]);
 
-    setResetTrigger(v => !v);
+    // setResetTrigger(v => !v);
 
     return(
         <>
