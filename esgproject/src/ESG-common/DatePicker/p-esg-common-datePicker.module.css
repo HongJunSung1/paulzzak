@@ -20,6 +20,7 @@
   
 .DatePickerWrap input {
   height: inherit;
+  padding: 0 34px 0 6px;   /* ✅ 오른쪽 34px 확보 */
   padding: 0 2px;
 }
 
@@ -108,7 +109,7 @@
     height: 28px;
     position: absolute;
     top: -1px;  
-    right: -5px;
+    right: 1px;
     cursor:pointer;
     background: url('../../assets/image/calendar.png') center center no-repeat;
     background-size: 64%;
@@ -116,4 +117,45 @@
     border:none;
     outline: none;
     background-color: #8c8fb9;
+}
+
+/* ✅ 포탈 루트 자체를 최상단 레이어로 고정 (폼 > 그리드) */
+:global(#datepicker-portal-form) {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000; /* 폼이 제일 위 */
+  pointer-events: none; /* 아래 클릭 막지 않도록 */
+}
+
+:global(#datepicker-portal-grid) {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000; /* 그리드는 폼보다 아래 */
+  pointer-events: none;
+}
+
+/* ✅ popper만 클릭 가능하게 */
+:global(#datepicker-portal-form .react-datepicker-popper),
+:global(#datepicker-portal-grid .react-datepicker-popper) {
+  pointer-events: auto;
+  z-index: inherit !important;
+}
+
+/* ✅ 팝업/달력은 무조건 불투명 배경 */
+:global(.react-datepicker) {
+  background: #fff !important;
+  opacity: 1 !important;
+}
+
+/* 세모는 유지하되, 세모/헤더 경계선이 지저분해 보일 때만 다듬기 */
+:global(.react-datepicker__triangle::before) {
+  border-bottom-color: #d2deee !important; /* 달력 테두리색과 맞춤 */
+}
+:global(.react-datepicker__triangle::after) {
+  border-bottom-color: #ffffff !important; /* 달력 배경색 */
+}
+
+/* 혹시 상단 경계선이 남으면(테두리 겹침 방지) */
+:global(.react-datepicker__header) {
+  border-top: 0 !important;
 }

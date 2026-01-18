@@ -522,12 +522,14 @@ const ToastGrid = forwardRef<any, CustomGridProps>(
       render(props: any) {
         if (!this.root) return;
         this.root.render(
-          <DatePick
-            value={props.value}
-            onChange={(value: any) => this.onChange(value)}
-            type={this.columnInfo.renderer.options?.dateType || 'date'}
-            isGrid={true}
-          />,
+          <div className={styles.GridDateCell}>
+            <DatePick
+              value={props.value}
+              onChange={(value: any) => this.onChange(value)}
+              type={this.columnInfo.renderer.options?.dateType || 'date'}
+              isGrid={true}
+            />
+          </div>,
         );
       }
 

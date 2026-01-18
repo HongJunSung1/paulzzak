@@ -122,3 +122,39 @@
   white-space: pre-wrap; /* 정말 필요할 때만 */
 }
 
+/* ✅ 포탈 루트 자체를 최상단 레이어로 고정 (폼 > 그리드) */
+:global(#datepicker-portal-form) {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000; /* 폼이 제일 위 */
+  pointer-events: none; /* 아래 클릭 막지 않도록 */
+}
+
+:global(#datepicker-portal-grid) {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000; /* 그리드는 폼보다 아래 */
+  pointer-events: none;
+}
+/* ✅ popper만 클릭 가능하게 */
+:global(#datepicker-portal-form .react-datepicker-popper),
+:global(#datepicker-portal-grid .react-datepicker-popper) {
+  pointer-events: auto;
+  z-index: inherit !important;
+}
+
+/* 그리드 내 날짜 버튼 위치 잡기 */
+.GridDateCell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  /* 아이콘이 셀 끝에 붙지 않게 “기본 여백” */
+  padding: 0;
+}
+
+.Wrap{
+  z-index:20;
+}
