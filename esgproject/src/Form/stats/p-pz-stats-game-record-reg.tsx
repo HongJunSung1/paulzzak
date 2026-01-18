@@ -72,7 +72,7 @@ const GameRecordReg = ({strOpenUrl, openTabs, jumpRowData, setJumpRowData}: Game
     const [TeamBName, setTeamBName] = useState('');
 
 
-    const [resetTrigger, setResetTrigger] = useState(false); //서치박스 초기화하기
+    const [resetTrigger] = useState(false); //서치박스 초기화하기
     const [calcOverall, setCalcOverall] = useState(false); // Overall 자동 계산
 
     // 조회 시 받는 데이터 값

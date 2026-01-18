@@ -6,12 +6,12 @@ import SHA256 from 'crypto-js/sha256';
 import ImageLogo from '../../assets/image/PaulZZakLogoSmall.png';
 import ImageSetting from '../../assets/image/setting.png';
 import ImageLogout from '../../assets/image/logout-black.png';
-import ImageAlarm from '../../assets/image/alarm.png';
+// import ImageAlarm from '../../assets/image/alarm.png';
 import ImageUserInfo from '../../assets/image/navbar-userinfo-white.png';
 import ImagePassword from '../../assets/image/navbar-password-white.png';
 import ImageXButton from '../../assets/image/condition/xButton-white.svg';
-import ImageCheck from '../../assets/image/alarmcheck_white.png';
-import ImageLink from '../../assets/image/alarmlink_white.png';
+// import ImageCheck from '../../assets/image/alarmcheck_white.png';
+// import ImageLink from '../../assets/image/alarmlink_white.png';
 import ImageCheckButton from '../../assets/image/condition/check.svg';
 import { HiChevronUp, HiChevronDown } from 'react-icons/hi'
 
@@ -112,7 +112,7 @@ const Navbar = ({strOpenUrl, isDataChanged} : NavbarProps) => {
     const [newPasswordCheck, setNewPasswordCheck] = useState('')
 
     //알림 내역
-    const [alarmList,setAlarmList] = useState<any>([]);
+    const [alarmList] = useState<any>([]);
 
 
     useEffect(() => {
@@ -130,8 +130,8 @@ const Navbar = ({strOpenUrl, isDataChanged} : NavbarProps) => {
         },100)
     }
 
-    const intervalRef = useRef<number | null>(null); // interval ID를 저장할 ref
-    const timeoutRef = useRef<number | null>(null); // timeout ID를 저장할 ref
+    // const intervalRef = useRef<number | null>(null); // interval ID를 저장할 ref
+    // const timeoutRef = useRef<number | null>(null); // timeout ID를 저장할 ref
 
     // // 로그인 되어 있는 상태일 경우 1초 뒤 30초 단위 알림 조회
     // useEffect(() => {

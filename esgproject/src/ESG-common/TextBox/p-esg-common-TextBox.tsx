@@ -5,13 +5,13 @@ import styles from './p-esg-common-TextBox.module.css';
 
 const TextBox = (settings : any) => {
     const [text, setText] = useState(settings.value || '');
-    const [isReadOnly, setIsReadOnly] = useState(settings.readOnly || false);
+    const [isReadOnly] = useState(settings.readOnly || false);
 
     useEffect(() => {
         setText(settings.value || '');
     }, [settings.value]);
 
-    const changeText = (e) => {
+    const changeText = (e: any) => {
         setText(e.target.value);
         if (settings.onChange) {
             settings.onChange(e.target.value);

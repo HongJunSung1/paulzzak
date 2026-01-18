@@ -466,7 +466,7 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
             }
             // end (자정 넘기면 cdow+1로 표시될 수 있음)
             {
-                const t = base + en;
+                // const t = base + en;
                 const { dow: showDow, hhmm } = addMinutesToDowTime(cdow, en);
                 points.push({
                     atAbsMin: segEndAbsMin,
@@ -504,7 +504,7 @@ const LoginPage = ({strOpenUrl}: FormLoginPageProps) => {
             .join(" / ")
         : "오늘은 운영시간이 없습니다.";
 
-    const nowStr = fmtHHMM(now);
+    // const nowStr = fmtHHMM(now);
     
     if (!nextPoint) {
         return {

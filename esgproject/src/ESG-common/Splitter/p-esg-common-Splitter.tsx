@@ -1,5 +1,5 @@
 // [splitter.tsx]
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import './p-esg-common-Splitter.css';
