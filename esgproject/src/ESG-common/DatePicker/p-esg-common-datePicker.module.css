@@ -20,8 +20,7 @@
   
 .DatePickerWrap input {
   height: inherit;
-  padding: 0 34px 0 6px;   /* ✅ 오른쪽 34px 확보 */
-  padding: 0 2px;
+  padding: 0 0px 0 6px !important; 
 }
 
 .xBtnWrap{
@@ -100,7 +99,8 @@
     border-radius: 2px;
     border:none;
     outline: none;
-    background-color: #8c8fb9;
+    /* background-color: #8c8fb9; */
+    background-color: #87010C;
 
 }
 
@@ -116,7 +116,8 @@
     border-radius: 2px;
     border:none;
     outline: none;
-    background-color: #8c8fb9;
+    /* background-color: #8c8fb9; */
+    background-color: #87010C;
 }
 
 /* ✅ 포탈 루트 자체를 최상단 레이어로 고정 (폼 > 그리드) */

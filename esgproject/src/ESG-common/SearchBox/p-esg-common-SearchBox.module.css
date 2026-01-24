@@ -124,7 +124,8 @@ th{
     background-size: 50%;
     border: none;
     outline: none;
-    background-color: #8c8fb9;
+    /* background-color: #8c8fb9; */
+    background-color: #87010C;
 }
 
 .SearchGridImg{
@@ -140,7 +141,8 @@ th{
     background-size: 58%;
     border: none;
     outline: none;
-    background-color: #8c8fb9;
+    /* background-color: #8c8fb9; */
+    background-color: #87010C;
 }
 
 .InputWrap .BtnClear {
