@@ -1,5 +1,5 @@
 .ButtonContainer{
-    margin: 5px 5px;
+    margin-top: 5px;
 }
 
 .Button{
@@ -17,4 +17,12 @@
 .Button:hover{
     /* background-color: rgb(33, 42, 218); */
     background-color: #af000f;
+}
+
+/* ✅ 모바일에서는 한 줄에 하나씩 */
+@media (max-width: 480px) {
+  .ButtonContainer {
+    margin: 0;
+    margin-left: 3px;
+  }
 }

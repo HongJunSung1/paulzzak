@@ -25,3 +25,24 @@
   flex-wrap: wrap;      /* ✅ 좁아지면 다음 줄로 */
   align-items: flex-start;
 }
+
+/* FixedWrap 직계 자식(SearchBox/TextBox 등)을 flex item으로 제어 */
+.FixedWrap > * {
+  min-width: 0;           /* 내부가 줄어들 수 있게 */
+  flex: 0 0 auto;         /* 기본은 내용/폭 유지 */
+}
+
+/* ✅ 모바일에서는 한 줄에 하나씩 */
+@media (max-width: 480px) {
+  .FixedWrap > * {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .FixedWrap > * button {
+    padding: 5px 0;           /* 모바일 터치 영역 */
+    margin-top: 0;            /* margin-top 17px 제거 효과 */
+    min-height: 25px;
+  }
+}

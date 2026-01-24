@@ -170,7 +170,7 @@ const SearchBox = (settings : any) => {
 
       return (
         <>
-            <div ref={searchRef} className={styles.SearchBoxWrap}>
+            <div ref={searchRef} className={settings.isGrid ? styles.SearchBoxWrap : styles.SearchBoxWrapCond}>
                 {settings.name && <div className={styles.SearchBoxBoxTitle}>{settings.name}</div>}
                 <div className={styles.InputWrap}>
                     <input
