@@ -105,11 +105,11 @@
     background-color: #f0e7e7;
 }
 
-th{
+/* th{
     position: sticky;
     top: 0px;
     white-space: pre-wrap !important;
-}
+} */
 
 .SearchImg {
     border-radius: 2px;
