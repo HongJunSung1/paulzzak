@@ -108,6 +108,8 @@ const TeamPointForm = ({strOpenUrl, openTabs}: FormTeamPointProps)=> {
         {name : "Steal"         , header: "스틸"        , width:  80, renderer : {type: 'number'}, sortable: true},
         {name : "Block"         , header: "블로킹"      , width:  80, renderer : {type: 'number'}, sortable: true},
         {name : "TurnOver"      , header: "턴오버"      , width:  80, renderer : {type: 'number'}, sortable: true, hidden: true},
+        {name : "TeamCD"        , header: "팀코드"      , width:  70, hidden: true},
+        {name : "TeamName"      , header: "소속팀"      , width:  100},
     ]), []);
 
 
